@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://runjs.rigial.com/</loc>
+    <lastmod>2024-12-28T17:44:14+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/about</loc>
+    <lastmod>2024-12-20T10:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/js</loc>
+    <lastmod>2024-12-18T15:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/ts</loc>
+    <lastmod>2024-12-28T17:44:14+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/dashboard</loc>
+    <lastmod>2024-12-20T10:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/bin</loc>
+    <lastmod>2024-12-18T15:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/404</loc>
+    <lastmod>2024-12-18T15:00:00+00:00</lastmod>
+  </url>
+</urlset>

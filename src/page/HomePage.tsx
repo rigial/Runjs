@@ -25,7 +25,8 @@ function HomePage() {
           <br />
           3. Save time & effort with live view results, ready-to-use templates!
           <br />
-          4. JavaScript interview questions with high quality answers for your interviews.
+          4. JavaScript interview questions with high quality answers for your
+          interviews.
         </p>
         <p className="text-xs font-semibold mt-2">
           * No registration or signup required

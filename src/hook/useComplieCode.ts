@@ -1,25 +1,25 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 type Callback = () => void;
 
 const useComplieCode = (complieCode: Callback) => {
-    useEffect(() => {
-        const handleKeyDown = async (event: KeyboardEvent) => {
-            const isCtrlOrCmd = event.ctrlKey || event.metaKey;
-            const isS = event.key === "r" || event.key === "R";
+  useEffect(() => {
+    const handleKeyDown = async (event: KeyboardEvent) => {
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey;
+      const isS = event.key === 'r' || event.key === 'R';
 
-            if (isCtrlOrCmd && isS) {
-                event.preventDefault();
-                await complieCode();
-            }
-        };
+      if (isCtrlOrCmd && isS) {
+        event.preventDefault();
+        await complieCode();
+      }
+    };
 
-        window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [complieCode]);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [complieCode]);
 };
 
 export default useComplieCode;

@@ -8,6 +8,7 @@ const AboutPage = lazy(() => import("./page/AboutPage"));
 const JSPlayground = lazy(() => import("./page/JSPlayground"));
 const TSPlayground = lazy(() => import("./page/TSPlayground"));
 const Dashboard = lazy(() => import("./page/Dashboard"));
+const Interview = lazy(() => import("./page/InterviewQuestion"));
 const Bin = lazy(() => import("./page/Bin"));
 const PageNotFound = lazy(() => import("./page/PageNotFound"));
 const JSsaved = lazy(() => import("./page/JSsaved"));
@@ -33,6 +34,7 @@ function AppRouter() {
                     <Route path="/ts" element={<TSPlayground />} />
                     <Route path="/ts/:id" element={<TSsaved />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/interview" element={<Interview />} />
                     <Route path="/bin" element={<Bin />} />
                     <Route path="/404" element={<PageNotFound />} />
                     <Route path="*" element={<PageNotFound />} />

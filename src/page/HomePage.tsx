@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import Navbar from "../components/Navbar"
+import Footer from "../components/Footer"
 
 function HomePage() {
     return (
@@ -20,9 +21,7 @@ function HomePage() {
                     </Link>
                 </div>
             </div>
-            <footer className="pb-4">
-                <Link to="https://rigial.com/" target="_blank" className="text-sm font-semibold hover:underline">{`Copyright © ${new Date().getFullYear()}. All rights reserved - Rigial.com`}</Link>
-            </footer>
+            <Footer />
         </section>
     )
 }

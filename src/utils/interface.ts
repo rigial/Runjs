@@ -96,3 +96,23 @@ export interface ITerminal {
     consoleRef: React.RefObject<HTMLDivElement>
     clearTerminal: () => void
 }
+
+export type AnswerBlockType = 'para' | 'heading' | 'points' | 'code';
+export interface AnswerBlock {
+  type: AnswerBlockType;
+  data: string[];
+}
+
+export interface JSInterviewQuestion {
+  question: string;
+  answer: AnswerBlock[];
+}
+
+export type JSInterviewQuestionList = JSInterviewQuestion[];
+
+export interface IQuestionAccordion {
+    data : JSInterviewQuestion
+    questionNumber : number
+    isOpened : boolean
+    changeActiveQuestion : () => void
+}

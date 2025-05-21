@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+body {
+  font-family: sans-serif, 'Courier New', Courier, monospace;
+}
+
 .no-select {
   user-select: none;
 }

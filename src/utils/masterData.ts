@@ -8,6 +8,10 @@ const navigation = [
         link: "/dashboard"
     },
     {
+        title: "JS Interview Question",
+        link: "/interview"
+    },
+    {
         title: "Javascript",
         link: "/js"
     },

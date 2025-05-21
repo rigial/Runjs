@@ -24,6 +24,10 @@ export default function InterviewQuestion() {
     <Fragment>
       <section className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <Navbar />
+        <div className='my-2'>
+          <h4 className="text-lg font-semibold underline mb-2">JavaScript Interview Questions & Answers !</h4>
+          <p>Explore our starter guides to get a solid grasp of JavaScript interview prep before jumping into practice.</p>
+        </div>
         <main className="my-8">
           {(InterViewQuestion as JSInterviewQuestionList).map((val, index) => {
             return (

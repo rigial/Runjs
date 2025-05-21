@@ -1,14 +1,18 @@
 [
   {
-    "question": "What are the _data types_ present in JavaScript?",
+    "question": "What are the data types present in JavaScript?",
     "answer": [
       {
         "type": "para",
-        "data": ["JavaScript has primitive and composite data types."]
+        "data": [
+          "JavaScript has primitive and composite data types."
+        ]
       },
       {
         "type": "heading",
-        "data": ["Primitive Data Types"]
+        "data": [
+          "Primitive Data Types"
+        ]
       },
       {
         "type": "points",
@@ -24,7 +28,9 @@
       },
       {
         "type": "heading",
-        "data": ["Composite Data Types"]
+        "data": [
+          "Composite Data Types"
+        ]
       },
       {
         "type": "points",
@@ -35,7 +41,9 @@
       },
       {
         "type": "heading",
-        "data": ["Notable Characteristics"]
+        "data": [
+          "Notable Characteristics"
+        ]
       },
       {
         "type": "points",
@@ -48,7 +56,7 @@
     ]
   },
   {
-    "question": "What is the difference between _null_ and _undefined_?",
+    "question": "What is the difference between null and undefined?",
     "answer": [
       {
         "type": "para",
@@ -58,7 +66,9 @@
       },
       {
         "type": "heading",
-        "data": ["Origin and Context"]
+        "data": [
+          "Origin and Context"
+        ]
       },
       {
         "type": "points",
@@ -69,7 +79,9 @@
       },
       {
         "type": "heading",
-        "data": ["Variable Initialization and Assignment"]
+        "data": [
+          "Variable Initialization and Assignment"
+        ]
       },
       {
         "type": "points",
@@ -79,11 +91,16 @@
       },
       {
         "type": "code",
-        "data": ["let foo; // undefined", "let bar = null; // null"]
+        "data": [
+          "let foo; // undefined",
+          "let bar = null; // null"
+        ]
       },
       {
         "type": "heading",
-        "data": ["Function Arguments"]
+        "data": [
+          "Function Arguments"
+        ]
       },
       {
         "type": "points",
@@ -94,7 +111,9 @@
       },
       {
         "type": "heading",
-        "data": ["Object Properties"]
+        "data": [
+          "Object Properties"
+        ]
       },
       {
         "type": "points",
@@ -117,11 +136,16 @@
       },
       {
         "type": "code",
-        "data": ["let obj = { prop: 'value' };", "obj.prop = null;"]
+        "data": [
+          "let obj = { prop: 'value' };",
+          "obj.prop = null;"
+        ]
       },
       {
         "type": "heading",
-        "data": ["The Equality Operation"]
+        "data": [
+          "The Equality Operation"
+        ]
       },
       {
         "type": "points",
@@ -131,7 +155,9 @@
       },
       {
         "type": "heading",
-        "data": ["Use-Cases and Best Practices"]
+        "data": [
+          "Use-Cases and Best Practices"
+        ]
       },
       {
         "type": "points",
@@ -142,11 +168,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example"]
+        "data": [
+          "Code Example"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -184,7 +214,7 @@
     ]
   },
   {
-    "question": "How does JavaScript handle _type coercion_?",
+    "question": "How does JavaScript handle type coercion?",
     "answer": [
       {
         "type": "para",
@@ -194,7 +224,9 @@
       },
       {
         "type": "heading",
-        "data": ["Explicit and Implicit Coercion"]
+        "data": [
+          "Explicit and Implicit Coercion"
+        ]
       },
       {
         "type": "points",
@@ -205,11 +237,15 @@
       },
       {
         "type": "heading",
-        "data": ["Common Coercion Scenarios"]
+        "data": [
+          "Common Coercion Scenarios"
+        ]
       },
       {
         "type": "para",
-        "data": ["1. Arithmetic Operations: Strings are coerced to numbers."]
+        "data": [
+          "1. Arithmetic Operations: Strings are coerced to numbers."
+        ]
       },
       {
         "type": "points",
@@ -256,7 +292,7 @@
     ]
   },
   {
-    "question": "Explain the concept of _hoisting_ in JavaScript.",
+    "question": "Explain the concept of hoisting in JavaScript.",
     "answer": [
       {
         "type": "para",
@@ -267,11 +303,15 @@
       },
       {
         "type": "heading",
-        "data": ["Hoisting in Action"]
+        "data": [
+          "Hoisting in Action"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here's a Code Example:"]
+        "data": [
+          "Here's a Code Example:"
+        ]
       },
       {
         "type": "code",
@@ -300,7 +340,9 @@
       },
       {
         "type": "heading",
-        "data": ["Why Hoisting Matters"]
+        "data": [
+          "Why Hoisting Matters"
+        ]
       },
       {
         "type": "para",
@@ -310,7 +352,9 @@
       },
       {
         "type": "heading",
-        "data": ["Global Scope and Hoisting"]
+        "data": [
+          "Global Scope and Hoisting"
+        ]
       },
       {
         "type": "para",
@@ -335,7 +379,9 @@
       },
       {
         "type": "heading",
-        "data": ["Local Scope and Hoisting"]
+        "data": [
+          "Local Scope and Hoisting"
+        ]
       },
       {
         "type": "para",
@@ -365,11 +411,15 @@
       },
       {
         "type": "heading",
-        "data": ["Best Practices"]
+        "data": [
+          "Best Practices"
+        ]
       },
       {
         "type": "para",
-        "data": ["To write clean, readable code, it's important to:"]
+        "data": [
+          "To write clean, readable code, it's important to:"
+        ]
       },
       {
         "type": "points",
@@ -380,7 +430,9 @@
       },
       {
         "type": "heading",
-        "data": ["ES6 and Hoisting"]
+        "data": [
+          "ES6 and Hoisting"
+        ]
       },
       {
         "type": "para",
@@ -398,7 +450,9 @@
       },
       {
         "type": "heading",
-        "data": ["Constants and Hoisting"]
+        "data": [
+          "Constants and Hoisting"
+        ]
       },
       {
         "type": "para",
@@ -420,7 +474,7 @@
     ]
   },
   {
-    "question": "What is the _scope_ in JavaScript?",
+    "question": "What is the scope in JavaScript?",
     "answer": [
       {
         "type": "para",
@@ -430,7 +484,9 @@
       },
       {
         "type": "heading",
-        "data": ["Global Scope"]
+        "data": [
+          "Global Scope"
+        ]
       },
       {
         "type": "para",
@@ -440,11 +496,15 @@
       },
       {
         "type": "heading",
-        "data": ["Example: Global Scope"]
+        "data": [
+          "Example: Global Scope"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -461,7 +521,9 @@
       },
       {
         "type": "heading",
-        "data": ["Local Scope"]
+        "data": [
+          "Local Scope"
+        ]
       },
       {
         "type": "para",
@@ -471,11 +533,15 @@
       },
       {
         "type": "heading",
-        "data": ["Example: Local Scope"]
+        "data": [
+          "Example: Local Scope"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -491,7 +557,9 @@
       },
       {
         "type": "heading",
-        "data": ["Block Scope"]
+        "data": [
+          "Block Scope"
+        ]
       },
       {
         "type": "para",
@@ -501,11 +569,15 @@
       },
       {
         "type": "heading",
-        "data": ["Example: Block Scope"]
+        "data": [
+          "Example: Block Scope"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -538,7 +610,9 @@
       },
       {
         "type": "heading",
-        "data": ["Illustrative Example: Abstract vs. Strict Equality"]
+        "data": [
+          "Illustrative Example: Abstract vs. Strict Equality"
+        ]
       },
       {
         "type": "points",
@@ -551,7 +625,9 @@
       },
       {
         "type": "heading",
-        "data": ["Key Considerations"]
+        "data": [
+          "Key Considerations"
+        ]
       },
       {
         "type": "points",
@@ -563,7 +639,9 @@
       },
       {
         "type": "heading",
-        "data": ["Common Best Practices"]
+        "data": [
+          "Common Best Practices"
+        ]
       },
       {
         "type": "points",
@@ -574,11 +652,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example: Equality Operators"]
+        "data": [
+          "Code Example: Equality Operators"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -597,7 +679,7 @@
     ]
   },
   {
-    "question": "Describe _closure_ in JavaScript. Can you give an example?",
+    "question": "Describe closure in JavaScript. Can you give an example?",
     "answer": [
       {
         "type": "para",
@@ -607,7 +689,9 @@
       },
       {
         "type": "heading",
-        "data": ["Core Concept"]
+        "data": [
+          "Core Concept"
+        ]
       },
       {
         "type": "para",
@@ -617,7 +701,9 @@
       },
       {
         "type": "heading",
-        "data": ["Key Components"]
+        "data": [
+          "Key Components"
+        ]
       },
       {
         "type": "para",
@@ -629,7 +715,9 @@
       },
       {
         "type": "heading",
-        "data": ["Example: Password Generator"]
+        "data": [
+          "Example: Password Generator"
+        ]
       },
       {
         "type": "para",
@@ -669,7 +757,9 @@
       },
       {
         "type": "heading",
-        "data": ["Application"]
+        "data": [
+          "Application"
+        ]
       },
       {
         "type": "points",
@@ -680,7 +770,9 @@
       },
       {
         "type": "heading",
-        "data": ["Pitfalls to Avoid"]
+        "data": [
+          "Pitfalls to Avoid"
+        ]
       },
       {
         "type": "points",
@@ -691,7 +783,9 @@
       },
       {
         "type": "heading",
-        "data": ["Browser Compatibility"]
+        "data": [
+          "Browser Compatibility"
+        ]
       },
       {
         "type": "para",
@@ -702,7 +796,7 @@
     ]
   },
   {
-    "question": "What is the '_this_ keyword' and how does its context change?",
+    "question": "What is the 'this keyword' and how does its context change?",
     "answer": [
       {
         "type": "para",
@@ -712,7 +806,9 @@
       },
       {
         "type": "heading",
-        "data": ["'this' in the Global Scope"]
+        "data": [
+          "'this' in the Global Scope"
+        ]
       },
       {
         "type": "para",
@@ -722,7 +818,9 @@
       },
       {
         "type": "heading",
-        "data": ["'this' in Functions"]
+        "data": [
+          "'this' in Functions"
+        ]
       },
       {
         "type": "para",
@@ -741,7 +839,9 @@
       },
       {
         "type": "heading",
-        "data": ["'this' in Arrow Functions"]
+        "data": [
+          "'this' in Arrow Functions"
+        ]
       },
       {
         "type": "para",
@@ -758,11 +858,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example: Global Context"]
+        "data": [
+          "Code Example: Global Context"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -783,7 +887,7 @@
     ]
   },
   {
-    "question": "What are _arrow functions_ and how do they differ from regular functions?",
+    "question": "What are arrow functions and how do they differ from regular functions?",
     "answer": [
       {
         "type": "para",
@@ -793,7 +897,9 @@
       },
       {
         "type": "heading",
-        "data": ["Arrow Functions: Key Features"]
+        "data": [
+          "Arrow Functions: Key Features"
+        ]
       },
       {
         "type": "points",
@@ -809,11 +915,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example: Standard Function vs. Arrow Function"]
+        "data": [
+          "Code Example: Standard Function vs. Arrow Function"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -835,7 +945,9 @@
       },
       {
         "type": "heading",
-        "data": ["When to Use Arrow Functions"]
+        "data": [
+          "When to Use Arrow Functions"
+        ]
       },
       {
         "type": "points",
@@ -847,11 +959,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example: Arrow Function and `this` Context"]
+        "data": [
+          "Code Example: Arrow Function and `this` Context"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -876,7 +992,7 @@
     ]
   },
   {
-    "question": "What are _template literals_ in JavaScript?",
+    "question": "What are template literals in JavaScript?",
     "answer": [
       {
         "type": "para",
@@ -886,7 +1002,9 @@
       },
       {
         "type": "heading",
-        "data": ["Key Features"]
+        "data": [
+          "Key Features"
+        ]
       },
       {
         "type": "points",
@@ -897,7 +1015,9 @@
       },
       {
         "type": "heading",
-        "data": ["Syntax"]
+        "data": [
+          "Syntax"
+        ]
       },
       {
         "type": "points",
@@ -908,7 +1028,9 @@
       },
       {
         "type": "heading",
-        "data": ["Example:"]
+        "data": [
+          "Example:"
+        ]
       },
       {
         "type": "code",
@@ -921,7 +1043,9 @@
       },
       {
         "type": "heading",
-        "data": ["Benefits"]
+        "data": [
+          "Benefits"
+        ]
       },
       {
         "type": "points",
@@ -932,7 +1056,9 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example: Multiline Text and String Interpolation"]
+        "data": [
+          "Code Example: Multiline Text and String Interpolation"
+        ]
       },
       {
         "type": "code",
@@ -951,7 +1077,9 @@
       },
       {
         "type": "heading",
-        "data": ["Browser Compatibility Concerns"]
+        "data": [
+          "Browser Compatibility Concerns"
+        ]
       },
       {
         "type": "para",
@@ -962,7 +1090,7 @@
     ]
   },
   {
-    "question": "What is a _higher-order function_ in JavaScript?",
+    "question": "What is a higher-order function in JavaScript?",
     "answer": [
       {
         "type": "para",
@@ -972,7 +1100,9 @@
       },
       {
         "type": "heading",
-        "data": ["Key Characteristics"]
+        "data": [
+          "Key Characteristics"
+        ]
       },
       {
         "type": "points",
@@ -984,7 +1114,9 @@
       },
       {
         "type": "heading",
-        "data": ["Practical Applications"]
+        "data": [
+          "Practical Applications"
+        ]
       },
       {
         "type": "points",
@@ -997,11 +1129,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example: Higher-order Functions"]
+        "data": [
+          "Code Example: Higher-order Functions"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -1037,11 +1173,15 @@
       },
       {
         "type": "heading",
-        "data": ["Practical Code Example"]
+        "data": [
+          "Practical Code Example"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -1068,7 +1208,9 @@
       },
       {
         "type": "heading",
-        "data": ["Practical Use Cases"]
+        "data": [
+          "Practical Use Cases"
+        ]
       },
       {
         "type": "points",
@@ -1082,7 +1224,7 @@
     ]
   },
   {
-    "question": "How do _functional programming_ concepts apply in JavaScript?",
+    "question": "How do functional programming concepts apply in JavaScript?",
     "answer": [
       {
         "type": "para",
@@ -1092,11 +1234,15 @@
       },
       {
         "type": "heading",
-        "data": ["Core Concepts"]
+        "data": [
+          "Core Concepts"
+        ]
       },
       {
         "type": "heading",
-        "data": ["First-Class Functions and Higher-Order Functions"]
+        "data": [
+          "First-Class Functions and Higher-Order Functions"
+        ]
       },
       {
         "type": "para",
@@ -1106,11 +1252,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example:"]
+        "data": [
+          "Code Example:"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -1124,7 +1274,7 @@
     ]
   },
   {
-    "question": "What are _IIFEs_ (Immediately Invoked Function Expressions)?",
+    "question": "What are IIFEs (Immediately Invoked Function Expressions)?",
     "answer": [
       {
         "type": "para",
@@ -1135,11 +1285,15 @@
       },
       {
         "type": "heading",
-        "data": ["Code Example: IIFE"]
+        "data": [
+          "Code Example: IIFE"
+        ]
       },
       {
         "type": "para",
-        "data": ["Here is the JavaScript code:"]
+        "data": [
+          "Here is the JavaScript code:"
+        ]
       },
       {
         "type": "code",
@@ -1158,7 +1312,9 @@
       },
       {
         "type": "heading",
-        "data": ["Core Functions of IIFE"]
+        "data": [
+          "Core Functions of IIFE"
+        ]
       },
       {
         "type": "para",
@@ -1170,7 +1326,9 @@
       },
       {
         "type": "heading",
-        "data": ["Use Cases"]
+        "data": [
+          "Use Cases"
+        ]
       },
       {
         "type": "points",
@@ -1181,7 +1339,9 @@
       },
       {
         "type": "heading",
-        "data": ["Modern Alternatives"]
+        "data": [
+          "Modern Alternatives"
+        ]
       },
       {
         "type": "para",
@@ -1191,7 +1351,9 @@
       },
       {
         "type": "heading",
-        "data": ["IIFE Variants"]
+        "data": [
+          "IIFE Variants"
+        ]
       },
       {
         "type": "para",
@@ -1201,7 +1363,11 @@
       },
       {
         "type": "code",
-        "data": ["(function(){", "console.log('Invoked!');", "})();"]
+        "data": [
+          "(function(){",
+          "console.log('Invoked!');",
+          "})();"
+        ]
       },
       {
         "type": "para",
@@ -1211,7 +1377,11 @@
       },
       {
         "type": "code",
-        "data": ["!function(){", "console.log('Invoked!');", "}();"]
+        "data": [
+          "!function(){",
+          "console.log('Invoked!');",
+          "}();"
+        ]
       },
       {
         "type": "para",
@@ -1230,7 +1400,9 @@
       },
       {
         "type": "heading",
-        "data": ["Caution on Minification"]
+        "data": [
+          "Caution on Minification"
+        ]
       },
       {
         "type": "para",
@@ -1241,7 +1413,7 @@
     ]
   },
   {
-    "question": "How do you create _private variables_ in JavaScript?",
+    "question": "How do you create private variables in JavaScript?",
     "answer": [
       {
         "type": "para",
@@ -1251,7 +1423,9 @@
       },
       {
         "type": "heading",
-        "data": ["How Closures Work"]
+        "data": [
+          "How Closures Work"
+        ]
       },
       {
         "type": "para",
@@ -1280,7 +1454,9 @@
       },
       {
         "type": "para",
-        "data": ["Here, `innerFunction` retains access to `outerVar`."]
+        "data": [
+          "Here, `innerFunction` retains access to `outerVar`."
+        ]
       },
       {
         "type": "heading",
@@ -1290,7 +1466,9 @@
       },
       {
         "type": "heading",
-        "data": ["Constructor Functions"]
+        "data": [
+          "Constructor Functions"
+        ]
       },
       {
         "type": "para",
@@ -1324,7 +1502,9 @@
       },
       {
         "type": "heading",
-        "data": ["Modules"]
+        "data": [
+          "Modules"
+        ]
       },
       {
         "type": "para",
@@ -1341,7 +1521,9 @@
       },
       {
         "type": "para",
-        "data": ["Here is the code:"]
+        "data": [
+          "Here is the code:"
+        ]
       },
       {
         "type": "code",

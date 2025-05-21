@@ -34,7 +34,7 @@ function QuestionAccordion({
           onClick={handleToggle}
           className="flex items-center justify-between gap-1.5 rounded-md border border-gray-100 bg-gray-50 p-4 text-gray-900 cursor-pointer"
         >
-          <h2 className="text-lg font-bold">{`${questionNumber + 1}. ${data.question}`}</h2>
+          <h2 className="text-lg font-semibold">{`${questionNumber + 1}. ${data.question}`}</h2>
           <svg
             className="size-5 shrink-0 transition-transform duration-300 group-open:-rotate-180"
             xmlns="http://www.w3.org/2000/svg"

@@ -12,18 +12,20 @@ function HomePage() {
           alt="RunJs Logo"
           className="w-24 h-24 mb-4 rounded-lg"
         />
-        <h2 className="text-3xl sm:text-2xl font-bold">
+        <h2 className="text-2xl sm:text-2xl font-bold my-1">
           Powerfull JS/TS Online Compiler.
         </h2>
-        <h2 className="text-3xl sm:text-2xl font-bold">
+        <h2 className="text-2xl sm:text-2xl font-bold my-2">
           Instant Browser-Based IDEs.
         </h2>
-        <p className="text-xl sm:text-xl/relaxed">
-          The easy-to-use and fast JavaScript compiler.
+        <p className="text-base sm:text-xl/relaxed font-normal my-2 text-left ml-5">
+          1. The easy-to-use and fast JavaScript compiler.
           <br />
-          Write JavaScript code and run it online.
+          2. Write JavaScript code and run it online.
           <br />
-          Save time & effort with live view results, ready-to-use templates!
+          3. Save time & effort with live view results, ready-to-use templates!
+          <br />
+          4. JavaScript interview questions with high quality answers for your interviews.
         </p>
         <p className="text-xs font-semibold mt-2">
           * No registration or signup required

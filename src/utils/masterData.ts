@@ -12,6 +12,10 @@ const navigation = [
     link: '/interview',
   },
   {
+    title: 'React',
+    link: '/react',
+  },
+  {
     title: 'Javascript',
     link: '/js',
   },

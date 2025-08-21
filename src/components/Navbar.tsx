@@ -45,7 +45,7 @@ function Navbar() {
   );
 
   return (
-    <nav className="w-full px-4 py-4 bg-white">
+    <nav className="w-full px-4 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="text-lg font-bold">RunJS.in</div>
 

@@ -1,6 +1,6 @@
 import SearchInput from '../components/SearchInput';
 import Badge from '../components/Badge';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ModalRef, Tag, UserCodeBase } from '../utils/interface';
 import { getAllCodes } from '../db/operations';
 import ProjectTable from '../components/ProjectTable';
@@ -75,8 +75,8 @@ function Dashboard() {
   }
 
   return (
-    <Fragment>
-      <section className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+    <section className="min-h-screen w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
+      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <Navbar />
         <h1 className="my-2 text-xl">Create playgrounds</h1>
         <h5 className="text-gray-500 my-2">
@@ -112,13 +112,13 @@ function Dashboard() {
           bin={false}
           createPlayground={() => dialogRef?.current?.open()}
         />
-      </section>
+      </div>
       <CreatePlayground
         edit={false}
         ref={dialogRef}
         tagSuggestions={Object.keys(tag)}
       />
-    </Fragment>
+    </section>
   );
 }
 

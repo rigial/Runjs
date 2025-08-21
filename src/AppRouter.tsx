@@ -6,6 +6,7 @@ import { loadTypscript } from './utils/commonFunction';
 const HomePage = lazy(() => import('./page/HomePage'));
 const AboutPage = lazy(() => import('./page/AboutPage'));
 const JSPlayground = lazy(() => import('./page/JSPlayground'));
+const ReactPlayground = lazy(() => import('./page/ReactPlayground'));
 const TSPlayground = lazy(() => import('./page/TSPlayground'));
 const Dashboard = lazy(() => import('./page/Dashboard'));
 const Interview = lazy(() => import('./page/InterviewQuestion'));
@@ -29,6 +30,7 @@ function AppRouter() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/js" element={<JSPlayground />} />
+          <Route path="/react" element={<ReactPlayground />} />
           <Route path="/js/:id" element={<JSsaved />} />
           <Route path="/ts" element={<TSPlayground />} />
           <Route path="/ts/:id" element={<TSsaved />} />

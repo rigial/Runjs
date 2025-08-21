@@ -1,17 +1,27 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import {
   SandpackProvider,
   SandpackPreview,
-  SandpackFileExplorer,
   SandpackConsole,
 } from '@codesandbox/sandpack-react';
+import SandpackFileExplorer from '@rainetian/sandpack-file-explorer';
 import Split from 'react-split';
 import ReactEditor from '../components/ReactEditor';
+import { fileIcon } from '../utils/folderIcons';
 
 function ReactPlayground() {
+  const filesIcon = useMemo(
+    () => (fileSuffix: string) => fileIcon(fileSuffix),
+    []
+  );
+
   return (
     <main className="h-screen w-full bg-black">
       <SandpackProvider
+        options={{
+          recompileMode: 'delayed',
+          recompileDelay: 500,
+        }}
         template="react"
         theme="dark"
         style={{ height: '100%' }}
@@ -23,7 +33,10 @@ function ReactPlayground() {
           gutterSize={6}
         >
           <div className="h-full overflow-auto">
-            <SandpackFileExplorer style={{ height: '100%' }} />
+            <SandpackFileExplorer
+              fileIcon={filesIcon}
+              style={{ height: '100%' }}
+            />
           </div>
 
           <div className="h-full overflow-hidden">
@@ -41,7 +54,10 @@ function ReactPlayground() {
               <SandpackPreview showNavigator style={{ height: '100%' }} />
             </div>
             <div className="h-full overflow-auto">
-              <SandpackConsole style={{ height: '100%' }} />
+              <SandpackConsole
+                resetOnPreviewRestart
+                style={{ height: '100%' }}
+              />
             </div>
           </Split>
         </Split>

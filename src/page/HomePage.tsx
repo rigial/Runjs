@@ -19,7 +19,7 @@ function HomePage() {
             Learn, Practice & Compete
           </h1>
           <p className="mt-4 text-base text-pretty text-gray-700 sm:text-lg/relaxed">
-            Join millions of developers in learning in-demand programming
+            Join thousands of developers in learning in-demand programming
             languages, solving real-world problems, and excelling in coding
             competitions.
           </p>

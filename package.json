@@ -9,11 +9,12 @@
     "lint": "eslint ./src",
     "pretty": "prettier --write ./src",
     "preview": "vite preview",
-    "check" : "npm run pretty && npm run lint"
+    "check": "npm run pretty && npm run lint"
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",
     "@monaco-editor/react": "^4.6.0",
+    "@rainetian/sandpack-file-explorer": "^0.1.1-alpha.3",
     "emmet-monaco-es": "^5.5.0",
     "esbuild-wasm": "0.24.2",
     "idb": "^8.0.1",

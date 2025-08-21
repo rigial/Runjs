@@ -99,6 +99,12 @@ const packageList = [
     packageDescription:
       'Emmet Support for Monaco Editor, based on vscode-emmet-helper',
   },
+  {
+    packageLink: 'https://www.npmjs.com/package/@codesandbox/sandpack-react',
+    packageName: '@codesandbox/sandpack-react',
+    packageDescription:
+      'Sandpack is a component toolkit for creating live-running code editing experiences, powered by the online bundler used on CodeSandbox.',
+  },
 ];
 
 export { navigation, packageList };

@@ -26,7 +26,7 @@ function HomePage() {
           <div className="mt-4 flex justify-center gap-4 sm:mt-6">
             <Link
               className="inline-block rounded-md border bg-black px-5 py-3 font-medium text-white shadow-sm transition-colors"
-              to="/start"
+              to="/dashboard"
             >
               Get Started
             </Link>

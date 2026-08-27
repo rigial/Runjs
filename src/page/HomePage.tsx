@@ -22,9 +22,9 @@ function HomePage() {
         {/* Hero Section */}
         <section className="flex flex-col items-center text-center max-w-3xl mx-auto">
           {/* Top Announcement Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold mb-6 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold mb-6 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>RunJS 2.0 • CodeSandbox-Inspired Playground</span>
+            <span>RunJS 2.0 • Modern In-Browser Developer Playground</span>
           </div>
 
           {/* Main Headline */}
@@ -156,8 +156,8 @@ function HomePage() {
                   React Sandpack
                 </h2>
                 <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
-                  Multi-file explorer, live component previews, and CodeSandbox
-                  bundler support.
+                  Multi-file explorer, live component previews, and full
+                  in-browser React bundler support.
                 </p>
               </div>
             </Link>

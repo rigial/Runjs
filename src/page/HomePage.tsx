@@ -44,10 +44,10 @@ function HomePage() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
             <Link
               to="/problems"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-sm font-semibold shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-sm font-semibold shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
             >
               <Sparkles className="w-4 h-4" />
               <span>Explore Coding Challenges</span>
@@ -55,101 +55,111 @@ function HomePage() {
 
             <Link
               to="/js"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
             >
               <Play className="w-4 h-4 text-amber-500 fill-amber-500" />
               <span>Open JavaScript Playground</span>
             </Link>
           </div>
+        </section>
 
-          {/* Language & Problem Cards Quick Links */}
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full text-left">
+        {/* Language & Problem Cards Quick Links */}
+        <section className="mt-14 max-w-6xl mx-auto w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full text-left">
             {/* Coding Problems Card */}
             <Link
               to="/problems"
-              className="group p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-amber-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md"
+              className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-amber-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-sm">
-                  <BookOpen className="w-4 h-4" />
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-sm">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                    Interactive
+                  </span>
                 </div>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-                  Interactive
-                </span>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
+                  Coding Challenges
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  LeetCode-style JS challenges with test runner, progressive
+                  hints, and submission history.
+                </p>
               </div>
-              <h2 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
-                Coding Challenges
-              </h2>
-              <p className="text-xs text-[var(--text-secondary)] mt-1">
-                LeetCode-style JS challenges with test runner, progressive
-                hints, and submission history.
-              </p>
             </Link>
 
             {/* JavaScript Card */}
             <Link
               to="/js"
-              className="group p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-amber-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md"
+              className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-amber-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-sm">
-                  JS
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-sm">
+                    JS
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                    Instant
+                  </span>
                 </div>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400">
-                  Instant
-                </span>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
+                  JavaScript Sandbox
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  Monaco IDE with infinite loop guard, interactive Luna console,
+                  and custom font controls.
+                </p>
               </div>
-              <h2 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
-                JavaScript Sandbox
-              </h2>
-              <p className="text-xs text-[var(--text-secondary)] mt-1">
-                Monaco IDE with infinite loop guard, interactive Luna console,
-                and custom font controls.
-              </p>
             </Link>
 
             {/* TypeScript Card */}
             <Link
               to="/ts"
-              className="group p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-blue-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md"
+              className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-blue-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 font-bold text-sm">
-                  TS
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20 font-bold text-sm">
+                    TS
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-blue-500/15 text-blue-600 dark:text-blue-400">
+                    esbuild
+                  </span>
                 </div>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-blue-500/15 text-blue-600 dark:text-blue-400">
-                  esbuild
-                </span>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">
+                  TypeScript Sandbox
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  Zero-lag WebAssembly esbuild compilation directly inside your
+                  browser tab.
+                </p>
               </div>
-              <h2 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">
-                TypeScript Sandbox
-              </h2>
-              <p className="text-xs text-[var(--text-secondary)] mt-1">
-                Zero-lag WebAssembly esbuild compilation directly inside your
-                browser tab.
-              </p>
             </Link>
 
             {/* React Card */}
             <Link
               to="/react"
-              className="group p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-cyan-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md"
+              className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-cyan-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-500 border border-cyan-500/20 font-bold text-sm">
-                  ⚛️
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-500 border border-cyan-500/20 font-bold text-base">
+                    ⚛️
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+                    Sandpack
+                  </span>
                 </div>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
-                  Sandpack
-                </span>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-cyan-500 transition-colors">
+                  React Sandpack
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  Multi-file explorer, live component previews, and CodeSandbox
+                  bundler support.
+                </p>
               </div>
-              <h2 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-cyan-500 transition-colors">
-                React Sandpack
-              </h2>
-              <p className="text-xs text-[var(--text-secondary)] mt-1">
-                Multi-file explorer, live component previews, and CodeSandbox
-                bundler support.
-              </p>
             </Link>
           </div>
         </section>

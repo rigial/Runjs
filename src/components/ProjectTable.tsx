@@ -208,15 +208,24 @@ function ProjectTable({
                           </button>
                         )}
                         <div>
-                          <Link
-                            to={targetUrl}
-                            className="font-medium text-[var(--text-primary)] hover:text-amber-500 hover:underline flex items-center gap-1.5"
-                          >
-                            <span>{val.fileName}</span>
-                            <span className="text-[var(--text-muted)] text-[11px]">
-                              .{val.language}
-                            </span>
-                          </Link>
+                          {bin ? (
+                            <div className="font-medium text-[var(--text-secondary)] flex items-center gap-1.5 cursor-not-allowed select-none">
+                              <span>{val.fileName}</span>
+                              <span className="text-[var(--text-muted)] text-[11px]">
+                                .{val.language}
+                              </span>
+                            </div>
+                          ) : (
+                            <Link
+                              to={targetUrl}
+                              className="font-medium text-[var(--text-primary)] hover:text-amber-500 hover:underline flex items-center gap-1.5"
+                            >
+                              <span>{val.fileName}</span>
+                              <span className="text-[var(--text-muted)] text-[11px]">
+                                .{val.language}
+                              </span>
+                            </Link>
+                          )}
                           <div className="sm:hidden mt-0.5 flex items-center gap-2">
                             {getLanguageBadge(val.language)}
                             {val.tag && (

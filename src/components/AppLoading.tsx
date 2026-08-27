@@ -4,7 +4,9 @@ import { Code2 } from 'lucide-react';
 
 function AppLoading({ freeLoading }: IAppLoading) {
   return (
-    <main
+    <div
+      role="status"
+      aria-live="polite"
       className={`${
         freeLoading ? 'h-full' : 'min-h-screen'
       } w-full flex flex-col items-center justify-center bg-[var(--bg-app)] text-[var(--text-primary)] p-4 transition-colors`}
@@ -28,7 +30,7 @@ function AppLoading({ freeLoading }: IAppLoading) {
           Loading RunJS...
         </span>
       </div>
-    </main>
+    </div>
   );
 }
 

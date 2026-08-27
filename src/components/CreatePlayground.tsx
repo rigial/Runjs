@@ -11,6 +11,69 @@ import { addCode, updateCode } from '../db/operations';
 import { useNavigate } from 'react-router';
 import { X, Sparkles, Tag as TagIcon, Check } from 'lucide-react';
 
+interface LanguageOption {
+  id: 'js' | 'ts';
+  label: string;
+  description: string;
+  textColorClass: string;
+  activeBorderClass: string;
+  activeBgClass: string;
+  activeRingClass: string;
+}
+
+const LANGUAGE_OPTIONS: LanguageOption[] = [
+  {
+    id: 'js',
+    label: 'JavaScript',
+    description: 'ES6+, Web APIs, standard runtime',
+    textColorClass: 'text-amber-500',
+    activeBorderClass: 'border-amber-500',
+    activeBgClass: 'bg-amber-500/10',
+    activeRingClass: 'ring-amber-500',
+  },
+  {
+    id: 'ts',
+    label: 'TypeScript',
+    description: 'Types, esbuild compilation',
+    textColorClass: 'text-blue-500',
+    activeBorderClass: 'border-blue-500',
+    activeBgClass: 'bg-blue-500/10',
+    activeRingClass: 'ring-blue-500',
+  },
+];
+
+interface LanguageCardProps {
+  option: LanguageOption;
+  isSelected: boolean;
+  onSelect: (id: 'js' | 'ts') => void;
+}
+
+function LanguageCard({ option, isSelected, onSelect }: LanguageCardProps) {
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(option.id)}
+      className={`flex flex-col items-start p-3 rounded-lg border text-left transition-all duration-150 relative ${
+        isSelected
+          ? `${option.activeBorderClass} ${option.activeBgClass} text-[var(--text-primary)] shadow-xs ring-1 ${option.activeRingClass}`
+          : 'border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)]'
+      }`}
+    >
+      <div className="flex items-center justify-between w-full mb-1">
+        <span className={`font-semibold text-xs ${option.textColorClass}`}>
+          {option.label}
+        </span>
+        {isSelected && (
+          <Check className={`w-3.5 h-3.5 ${option.textColorClass}`} />
+        )}
+      </div>
+      <span className="text-[11px] text-[var(--text-muted)]">
+        {option.description}
+      </span>
+    </button>
+  );
+}
+
 const CreatePlayground = ({
   tagSuggestions,
   edit,
@@ -226,51 +289,14 @@ const CreatePlayground = ({
                 Language
               </label>
               <div className="grid grid-cols-2 gap-3">
-                {/* JavaScript Card */}
-                <button
-                  type="button"
-                  onClick={() => setLang('js')}
-                  className={`flex flex-col items-start p-3 rounded-lg border text-left transition-all duration-150 relative ${
-                    lang === 'js'
-                      ? 'border-amber-500 bg-amber-500/10 text-[var(--text-primary)] shadow-xs ring-1 ring-amber-500'
-                      : 'border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full mb-1">
-                    <span className="font-semibold text-xs text-amber-500">
-                      JavaScript
-                    </span>
-                    {lang === 'js' && (
-                      <Check className="w-3.5 h-3.5 text-amber-500" />
-                    )}
-                  </div>
-                  <span className="text-[11px] text-[var(--text-muted)]">
-                    ES6+, Web APIs, standard runtime
-                  </span>
-                </button>
-
-                {/* TypeScript Card */}
-                <button
-                  type="button"
-                  onClick={() => setLang('ts')}
-                  className={`flex flex-col items-start p-3 rounded-lg border text-left transition-all duration-150 relative ${
-                    lang === 'ts'
-                      ? 'border-blue-500 bg-blue-500/10 text-[var(--text-primary)] shadow-xs ring-1 ring-blue-500'
-                      : 'border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full mb-1">
-                    <span className="font-semibold text-xs text-blue-500">
-                      TypeScript
-                    </span>
-                    {lang === 'ts' && (
-                      <Check className="w-3.5 h-3.5 text-blue-500" />
-                    )}
-                  </div>
-                  <span className="text-[11px] text-[var(--text-muted)]">
-                    Types, esbuild compilation
-                  </span>
-                </button>
+                {LANGUAGE_OPTIONS.map((option) => (
+                  <LanguageCard
+                    key={option.id}
+                    option={option}
+                    isSelected={lang === option.id}
+                    onSelect={(selectedLang) => setLang(selectedLang)}
+                  />
+                ))}
               </div>
             </div>
           )}

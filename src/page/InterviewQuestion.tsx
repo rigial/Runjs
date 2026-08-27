@@ -61,10 +61,14 @@ export default function InterviewQuestion() {
           {/* Search & Stats Bar */}
           <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="relative flex-1 max-w-md">
+              <label htmlFor="interview-question-search" className="sr-only">
+                Search interview questions
+              </label>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
                 <Search className="w-4 h-4" />
               </div>
               <input
+                id="interview-question-search"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -74,6 +78,7 @@ export default function InterviewQuestion() {
               {searchQuery && (
                 <button
                   type="button"
+                  aria-label="Clear interview question search"
                   onClick={() => setSearchQuery('')}
                   className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >

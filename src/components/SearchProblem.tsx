@@ -8,6 +8,9 @@ function SearchProblem() {
         <Search className="w-4 h-4" />
       </div>
 
+      <label htmlFor="Search" className="sr-only">
+        Search for problem by title or tag
+      </label>
       <input
         type="text"
         id="Search"

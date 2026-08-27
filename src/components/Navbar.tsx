@@ -15,7 +15,7 @@ function Navbar() {
         <div className="flex items-center gap-6">
           <Link
             to="/"
-            className="flex items-center gap-2.5 group focus:outline-none"
+            className="flex items-center gap-2.5 group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
           >
             <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-black shadow-sm group-hover:scale-105 transition-transform">
               <Code2 className="w-4 h-4 stroke-[2.5]" />

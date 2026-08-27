@@ -94,7 +94,7 @@ function AboutPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Link
                 target="_blank"
                 rel="noopener noreferrer"
@@ -118,7 +118,7 @@ function AboutPage() {
               <Link
                 target="_blank"
                 rel="noopener noreferrer"
-                to="http://youtube.com/mrkishorekumar?sub_confirmation=1"
+                to="https://youtube.com/mrkishorekumar?sub_confirmation=1"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-medium text-[var(--text-secondary)] hover:text-red-500 transition-colors"
               >
                 <YoutubeIcon />

@@ -12,6 +12,8 @@ import useIndexDBState from '../hook/useIndexDBState';
 import HelpModal from '../components/HelpModal';
 import useWarnOnClose from '../hook/useWarnOnClose ';
 import useFormatDocument from '../hook/useFormatDocument';
+import useDownloadFile from '../hook/useDownloadFile';
+import useMediaQuery from '../hook/useMediaQuery';
 import CodeEditor from '../components/CodeEditor';
 import Terminal from '../components/Terminal';
 import ThemeSelector from '../components/ThemeSelector';
@@ -44,6 +46,7 @@ function JSsaved() {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   const editorRef = useRef<any>(null);
   const { resolvedTheme } = useTheme();
+  const isDesktop = useMediaQuery('(min-width: 640px)');
 
   async function dbcall() {
     if (id) {
@@ -90,6 +93,9 @@ function JSsaved() {
 
   function handleRunClick() {
     setIsRunning(true);
+    if (!isDesktop) {
+      setActiveMobileTab('console');
+    }
     if (editorRef.current) {
       editorRef.current.getAction('editor.action.formatDocument')?.run();
     }
@@ -135,6 +141,7 @@ function JSsaved() {
 
   useAdjustFontSize(handleFontSize);
   useComplieCode(handleRunClick);
+  useDownloadFile(handleDownload);
   useWarnOnClose();
   useFormatDocument(() => {
     if (editorRef.current) {
@@ -292,54 +299,58 @@ function JSsaved() {
 
         {/* Main Workspace Area */}
         <section className="flex-1 w-full relative overflow-hidden">
-          {/* Desktop Split Pane View */}
-          <div className="hidden sm:block h-full w-full">
-            <Split
-              className="split h-full w-full"
-              sizes={[60, 40]}
-              minSize={180}
-              gutterSize={6}
-            >
-              {/* Code Editor Column */}
-              <div className="h-full flex flex-col overflow-hidden bg-[var(--bg-app)]">
-                {/* Editor File Tab Strip */}
-                <div className="flex items-center justify-between px-3 py-1.5 bg-[var(--bg-surface)] border-b border-[var(--border-default)] text-xs no-select">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-medium border border-[var(--border-subtle)]">
-                      <Code2 className="w-3.5 h-3.5 text-amber-500" />
-                      <span>{fileName}.js</span>
+          {isDesktop ? (
+            /* Desktop Split Pane View */
+            <div className="h-full w-full">
+              <Split
+                className="split h-full w-full"
+                sizes={[60, 40]}
+                minSize={180}
+                gutterSize={6}
+              >
+                {/* Code Editor Column */}
+                <div className="h-full flex flex-col overflow-hidden bg-[var(--bg-app)]">
+                  {/* Editor File Tab Strip */}
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-[var(--bg-surface)] border-b border-[var(--border-default)] text-xs no-select">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-medium border border-[var(--border-subtle)]">
+                        <Code2 className="w-3.5 h-3.5 text-amber-500" />
+                        <span>{fileName}.js</span>
+                      </div>
                     </div>
+                    <span className="text-[11px] text-[var(--text-muted)] font-mono">
+                      JavaScript • IndexedDB
+                    </span>
                   </div>
-                  <span className="text-[11px] text-[var(--text-muted)] font-mono">
-                    JavaScript • IndexedDB
-                  </span>
+
+                  <div className="flex-1 overflow-hidden">
+                    <CodeEditor
+                      language="javascript"
+                      code={code?.code ?? ''}
+                      editorRef={editorRef}
+                      currentFontSize={Number(currentFontSize)}
+                      onChange={(value) => handleTextChange(value ?? '')}
+                    />
+                  </div>
                 </div>
 
-                <div className="flex-1 overflow-hidden">
-                  <CodeEditor
-                    language="javascript"
-                    code={code?.code ?? ''}
-                    editorRef={editorRef}
-                    currentFontSize={Number(currentFontSize)}
-                    onChange={(value) => handleTextChange(value ?? '')}
+                {/* Terminal Column */}
+                <div className="h-full overflow-hidden">
+                  <Terminal
+                    clearTerminal={clearTerminal}
+                    consoleRef={consoleRef}
                   />
                 </div>
-              </div>
-
-              {/* Terminal Column */}
-              <div className="h-full overflow-hidden">
-                <Terminal
-                  clearTerminal={clearTerminal}
-                  consoleRef={consoleRef}
-                />
-              </div>
-            </Split>
-          </div>
-
-          {/* Mobile Single Tab View */}
-          <div className="sm:hidden h-full w-full">
-            {activeMobileTab === 'editor' ? (
-              <div className="h-full flex flex-col bg-[var(--bg-app)]">
+              </Split>
+            </div>
+          ) : (
+            /* Mobile Single Tab View */
+            <div className="h-full w-full">
+              <div
+                className={`h-full flex flex-col bg-[var(--bg-app)] ${
+                  activeMobileTab === 'editor' ? '' : 'hidden'
+                }`}
+              >
                 <CodeEditor
                   language="javascript"
                   code={code?.code ?? ''}
@@ -348,15 +359,18 @@ function JSsaved() {
                   onChange={(value) => handleTextChange(value ?? '')}
                 />
               </div>
-            ) : (
-              <div className="h-full">
+              <div
+                className={`h-full ${
+                  activeMobileTab === 'console' ? '' : 'hidden'
+                }`}
+              >
                 <Terminal
                   clearTerminal={clearTerminal}
                   consoleRef={consoleRef}
                 />
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </section>
       </main>
 

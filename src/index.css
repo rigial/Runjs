@@ -265,7 +265,7 @@
   color: #f0f6fc !important;
 }
 
-:not(.dark) .luna-console {
+.light .luna-console {
   background-color: #f8fafc !important;
   color: #0f172a !important;
 }

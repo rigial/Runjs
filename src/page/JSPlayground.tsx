@@ -32,7 +32,7 @@ import {
 function JSPlayground() {
   const [code, setCode] = useDebounceLocalStorageState(
     'jscode',
-    '// Welcome to RunJS - In-browser JavaScript Playground\n\nfunction calculateStats(numbers) {\n  const sum = numbers.reduce((acc, curr) => acc + curr, 0);\n  const avg = sum / numbers.length;\n  const max = Math.max(...numbers);\n  return { sum, avg, max };\n}\n\nconst scores = [88, 92, 79, 95, 100];\nconsole.log("Calculated Statistics:", calculateStats(scores));\n\n// Try logging complex objects or arrays:\nconsole.table([\n  { language: "JavaScript", status: "Active" },\n  { language: "TypeScript", status: "Active" },\n  { language: "React", status: "Active" }\n]);\n',
+    '// Welcome to RunJS - In-browser JavaScript Playground\n\nfunction calculateStats(numbers) {\n  const sum = numbers.reduce((acc, curr) => acc + curr, 0);\n  const avg = sum / numbers.length;\n  const max = Math.max(...numbers);\n  return { sum, avg, max };\n}\n\nconst scores = [88, 92, 79, 95, 100];\nconsole.log("Calculated Statistics:", calculateStats(scores));\n',
     1000
   );
   const [currentFontSize, setFontSize] = useLocalStorageState('fontSize', '14');

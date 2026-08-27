@@ -117,6 +117,9 @@
       sans-serif;
     background-color: var(--bg-app);
     color: var(--text-primary);
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
     transition:
       background-color 150ms ease,
       color 150ms ease;
@@ -127,6 +130,15 @@
     color: var(--text-primary);
     min-height: 100vh;
     overflow-x: hidden;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+  }
+
+  #root {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
   }
 
   dialog::backdrop {
@@ -166,6 +178,13 @@
     display: none !important;
     width: 0 !important;
     height: 0 !important;
+  }
+
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
   }
 
   .no-select {

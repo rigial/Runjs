@@ -1,41 +1,157 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-CustomDarkGrey: #141414;
-  --color-custom-dark-grey: #141414;
-  --color-WindowBorder: #393939;
-  --color-window-border: #393939;
-  --color-JSYellow: #f1dd50;
-  --color-js-yellow: #f1dd50;
-  --color-TSBlue: #3179c7;
-  --color-ts-blue: #3179c7;
-  --color-cblack: #141414;
-  --color-modalBg: #f9fafb;
-  --color-modal-bg: #f9fafb;
-  --color-PearlLusta: #fcf4de;
-  --color-pearl-lusta: #fcf4de;
+  --color-CustomDarkGrey: var(--bg-app);
+  --color-custom-dark-grey: var(--bg-app);
+  --color-WindowBorder: var(--border-default);
+  --color-window-border: var(--border-default);
+  --color-JSYellow: #facc15;
+  --color-js-yellow: #facc15;
+  --color-TSBlue: #3b82f6;
+  --color-ts-blue: #3b82f6;
+  --color-cblack: var(--bg-surface);
+  --color-modalBg: var(--bg-surface-elevated);
+  --color-modal-bg: var(--bg-surface-elevated);
+  --color-PearlLusta: var(--text-primary);
+  --color-pearl-lusta: var(--text-primary);
 
-  --spacing-7vh: 7vh;
-  --spacing-93vh: 93vh;
+  --spacing-7vh: 48px;
+  --spacing-93vh: calc(100vh - 48px);
 }
 
 @utility h-7vh {
-  height: 7vh;
+  height: 48px;
 }
 
 @utility h-93vh {
-  height: 93vh;
+  height: calc(100vh - 48px);
 }
 
 @variant dark (&:where(.dark, .dark *));
 
+:root {
+  color-scheme: light;
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-hover: #f1f5f9;
+  --bg-surface-active: #e2e8f0;
+  --bg-surface-muted: #f8fafc;
+
+  --border-subtle: #f1f5f9;
+  --border-default: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --border-focus: #3b82f6;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-inverse: #ffffff;
+
+  --color-primary: #0f172a;
+  --color-primary-hover: #1e293b;
+  --color-primary-text: #ffffff;
+
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card:
+    0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-elevated:
+    0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+
+  --gutter-bg: #f1f5f9;
+  --gutter-hover: #cbd5e1;
+  --gutter-border: #e2e8f0;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg-app: #0e1117;
+  --bg-surface: #161b22;
+  --bg-surface-elevated: #1f242c;
+  --bg-surface-hover: #262c36;
+  --bg-surface-active: #2f3642;
+  --bg-surface-muted: #13171e;
+
+  --border-subtle: #21262d;
+  --border-default: #30363d;
+  --border-hover: #484f58;
+  --border-focus: #388bfd;
+
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --text-inverse: #0f172a;
+
+  --color-primary: #f0f6fc;
+  --color-primary-hover: #e6edf3;
+  --color-primary-text: #0e1117;
+
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-card:
+    0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-elevated:
+    0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+
+  --gutter-bg: #161b22;
+  --gutter-hover: #30363d;
+  --gutter-border: #21262d;
+}
+
 @layer base {
+  * {
+    border-color: var(--border-default);
+  }
+
+  html {
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      'Open Sans',
+      'Helvetica Neue',
+      sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
   body {
-    font-family: 'Inter', sans-serif, 'Courier New', Courier, monospace;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   dialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Custom clean scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
   }
 }
 
@@ -44,20 +160,124 @@
     user-select: none;
   }
 
+  .bg-app {
+    background-color: var(--bg-app);
+  }
+
+  .bg-surface {
+    background-color: var(--bg-surface);
+  }
+
+  .bg-surface-elevated {
+    background-color: var(--bg-surface-elevated);
+  }
+
+  .bg-surface-hover {
+    background-color: var(--bg-surface-hover);
+  }
+
+  .border-subtle {
+    border-color: var(--border-subtle);
+  }
+
+  .border-default {
+    border-color: var(--border-default);
+  }
+
+  .text-primary-var {
+    color: var(--text-primary);
+  }
+
+  .text-secondary-var {
+    color: var(--text-secondary);
+  }
+
+  .text-muted-var {
+    color: var(--text-muted);
+  }
+
   .split {
     display: flex;
     flex-direction: row;
+    height: 100%;
+    width: 100%;
   }
 
   .gutter {
-    background-color: #141414;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    border-right: 1px solid #393939;
+    background-color: var(--gutter-bg);
+    transition: background-color 150ms ease;
+    position: relative;
+    z-index: 10;
   }
 
   .gutter.gutter-horizontal {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
     cursor: col-resize;
+    border-left: 1px solid var(--gutter-border);
+    border-right: 1px solid var(--gutter-border);
+    width: 6px !important;
+  }
+
+  .gutter.gutter-horizontal:hover,
+  .gutter.gutter-horizontal:active {
+    background-color: var(--border-focus);
+  }
+
+  .gutter.gutter-vertical {
+    cursor: row-resize;
+    border-top: 1px solid var(--gutter-border);
+    border-bottom: 1px solid var(--gutter-border);
+    height: 6px !important;
+  }
+
+  .gutter.gutter-vertical:hover,
+  .gutter.gutter-vertical:active {
+    background-color: var(--border-focus);
+  }
+
+  /* Grid background patterns */
+  .grid-pattern {
+    background-size: 24px 24px;
+    background-image:
+      linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+  }
+
+  .dot-pattern {
+    background-size: 20px 20px;
+    background-image: radial-gradient(
+      var(--border-default) 1px,
+      transparent 1px
+    );
+  }
+}
+
+/* Luna console overrides to integrate smoothly with themes */
+.luna-console {
+  font-family:
+    'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace !important;
+  font-size: 13px !important;
+  background: transparent !important;
+  height: 100% !important;
+}
+
+.dark .luna-console {
+  background-color: #0e1117 !important;
+  color: #f0f6fc !important;
+}
+
+:not(.dark) .luna-console {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Smooth motion & animation accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

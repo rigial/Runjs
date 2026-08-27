@@ -1,5 +1,5 @@
 import { transform } from 'esbuild-wasm';
-import { Fragment, memo, useRef } from 'react';
+import { Fragment, memo, useRef, useState } from 'react';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
 import useLocalStorageState from '../hook/useLocalStorageState';
@@ -14,27 +14,45 @@ import useWarnOnClose from '../hook/useWarnOnClose ';
 import useFormatDocument from '../hook/useFormatDocument';
 import CodeEditor from '../components/CodeEditor';
 import Terminal from '../components/Terminal';
+import ThemeSelector from '../components/ThemeSelector';
+import useTheme from '../hook/useTheme';
+import { saveJSTSFile } from '../utils/commonFunction';
+import {
+  Play,
+  HelpCircle,
+  Download,
+  AlignLeft,
+  ZoomIn,
+  ZoomOut,
+  Code2,
+  ChevronLeft,
+} from 'lucide-react';
 
 function TSPlayground() {
   const [code, setCode] = useDebounceLocalStorageState(
     'tscode',
-    '// Write your code here...',
+    '// Welcome to RunJS - In-browser TypeScript Playground\n\ninterface UserProfile {\n  id: string;\n  name: string;\n  role: "admin" | "developer" | "designer";\n  skills: string[];\n}\n\nconst user: UserProfile = {\n  id: "usr_101",\n  name: "Alex Rivera",\n  role: "developer",\n  skills: ["TypeScript", "React", "Node.js"]\n};\n\nfunction printUserInfo(profile: UserProfile): void {\n  console.log(`User: ${profile.name} (${profile.role.toUpperCase()})`);\n  console.log("Skills:", profile.skills.join(", "));\n}\n\nprintUserInfo(user);\n',
     1000
   );
   const [currentFontSize, setFontSize] = useLocalStorageState('fontSize', '14');
+  const [activeMobileTab, setActiveMobileTab] = useState<'editor' | 'console'>(
+    'editor'
+  );
+  const [isRunning, setIsRunning] = useState(false);
   const consoleRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<ModalRef>(null);
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   const editorRef = useRef<any>(null);
+  const { resolvedTheme } = useTheme();
 
   function handleFontSize(operation: 'increaseFontSize' | 'decreaseFontSize') {
     let fontSize = Number(currentFontSize);
-    if (operation == 'increaseFontSize') {
-      fontSize += 1;
+    if (operation === 'increaseFontSize') {
+      fontSize = Math.min(fontSize + 1, 28);
     } else {
-      fontSize -= 1;
+      fontSize = Math.max(fontSize - 1, 10);
     }
-    setFontSize(fontSize);
+    setFontSize(fontSize.toString());
   }
 
   function clearTerminal() {
@@ -44,6 +62,7 @@ function TSPlayground() {
   }
 
   async function handleRunClick() {
+    setIsRunning(true);
     if (editorRef.current) {
       editorRef.current.getAction('editor.action.formatDocument')?.run();
     }
@@ -51,7 +70,7 @@ function TSPlayground() {
       consoleRef.current.innerHTML = '';
 
       const lunaConsole = new LunaConsole(consoleRef.current, {
-        theme: 'dark',
+        theme: resolvedTheme === 'dark' ? 'dark' : 'light',
       });
 
       type ConsoleMethods = 'log' | 'info' | 'warn' | 'error';
@@ -73,11 +92,15 @@ function TSPlayground() {
         final = addInfiniteLoopProtection(final);
         const executeCode = new Function('console', final);
         executeCode(customConsole);
-        console.clear();
       } catch (error) {
         customConsole.error(error);
       }
     }
+    setTimeout(() => setIsRunning(false), 200);
+  }
+
+  function handleDownload() {
+    saveJSTSFile(code, 'script', 'ts');
   }
 
   useAdjustFontSize(handleFontSize);
@@ -91,67 +114,217 @@ function TSPlayground() {
 
   return (
     <Fragment>
-      <main className="bg-CustomDarkGrey">
-        <nav className="h-7vh w-full flex items-center justify-between px-3">
-          <Link to={'/dashboard'}>
-            <img
-              src={'/runjs.in.webp'}
-              className="w-8 h-8 rounded"
-              alt="RunJs Logo"
-            />
-          </Link>
-          <button
-            onClick={handleRunClick}
-            className={`bg-TSBlue text-black font-semibold py-1 px-2 rounded flex flex-row gap-1 items-center hover:cursor-pointer`}
-          >
-            <svg
-              stroke="currentColor"
-              fill="#000000"
-              strokeWidth="0"
-              viewBox="0 0 16 16"
-              className="shrink-0"
-              height="20"
-              width="20"
-              xmlns="http://www.w3.org/2000/svg"
+      <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
+        {/* Top IDE Navigation */}
+        <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">
+          {/* Left: Brand & File Title */}
+          <div className="flex items-center gap-3">
+            <Link
+              to="/dashboard"
+              title="Back to Dashboard"
+              className="flex items-center gap-1.5 p-1.5 rounded-md hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
-              <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-            </svg>
-            Run
-          </button>
-          <button
-            onClick={() => dialogRef?.current?.open()}
-            className={`text-WindowBorder hover:cursor-pointer font-medium hover:text-white`}
-          >
-            Help
-          </button>
+              <ChevronLeft className="w-4 h-4" />
+              <div className="flex items-center justify-center w-6 h-6 rounded-md bg-blue-500 text-white font-bold text-xs shadow-xs">
+                TS
+              </div>
+            </Link>
+
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-xs font-semibold text-[var(--text-primary)]">
+                script.ts
+              </span>
+              <span className="px-1.5 py-0.5 text-[10px] font-semibold rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                TypeScript
+              </span>
+            </div>
+          </div>
+
+          {/* Center: Actions (Run, Format, Font, Download) */}
+          <div className="flex items-center gap-1.5">
+            {/* Run Button */}
+            <button
+              type="button"
+              onClick={handleRunClick}
+              disabled={isRunning}
+              title="Run code (Ctrl/Cmd + R)"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer disabled:opacity-50"
+            >
+              <Play
+                className={`w-3.5 h-3.5 fill-white ${isRunning ? 'animate-spin' : ''}`}
+              />
+              <span>Run</span>
+              <kbd className="hidden md:inline-block ml-1 px-1 py-0.2 text-[9px] font-mono bg-white/20 text-white rounded">
+                ⌘R
+              </kbd>
+            </button>
+
+            {/* Format Document */}
+            <button
+              type="button"
+              onClick={() => {
+                if (editorRef.current) {
+                  editorRef.current
+                    .getAction('editor.action.formatDocument')
+                    ?.run();
+                }
+              }}
+              title="Format Document (Shift + Alt + F)"
+              aria-label="Format Document"
+              className="hidden sm:flex items-center gap-1 p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <AlignLeft className="w-4 h-4" />
+            </button>
+
+            {/* Font Size Adjusters */}
+            <div className="hidden md:flex items-center rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] p-0.5">
+              <button
+                type="button"
+                onClick={() => handleFontSize('decreaseFontSize')}
+                title="Decrease font size"
+                className="p-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+              >
+                <ZoomOut className="w-3.5 h-3.5" />
+              </button>
+              <span className="px-1.5 text-[11px] font-mono text-[var(--text-muted)]">
+                {currentFontSize}px
+              </span>
+              <button
+                type="button"
+                onClick={() => handleFontSize('increaseFontSize')}
+                title="Increase font size"
+                className="p-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+              >
+                <ZoomIn className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Download File */}
+            <button
+              type="button"
+              onClick={handleDownload}
+              title="Download File (Ctrl/Cmd + S)"
+              aria-label="Download File"
+              className="hidden sm:flex items-center p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Right: Help, Theme & Mobile Switcher */}
+          <div className="flex items-center gap-2">
+            {/* Mobile View Toggle */}
+            <div className="flex sm:hidden rounded-md border border-[var(--border-default)] bg-[var(--bg-surface-muted)] p-0.5">
+              <button
+                type="button"
+                onClick={() => setActiveMobileTab('editor')}
+                className={`px-2 py-1 text-[11px] font-medium rounded ${
+                  activeMobileTab === 'editor'
+                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xs font-semibold'
+                    : 'text-[var(--text-secondary)]'
+                }`}
+              >
+                Code
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveMobileTab('console')}
+                className={`px-2 py-1 text-[11px] font-medium rounded ${
+                  activeMobileTab === 'console'
+                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xs font-semibold'
+                    : 'text-[var(--text-secondary)]'
+                }`}
+              >
+                Console
+              </button>
+            </div>
+
+            {/* Theme Selector */}
+            <ThemeSelector compact={true} />
+
+            {/* Help / Shortcuts Button */}
+            <button
+              type="button"
+              onClick={() => dialogRef?.current?.open()}
+              title="Keyboard Shortcuts"
+              aria-label="Help"
+              className="flex items-center gap-1 p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <HelpCircle className="w-4 h-4" />
+            </button>
+          </div>
         </nav>
-        <section className="h-93vh w-full">
-          <Split className="split h-full w-full" minSize={0}>
-            <section className="h-full w-full flex flex-col">
-              <div className="flex overflow-x-auto border border-WindowBorder">
-                <div
-                  className={`flex items-center gap-2 bg-cblack py-2 px-3 border-r border-r-WindowBorder hover:cursor-pointer`}
-                >
-                  <img
-                    src={'/Typescript.webp'}
-                    className="w-5 h-5 rounded-sm"
-                    alt="Typescript Logo"
+
+        {/* Main Workspace Area */}
+        <section className="flex-1 w-full relative overflow-hidden">
+          {/* Desktop Split Pane View */}
+          <div className="hidden sm:block h-full w-full">
+            <Split
+              className="split h-full w-full"
+              sizes={[60, 40]}
+              minSize={180}
+              gutterSize={6}
+            >
+              {/* Code Editor Column */}
+              <div className="h-full flex flex-col overflow-hidden bg-[var(--bg-app)]">
+                {/* Editor File Tab Strip */}
+                <div className="flex items-center justify-between px-3 py-1.5 bg-[var(--bg-surface)] border-b border-[var(--border-default)] text-xs no-select">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-medium border border-[var(--border-subtle)]">
+                      <Code2 className="w-3.5 h-3.5 text-blue-500" />
+                      <span>script.ts</span>
+                    </div>
+                  </div>
+                  <span className="text-[11px] text-[var(--text-muted)] font-mono">
+                    TypeScript • esbuild-wasm
+                  </span>
+                </div>
+
+                <div className="flex-1 overflow-hidden">
+                  <CodeEditor
+                    language="typescript"
+                    code={code}
+                    editorRef={editorRef}
+                    currentFontSize={Number(currentFontSize)}
+                    onChange={(value) => setCode(value ?? '')}
                   />
-                  <span className="text-white text-sm">script.ts</span>
                 </div>
               </div>
-              <CodeEditor
-                language={'typescript'}
-                code={code}
-                editorRef={editorRef}
-                currentFontSize={Number(currentFontSize)}
-                onChange={(value) => setCode(value ?? '')}
-              />
-            </section>
-            <Terminal clearTerminal={clearTerminal} consoleRef={consoleRef} />
-          </Split>
+
+              {/* Terminal Column */}
+              <div className="h-full overflow-hidden">
+                <Terminal
+                  clearTerminal={clearTerminal}
+                  consoleRef={consoleRef}
+                />
+              </div>
+            </Split>
+          </div>
+
+          {/* Mobile Single Tab View */}
+          <div className="sm:hidden h-full w-full">
+            {activeMobileTab === 'editor' ? (
+              <div className="h-full flex flex-col bg-[var(--bg-app)]">
+                <CodeEditor
+                  language="typescript"
+                  code={code}
+                  editorRef={editorRef}
+                  currentFontSize={Number(currentFontSize)}
+                  onChange={(value) => setCode(value ?? '')}
+                />
+              </div>
+            ) : (
+              <div className="h-full">
+                <Terminal
+                  clearTerminal={clearTerminal}
+                  consoleRef={consoleRef}
+                />
+              </div>
+            )}
+          </div>
         </section>
       </main>
+
       <HelpModal ref={dialogRef} />
     </Fragment>
   );

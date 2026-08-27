@@ -1,23 +1,67 @@
 import { Link } from 'react-router';
+import { Home, Play } from 'lucide-react';
 
 function PageNotFound() {
   return (
-    <div className="grid h-screen place-content-center bg-cblack px-4">
-      <div className="text-center">
-        <h1 className="text-9xl font-black text-gray-200">404</h1>
+    <div className="min-h-screen w-full flex items-center justify-center bg-[var(--bg-app)] text-[var(--text-primary)] p-4">
+      <div className="w-full max-w-md rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-card overflow-hidden">
+        {/* Terminal Header */}
+        <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--bg-surface-muted)] border-b border-[var(--border-default)] text-xs select-none">
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block" />
+            </div>
+            <span className="ml-2 font-mono text-[var(--text-secondary)] text-[11px]">
+              runtime-error • 404.ts
+            </span>
+          </div>
+          <span className="text-[10px] font-mono text-red-500 font-semibold uppercase">
+            Error 404
+          </span>
+        </div>
 
-        <p className="text-2xl font-bold tracking-tight text-PearlLusta sm:text-4xl">
-          Uh-oh!
-        </p>
+        {/* Terminal Error Content */}
+        <div className="p-6 font-mono text-xs space-y-4">
+          <div className="space-y-1">
+            <div className="text-red-500 font-bold">
+              NotFoundException: Page or resource does not exist.
+            </div>
+            <div className="text-[var(--text-muted)] text-[11px]">
+              at Router.resolveRoute (src/AppRouter.tsx:41:11)
+            </div>
+            <div className="text-[var(--text-muted)] text-[11px]">
+              at ClientSession.navigate (window.location.pathname)
+            </div>
+          </div>
 
-        <p className="mt-4 text-gray-500">We can't find that page.</p>
+          <div className="p-3 rounded-lg bg-[var(--bg-app)] border border-[var(--border-subtle)] text-[var(--text-secondary)]">
+            <p>
+              The playground or route you are looking for might have been
+              deleted, renamed, or moved.
+            </p>
+          </div>
 
-        <Link
-          to={'/'}
-          className="mt-6 inline-block rounded bg-PearlLusta px-5 py-3 text-sm font-medium text-black focus:outline-none focus:ring"
-        >
-          Go Back Home
-        </Link>
+          {/* Action Links */}
+          <div className="flex flex-col sm:flex-row gap-2 pt-2">
+            <Link
+              to="/"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-semibold shadow-xs transition-colors"
+            >
+              <Home className="w-3.5 h-3.5" />
+              <span>Back to Home</span>
+            </Link>
+
+            <Link
+              to="/js"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-xs font-medium transition-colors"
+            >
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>New Playground</span>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

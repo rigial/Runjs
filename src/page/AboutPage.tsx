@@ -139,23 +139,34 @@ function AboutPage() {
           <div className="p-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] space-y-4 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
             <p>
               RunJS began its journey in 2023, inspired by platforms like
-              CodePen where developers could compile and experiment with HTML,
-              CSS, and JavaScript live in the browser. What started as an
-              experimental prototype named <em>WebDJ</em> evolved as the need
-              grew for a lightweight, standalone JavaScript and TypeScript
-              execution playground.
+              CodePen and JSFiddle where developers could prototype and
+              experiment with HTML, CSS, and JavaScript live in the browser.
+              What started as an experimental prototype named <em>WebDJ</em>{' '}
+              evolved as the need grew for a lightweight, instant JavaScript and
+              TypeScript scratchpad free of heavy dev servers or cloud backends.
             </p>
             <p>
-              In October 2024, the platform was re-architected to execute code
-              directly in the client browser with zero server dependencies,
-              capturing console logs with high-fidelity output viewers and
-              safeguarding execution with infinite-loop AST protection.
+              In 2024, the platform was re-architected to execute code directly
+              in the client browser with zero server dependencies, capturing
+              console logs with high-fidelity Luna output inspectors and
+              safeguarding execution with AST-based infinite loop protection.
             </p>
             <p>
-              By 2025, RunJS was redesigned from the ground up to follow modern
-              developer-tool design standards, featuring VS Code Monaco
-              integration, esbuild WebAssembly compilation, offline IndexedDB
-              storage, and Sandpack React support.
+              In 2025, RunJS was redesigned from the ground up to adhere to
+              modern developer-tool standards, integrating Monaco Editor (VS
+              Code core), esbuild WebAssembly compilation, offline IndexedDB
+              storage, and Sandpack React container support.
+            </p>
+            <p>
+              In 2026, RunJS expanded beyond playgrounds into a comprehensive{' '}
+              <strong className="text-[var(--text-primary)] font-semibold">
+                JavaScript Problem Solving & Interview Preparation Platform
+              </strong>
+              . Featuring a LeetCode-style problem browser, custom test runner,
+              real-time submission verification engine, progressive hints, and
+              deep complexity analyses — RunJS empowers developers to master
+              JavaScript fundamentals, closures, async patterns, and algorithms
+              entirely within their browser.
             </p>
           </div>
         </section>

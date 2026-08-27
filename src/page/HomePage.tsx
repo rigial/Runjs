@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import {
   Play,
-  ArrowRight,
   Terminal,
   Zap,
   ShieldCheck,
@@ -47,24 +46,46 @@ function HomePage() {
           {/* CTA Buttons */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
-              to="/js"
+              to="/problems"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-sm font-semibold shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Play className="w-4 h-4 fill-black" />
-              <span>Start Coding JavaScript</span>
+              <Sparkles className="w-4 h-4" />
+              <span>Explore Coding Challenges</span>
             </Link>
 
             <Link
-              to="/dashboard"
+              to="/js"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
             >
-              <span>My Playgrounds</span>
-              <ArrowRight className="w-4 h-4 text-[var(--text-muted)]" />
+              <Play className="w-4 h-4 text-amber-500 fill-amber-500" />
+              <span>Open JavaScript Playground</span>
             </Link>
           </div>
 
-          {/* Language Cards Quick Links */}
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full text-left">
+          {/* Language & Problem Cards Quick Links */}
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full text-left">
+            {/* Coding Problems Card */}
+            <Link
+              to="/problems"
+              className="group p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-amber-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-sm">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                  Interactive
+                </span>
+              </div>
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
+                Coding Challenges
+              </h2>
+              <p className="text-xs text-[var(--text-secondary)] mt-1">
+                LeetCode-style JS challenges with test runner, progressive
+                hints, and submission history.
+              </p>
+            </Link>
+
             {/* JavaScript Card */}
             <Link
               to="/js"

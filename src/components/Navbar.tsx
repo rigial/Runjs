@@ -33,7 +33,10 @@ function Navbar() {
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-1">
             {navigation.map((val, index) => {
-              const isActive = location.pathname === val.link;
+              const isActive =
+                val.link === '/'
+                  ? location.pathname === '/'
+                  : location.pathname.startsWith(val.link);
               return (
                 <Link
                   key={index}

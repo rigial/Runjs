@@ -15,6 +15,9 @@ const PageNotFound = lazy(() => import('./page/PageNotFound'));
 const JSsaved = lazy(() => import('./page/JSsaved'));
 const TSsaved = lazy(() => import('./page/TSsaved'));
 
+const Problemset = lazy(() => import('./page/Problemset'));
+const ProblemSolving = lazy(() => import('./page/ProblemSolving'));
+
 function AppRouter() {
   useEffect(() => {
     async function asyncFunctionCall() {
@@ -29,6 +32,8 @@ function AppRouter() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/problems" element={<Problemset />} />
+          <Route path="/problems/:slug" element={<ProblemSolving />} />
           <Route path="/js" element={<JSPlayground />} />
           <Route path="/react" element={<ReactPlayground />} />
           <Route path="/js/:id" element={<JSsaved />} />

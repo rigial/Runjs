@@ -131,6 +131,129 @@ async function compileIfTypeScript(
   return code;
 }
 
+function isWorkerSupported(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    typeof Worker !== 'undefined' &&
+    typeof Blob !== 'undefined' &&
+    typeof URL !== 'undefined' &&
+    typeof URL.createObjectURL === 'function'
+  );
+}
+
+function isCloneable(val: any): boolean {
+  try {
+    if (typeof structuredClone === 'function') {
+      structuredClone(val);
+      return true;
+    }
+    JSON.stringify(val);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function runInWorker(
+  runnerFunctionBody: string,
+  input: any,
+  timeoutMs: number
+): Promise<{ actual: any; logs: string[] }> {
+  return new Promise((resolve, reject) => {
+    const workerScript = `
+      self.onmessage = async function(e) {
+        const { runnerCode, input } = e.data;
+        const logs = [];
+        
+        function formatVal(val) {
+          if (val === undefined) return 'undefined';
+          if (val === null) return 'null';
+          if (typeof val === 'function') return val.toString();
+          if (typeof val === 'string') return '"' + val + '"';
+          if (typeof val === 'number' || typeof val === 'boolean') return String(val);
+          try {
+            return JSON.stringify(val, null, 2);
+          } catch {
+            return String(val);
+          }
+        }
+
+        const captureConsole = {
+          log: (...args) => logs.push(args.map((a) => formatVal(a)).join(' ')),
+          info: (...args) => logs.push('[INFO] ' + args.map((a) => formatVal(a)).join(' ')),
+          warn: (...args) => logs.push('[WARN] ' + args.map((a) => formatVal(a)).join(' ')),
+          error: (...args) => logs.push('[ERR] ' + args.map((a) => formatVal(a)).join(' ')),
+        };
+
+        try {
+          const factory = new Function('console', runnerCode);
+          const execute = factory(captureConsole);
+          const actual = await execute(input);
+          self.postMessage({ success: true, actual, logs });
+        } catch (err) {
+          self.postMessage({ success: false, error: err?.message || String(err), logs });
+        }
+      };
+    `;
+
+    let blob: Blob | null = null;
+    let url: string | null = null;
+    let worker: Worker | null = null;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
+
+    const cleanup = () => {
+      if (timerId !== null) {
+        clearTimeout(timerId);
+        timerId = null;
+      }
+      if (worker) {
+        worker.terminate();
+        worker = null;
+      }
+      if (url) {
+        URL.revokeObjectURL(url);
+        url = null;
+      }
+    };
+
+    try {
+      blob = new Blob([workerScript], { type: 'application/javascript' });
+      url = URL.createObjectURL(blob);
+      worker = new Worker(url);
+
+      timerId = setTimeout(() => {
+        cleanup();
+        reject(
+          new Error(
+            `Time Limit Exceeded: Execution took longer than ${timeoutMs}ms.`
+          )
+        );
+      }, timeoutMs);
+
+      worker.onmessage = (event: MessageEvent) => {
+        const data = event.data;
+        cleanup();
+        if (data.success) {
+          resolve({ actual: data.actual, logs: data.logs || [] });
+        } else {
+          reject(new Error(data.error || 'Execution failed'));
+        }
+      };
+
+      worker.onerror = (event: ErrorEvent) => {
+        const errorMsg = event.message || 'Worker execution error';
+        cleanup();
+        reject(new Error(errorMsg));
+      };
+
+      worker.postMessage({ runnerCode: runnerFunctionBody, input });
+    } catch (err) {
+      cleanup();
+      reject(err);
+    }
+  });
+}
+
 export async function runSingleTestCase(
   problem: Problem,
   userCode: string,
@@ -228,31 +351,43 @@ export async function runSingleTestCase(
       `;
     }
 
-    const factory = new Function('console', runnerFunctionBody);
-    const execute = factory(captureConsole);
-
     const clonedInput = deepClone(testCase.input);
 
-    let timerId: ReturnType<typeof setTimeout> | undefined;
-    const executionPromise = execute(clonedInput);
-    const timeoutPromise = new Promise((_, reject) => {
-      timerId = setTimeout(
-        () =>
-          reject(
-            new Error(
-              `Time Limit Exceeded: Execution took longer than ${timeoutMs}ms.`
-            )
-          ),
+    let actual: any;
+    if (isWorkerSupported() && isCloneable(clonedInput)) {
+      const workerRes = await runInWorker(
+        runnerFunctionBody,
+        clonedInput,
         timeoutMs
       );
-    });
+      actual = workerRes.actual;
+      logs.push(...workerRes.logs);
+    } else {
+      let timerId: ReturnType<typeof setTimeout> | undefined;
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timerId = setTimeout(
+          () =>
+            reject(
+              new Error(
+                `Time Limit Exceeded: Execution took longer than ${timeoutMs}ms.`
+              )
+            ),
+          timeoutMs
+        );
+      });
 
-    let actual: any;
-    try {
-      actual = await Promise.race([executionPromise, timeoutPromise]);
-    } finally {
-      if (timerId !== undefined) {
-        clearTimeout(timerId);
+      const executionPromise = (async () => {
+        const factory = new Function('console', runnerFunctionBody);
+        const execute = factory(captureConsole);
+        return await execute(clonedInput);
+      })();
+
+      try {
+        actual = await Promise.race([executionPromise, timeoutPromise]);
+      } finally {
+        if (timerId !== undefined) {
+          clearTimeout(timerId);
+        }
       }
     }
 

@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { RotateCcw, X, AlertTriangle } from 'lucide-react';
 
 interface ResetCodeModalProps {
@@ -14,18 +14,50 @@ function ResetCodeModal({
   onConfirm,
   problemTitle,
 }: ResetCodeModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    }
     if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement | null;
+      // Focus cancel button on open
+      setTimeout(() => {
+        cancelButtonRef.current?.focus();
+      }, 0);
+
+      function handleKeyDown(e: KeyboardEvent) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          onClose();
+          return;
+        }
+
+        if (e.key === 'Tab' && modalRef.current) {
+          const focusables = modalRef.current.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+          if (focusables.length === 0) return;
+
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+
       window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        previousFocusRef.current?.focus();
+      };
     }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -35,9 +67,11 @@ function ResetCodeModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="reset-modal-title"
+      onClick={onClose}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
     >
       <div
+        ref={modalRef}
         className="w-full max-w-md rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-default)] shadow-2xl overflow-hidden transition-all duration-200"
         onClick={(e) => e.stopPropagation()}
       >
@@ -82,6 +116,7 @@ function ResetCodeModal({
         {/* Actions Footer */}
         <div className="flex items-center justify-end gap-2.5 px-5 py-4 border-t border-[var(--border-default)] bg-[var(--bg-app)]/50">
           <button
+            ref={cancelButtonRef}
             type="button"
             onClick={onClose}
             className="px-4 py-2 rounded-xl text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] border border-[var(--border-default)] transition-colors cursor-pointer"

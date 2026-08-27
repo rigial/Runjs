@@ -75,11 +75,17 @@ function ProblemFilters({
           <button
             type="button"
             onClick={() => {
-              onDifficultyChange('all');
-              onStatusChange('all');
+              if (onResetFilters) {
+                onResetFilters();
+              } else {
+                onSearchChange('');
+                onDifficultyChange('all');
+                onTopicChange('all');
+                onStatusChange('all');
+              }
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-              difficulty === 'all' && status === 'all'
+              !isFiltered
                 ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] shadow-xs border border-[var(--border-default)]'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
             }`}

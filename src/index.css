@@ -143,6 +143,16 @@
     overscroll-behavior-x: none;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html,
+    #root,
+    .overflow-y-auto,
+    .overflow-x-auto,
+    .overflow-auto {
+      scroll-behavior: auto !important;
+    }
+  }
+
   dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);

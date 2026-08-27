@@ -58,12 +58,21 @@ export function deepEqual(a: any, b: any): boolean {
   }
   if (typeof a !== typeof b) return false;
 
-  if (Array.isArray(a) && Array.isArray(b)) {
+  if (Array.isArray(a) || Array.isArray(b)) {
+    if (!Array.isArray(a) || !Array.isArray(b)) return false;
     if (a.length !== b.length) return false;
     for (let i = 0; i < a.length; i++) {
       if (!deepEqual(a[i], b[i])) return false;
     }
     return true;
+  }
+
+  if (a instanceof Date && b instanceof Date) {
+    return a.getTime() === b.getTime();
+  }
+
+  if (a instanceof RegExp && b instanceof RegExp) {
+    return a.source === b.source && a.flags === b.flags;
   }
 
   if (a instanceof Set && b instanceof Set) {
@@ -113,15 +122,11 @@ async function compileIfTypeScript(
   language: 'javascript' | 'typescript'
 ): Promise<string> {
   if (language === 'typescript') {
-    try {
-      const result = await transform(code, {
-        loader: 'ts',
-        target: 'es2022',
-      });
-      return result.code;
-    } catch {
-      return code;
-    }
+    const result = await transform(code, {
+      loader: 'ts',
+      target: 'es2022',
+    });
+    return result.code;
   }
   return code;
 }
@@ -228,9 +233,10 @@ export async function runSingleTestCase(
 
     const clonedInput = deepClone(testCase.input);
 
+    let timerId: ReturnType<typeof setTimeout> | undefined;
     const executionPromise = execute(clonedInput);
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(
+    const timeoutPromise = new Promise((_, reject) => {
+      timerId = setTimeout(
         () =>
           reject(
             new Error(
@@ -238,10 +244,18 @@ export async function runSingleTestCase(
             )
           ),
         timeoutMs
-      )
-    );
+      );
+    });
 
-    const actual = await Promise.race([executionPromise, timeoutPromise]);
+    let actual: any;
+    try {
+      actual = await Promise.race([executionPromise, timeoutPromise]);
+    } finally {
+      if (timerId !== undefined) {
+        clearTimeout(timerId);
+      }
+    }
+
     const runtimeMs = Math.max(
       0.1,
       Math.round((performance.now() - startTime) * 100) / 100
@@ -351,8 +365,12 @@ export async function submitProblemSolution(
     verdict = 'wrong_answer';
   }
 
-  const memoryEstimate = Math.round((42 + Math.random() * 8.5) * 10) / 10;
-  const avgRuntime = Math.max(1, Math.round(totalRuntime));
+  const perf =
+    typeof window !== 'undefined' ? (window.performance as any) : null;
+  const memoryEstimate = perf?.memory?.usedJSHeapSize
+    ? Math.round((perf.memory.usedJSHeapSize / (1024 * 1024)) * 10) / 10
+    : undefined;
+  const totalRuntimeMs = Math.max(1, Math.round(totalRuntime * 10) / 10);
 
   return {
     id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -360,7 +378,7 @@ export async function submitProblemSolution(
     status: verdict,
     totalCases: allCases.length,
     passedCases,
-    runtimeMs: avgRuntime,
+    runtimeMs: totalRuntimeMs,
     memoryMB: memoryEstimate,
     failedCase,
     allResults: results,

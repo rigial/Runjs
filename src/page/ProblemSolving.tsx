@@ -94,6 +94,10 @@ function ProblemSolving() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
+  const [consoleLogs, setConsoleLogs] = useState<
+    { type: 'info' | 'log'; message: string }[]
+  >([]);
+
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   const editorRef = useRef<any>(null);
   const consoleRef = useRef<HTMLDivElement>(null);
@@ -122,8 +126,37 @@ function ProblemSolving() {
     return () => clearTimeout(timer);
   }, [code, problem]);
 
+  // Reactive Luna Console rendering
+  useEffect(() => {
+    if (
+      consoleRef.current &&
+      (bottomTab === 'console' || mobileTab === 'console')
+    ) {
+      consoleRef.current.innerHTML = '';
+      const consoleInst = new LunaConsole(consoleRef.current, {
+        theme: resolvedTheme === 'dark' ? 'dark' : 'light',
+      });
+      lunaConsoleInstanceRef.current = consoleInst;
+
+      if (consoleLogs.length === 0) {
+        consoleInst.log(
+          'Console output will appear here when running code with console.log(...)'
+        );
+      } else {
+        consoleLogs.forEach((entry) => {
+          if (entry.type === 'info') {
+            consoleInst.info(entry.message);
+          } else {
+            consoleInst.log(entry.message);
+          }
+        });
+      }
+    }
+  }, [bottomTab, mobileTab, consoleLogs, resolvedTheme]);
+
   // Terminal setup
   function clearTerminal() {
+    setConsoleLogs([]);
     if (consoleRef.current) {
       consoleRef.current.innerHTML = '';
     }
@@ -167,35 +200,26 @@ function ProblemSolving() {
         setMobileTab('results');
       }
 
-      // Mirror logs to Luna Console
-      if (consoleRef.current) {
-        consoleRef.current.innerHTML = '';
-        const consoleInst = new LunaConsole(consoleRef.current, {
-          theme: resolvedTheme === 'dark' ? 'dark' : 'light',
-        });
-        lunaConsoleInstanceRef.current = consoleInst;
-
-        results.forEach((res, i) => {
-          if (res.logs && res.logs.length > 0) {
-            consoleInst.info(`--- Test Case ${i + 1} Logs ---`);
-            res.logs.forEach((log) => consoleInst.log(log));
-          }
-        });
-      }
+      // Collect logs to state for Luna Console
+      const newLogs: { type: 'info' | 'log'; message: string }[] = [];
+      results.forEach((res, i) => {
+        if (res.logs && res.logs.length > 0) {
+          newLogs.push({
+            type: 'info',
+            message: `--- Test Case ${i + 1} Logs ---`,
+          });
+          res.logs.forEach((log) =>
+            newLogs.push({ type: 'log', message: log })
+          );
+        }
+      });
+      setConsoleLogs(newLogs);
     } catch (err: unknown) {
       console.error('Run failed', err);
     } finally {
       setIsRunning(false);
     }
-  }, [
-    problem,
-    isRunning,
-    isSubmitting,
-    code,
-    customTestCases,
-    isDesktop,
-    resolvedTheme,
-  ]);
+  }, [problem, isRunning, isSubmitting, code, customTestCases, isDesktop]);
 
   const handleSubmit = useCallback(async () => {
     if (!problem || isRunning || isSubmitting) return;
@@ -219,6 +243,21 @@ function ProblemSolving() {
       if (!isDesktop) {
         setMobileTab('results');
       }
+
+      // Collect logs to state for Luna Console
+      const newLogs: { type: 'info' | 'log'; message: string }[] = [];
+      submission.allResults?.forEach((res, i) => {
+        if (res.logs && res.logs.length > 0) {
+          newLogs.push({
+            type: 'info',
+            message: `--- Test Case ${i + 1} Logs ---`,
+          });
+          res.logs.forEach((log) =>
+            newLogs.push({ type: 'log', message: log })
+          );
+        }
+      });
+      setConsoleLogs(newLogs);
     } catch (err: unknown) {
       console.error('Submit failed', err);
     } finally {

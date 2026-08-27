@@ -43,7 +43,9 @@ function TestCasePanel({
         isCustom: true,
       };
 
+      const newIndex = testCases.length + customTestCases.length;
       onAddCustomTestCase(newCase);
+      onSelectCaseIndex(newIndex);
       setIsAdding(false);
     } catch (err: unknown) {
       const message =
@@ -137,10 +139,14 @@ function TestCasePanel({
             )}
 
             <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold text-[var(--text-secondary)]">
+              <label
+                htmlFor="custom-case-args"
+                className="text-[11px] font-semibold text-[var(--text-secondary)]"
+              >
                 Arguments Array (JSON format e.g. [[1,2,3], 5])
               </label>
               <textarea
+                id="custom-case-args"
                 value={customInputText}
                 onChange={(e) => setCustomInputText(e.target.value)}
                 rows={4}
@@ -149,10 +155,14 @@ function TestCasePanel({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold text-[var(--text-secondary)]">
+              <label
+                htmlFor="custom-case-expected"
+                className="text-[11px] font-semibold text-[var(--text-secondary)]"
+              >
                 Expected Return Value (JSON format)
               </label>
               <input
+                id="custom-case-expected"
                 type="text"
                 value={customExpectedText}
                 onChange={(e) => setCustomExpectedText(e.target.value)}

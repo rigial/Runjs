@@ -115,10 +115,11 @@ function SubmissionHistory({
         {submissions.map((sub) => {
           const isSelected = sub.id === (selectedSubmission?.id || '');
           return (
-            <div
+            <button
+              type="button"
               key={sub.id}
               onClick={() => setSelectedSubId(sub.id)}
-              className={`p-3 rounded-xl border transition-all cursor-pointer ${
+              className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                 isSelected
                   ? 'border-amber-500/50 bg-[var(--bg-surface-active)] shadow-xs'
                   : 'border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)]'
@@ -147,7 +148,7 @@ function SubmissionHistory({
                   </span>
                 </div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

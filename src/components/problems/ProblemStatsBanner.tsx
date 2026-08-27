@@ -1,6 +1,9 @@
 import { memo } from 'react';
 import { Problem } from '../../problem-engine/types';
-import { getProblemStats } from '../../problem-engine/storage';
+import {
+  getProblemStats,
+  getAllProblemStates,
+} from '../../problem-engine/storage';
 import { Sparkles, Trophy, Star, Shuffle, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router';
 
@@ -29,13 +32,9 @@ function ProblemStatsBanner({
       : 0;
 
   // Find next unsolved problem for quick start
-  const allStates =
-    typeof window !== 'undefined'
-      ? localStorage.getItem('runjs_problem_states_v2')
-      : null;
-  const parsedStates = allStates ? JSON.parse(allStates) : {};
+  const allStates = getAllProblemStates();
   const nextUnsolved =
-    problems.find((p) => !parsedStates[p.slug]?.isSolved) || problems[0];
+    problems.find((p) => !allStates[p.slug]?.isSolved) || problems[0];
 
   return (
     <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] p-5 sm:p-6 shadow-xs transition-all mb-6">

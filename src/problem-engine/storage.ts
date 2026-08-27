@@ -7,7 +7,11 @@ export function getAllProblemStates(): Record<string, UserProblemState> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_STATES);
     if (!raw) return {};
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      return parsed as Record<string, UserProblemState>;
+    }
+    return {};
   } catch (error) {
     console.error('Failed to load problem states from localStorage', error);
     return {};
@@ -30,8 +34,14 @@ export function getUserProblemState(
   defaultLanguage: 'javascript' | 'typescript' = 'javascript'
 ): UserProblemState {
   const states = getAllProblemStates();
-  if (states[slug]) {
-    return states[slug];
+  const existing = states[slug];
+  if (existing) {
+    return {
+      ...existing,
+      code: existing.code || defaultStarterCode,
+      language: existing.language ?? defaultLanguage,
+      submissions: existing.submissions ?? [],
+    };
   }
   return {
     code: defaultStarterCode,
@@ -66,10 +76,13 @@ export function saveUserProblemCode(
   saveAllProblemStates(states);
 }
 
-export function toggleProblemStar(slug: string): boolean {
+export function toggleProblemStar(
+  slug: string,
+  defaultStarterCode = ''
+): boolean {
   const states = getAllProblemStates();
   const current = states[slug] || {
-    code: '',
+    code: defaultStarterCode,
     language: 'javascript',
     isSolved: false,
     isStarred: false,

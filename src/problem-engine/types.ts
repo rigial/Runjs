@@ -77,7 +77,7 @@ export interface SubmissionResult {
   totalCases: number;
   passedCases: number;
   runtimeMs: number;
-  memoryMB: number;
+  memoryMB?: number;
   failedCase?: TestResult;
   allResults: TestResult[];
   timestamp: string;

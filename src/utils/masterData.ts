@@ -77,8 +77,8 @@ const packageList = [
       'Provides rendering support for React in the browser DOM.',
   },
   {
-    packageLink: 'https://www.npmjs.com/package/react-router-dom',
-    packageName: 'react-router-dom',
+    packageLink: 'https://www.npmjs.com/package/react-router',
+    packageName: 'react-router',
     packageDescription:
       'Handles routing for navigation between different pages in the application.',
   },

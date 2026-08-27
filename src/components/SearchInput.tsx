@@ -1,5 +1,5 @@
 import { Fragment, memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ISearchInput } from '../utils/interface';
 
 function SearchInput({
@@ -26,10 +26,10 @@ function SearchInput({
               type="text"
               id="Search"
               placeholder="Search for filename, tagname..."
-              className="w-full rounded-md border-black border-[2px] px-2 py-2.5 pe-10 shadow-sm sm:text-sm bg-inherit focus:outline-none"
+              className="w-full rounded-md border-black border-2 px-2 py-2.5 pe-10 shadow-sm sm:text-sm bg-inherit focus:outline-none"
             />
 
-            <span className="absolute inset-y-0 end-0 grid w-10 place-content-center">
+            <span className="absolute inset-y-0 inset-e-0 grid w-10 place-content-center">
               <div className="text-gray-600">
                 <span className="sr-only">Search</span>
 
@@ -53,9 +53,9 @@ function SearchInput({
         ) : null}
       </div>
       <div>
-        <span className="inline-flex overflow-hidden rounded-md border-black border-[2px] shadow-sm">
+        <span className="inline-flex overflow-hidden rounded-md border-black border-2 shadow-sm">
           <button
-            className="inline-block border-e-black border-e-[2px] p-3 text-black focus:relative"
+            className="inline-block border-e-black border-e-2 p-3 text-black focus:relative"
             title="Edit Product"
             onClick={() => dialogRef?.current?.open()}
           >
@@ -78,7 +78,7 @@ function SearchInput({
           {!showFavourite ? (
             <button
               title="Show favorites"
-              className="inline-block border-e-black border-e-[2px] p-3 text-black focus:relative"
+              className="inline-block border-e-black border-e-2 p-3 text-black focus:relative"
               onClick={() => setIsFavouriteSelected((prev) => !prev)}
             >
               <svg

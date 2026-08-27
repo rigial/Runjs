@@ -1,7 +1,11 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { useImperativeHandle, useRef } from 'react';
 import { ModalRef } from '../utils/interface';
 
-const HelpModal = forwardRef<ModalRef, unknown>((_, ref) => {
+interface HelpModalProps {
+  ref?: React.Ref<ModalRef>;
+}
+
+const HelpModal = ({ ref }: HelpModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useImperativeHandle(ref, () => ({
@@ -23,47 +27,47 @@ const HelpModal = forwardRef<ModalRef, unknown>((_, ref) => {
         Need help with ShortCuts?
       </h2>
       <div className="overflow-x-auto my-5 text-black no-select">
-        <table className="min-w-full divide-y-[1px] border-black text-sm border-collapse border">
+        <table className="min-w-full divide-y border-black text-sm border-collapse border">
           <thead>
             <tr>
-              <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+              <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                 Shortcut
               </th>
-              <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+              <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                 Usage
               </th>
             </tr>
           </thead>
           <tbody className="w-full">
             <tr>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 ctrl + +
               </td>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 Zoom in
               </td>
             </tr>
             <tr>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 ctrl + -
               </td>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 Zoom our
               </td>
             </tr>
             <tr>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 ctrl + s
               </td>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 Download File
               </td>
             </tr>
             <tr>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 ctrl + r
               </td>
-              <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+              <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                 Run Code
               </td>
             </tr>
@@ -72,6 +76,6 @@ const HelpModal = forwardRef<ModalRef, unknown>((_, ref) => {
       </div>
     </dialog>
   );
-});
+};
 
 export default HelpModal;

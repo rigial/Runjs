@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import LunaConsole from 'luna-console';
 import Split from 'react-split';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
 import { ConsoleMethods, ModalRef, UserCodeBase } from '../utils/interface';
@@ -155,9 +155,9 @@ function JSsaved() {
         <section className="h-93vh w-full relative">
           <Split className="split h-full w-full" minSize={0}>
             <section className="h-full w-full flex flex-col">
-              <div className="w-full flex overflow-x-auto border-[1px] border-WindowBorder no-select">
+              <div className="w-full flex overflow-x-auto border border-WindowBorder no-select">
                 <div
-                  className={`flex items-center gap-2 bg-cblack py-2 px-3 border-r-[1px] border-r-WindowBorder hover:cursor-pointer`}
+                  className={`flex items-center gap-2 bg-cblack py-2 px-3 border-r border-r-WindowBorder hover:cursor-pointer`}
                 >
                   <img
                     src={'/JavaScript.webp'}

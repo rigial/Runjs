@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import { navigation } from '../utils/masterData';
 
 function Navbar() {
@@ -51,7 +51,7 @@ function Navbar() {
 
         <div className="md:hidden">
           <button
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setIsOpen(!isOpen)}
             className="focus:outline-none"
           >

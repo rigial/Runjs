@@ -1,6 +1,6 @@
 import { Fragment, memo, useRef, useState } from 'react';
 import { IProjectTable, ModalRef, UserCodeBase } from '../utils/interface';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { saveJSTSFile } from '../utils/commonFunction';
 import { deleteCode, updateCode } from '../db/operations';
 import CreatePlayground from './CreatePlayground';
@@ -78,19 +78,19 @@ function ProjectTable({
   return (
     <Fragment>
       <div className="overflow-x-auto my-6 text-black">
-        <table className="min-w-full divide-y-[1px] border-black text-sm border-collapse border">
+        <table className="min-w-full divide-y border-black text-sm border-collapse border">
           <thead className="text-left">
             <tr>
-              <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+              <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                 Language
               </th>
-              <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+              <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                 File Name
               </th>
-              <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+              <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                 Last modified
               </th>
-              <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+              <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                 Actions
               </th>
             </tr>
@@ -100,7 +100,7 @@ function ProjectTable({
             {data.map((val, index) => {
               return (
                 <tr key={index}>
-                  <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+                  <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                     <img
                       src={
                         val.language === 'js'
@@ -115,15 +115,15 @@ function ProjectTable({
                       alt="Language Logo"
                     />
                   </td>
-                  <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black hover:cursor-pointer hover:underline">
+                  <td className="whitespace-nowrap px-4 py-2 border-2 border-black hover:cursor-pointer hover:underline">
                     <Link
                       to={`/${val.language}/${val.id}`}
                     >{`${val.fileName}.${val.language}`}</Link>
                   </td>
-                  <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+                  <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                     {val?.lastModifiedAt.toLocaleString()}
                   </td>
-                  <td className="whitespace-nowrap px-2 py-2 border-[2px] border-black">
+                  <td className="whitespace-nowrap px-2 py-2 border-2 border-black">
                     <div className="w-full flex gap-4 color-black">
                       {bin === false ? (
                         <Fragment>

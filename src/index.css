@@ -1,38 +1,63 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@theme {
+  --color-CustomDarkGrey: #141414;
+  --color-custom-dark-grey: #141414;
+  --color-WindowBorder: #393939;
+  --color-window-border: #393939;
+  --color-JSYellow: #f1dd50;
+  --color-js-yellow: #f1dd50;
+  --color-TSBlue: #3179c7;
+  --color-ts-blue: #3179c7;
+  --color-cblack: #141414;
+  --color-modalBg: #f9fafb;
+  --color-modal-bg: #f9fafb;
+  --color-PearlLusta: #fcf4de;
+  --color-pearl-lusta: #fcf4de;
+
+  --spacing-7vh: 7vh;
+  --spacing-93vh: 93vh;
 }
 
-body {
-  font-family: 'Inter', sans-serif, 'Courier New', Courier, monospace;
+@utility h-7vh {
+  height: 7vh;
 }
 
-.no-select {
-  user-select: none;
+@utility h-93vh {
+  height: 93vh;
 }
 
-dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.4);
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif, 'Courier New', Courier, monospace;
+  }
+
+  dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 }
 
-.split {
-  display: flex;
-  flex-direction: row;
-}
+@layer utilities {
+  .no-select {
+    user-select: none;
+  }
 
-.gutter {
-  background-color: #141414;
-  background-repeat: no-repeat;
-  background-position: 50%;
-  border-right: 1px solid #393939;
-}
+  .split {
+    display: flex;
+    flex-direction: row;
+  }
 
-.gutter.gutter-horizontal {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
-  cursor: col-resize;
+  .gutter {
+    background-color: #141414;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-right: 1px solid #393939;
+  }
+
+  .gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+  }
 }

@@ -4,8 +4,8 @@ import { ITerminal } from '../utils/interface';
 function Terminal({ consoleRef, clearTerminal }: ITerminal) {
   return (
     <section className="h-full w-full flex flex-col">
-      <div className="w-full flex justify-between overflow-x-auto border-[1px] border-WindowBorder no-select">
-        <div className="flex items-center gap-2 bg-cblack py-2 px-3 border-r-[1px] border-r-WindowBorder hover:cursor-pointer">
+      <div className="w-full flex justify-between overflow-x-auto border border-WindowBorder no-select">
+        <div className="flex items-center gap-2 bg-cblack py-2 px-3 border-r border-r-WindowBorder hover:cursor-pointer">
           <svg
             width="18px"
             height="18px"

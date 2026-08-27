@@ -1,7 +1,7 @@
 import { transform } from 'esbuild-wasm';
 import { Fragment, memo, useEffect, useRef, useState } from 'react';
 import LunaConsole from 'luna-console';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import useAdjustFontSize from '../hook/useAdjustFontSize';
 import useComplieCode from '../hook/useComplieCode';
@@ -161,9 +161,9 @@ function TSsaved() {
         <section className="h-93vh w-full">
           <Split className="split h-full w-full" minSize={0}>
             <section className="h-full w-full flex flex-col">
-              <div className="flex overflow-x-auto border-[1px] border-WindowBorder">
+              <div className="flex overflow-x-auto border border-WindowBorder">
                 <div
-                  className={`flex items-center gap-2 bg-cblack py-2 px-3 border-r-[1px] border-r-WindowBorder hover:cursor-pointer`}
+                  className={`flex items-center gap-2 bg-cblack py-2 px-3 border-r border-r-WindowBorder hover:cursor-pointer`}
                 >
                   <img
                     src={'/Typescript.webp'}

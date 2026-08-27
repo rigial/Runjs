@@ -22,7 +22,7 @@ export default function InterviewQuestion() {
 
   return (
     <Fragment>
-      <section className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Navbar />
         <div className="my-2">
           <h4 className="text-lg font-semibold underline mb-2">

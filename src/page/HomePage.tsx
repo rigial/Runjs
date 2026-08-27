@@ -1,12 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 function HomePage() {
   return (
-    <section className="w-screen h-screen flex flex-col justify-between items-center font-sans gap-2 absolute inset-0 bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
+    <section className="min-h-screen w-full flex flex-col justify-between items-center font-sans gap-2 bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
       <Navbar />
-      <div className="mx-auto flex h-full w-screen max-w-screen-xl items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex flex-1 w-full max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8 py-6">
         <div className="mx-auto flex max-w-prose flex-col items-center text-center">
           <img width={112} height={16} src="/users.webp" alt="RunJS Users" />
           <span className="mt-4 text-base text-gray-700">

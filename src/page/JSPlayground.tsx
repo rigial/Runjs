@@ -7,7 +7,7 @@ import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
 import { ConsoleMethods, ModalRef } from '../utils/interface';
 import useAdjustFontSize from '../hook/useAdjustFontSize';
 import useComplieCode from '../hook/useComplieCode';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import HelpModal from '../components/HelpModal';
 import useWarnOnClose from '../hook/useWarnOnClose ';
 import useFormatDocument from '../hook/useFormatDocument';
@@ -122,9 +122,9 @@ function JSPlayground() {
         <section className="h-93vh w-full relative">
           <Split className="split h-full w-full" minSize={0}>
             <section className="h-full w-full flex flex-col">
-              <div className="w-full flex overflow-x-auto border-[1px] border-WindowBorder no-select">
+              <div className="w-full flex overflow-x-auto border border-WindowBorder no-select">
                 <div
-                  className={`flex items-center gap-2 bg-cblack py-2 px-3 border-r-[1px] border-r-WindowBorder hover:cursor-pointer`}
+                  className={`flex items-center gap-2 bg-cblack py-2 px-3 border-r border-r-WindowBorder hover:cursor-pointer`}
                 >
                   <img
                     src={'/JavaScript.webp'}

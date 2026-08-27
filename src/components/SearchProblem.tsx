@@ -7,10 +7,10 @@ function SearchProblem() {
         type="text"
         id="Search"
         placeholder="Search for problem, tagname..."
-        className="w-full rounded-md border-black border-[2px] px-2 py-2.5 pe-10 shadow-sm sm:text-sm bg-inherit focus:outline-none"
+        className="w-full rounded-md border-black border-2 px-2 py-2.5 pe-10 shadow-sm sm:text-sm bg-inherit focus:outline-none"
       />
 
-      <span className="absolute inset-y-0 end-0 grid w-10 place-content-center">
+      <span className="absolute inset-y-0 inset-e-0 grid w-10 place-content-center">
         <div className="text-gray-600">
           <span className="sr-only">Search</span>
 

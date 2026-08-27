@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import { packageList } from '../utils/masterData';
 
 function AboutPage() {
   return (
-    <section className="min-h-screen w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
-      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+    <section className="min-h-screen w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] [background-size:24px_24px]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Navbar />
         <h1 className="my-4 text-xl font-medium">RunJS Author - Links</h1>
         <Link
@@ -84,13 +84,13 @@ function AboutPage() {
 
         <h1 className="my-4 text-xl font-medium">RunJS Dependencies</h1>
         <div className="overflow-x-auto mb-6 text-black">
-          <table className="min-w-full divide-y-[1px] border-black text-sm border-collapse border">
+          <table className="min-w-full divide-y border-black text-sm border-collapse border">
             <thead>
               <tr>
-                <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+                <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                   Dependency
                 </th>
-                <th className="whitespace-nowrap px-4 py-2 font-medium border-[2px] border-black">
+                <th className="whitespace-nowrap px-4 py-2 font-medium border-2 border-black">
                   Purpose
                 </th>
               </tr>
@@ -99,7 +99,7 @@ function AboutPage() {
               {packageList.map((val, index) => {
                 return (
                   <tr key={index}>
-                    <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+                    <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                       <a
                         href={val.packageLink}
                         target="_blank"
@@ -108,7 +108,7 @@ function AboutPage() {
                         {val.packageName}
                       </a>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 border-[2px] border-black">
+                    <td className="whitespace-nowrap px-4 py-2 border-2 border-black">
                       {val.packageDescription}
                     </td>
                   </tr>

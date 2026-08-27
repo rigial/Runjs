@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { Link } from 'react-router';
 import { Problem } from '../../problem-engine/types';
+import { getGithubIssueUrl } from '../../utils/githubIssues';
 import ThemeSelector from '../ThemeSelector';
 import {
   ChevronLeft,
@@ -11,6 +12,7 @@ import {
   ZoomIn,
   ZoomOut,
   Sparkles,
+  Bug,
 } from 'lucide-react';
 
 interface ProblemHeaderProps {
@@ -180,6 +182,19 @@ function ProblemHeader({
             <ZoomIn className="w-3 h-3" />
           </button>
         </div>
+
+        {/* Raise Issue on GitHub */}
+        <a
+          href={getGithubIssueUrl(problem)}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Raise an issue for this problem on GitHub"
+          aria-label="Raise Issue"
+          className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-app)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-amber-500 text-xs font-medium transition-colors"
+        >
+          <Bug className="w-3.5 h-3.5 text-amber-500" />
+          <span className="hidden xl:inline">Raise Issue</span>
+        </a>
 
         {/* Theme Selector */}
         <ThemeSelector compact={true} />

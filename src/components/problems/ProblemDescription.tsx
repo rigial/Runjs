@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { Problem, SubmissionResult } from '../../problem-engine/types';
+import { getGithubIssueUrl } from '../../utils/githubIssues';
 import SubmissionHistory from './SubmissionHistory';
 import {
   FileText,
@@ -12,6 +13,7 @@ import {
   ChevronRight,
   Clock,
   HardDrive,
+  Bug,
 } from 'lucide-react';
 
 interface ProblemDescriptionProps {
@@ -225,6 +227,22 @@ function ProblemDescription({
                 </ul>
               </div>
             )}
+
+            {/* Raise Issue / Feedback Footer */}
+            <div className="pt-5 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[var(--text-muted)]">
+              <span>
+                Found a typo, incorrect test case, or issue with this problem?
+              </span>
+              <a
+                href={getGithubIssueUrl(problem)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-amber-500 font-medium transition-colors cursor-pointer shrink-0"
+              >
+                <Bug className="w-3.5 h-3.5 text-amber-500" />
+                <span>Raise Issue on GitHub</span>
+              </a>
+            </div>
           </div>
         )}
 

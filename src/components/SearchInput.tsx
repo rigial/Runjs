@@ -1,6 +1,7 @@
-import { Fragment, memo } from 'react';
+import { memo } from 'react';
 import { Link } from 'react-router';
 import { ISearchInput } from '../utils/interface';
+import { Search, Plus, Star, Trash2, X } from 'lucide-react';
 
 function SearchInput({
   showFavourite,
@@ -11,110 +12,86 @@ function SearchInput({
   setIsFavouriteSelected,
 }: ISearchInput) {
   return (
-    <div className="flex justify-between items-center">
-      <div className="relative w-2/4">
-        <label htmlFor="Search" className="sr-only">
-          {' '}
-          Search{' '}
+    <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between my-4">
+      {/* Search Input */}
+      <div className="relative flex-1 max-w-md">
+        <label htmlFor="search-playgrounds" className="sr-only">
+          Search playgrounds
         </label>
 
-        {!showFavourite ? (
-          <Fragment>
-            <input
-              value={searchTerm}
-              onChange={(e) => onInputChange(e.target.value.toLowerCase())}
-              type="text"
-              id="Search"
-              placeholder="Search for filename, tagname..."
-              className="w-full rounded-md border-black border-2 px-2 py-2.5 pe-10 shadow-sm sm:text-sm bg-inherit focus:outline-none"
-            />
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
+          <Search className="w-4 h-4" />
+        </div>
 
-            <span className="absolute inset-y-0 inset-e-0 grid w-10 place-content-center">
-              <div className="text-gray-600">
-                <span className="sr-only">Search</span>
+        <input
+          id="search-playgrounds"
+          type="text"
+          value={searchTerm}
+          onChange={(e) => onInputChange(e.target.value.toLowerCase())}
+          placeholder="Search by file name or tag..."
+          className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--border-focus)]/30 focus:border-[var(--border-focus)] transition-all shadow-xs"
+        />
 
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
-              </div>
-            </span>
-          </Fragment>
-        ) : null}
-      </div>
-      <div>
-        <span className="inline-flex overflow-hidden rounded-md border-black border-2 shadow-sm">
+        {searchTerm && (
           <button
-            className="inline-block border-e-black border-e-2 p-3 text-black focus:relative"
-            title="Edit Product"
-            onClick={() => dialogRef?.current?.open()}
+            type="button"
+            aria-label="Clear search"
+            onClick={() => onInputChange('')}
+            className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-              />
-            </svg>
+            <X className="w-4 h-4" />
           </button>
+        )}
+      </div>
 
-          {!showFavourite ? (
-            <button
-              title="Show favorites"
-              className="inline-block border-e-black border-e-2 p-3 text-black focus:relative"
-              onClick={() => setIsFavouriteSelected((prev) => !prev)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20px"
-                viewBox="0 -960 960 960"
-                width="20px"
-                stroke="currentColor"
-                fill={isFavouriteSelected ? 'red' : 'black'}
-              >
-                <path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Zm0-97q93-83 153-141.5t95.5-102Q764-528 778-562t14-67q0-59-40-99t-99-40q-35 0-65.5 14.5T535-713l-35 41h-40l-35-41q-22-26-53.5-40.5T307-768q-59 0-99 40t-40 99q0 33 13 65.5t47.5 75.5q34.5 43 95 102T480-241Zm0-264Z" />
-              </svg>
-            </button>
-          ) : null}
-
-          <Link
-            to={'/bin'}
-            className="inline-block p-3 text-black focus:relative"
-            title="Delete Product"
+      {/* Action Buttons */}
+      <div className="flex items-center gap-2">
+        {/* Favorite Filter Toggle */}
+        {!showFavourite && (
+          <button
+            type="button"
+            title={
+              isFavouriteSelected ? 'Show all playgrounds' : 'Show starred only'
+            }
+            onClick={() => setIsFavouriteSelected((prev) => !prev)}
+            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--border-focus)]/30 ${
+              isFavouriteSelected
+                ? 'bg-amber-500/15 border-amber-500/40 text-amber-600 dark:text-amber-400 font-semibold shadow-xs'
+                : 'bg-[var(--bg-surface)] border-[var(--border-default)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+            }`}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-              />
-            </svg>
-          </Link>
-        </span>
+            <Star
+              className={`w-4 h-4 ${
+                isFavouriteSelected
+                  ? 'fill-amber-500 text-amber-500'
+                  : 'text-[var(--text-secondary)]'
+              }`}
+            />
+            <span className="hidden sm:inline">
+              {isFavouriteSelected ? 'Starred' : 'Favorites'}
+            </span>
+          </button>
+        )}
+
+        {/* Bin Link */}
+        <Link
+          to="/bin"
+          title="Recently deleted items"
+          className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--border-focus)]/30"
+        >
+          <Trash2 className="w-4 h-4" />
+          <span className="hidden sm:inline">Bin</span>
+        </Link>
+
+        {/* Create New Playground Button */}
+        <button
+          type="button"
+          onClick={() => dialogRef?.current?.open()}
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+        >
+          <Plus className="w-4 h-4 stroke-[2.5]" />
+          <span>New Playground</span>
+        </button>
       </div>
     </div>
   );

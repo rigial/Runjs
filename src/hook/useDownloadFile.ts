@@ -2,19 +2,15 @@ import { useEffect } from 'react';
 
 type Callback = () => void;
 
-const useFormatDocument = (formatDocument: Callback) => {
+const useDownloadFile = (downloadFile: Callback) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const isCtrlOrCmd = event.ctrlKey || event.metaKey;
-      const isQ = event.key === 'q' || event.key === 'Q';
-      const isShiftAltF =
-        event.shiftKey &&
-        event.altKey &&
-        (event.key === 'f' || event.key === 'F');
+      const isS = event.key === 's' || event.key === 'S';
 
-      if ((isCtrlOrCmd && isQ) || isShiftAltF) {
+      if (isCtrlOrCmd && isS) {
         event.preventDefault();
-        formatDocument();
+        downloadFile();
       }
     };
 
@@ -23,7 +19,7 @@ const useFormatDocument = (formatDocument: Callback) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [formatDocument]);
+  }, [downloadFile]);
 };
 
-export default useFormatDocument;
+export default useDownloadFile;

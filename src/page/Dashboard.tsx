@@ -6,6 +6,8 @@ import { getAllCodes } from '../db/operations';
 import ProjectTable from '../components/ProjectTable';
 import CreatePlayground from '../components/CreatePlayground';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { Star, FolderCode, Tag as TagIcon } from 'lucide-react';
 
 function Dashboard() {
   const [userSavedCode, setUserSavedCode] = useState<UserCodeBase[]>([]);
@@ -74,26 +76,79 @@ function Dashboard() {
     setSearchTerm(text);
   }
 
+  const totalCount = userSavedCode.length;
+  const starredCount = userSavedCode.filter((c) => c.star === 1).length;
+  const jsCount = userSavedCode.filter((c) => c.language === 'js').length;
+  const tsCount = userSavedCode.filter((c) => c.language === 'ts').length;
+
   return (
-    <section className="min-h-screen w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
-      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-        <Navbar />
-        <h1 className="my-2 text-xl">Create playgrounds</h1>
-        <h5 className="text-gray-500 my-2">
-          Coding playgrounds on RunJs are powered by VS Code IDE and start
-          within a few seconds. Practice coding while learning for free.
-        </h5>
+    <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <Navbar />
+
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-default)]">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+              Workspace & Playgrounds
+            </h1>
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">
+              Manage your local projects, code snippets, and interview
+              solutions.
+            </p>
+          </div>
+
+          {/* Quick Stats Chips */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-xs">
+              <FolderCode className="w-3.5 h-3.5 text-amber-500" />
+              <span className="text-[var(--text-secondary)]">Total:</span>
+              <span className="font-semibold text-[var(--text-primary)]">
+                {totalCount}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-xs">
+              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+              <span className="text-[var(--text-secondary)]">Starred:</span>
+              <span className="font-semibold text-[var(--text-primary)]">
+                {starredCount}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-xs">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span className="text-[var(--text-secondary)]">JS:</span>
+              <span className="font-semibold text-[var(--text-primary)]">
+                {jsCount}
+              </span>
+              <span className="text-[var(--text-muted)] mx-0.5">/</span>
+              <span className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="text-[var(--text-secondary)]">TS:</span>
+              <span className="font-semibold text-[var(--text-primary)]">
+                {tsCount}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Search & Actions Bar */}
         <SearchInput
-          showFavourite={filterData.length === 0}
+          showFavourite={filterData.length === 0 && userSavedCode.length === 0}
           isFavouriteSelected={isFavouriteSelected}
           setIsFavouriteSelected={setIsFavouriteSelected}
           searchTerm={searchTerm}
           dialogRef={dialogRef}
           onInputChange={onInputChange}
         />
-        {Object.keys(tag).length > 0 ? (
-          <section className="flex flex-wrap gap-2 mt-3">
-            <h1>Your Tags : </h1>
+
+        {/* Tag Filters */}
+        {Object.keys(tag).length > 0 && (
+          <section className="flex items-center gap-2 flex-wrap my-3 text-xs">
+            <span className="text-[var(--text-secondary)] font-medium flex items-center gap-1">
+              <TagIcon className="w-3.5 h-3.5 opacity-70" />
+              Tags:
+            </span>
             {Object.keys(tag).map((val, index) => (
               <Badge
                 searchTerm={searchTerm}
@@ -104,7 +159,9 @@ function Dashboard() {
               />
             ))}
           </section>
-        ) : null}
+        )}
+
+        {/* Playgrounds Data Table */}
         <ProjectTable
           tagSuggestions={Object.keys(tag)}
           dbcall={dbcall}
@@ -112,13 +169,18 @@ function Dashboard() {
           bin={false}
           createPlayground={() => dialogRef?.current?.open()}
         />
-      </div>
+      </main>
+
+      {/* Create / Rename Modal */}
       <CreatePlayground
         edit={false}
         ref={dialogRef}
         tagSuggestions={Object.keys(tag)}
+        dbcall={dbcall}
       />
-    </section>
+
+      <Footer />
+    </div>
   );
 }
 

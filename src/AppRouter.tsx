@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import { lazy, memo, Suspense, useEffect } from 'react';
 import AppLoading from './components/AppLoading';
 import { loadTypscript } from './utils/commonFunction';

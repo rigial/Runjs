@@ -1,4 +1,4 @@
-import { editor } from 'monaco-editor';
+import type { OnChange } from '@monaco-editor/react';
 
 export type ConsoleMethods = 'log' | 'info' | 'warn' | 'error';
 
@@ -58,13 +58,10 @@ export interface ITokenThemeRule {
 export interface ICodeEditor {
   code: string;
   language: 'javascript' | 'typescript';
-  onChange: (
-    value: string | undefined,
-    ev: editor.IModelContentChangedEvent
-  ) => void;
+  onChange: OnChange;
   currentFontSize: number;
   /* eslint-disable  @typescript-eslint/no-explicit-any */
-  editorRef: React.MutableRefObject<any>;
+  editorRef: React.RefObject<any>;
 }
 
 export interface IAppLoading {
@@ -76,6 +73,7 @@ export interface IModalProps {
   edit: boolean;
   renameData?: UserCodeBase;
   dbcall?: () => Promise<void>;
+  ref?: React.Ref<ModalRef>;
 }
 
 export interface IProjectTable {
@@ -89,14 +87,14 @@ export interface IProjectTable {
 export interface ISearchInput {
   showFavourite: boolean;
   isFavouriteSelected: boolean;
-  dialogRef: React.RefObject<ModalRef>;
+  dialogRef: React.RefObject<ModalRef | null>;
   onInputChange: (e: string) => void;
   searchTerm: string;
   setIsFavouriteSelected: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ITerminal {
-  consoleRef: React.RefObject<HTMLDivElement>;
+  consoleRef: React.RefObject<HTMLDivElement | null>;
   clearTerminal: () => void;
 }
 

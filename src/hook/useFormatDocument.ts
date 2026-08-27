@@ -6,9 +6,13 @@ const useFormatDocument = (formatDocument: Callback) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const isCtrlOrCmd = event.ctrlKey || event.metaKey;
-      const isS = event.key === 'q' || event.key === 'Q';
+      const isQ = event.key === 'q' || event.key === 'Q';
+      const isShiftAltF =
+        event.shiftKey &&
+        event.altKey &&
+        (event.key === 'f' || event.key === 'F' || event.code === 'KeyF');
 
-      if (isCtrlOrCmd && isS) {
+      if ((isCtrlOrCmd && isQ) || isShiftAltF) {
         event.preventDefault();
         formatDocument();
       }

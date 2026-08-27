@@ -103,6 +103,7 @@
   }
 
   html {
+    scroll-behavior: smooth;
     font-family:
       'Inter',
       -apple-system,
@@ -136,6 +137,7 @@
   }
 
   #root {
+    scroll-behavior: smooth;
     overscroll-behavior: none;
     overscroll-behavior-y: none;
     overscroll-behavior-x: none;
@@ -183,6 +185,7 @@
   .overflow-y-auto,
   .overflow-x-auto,
   .overflow-auto {
+    scroll-behavior: smooth;
     overscroll-behavior: none;
     overscroll-behavior-y: none;
   }

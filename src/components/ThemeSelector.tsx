@@ -39,9 +39,20 @@ function ThemeSelector({
         setIsOpen(false);
       }
     }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   const getCurrentIcon = () => {
     if (theme === 'system') {
@@ -63,6 +74,8 @@ function ThemeSelector({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Select theme"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
         title={`Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)} (${resolvedTheme})`}
         className={`flex items-center justify-center gap-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--border-focus)]/40 ${
           compact ? 'p-1.5' : 'px-2.5 py-1.5 text-xs font-medium'

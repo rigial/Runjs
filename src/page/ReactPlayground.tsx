@@ -67,6 +67,7 @@ function ReactPlayground() {
               <button
                 key={tab.id}
                 type="button"
+                aria-pressed={activeMobileTab === tab.id}
                 onClick={() => setActiveMobileTab(tab.id)}
                 className={`px-2 py-1 text-[11px] font-medium rounded transition-colors ${
                   activeMobileTab === tab.id

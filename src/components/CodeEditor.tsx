@@ -18,6 +18,7 @@ function CodeEditor({
 }: ICodeEditor) {
   const { resolvedTheme } = useTheme();
   const monacoInstanceRef = useRef<Monaco | null>(null);
+  const emmetDisposerRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (monacoInstanceRef.current) {
@@ -26,6 +27,15 @@ function CodeEditor({
       );
     }
   }, [resolvedTheme]);
+
+  useEffect(() => {
+    return () => {
+      if (emmetDisposerRef.current) {
+        emmetDisposerRef.current();
+        emmetDisposerRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className="h-full w-full bg-[var(--bg-app)] relative">
@@ -43,7 +53,10 @@ function CodeEditor({
         }}
         beforeMount={(monaco) => {
           registerMonacoThemes(monaco);
-          emmetJSX(monaco, [language]);
+          if (emmetDisposerRef.current) {
+            emmetDisposerRef.current();
+          }
+          emmetDisposerRef.current = emmetJSX(monaco, [language]);
         }}
         onChange={onChange}
         options={{

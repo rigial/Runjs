@@ -1,8 +1,9 @@
 import { Editor, Monaco } from '@monaco-editor/react';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import AppLoading from './AppLoading';
 import { emmetJSX } from 'emmet-monaco-es';
 import useTheme from '../hook/useTheme';
+import useCopyToClipboard from '../hook/useCopyToClipboard';
 import {
   getMonacoThemeName,
   registerMonacoThemes,
@@ -12,7 +13,8 @@ import { Check, Copy, Code2 } from 'lucide-react';
 function CodeSnippet({ code, height }: { code: string; height: string }) {
   const { resolvedTheme } = useTheme();
   const monacoInstanceRef = useRef<Monaco | null>(null);
-  const [copied, setCopied] = useState(false);
+  const emmetDisposerRef = useRef<(() => void) | null>(null);
+  const { copied, copy } = useCopyToClipboard();
 
   useEffect(() => {
     if (monacoInstanceRef.current) {
@@ -22,14 +24,17 @@ function CodeSnippet({ code, height }: { code: string; height: string }) {
     }
   }, [resolvedTheme]);
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // ignore
-    }
+  useEffect(() => {
+    return () => {
+      if (emmetDisposerRef.current) {
+        emmetDisposerRef.current();
+        emmetDisposerRef.current = null;
+      }
+    };
+  }, []);
+
+  const handleCopy = () => {
+    copy(code);
   };
 
   return (

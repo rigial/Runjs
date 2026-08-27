@@ -10,7 +10,7 @@ const useFormatDocument = (formatDocument: Callback) => {
       const isShiftAltF =
         event.shiftKey &&
         event.altKey &&
-        (event.key === 'f' || event.key === 'F');
+        (event.key === 'f' || event.key === 'F' || event.code === 'KeyF');
 
       if ((isCtrlOrCmd && isQ) || isShiftAltF) {
         event.preventDefault();

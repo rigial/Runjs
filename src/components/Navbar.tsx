@@ -51,7 +51,7 @@ function Navbar() {
 
         <div className="md:hidden">
           <button
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setIsOpen(!isOpen)}
             className="focus:outline-none"
           >

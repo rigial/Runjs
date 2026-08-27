@@ -29,8 +29,14 @@
   <script>
     (function () {
       try {
-        var theme = localStorage.getItem('runjs_theme');
-        var isDark = theme === 'dark' || ((!theme || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var theme = null;
+        try {
+          theme = localStorage.getItem('runjs_theme');
+        } catch (e) {}
+        var isDark =
+          theme === 'dark' ||
+          (theme !== 'light' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches);
         if (isDark) {
           document.documentElement.classList.add('dark');
           document.documentElement.classList.remove('light');

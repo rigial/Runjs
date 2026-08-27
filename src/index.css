@@ -271,7 +271,7 @@
 }
 
 /* Animation utilities */
-@keyframes fadeIn {
+@keyframes fade-in {
   from {
     opacity: 0;
   }
@@ -280,7 +280,7 @@
   }
 }
 
-@keyframes zoomIn95 {
+@keyframes zoom-in-95 {
   from {
     opacity: 0;
     transform: scale(0.95);
@@ -291,7 +291,7 @@
   }
 }
 
-@keyframes slideInFromTop2 {
+@keyframes slide-in-from-top-2 {
   from {
     opacity: 0;
     transform: translateY(-0.5rem);
@@ -302,7 +302,7 @@
   }
 }
 
-@keyframes slideInFromBottom2 {
+@keyframes slide-in-from-bottom-2 {
   from {
     opacity: 0;
     transform: translateY(0.5rem);
@@ -319,23 +319,23 @@
 }
 
 .fade-in {
-  animation-name: fadeIn;
+  animation-name: fade-in;
 }
 
 .fade-in-50 {
-  animation-name: fadeIn;
+  animation-name: fade-in;
 }
 
 .zoom-in-95 {
-  animation-name: zoomIn95;
+  animation-name: zoom-in-95;
 }
 
 .slide-in-from-top-2 {
-  animation-name: slideInFromTop2;
+  animation-name: slide-in-from-top-2;
 }
 
 .slide-in-from-bottom-2 {
-  animation-name: slideInFromBottom2;
+  animation-name: slide-in-from-bottom-2;
 }
 
 /* Smooth motion & animation accessibility */

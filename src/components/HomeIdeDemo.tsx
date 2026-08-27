@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, useCallback } from 'react';
+import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Terminal,
   Play,
@@ -9,9 +9,14 @@ import {
   Code2,
 } from 'lucide-react';
 
+interface CodeToken {
+  text: string;
+  color: string;
+}
+
 interface CodeLine {
   indent: number;
-  tokens: { text: string; color: string; bold?: boolean }[];
+  tokens: CodeToken[];
 }
 
 const DEMO_SNIPPET: CodeLine[] = [
@@ -99,13 +104,44 @@ const DEMO_SNIPPET: CodeLine[] = [
 
 type Phase = 'typing' | 'compiling' | 'success';
 
+function renderTokensUpToCharLimit(
+  line: CodeLine,
+  charLimit: number
+): CodeToken[] {
+  let remainingChars = charLimit;
+  const renderedTokens: CodeToken[] = [];
+
+  for (const token of line.tokens) {
+    if (remainingChars <= 0) break;
+    const tokenText = token.text;
+    if (tokenText.length <= remainingChars) {
+      renderedTokens.push({ text: tokenText, color: token.color });
+      remainingChars -= tokenText.length;
+    } else {
+      renderedTokens.push({
+        text: tokenText.slice(0, remainingChars),
+        color: token.color,
+      });
+      remainingChars = 0;
+    }
+  }
+
+  return renderedTokens;
+}
+
 function HomeIdeDemo() {
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
+  const [typedLineIndex, setTypedLineIndex] = useState(0);
+  const [typedCharIndex, setTypedCharIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>('typing');
   const [executionTime, setExecutionTime] = useState<number | null>(null);
 
+  const lineTexts = useMemo(() => {
+    return DEMO_SNIPPET.map((line) => line.tokens.map((t) => t.text).join(''));
+  }, []);
+
   const startAnimation = useCallback(() => {
-    setCurrentLineIndex(0);
+    setTypedLineIndex(0);
+    setTypedCharIndex(0);
     setPhase('typing');
     setExecutionTime(null);
   }, []);
@@ -114,33 +150,53 @@ function HomeIdeDemo() {
     let timer: ReturnType<typeof setTimeout>;
 
     if (phase === 'typing') {
-      if (currentLineIndex < DEMO_SNIPPET.length) {
-        // Typing each line with variable speed for natural coding cadence
-        const delay = currentLineIndex === 0 ? 300 : 220;
+      const currentLineText = lineTexts[typedLineIndex] || '';
+      const totalCharsInLine = currentLineText.length;
+
+      if (typedCharIndex < totalCharsInLine) {
+        // Typing character by character with human-like rhythm
+        const nextChar = currentLineText[typedCharIndex];
+        let charDelay = 22;
+
+        if (nextChar === ' ') {
+          charDelay = 35;
+        } else if ([';', '{', '}', '(', ')', ','].includes(nextChar)) {
+          charDelay = 55;
+        }
+
         timer = setTimeout(() => {
-          setCurrentLineIndex((prev) => prev + 1);
-        }, delay);
+          setTypedCharIndex((prev) => prev + 1);
+        }, charDelay);
       } else {
-        // Finished typing -> trigger compiling phase
-        timer = setTimeout(() => {
-          setPhase('compiling');
-        }, 500);
+        // Current line completed
+        if (typedLineIndex < DEMO_SNIPPET.length - 1) {
+          // Pause between lines (pressing Enter to next line)
+          timer = setTimeout(() => {
+            setTypedLineIndex((prev) => prev + 1);
+            setTypedCharIndex(0);
+          }, 160);
+        } else {
+          // All lines completed -> transition to compiling
+          timer = setTimeout(() => {
+            setPhase('compiling');
+          }, 500);
+        }
       }
     } else if (phase === 'compiling') {
-      // Compiling animation duration (800ms)
+      // Compiling animation duration (900ms)
       timer = setTimeout(() => {
         setExecutionTime(0.42);
         setPhase('success');
       }, 900);
     } else if (phase === 'success') {
-      // Hold on success for 5 seconds before looping
+      // Hold output for 5.5s before looping
       timer = setTimeout(() => {
         startAnimation();
       }, 5500);
     }
 
     return () => clearTimeout(timer);
-  }, [phase, currentLineIndex, startAnimation]);
+  }, [phase, typedLineIndex, typedCharIndex, lineTexts, startAnimation]);
 
   return (
     <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-card overflow-hidden transition-all duration-300">
@@ -165,7 +221,7 @@ function HomeIdeDemo() {
           {phase === 'typing' && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 animate-pulse">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
-              <span>Coding...</span>
+              <span>Coding letter by letter...</span>
             </span>
           )}
 
@@ -200,37 +256,37 @@ function HomeIdeDemo() {
       <div className="grid grid-cols-1 md:grid-cols-12 min-h-[300px] font-mono text-xs divide-y md:divide-y-0 md:divide-x divide-[var(--border-default)]">
         {/* Code Editor Pane */}
         <div className="p-4 sm:p-5 md:col-span-7 bg-[var(--bg-app)] text-[var(--text-primary)] space-y-1.5 overflow-x-auto select-none">
-          {DEMO_SNIPPET.slice(0, currentLineIndex).map((line, idx) => (
-            <div key={idx} className="flex items-center gap-3">
-              <span className="text-[var(--text-muted)] text-[11px] w-4 text-right select-none opacity-40">
-                {idx + 1}
-              </span>
-              <div
-                style={{ paddingLeft: `${line.indent * 1.25}rem` }}
-                className="flex-1 whitespace-pre"
-              >
-                {line.tokens.map((tok, tIdx) => (
-                  <span key={tIdx} className={tok.color}>
-                    {tok.text}
-                  </span>
-                ))}
-                {/* Active Typing Cursor on latest line */}
-                {phase === 'typing' && idx === currentLineIndex - 1 && (
-                  <span className="inline-block w-1.5 h-3.5 ml-1 bg-amber-500 animate-pulse align-middle" />
-                )}
-              </div>
-            </div>
-          ))}
+          {DEMO_SNIPPET.map((line, idx) => {
+            if (idx > typedLineIndex) return null;
 
-          {/* Blinking cursor if starting */}
-          {currentLineIndex === 0 && (
-            <div className="flex items-center gap-3">
-              <span className="text-[var(--text-muted)] text-[11px] w-4 text-right opacity-40">
-                1
-              </span>
-              <span className="inline-block w-1.5 h-3.5 bg-amber-500 animate-pulse" />
-            </div>
-          )}
+            const isCurrentLine = idx === typedLineIndex;
+            const lineLimit = isCurrentLine
+              ? typedCharIndex
+              : lineTexts[idx].length;
+            const renderedTokens = renderTokensUpToCharLimit(line, lineLimit);
+
+            return (
+              <div key={idx} className="flex items-center gap-3">
+                <span className="text-[var(--text-muted)] text-[11px] w-4 text-right select-none opacity-40">
+                  {idx + 1}
+                </span>
+                <div
+                  style={{ paddingLeft: `${line.indent * 1.25}rem` }}
+                  className="flex-1 whitespace-pre"
+                >
+                  {renderedTokens.map((tok, tIdx) => (
+                    <span key={tIdx} className={tok.color}>
+                      {tok.text}
+                    </span>
+                  ))}
+                  {/* Active Letter-by-Letter Blinking Cursor */}
+                  {phase === 'typing' && isCurrentLine && (
+                    <span className="inline-block w-1.5 h-3.5 ml-0.5 bg-amber-500 animate-pulse align-middle" />
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Terminal Console Pane */}

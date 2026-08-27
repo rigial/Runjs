@@ -15,8 +15,6 @@ import {
 
 interface ProblemHeaderProps {
   problem: Problem;
-  language: 'javascript' | 'typescript';
-  onLanguageChange: (lang: 'javascript' | 'typescript') => void;
   isRunning: boolean;
   isSubmitting: boolean;
   onRun: () => void;
@@ -32,8 +30,6 @@ interface ProblemHeaderProps {
 
 function ProblemHeader({
   problem,
-  language,
-  onLanguageChange,
   isRunning,
   isSubmitting,
   onRun,
@@ -107,32 +103,6 @@ function ProblemHeader({
 
       {/* Center: Run & Submit Actions */}
       <div className="flex items-center gap-2 shrink-0">
-        {/* Language Selector */}
-        <div className="hidden lg:flex items-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-app)] p-0.5 text-xs">
-          <button
-            type="button"
-            onClick={() => onLanguageChange('javascript')}
-            className={`px-2 py-1 rounded-md text-[11px] font-medium transition-all ${
-              language === 'javascript'
-                ? 'bg-amber-500 text-black font-semibold shadow-2xs'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-            }`}
-          >
-            JS
-          </button>
-          <button
-            type="button"
-            onClick={() => onLanguageChange('typescript')}
-            className={`px-2 py-1 rounded-md text-[11px] font-medium transition-all ${
-              language === 'typescript'
-                ? 'bg-blue-500 text-white font-semibold shadow-2xs'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-            }`}
-          >
-            TS
-          </button>
-        </div>
-
         {/* Run Button (Tests Sample Cases) */}
         <button
           type="button"

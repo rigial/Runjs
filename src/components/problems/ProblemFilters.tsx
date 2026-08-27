@@ -188,7 +188,7 @@ function ProblemFilters({
       </div>
 
       {/* Topic Tags Filter Bar */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs scrollbar-none">
         <span className="text-[var(--text-muted)] font-medium text-[11px] uppercase tracking-wider mr-1 shrink-0">
           Topics:
         </span>

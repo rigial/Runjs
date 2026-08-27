@@ -15,6 +15,7 @@ function CodeEditor({
   onChange,
   currentFontSize,
   editorRef,
+  disableAutoSuggestion = false,
 }: ICodeEditor) {
   const { resolvedTheme } = useTheme();
   const monacoInstanceRef = useRef<Monaco | null>(null);
@@ -56,7 +57,9 @@ function CodeEditor({
           if (emmetDisposerRef.current) {
             emmetDisposerRef.current();
           }
-          emmetDisposerRef.current = emmetJSX(monaco, [language]);
+          if (!disableAutoSuggestion) {
+            emmetDisposerRef.current = emmetJSX(monaco, [language]);
+          }
         }}
         onChange={onChange}
         options={{
@@ -89,6 +92,49 @@ function CodeEditor({
             verticalScrollbarSize: 8,
             horizontalScrollbarSize: 8,
           },
+          quickSuggestions: disableAutoSuggestion ? false : true,
+          suggestOnTriggerCharacters: !disableAutoSuggestion,
+          acceptSuggestionOnEnter: disableAutoSuggestion ? 'off' : 'on',
+          acceptSuggestionOnCommitCharacter: !disableAutoSuggestion,
+          tabCompletion: disableAutoSuggestion ? 'off' : 'on',
+          wordBasedSuggestions: disableAutoSuggestion
+            ? 'off'
+            : 'matchingDocuments',
+          parameterHints: { enabled: !disableAutoSuggestion },
+          suggest: disableAutoSuggestion
+            ? {
+                showKeywords: false,
+                showSnippets: false,
+                showWords: false,
+                showFunctions: false,
+                showVariables: false,
+                showClasses: false,
+                showMethods: false,
+                showModules: false,
+                showProperties: false,
+                showInterfaces: false,
+                showUnits: false,
+                showValues: false,
+                showConstants: false,
+                showEnums: false,
+                showEnumMembers: false,
+                showEvents: false,
+                showOperators: false,
+                showTypeParameters: false,
+                showFields: false,
+                showFiles: false,
+                showFolders: false,
+                showReferences: false,
+                showColors: false,
+                showConstructors: false,
+                showStructs: false,
+                showIssues: false,
+                showUsers: false,
+                filterGraceful: false,
+                snippetsPreventQuickSuggestions: false,
+              }
+            : undefined,
+          inlineSuggest: { enabled: !disableAutoSuggestion },
         }}
       />
     </div>

@@ -30,6 +30,7 @@ import ProblemHeader from '../components/problems/ProblemHeader';
 import ProblemDescription from '../components/problems/ProblemDescription';
 import TestCasePanel from '../components/problems/TestCasePanel';
 import TestResultsPanel from '../components/problems/TestResultsPanel';
+import ResetCodeModal from '../components/problems/ResetCodeModal';
 import CodeEditor from '../components/CodeEditor';
 import Terminal from '../components/Terminal';
 import {
@@ -61,9 +62,7 @@ function ProblemSolving() {
     return state.code || defaultCode;
   });
 
-  const [language, setLanguage] = useState<'javascript' | 'typescript'>(
-    'javascript'
-  );
+  const language = 'javascript' as const;
   const [currentFontSize, setFontSize] = useLocalStorageState('fontSize', '14');
 
   const [userState, setUserState] = useState(() => {
@@ -93,6 +92,7 @@ function ProblemSolving() {
 
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   const editorRef = useRef<any>(null);
@@ -109,7 +109,6 @@ function ProblemSolving() {
       );
       setUserState(state);
       setCode(state.code || problem.starterCode.javascript);
-      setLanguage(state.language || 'javascript');
       setLastSubmission(state.submissions[0] || null);
     }
   }, [slug, problem]);
@@ -118,10 +117,10 @@ function ProblemSolving() {
   useEffect(() => {
     if (!problem || !code) return;
     const timer = setTimeout(() => {
-      saveUserProblemCode(problem.slug, code, language);
+      saveUserProblemCode(problem.slug, code, 'javascript');
     }, 600);
     return () => clearTimeout(timer);
-  }, [code, language, problem]);
+  }, [code, problem]);
 
   // Terminal setup
   function clearTerminal() {
@@ -159,7 +158,7 @@ function ProblemSolving() {
         problem,
         code,
         customTestCases,
-        language
+        'javascript'
       );
       setLastRunResults(results);
       setResultsActiveView('run');
@@ -183,7 +182,7 @@ function ProblemSolving() {
           }
         });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Run failed', err);
     } finally {
       setIsRunning(false);
@@ -194,7 +193,6 @@ function ProblemSolving() {
     isSubmitting,
     code,
     customTestCases,
-    language,
     isDesktop,
     resolvedTheme,
   ]);
@@ -208,7 +206,11 @@ function ProblemSolving() {
     }
 
     try {
-      const submission = await submitProblemSolution(problem, code, language);
+      const submission = await submitProblemSolution(
+        problem,
+        code,
+        'javascript'
+      );
       const updatedState = recordSubmission(problem.slug, submission);
       setUserState(updatedState);
       setLastSubmission(submission);
@@ -217,42 +219,23 @@ function ProblemSolving() {
       if (!isDesktop) {
         setMobileTab('results');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Submit failed', err);
     } finally {
       setIsSubmitting(false);
     }
-  }, [problem, isRunning, isSubmitting, code, language, isDesktop]);
+  }, [problem, isRunning, isSubmitting, code, isDesktop]);
 
-  const handleResetCode = useCallback(() => {
-    if (!problem) return;
-    if (
-      window.confirm(
-        'Are you sure you want to reset your code to the original starter template?'
-      )
-    ) {
-      const starter =
-        language === 'typescript' && problem.starterCode.typescript
-          ? problem.starterCode.typescript
-          : problem.starterCode.javascript;
-      resetProblemCode(problem.slug, starter, language);
-      setCode(starter);
-    }
-  }, [problem, language]);
+  const handleOpenResetModal = useCallback(() => {
+    setIsResetModalOpen(true);
+  }, []);
 
-  function handleLanguageChange(newLang: 'javascript' | 'typescript') {
-    setLanguage(newLang);
+  const handleConfirmReset = useCallback(() => {
     if (!problem) return;
-    if (newLang === 'typescript' && problem.starterCode.typescript) {
-      if (code === problem.starterCode.javascript) {
-        setCode(problem.starterCode.typescript);
-      }
-    } else if (newLang === 'javascript' && problem.starterCode.javascript) {
-      if (code === problem.starterCode.typescript) {
-        setCode(problem.starterCode.javascript);
-      }
-    }
-  }
+    const starter = problem.starterCode.javascript;
+    resetProblemCode(problem.slug, starter, 'javascript');
+    setCode(starter);
+  }, [problem]);
 
   useAdjustFontSize(handleFontSize);
   useComplieCode(handleRun);
@@ -269,7 +252,7 @@ function ProblemSolving() {
         <button
           type="button"
           onClick={() => navigate('/problems')}
-          className="px-4 py-2 rounded-lg bg-amber-500 text-black font-semibold text-xs shadow-xs hover:bg-amber-600 transition-colors"
+          className="px-4 py-2 rounded-lg bg-amber-500 text-black font-semibold text-xs shadow-xs hover:bg-amber-600 transition-colors cursor-pointer"
         >
           Back to Problemset
         </button>
@@ -282,13 +265,11 @@ function ProblemSolving() {
       {/* Top Solved Screen Navigation */}
       <ProblemHeader
         problem={problem}
-        language={language}
-        onLanguageChange={handleLanguageChange}
         isRunning={isRunning}
         isSubmitting={isSubmitting}
         onRun={handleRun}
         onSubmit={handleSubmit}
-        onReset={handleResetCode}
+        onReset={handleOpenResetModal}
         onFormat={handleFormatDocument}
         currentFontSize={currentFontSize}
         onFontSizeChange={handleFontSize}
@@ -320,7 +301,7 @@ function ProblemSolving() {
                 : 'text-[var(--text-secondary)]'
             }`}
           >
-            <Code2 className="w-3.5 h-3.5" />
+            <Code2 className="w-3.5 h-3.5 text-amber-500" />
             <span>Editor</span>
           </button>
 
@@ -333,8 +314,8 @@ function ProblemSolving() {
                 : 'text-[var(--text-secondary)]'
             }`}
           >
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Results</span>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Verdict</span>
           </button>
 
           <button
@@ -353,17 +334,17 @@ function ProblemSolving() {
       )}
 
       {/* Main Workspace Area */}
-      <div className="flex-1 w-full relative overflow-hidden">
+      <div className="flex-1 overflow-hidden">
         {isDesktop ? (
-          /* Desktop Split Layout (Left: Problem / Right: Editor + Tests) */
+          /* Desktop Split Pane Workspace */
           <Split
-            className="split h-full w-full"
             sizes={[42, 58]}
-            minSize={260}
+            minSize={[320, 420]}
             gutterSize={6}
+            className="split h-full w-full"
           >
-            {/* Left Pane: Problem Description & Tabs */}
-            <div className="h-full overflow-hidden border-r border-[var(--border-default)]">
+            {/* Left Pane: Problem Description & Solutions */}
+            <div className="h-full bg-[var(--bg-surface)] overflow-hidden border-r border-[var(--border-default)]">
               <ProblemDescription
                 problem={problem}
                 submissions={userState?.submissions || []}
@@ -371,12 +352,12 @@ function ProblemSolving() {
               />
             </div>
 
-            {/* Right Pane: Vertical Split (Top: Editor / Bottom: Test Runner) */}
-            <div className="h-full flex flex-col overflow-hidden">
+            {/* Right Pane: Code Editor + Test Runner Split */}
+            <div className="h-full overflow-hidden">
               <Split
                 direction="vertical"
-                sizes={[58, 42]}
-                minSize={120}
+                sizes={[62, 38]}
+                minSize={[200, 160]}
                 gutterSize={6}
                 className="h-full w-full flex flex-col"
               >
@@ -386,16 +367,12 @@ function ProblemSolving() {
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-medium border border-[var(--border-subtle)]">
                         <Code2 className="w-3.5 h-3.5 text-amber-500" />
-                        <span>
-                          solution.{language === 'typescript' ? 'ts' : 'js'}
-                        </span>
+                        <span>solution.js</span>
                       </div>
                     </div>
 
                     <span className="text-[11px] font-mono text-[var(--text-muted)]">
-                      {language === 'typescript'
-                        ? 'TypeScript • esbuild'
-                        : 'JavaScript • ES2024'}
+                      JavaScript • ES2024
                     </span>
                   </div>
 
@@ -406,6 +383,7 @@ function ProblemSolving() {
                       editorRef={editorRef}
                       currentFontSize={Number(currentFontSize)}
                       onChange={(val) => setCode(val ?? '')}
+                      disableAutoSuggestion={true}
                     />
                   </div>
                 </div>
@@ -418,7 +396,7 @@ function ProblemSolving() {
                       <button
                         type="button"
                         onClick={() => setBottomTab('cases')}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                           bottomTab === 'cases'
                             ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)]'
                             : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
@@ -430,7 +408,7 @@ function ProblemSolving() {
                       <button
                         type="button"
                         onClick={() => setBottomTab('results')}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                           bottomTab === 'results'
                             ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)]'
                             : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
@@ -443,7 +421,7 @@ function ProblemSolving() {
                       <button
                         type="button"
                         onClick={() => setBottomTab('console')}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                           bottomTab === 'console'
                             ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)]'
                             : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
@@ -517,6 +495,7 @@ function ProblemSolving() {
                 editorRef={editorRef}
                 currentFontSize={Number(currentFontSize)}
                 onChange={(val) => setCode(val ?? '')}
+                disableAutoSuggestion={true}
               />
             </div>
 
@@ -539,6 +518,14 @@ function ProblemSolving() {
           </div>
         )}
       </div>
+
+      {/* Custom Reset Code Confirmation Modal */}
+      <ResetCodeModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        onConfirm={handleConfirmReset}
+        problemTitle={problem.title}
+      />
     </div>
   );
 }

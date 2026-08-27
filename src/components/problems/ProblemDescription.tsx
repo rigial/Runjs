@@ -168,39 +168,42 @@ function ProblemDescription({
                 {problem.examples.map((example, i) => (
                   <div
                     key={i}
-                    className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] p-3.5 space-y-2 font-mono text-xs shadow-2xs"
+                    className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] p-3.5 sm:p-4 space-y-3 font-mono text-xs shadow-2xs"
                   >
-                    <div className="text-[11px] font-bold text-[var(--text-primary)] font-sans">
+                    <div className="text-xs font-bold text-[var(--text-primary)] font-sans">
                       Example {i + 1}
                     </div>
 
-                    <div className="space-y-1.5 text-[11px]">
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                        <span className="text-[var(--text-muted)] font-semibold w-16 shrink-0">
+                    <div className="space-y-2.5 text-xs">
+                      {/* Input */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-3">
+                        <span className="text-[var(--text-muted)] font-semibold sm:w-24 shrink-0 font-mono text-[11px] pt-1">
                           Input:
                         </span>
-                        <code className="text-amber-600 dark:text-amber-400 break-all bg-[var(--bg-app)] px-2 py-1 rounded border border-[var(--border-subtle)] flex-1">
+                        <div className="text-amber-500 bg-[var(--bg-app)] px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] flex-1 break-all select-text font-mono">
                           {example.input}
-                        </code>
+                        </div>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                        <span className="text-[var(--text-muted)] font-semibold w-16 shrink-0">
+                      {/* Output */}
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-3">
+                        <span className="text-[var(--text-muted)] font-semibold sm:w-24 shrink-0 font-mono text-[11px] pt-1">
                           Output:
                         </span>
-                        <code className="text-emerald-600 dark:text-emerald-400 break-all bg-[var(--bg-app)] px-2 py-1 rounded border border-[var(--border-subtle)] flex-1">
+                        <div className="text-emerald-500 bg-[var(--bg-app)] px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] flex-1 break-all select-text font-mono">
                           {example.output}
-                        </code>
+                        </div>
                       </div>
 
+                      {/* Explanation */}
                       {example.explanation && (
-                        <div className="flex flex-col sm:flex-row sm:items-start gap-1 pt-1 font-sans text-xs text-[var(--text-secondary)]">
-                          <span className="text-[var(--text-muted)] font-semibold w-16 shrink-0 font-mono text-[11px]">
+                        <div className="flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-3 pt-0.5 font-sans text-xs text-[var(--text-secondary)]">
+                          <span className="text-[var(--text-muted)] font-semibold sm:w-24 shrink-0 font-mono text-[11px] pt-0.5">
                             Explanation:
                           </span>
-                          <span className="flex-1 text-[var(--text-secondary)]">
+                          <div className="flex-1 text-[var(--text-secondary)] leading-relaxed pl-1 sm:pl-0">
                             {example.explanation}
-                          </span>
+                          </div>
                         </div>
                       )}
                     </div>

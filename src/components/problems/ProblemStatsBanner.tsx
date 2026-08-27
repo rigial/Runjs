@@ -41,20 +41,20 @@ function ProblemStatsBanner({
     <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] p-5 sm:p-6 shadow-xs transition-all mb-6">
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
         {/* Left: Overall Completion Circle & Info */}
-        <div className="flex items-center gap-5">
-          <div className="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 shrink-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+          <div className="relative flex items-center justify-center w-16 h-16 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 shrink-0">
             <div className="text-center">
-              <div className="text-xl sm:text-2xl font-black text-amber-500 leading-none">
+              <div className="text-lg sm:text-2xl font-black text-amber-500 leading-none">
                 {stats.solved}
               </div>
-              <div className="text-[11px] font-medium text-[var(--text-secondary)] mt-1">
+              <div className="text-[10px] sm:text-[11px] font-medium text-[var(--text-secondary)] mt-1">
                 / {stats.total} Solved
               </div>
             </div>
           </div>
 
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
                 Your JavaScript Progress
               </h2>
@@ -85,7 +85,7 @@ function ProblemStatsBanner({
         </div>
 
         {/* Middle: Difficulty Breakdown Progress Bars */}
-        <div className="flex-1 max-w-md grid grid-cols-3 gap-3">
+        <div className="flex-1 max-w-md grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
           {/* Easy */}
           <div className="p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-app)]">
             <div className="flex items-center justify-between text-xs mb-1.5">
@@ -136,11 +136,11 @@ function ProblemStatsBanner({
         </div>
 
         {/* Right: Quick Action Buttons */}
-        <div className="flex sm:flex-col items-center justify-center gap-2 shrink-0">
+        <div className="flex flex-col w-full sm:w-auto items-stretch justify-center gap-2 shrink-0">
           {nextUnsolved && (
             <Link
               to={`/problems/${nextUnsolved.slug}`}
-              className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Continue Solving</span>
@@ -151,7 +151,7 @@ function ProblemStatsBanner({
             <button
               type="button"
               onClick={onPickRandom}
-              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-medium transition-colors"
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-medium transition-colors cursor-pointer"
             >
               <Shuffle className="w-3.5 h-3.5" />
               <span>Pick Random</span>

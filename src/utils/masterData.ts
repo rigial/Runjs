@@ -4,6 +4,10 @@ const navigation = [
     link: '/',
   },
   {
+    title: 'Problems',
+    link: '/problems',
+  },
+  {
     title: 'Dashboard',
     link: '/dashboard',
   },
@@ -35,75 +39,89 @@ const navigation = [
 
 const packageList = [
   {
-    packageLink: 'https://www.npmjs.com/package/react-split',
-    packageName: 'react-split',
-    packageDescription:
-      'Used for implementing a split-screen feature in the UI.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/idb',
-    packageName: 'idb',
-    packageDescription:
-      'Used to interact with IndexedDB for storing and retrieving user code.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/luna-console',
-    packageName: 'luna-console',
-    packageDescription:
-      'Provides a UI for displaying console logs within the application.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/luna-object-viewer',
-    packageName: 'luna-object-viewer',
-    packageDescription:
-      'Enhances the console UI by allowing object inspection.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/@monaco-editor/react',
-    packageName: '@monaco-editor/react',
-    packageDescription:
-      'Serves as the integrated development environment (IDE) UI for coding',
-  },
-  {
     packageLink: 'https://www.npmjs.com/package/react',
     packageName: 'react',
     packageDescription:
-      'Chosen as the frontend framework for building the application.',
+      'Core UI library for building reactive, component-driven user interfaces.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/react-dom',
     packageName: 'react-dom',
     packageDescription:
-      'Provides rendering support for React in the browser DOM.',
+      'DOM renderer for React handling high-performance client updates.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/react-router',
     packageName: 'react-router',
     packageDescription:
-      'Handles routing for navigation between different pages in the application.',
+      'Client-side declarative routing and URL synchronization across views.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/@monaco-editor/react',
+    packageName: '@monaco-editor/react',
+    packageDescription:
+      'Powers the VS Code-grade code editor with syntax highlighting, formatting, and theme support.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/react-split',
+    packageName: 'react-split',
+    packageDescription:
+      'Provides resizable split-pane layouts for the problem solver and playgrounds.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/esbuild-wasm',
     packageName: 'esbuild-wasm',
     packageDescription:
-      'Used to convert TypeScript to JavaScript via the transform function.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/uuid',
-    packageName: 'uuid',
-    packageDescription: 'Generates unique IDs for storing user code entries.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/emmet-monaco-es',
-    packageName: 'emmet-monaco-es',
-    packageDescription:
-      'Emmet Support for Monaco Editor, based on vscode-emmet-helper',
+      'WebAssembly-based JavaScript and TypeScript compiler running blazingly fast in the browser.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/@codesandbox/sandpack-react',
     packageName: '@codesandbox/sandpack-react',
     packageDescription:
-      'Sandpack is a component toolkit for creating live-running code editing experiences, powered by the online bundler used on CodeSandbox.',
+      'In-browser live bundler and container for the interactive React Playground.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/luna-console',
+    packageName: 'luna-console',
+    packageDescription:
+      'Developer console capturing stdout, warnings, errors, and object trees with theme parity.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/luna-object-viewer',
+    packageName: 'luna-object-viewer',
+    packageDescription:
+      'Interactive deep object inspector for complex JavaScript data structures.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/idb',
+    packageName: 'idb',
+    packageDescription:
+      'IndexedDB wrapper providing fast, offline-first local storage for saved snippets and projects.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/lucide-react',
+    packageName: 'lucide-react',
+    packageDescription:
+      'Beautiful, consistent vector icons powering navigation, buttons, and status indicators.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/uuid',
+    packageName: 'uuid',
+    packageDescription:
+      'RFC4122 UUID generator for unique project keys and session identifiers.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/emmet-monaco-es',
+    packageName: 'emmet-monaco-es',
+    packageDescription:
+      'Emmet expansion and abbreviations engine integrated with Monaco editor.',
+  },
+  {
+    packageLink:
+      'https://www.npmjs.com/package/@rainetian/sandpack-file-explorer',
+    packageName: '@rainetian/sandpack-file-explorer',
+    packageDescription:
+      'Multi-file directory tree explorer for custom React Sandpack projects.',
   },
 ];
 

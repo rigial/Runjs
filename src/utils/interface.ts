@@ -62,6 +62,7 @@ export interface ICodeEditor {
   currentFontSize: number;
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   editorRef: React.RefObject<any>;
+  disableAutoSuggestion?: boolean;
 }
 
 export interface IAppLoading {

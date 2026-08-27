@@ -33,7 +33,11 @@ function Navbar() {
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-1">
             {navigation.map((val, index) => {
-              const isActive = location.pathname === val.link;
+              const isActive =
+                val.link === '/'
+                  ? location.pathname === '/'
+                  : location.pathname === val.link ||
+                    location.pathname.startsWith(`${val.link}/`);
               return (
                 <Link
                   key={index}
@@ -84,7 +88,11 @@ function Navbar() {
         <div className="md:hidden border-t border-[var(--border-default)] bg-[var(--bg-surface-elevated)] px-4 py-3 shadow-lg animate-in slide-in-from-top-2 duration-150">
           <div className="flex flex-col gap-1">
             {navigation.map((val, index) => {
-              const isActive = location.pathname === val.link;
+              const isActive =
+                val.link === '/'
+                  ? location.pathname === '/'
+                  : location.pathname === val.link ||
+                    location.pathname.startsWith(`${val.link}/`);
               return (
                 <Link
                   key={index}

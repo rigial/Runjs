@@ -103,6 +103,7 @@
   }
 
   html {
+    scroll-behavior: smooth;
     font-family:
       'Inter',
       -apple-system,
@@ -117,6 +118,9 @@
       sans-serif;
     background-color: var(--bg-app);
     color: var(--text-primary);
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
     transition:
       background-color 150ms ease,
       color 150ms ease;
@@ -127,6 +131,26 @@
     color: var(--text-primary);
     min-height: 100vh;
     overflow-x: hidden;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+  }
+
+  #root {
+    scroll-behavior: smooth;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html,
+    #root,
+    .overflow-y-auto,
+    .overflow-x-auto,
+    .overflow-auto {
+      scroll-behavior: auto !important;
+    }
   }
 
   dialog::backdrop {
@@ -156,6 +180,26 @@
 }
 
 @layer utilities {
+  .scrollbar-none,
+  .no-scrollbar {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  .scrollbar-none::-webkit-scrollbar,
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    scroll-behavior: smooth;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+  }
+
   .no-select {
     user-select: none;
   }

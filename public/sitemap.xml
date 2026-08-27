@@ -2,30 +2,114 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://runjs.rigial.com/</loc>
-    <lastmod>2024-12-28T17:44:14+00:00</lastmod>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>https://runjs.rigial.com/about</loc>
-    <lastmod>2024-12-20T10:00:00+00:00</lastmod>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/two-sum</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/reverse-string</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/valid-anagram</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/debounce-function</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/deep-clone</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/flatten-array</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/memoize-function</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/promise-all-polyfill</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/event-emitter</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/lru-cache</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/curry-function</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/chunk-array</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/group-anagrams</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/get-object-property</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/function-composition</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/deep-equal</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/allow-one-function-call</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/problems/promise-race-polyfill</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>https://runjs.rigial.com/js</loc>
-    <lastmod>2024-12-18T15:00:00+00:00</lastmod>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>https://runjs.rigial.com/ts</loc>
-    <lastmod>2024-12-28T17:44:14+00:00</lastmod>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/react</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://runjs.rigial.com/interview</loc>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>https://runjs.rigial.com/dashboard</loc>
-    <lastmod>2024-12-20T10:00:00+00:00</lastmod>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>https://runjs.rigial.com/bin</loc>
-    <lastmod>2024-12-18T15:00:00+00:00</lastmod>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>https://runjs.rigial.com/404</loc>
-    <lastmod>2024-12-18T15:00:00+00:00</lastmod>
+    <lastmod>2026-08-27T18:00:00+00:00</lastmod>
   </url>
 </urlset>

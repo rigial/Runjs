@@ -75,6 +75,7 @@ export function MultiTabEditor({
   const activeFileRef = useRef(activeFile);
   const onSaveFileRef = useRef(onSaveFile);
   const allFilesRef = useRef(allFiles);
+  const languageDisposersRef = useRef<Array<() => void>>([]);
   const pendingPositionRef = useRef<{
     lineNumber: number;
     column: number;
@@ -92,10 +93,23 @@ export function MultiTabEditor({
     const packageVirtualFiles = getAllPackageVirtualFiles();
     const merged = { ...packageVirtualFiles, ...allFiles };
     allFilesRef.current = merged;
-    if (monacoInstanceRef.current) {
-      syncVfsToMonacoTypeScript(monacoInstanceRef.current, allFiles);
-    }
+
+    const timer = setTimeout(() => {
+      if (monacoInstanceRef.current) {
+        syncVfsToMonacoTypeScript(monacoInstanceRef.current, merged);
+      }
+    }, 150);
+
+    return () => clearTimeout(timer);
   }, [allFiles]);
+
+  // Clean up registered providers on unmount
+  useEffect(() => {
+    return () => {
+      languageDisposersRef.current.forEach((dispose) => dispose());
+      languageDisposersRef.current = [];
+    };
+  }, []);
 
   const [tabContextMenu, setTabContextMenu] = useState<{
     x: number;
@@ -193,11 +207,11 @@ export function MultiTabEditor({
 
   // Effective content including virtual package files fallback
   const effectiveContent = useMemo(() => {
-    if (content !== undefined && content !== '') return content;
+    if (content !== undefined) return content;
     const pkgFiles = getAllPackageVirtualFiles();
     if (pkgFiles[activeFile]) return pkgFiles[activeFile];
-    return allFilesRef.current[activeFile] ?? '';
-  }, [content, activeFile]);
+    return allFiles[activeFile] ?? '';
+  }, [content, activeFile, allFiles]);
 
   return (
     <div className="h-full w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
@@ -338,18 +352,23 @@ export function MultiTabEditor({
               setupTypeScript(monaco);
               syncVfsToMonacoTypeScript(monaco, allFilesRef.current);
 
-              // Register ES7+ React Snippets
-              registerReactSnippets(monaco);
-
-              // Register Import Auto-Suggestions
-              registerImportCompletion(monaco, () => allFilesRef.current);
-
-              // Register Go to Definition Provider & Document Links
-              registerDefinitionProvider(
+              // Register language services and store disposers
+              const snippetsDisposer = registerReactSnippets(monaco);
+              const importDisposer = registerImportCompletion(
+                monaco,
+                () => allFilesRef.current
+              );
+              const defDisposer = registerDefinitionProvider(
                 monaco,
                 () => allFilesRef.current,
                 handleOpenFile
               );
+
+              languageDisposersRef.current = [
+                snippetsDisposer,
+                importDisposer,
+                defDisposer,
+              ];
 
               // Mouse Down Handler for seamless Ctrl/Cmd + click navigation
               editor.onMouseDown((e: any) => {
@@ -453,10 +472,23 @@ export function MultiTabEditor({
                     if (localLoc) {
                       e.event.preventDefault();
                       e.event.stopPropagation();
-                      handleOpenFile(currentFilePath, {
-                        lineNumber: localLoc.lineNumber,
-                        column: localLoc.column,
-                      });
+                      if (currentFilePath === activeFileRef.current) {
+                        pendingPositionRef.current = null;
+                        editor.setPosition({
+                          lineNumber: localLoc.lineNumber,
+                          column: localLoc.column,
+                        });
+                        editor.revealPositionInCenter({
+                          lineNumber: localLoc.lineNumber,
+                          column: localLoc.column,
+                        });
+                        editor.focus();
+                      } else {
+                        handleOpenFile(currentFilePath, {
+                          lineNumber: localLoc.lineNumber,
+                          column: localLoc.column,
+                        });
+                      }
                       return;
                     }
                   }

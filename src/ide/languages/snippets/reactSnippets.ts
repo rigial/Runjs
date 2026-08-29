@@ -1,36 +1,34 @@
 import type { Monaco } from '@monaco-editor/react';
 
-/**
- * Extracts a valid React Component name in PascalCase from a file path.
- * e.g., '/src/components/HeaderNav.tsx' -> 'HeaderNav'
- * e.g., '/src/components/user-profile.tsx' -> 'UserProfile'
- */
-export function getComponentNameFromPath(path: string): string {
-  if (!path) return 'MyComponent';
-  const cleanPath = path.replace(/\\/g, '/');
-  const filename = cleanPath.split('/').pop() || 'MyComponent';
-  const baseName = filename.split('.')[0] || 'MyComponent';
-
-  // Convert kebab-case / snake_case into PascalCase
-  const formatted = baseName
-    .replace(/[-_]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ''))
-    .replace(/^[a-z]/, (c) => c.toUpperCase());
-
-  // Return formatted name if valid identifier, else fallback
-  return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(formatted)
-    ? formatted
-    : 'MyComponent';
-}
-
-interface SnippetDef {
+export interface SnippetDefinition {
   label: string;
   detail: string;
   documentation: string;
   getSnippet: (componentName: string) => string;
+  languages?: Array<'javascript' | 'typescript' | 'jsx' | 'tsx'>;
 }
 
-const SNIPPETS: SnippetDef[] = [
-  // ================= React Components =================
+/**
+ * Derives a PascalCase component name from a file path.
+ * e.g. /src/components/user-card.tsx -> UserCard
+ */
+export function getComponentNameFromPath(filePath?: string): string {
+  if (!filePath) return 'MyComponent';
+  const fileNameWithExt = filePath.split('/').pop() || '';
+  const baseName = fileNameWithExt.replace(/\.[^/.]+$/, '');
+  if (!baseName || baseName === 'index') return 'MyComponent';
+
+  // Convert kebab-case, snake_case or regular name to PascalCase
+  return baseName
+    .replace(/[-_](\w)/g, (_, c) => c.toUpperCase())
+    .replace(/^\w/, (c) => c.toUpperCase());
+}
+
+/**
+ * Standard ES7+ React/Redux/React Native snippet definitions.
+ */
+export const SNIPPETS: SnippetDefinition[] = [
+  // ================= React Functional Components =================
   {
     label: 'rafce',
     detail: 'React Arrow Function Component with Export Default',
@@ -48,14 +46,14 @@ const SNIPPETS: SnippetDef[] = [
   },
   {
     label: 'rafc',
-    detail: 'React Arrow Function Component (Named Export)',
+    detail: 'React Arrow Function Component with Named Export',
     documentation: 'Creates a React Arrow Function Component with Named Export',
     getSnippet: (name) =>
       `import React from 'react';\n\nexport const \${1:${name}} = () => {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n};\n`,
   },
   {
     label: 'rfc',
-    detail: 'React Function Component (Named Export)',
+    detail: 'React Function Component with Named Export',
     documentation: 'Creates a React Function Component with Named Export',
     getSnippet: (name) =>
       `import React from 'react';\n\nexport function \${1:${name}}() {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n}\n`,
@@ -83,17 +81,18 @@ const SNIPPETS: SnippetDef[] = [
   },
   {
     label: 'rfcp',
-    detail: 'React Function Component with PropTypes',
-    documentation: 'Creates a React Function Component with PropTypes',
+    detail: 'React Function Component with Props Type',
+    documentation: 'Creates a React Function Component with Props interface',
     getSnippet: (name) =>
-      `import React from 'react';\nimport PropTypes from 'prop-types';\n\nfunction \${1:${name}}(props) {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n}\n\n\${1:${name}}.propTypes = {\n  \${2}\n};\n\nexport default \${1:${name}};\n`,
+      `import React from 'react';\n\ninterface \${1:${name}}Props {\n  \${2:children?: React.ReactNode;}\n}\n\nexport function \${1:${name}}({ \${3} }: \${1:${name}}Props) {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n}\n\nexport default \${1:${name}};\n`,
   },
   {
     label: 'rafcp',
-    detail: 'React Arrow Function Component with PropTypes',
-    documentation: 'Creates a React Arrow Function Component with PropTypes',
+    detail: 'React Arrow Function Component with Props Type',
+    documentation:
+      'Creates a React Arrow Function Component with Props interface',
     getSnippet: (name) =>
-      `import React from 'react';\nimport PropTypes from 'prop-types';\n\nconst \${1:${name}} = (props) => {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n};\n\n\${1:${name}}.propTypes = {\n  \${2}\n};\n\nexport default \${1:${name}};\n`,
+      `import React from 'react';\n\ninterface \${1:${name}}Props {\n  \${2:children?: React.ReactNode;}\n}\n\nexport const \${1:${name}}: React.FC<\${1:${name}}Props> = ({ \${3} }) => {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n};\n\nexport default \${1:${name}};\n`,
   },
 
   // ================= React Native =================
@@ -109,21 +108,21 @@ const SNIPPETS: SnippetDef[] = [
     label: 'rnfes',
     detail: 'React Native Functional Component with StyleSheet',
     documentation:
-      'Creates a React Native Functional Component with StyleSheet & Export',
+      'Creates a React Native Functional Component with StyleSheet and Named Export',
     getSnippet: (name) =>
-      `import React from 'react';\nimport { StyleSheet, Text, View } from 'react-native';\n\nexport const \${1:${name}} = () => {\n  return (\n    <View style={styles.container}>\n      <Text>\${1:${name}}</Text>\n      \${0}\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n  },\n});\n`,
+      `import React from 'react';\nimport { StyleSheet, Text, View } from 'react-native';\n\nexport const \${1:${name}} = () => {\n  return (\n    <View style={styles.container}>\n      <Text>\${1:${name}}</Text>\n      \${0}\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    justifyContent: 'center',\n    alignItems: 'center',\n  },\n});\n`,
   },
   {
     label: 'rnc',
     detail: 'React Native Class Component',
-    documentation: 'Creates a React Native Class Component with Export',
+    documentation: 'Creates a React Native Class Component with Default Export',
     getSnippet: (name) =>
-      `import React, { Component } from 'react';\nimport { Text, View } from 'react-native';\n\nexport default class \${1:${name}} extends Component {\n  render() {\n    return (\n      <View>\n        <Text> \${1:${name}} </Text>\n        \${0}\n      </View>\n    );\n  }\n}\n`,
+      `import React, { Component } from 'react';\nimport { Text, View } from 'react-native';\n\nexport class \${1:${name}} extends Component {\n  render() {\n    return (\n      <View>\n        <Text>\${1:${name}}</Text>\n        \${0}\n      </View>\n    );\n  }\n}\n\nexport default \${1:${name}};\n`,
   },
   {
     label: 'rnstyle',
     detail: 'React Native StyleSheet.create',
-    documentation: 'Creates a React Native StyleSheet definition',
+    documentation: 'Creates a React Native StyleSheet object',
     getSnippet: () =>
       `const styles = StyleSheet.create({\n  \${1:container}: {\n    \${0}\n  },\n});\n`,
   },
@@ -139,7 +138,7 @@ const SNIPPETS: SnippetDef[] = [
   {
     label: 'useEffect',
     detail: 'React useEffect Hook',
-    documentation: 'Runs side effects in function components',
+    documentation: 'Runs side effects on component render or dependency change',
     getSnippet: () =>
       `useEffect(() => {\n  \${1}\n\n  return () => {\n    \${2}\n  };\n}, [\${3}]);\${0}`,
   },
@@ -152,22 +151,23 @@ const SNIPPETS: SnippetDef[] = [
   {
     label: 'useCallback',
     detail: 'React useCallback Hook',
-    documentation: 'Returns a memoized callback',
+    documentation: 'Returns a memoized version of the callback function',
     getSnippet: () =>
-      `const \${1:memoizedCallback} = useCallback(\n  (\${2:params}) => {\n    \${3}\n  },\n  [\${4:deps}],\n);\${0}`,
+      `const \${1:memoizedCallback} = useCallback(\n  (\${2:params}) => {\n    \${3}\n  },\n  [\${4}],\n);\${0}`,
   },
   {
     label: 'useMemo',
     detail: 'React useMemo Hook',
-    documentation: 'Returns a memoized computed value',
+    documentation: 'Returns a memoized calculation result',
     getSnippet: () =>
-      `const \${1:memoizedValue} = useMemo(() => \${2:computeValue}, [\${3:deps}]);\${0}`,
+      `const \${1:memoizedValue} = useMemo(() => \${2:computeExpensiveValue(\${3})}, [\${4}]);\${0}`,
   },
   {
     label: 'useRef',
     detail: 'React useRef Hook',
-    documentation: 'Returns a mutable ref object whose .current is initialized',
-    getSnippet: () => `const \${1:refName} = useRef(\${2:null});\${0}`,
+    documentation:
+      'Returns a mutable ref object whose .current property is initialized',
+    getSnippet: () => `const \${1:ref} = useRef(\${2:null});\${0}`,
   },
   {
     label: 'useReducer',
@@ -179,92 +179,91 @@ const SNIPPETS: SnippetDef[] = [
   {
     label: 'useLayoutEffect',
     detail: 'React useLayoutEffect Hook',
-    documentation: 'Fires synchronously after all DOM mutations',
+    documentation:
+      'Fires synchronously after all DOM mutations (before browser paint)',
     getSnippet: () =>
       `useLayoutEffect(() => {\n  \${1}\n\n  return () => {\n    \${2}\n  };\n}, [\${3}]);\${0}`,
   },
   {
     label: 'useId',
     detail: 'React useId Hook',
-    documentation: 'Generates unique IDs for accessibility attributes',
+    documentation:
+      'Generates unique IDs that are stable across server and client',
     getSnippet: () => `const \${1:id} = useId();\${0}`,
   },
   {
     label: 'useTransition',
     detail: 'React useTransition Hook',
-    documentation: 'Lets you mark updates as non-blocking transitions',
+    documentation: 'Allows updating state without blocking the UI',
     getSnippet: () =>
       `const [\${1:isPending}, startTransition] = useTransition();\${0}`,
   },
   {
     label: 'useDeferredValue',
     detail: 'React useDeferredValue Hook',
-    documentation: 'Defers updating a part of the UI',
+    documentation: 'Defers updating a non-critical part of the UI',
     getSnippet: () =>
-      `const deferred\${1:Value} = useDeferredValue(\${2:value});\${0}`,
+      `const \${1:deferredValue} = useDeferredValue(\${2:value});\${0}`,
   },
   {
     label: 'useImperativeHandle',
     detail: 'React useImperativeHandle Hook',
-    documentation: 'Customizes the instance value exposed to parent refs',
+    documentation:
+      'Customizes the instance value that is exposed to parent components when using ref',
     getSnippet: () =>
-      `useImperativeHandle(\${1:ref}, () => ({\n  \${2}\n}), [\${3}]);\${0}`,
+      `useImperativeHandle(\n  \${1:ref},\n  () => ({\n    \${2}\n  }),\n  [\${3}],\n);\${0}`,
   },
 
   // ================= Import Snippets =================
   {
     label: 'imr',
     detail: "import React from 'react'",
-    documentation: 'Imports React default module',
-    getSnippet: () => `import React from 'react';\n`,
+    documentation: "Imports default React object from 'react'",
+    getSnippet: () => `import React from 'react';\${0}\n`,
   },
   {
     label: 'imrd',
     detail: "import ReactDOM from 'react-dom'",
-    documentation: 'Imports ReactDOM module',
-    getSnippet: () => `import ReactDOM from 'react-dom';\n`,
+    documentation: "Imports default ReactDOM from 'react-dom'",
+    getSnippet: () => `import ReactDOM from 'react-dom';\${0}\n`,
   },
   {
     label: 'imrc',
     detail: "import React, { Component } from 'react'",
-    documentation: 'Imports React and Component class',
-    getSnippet: () => `import React, { Component } from 'react';\n`,
+    documentation: "Imports React and Component from 'react'",
+    getSnippet: () => `import React, { Component } from 'react';\${0}\n`,
   },
   {
     label: 'imrs',
     detail: "import React, { useState } from 'react'",
-    documentation: 'Imports React and useState hook',
-    getSnippet: () => `import React, { useState } from 'react';\n`,
+    documentation: "Imports React and useState hook from 'react'",
+    getSnippet: () => `import React, { useState } from 'react';\${0}\n`,
   },
   {
     label: 'imrse',
     detail: "import React, { useState, useEffect } from 'react'",
-    documentation: 'Imports React, useState and useEffect hooks',
-    getSnippet: () => `import React, { useState, useEffect } from 'react';\n`,
-  },
-  {
-    label: 'impt',
-    detail: "import PropTypes from 'prop-types'",
-    documentation: 'Imports PropTypes module',
-    getSnippet: () => `import PropTypes from 'prop-types';\n`,
+    documentation: "Imports React, useState, and useEffect from 'react'",
+    getSnippet: () =>
+      `import React, { useState, useEffect } from 'react';\${0}\n`,
   },
   {
     label: 'imp',
-    detail: "import { ... } from '...'",
-    documentation: 'Imports named members from a module',
-    getSnippet: () => `import { \${2:module} } from '\${1:source}';\${0}\n`,
+    detail: "import module from 'path'",
+    documentation: 'Imports a default module',
+    getSnippet: () => `import \${1:module} from '\${2:module}';\${0}\n`,
   },
   {
     label: 'impd',
-    detail: "import ... from '...'",
-    documentation: 'Imports default export from a module',
-    getSnippet: () => `import \${2:name} from '\${1:source}';\${0}\n`,
+    detail: "import { destructure } from 'path'",
+    documentation: 'Imports destructured members from a module',
+    getSnippet: () =>
+      `import { \${1:destructure} } from '\${2:module}';\${0}\n`,
   },
   {
     label: 'impa',
-    detail: "import * as ... from '...'",
-    documentation: 'Imports all exports into a namespace',
-    getSnippet: () => `import * as \${2:name} from '\${1:source}';\${0}\n`,
+    detail: "import * as alias from 'path'",
+    documentation: 'Imports entire module namespace as an alias',
+    getSnippet: () => `import * as \${1:alias} from '\${2:module}';\${0}\n`,
   },
 
   // ================= Redux / Redux Toolkit =================
@@ -286,6 +285,7 @@ const SNIPPETS: SnippetDef[] = [
     label: 'rxslice',
     detail: 'Redux Toolkit createSlice',
     documentation: 'Creates a Redux Toolkit slice with reducers and actions',
+    languages: ['typescript', 'tsx'],
     getSnippet: (name) =>
       `import { createSlice, PayloadAction } from '@reduxjs/toolkit';\n\ninterface \${1:${name}}State {\n  \${2:value}: \${3:number};\n}\n\nconst initialState: \${1:${name}}State = {\n  \${2:value}: 0,\n};\n\nexport const \${4:${name.toLowerCase()}}Slice = createSlice({\n  name: '\${4:${name.toLowerCase()}}',\n  initialState,\n  reducers: {\n    \${5:increment}: (state) => {\n      state.\${2:value} += 1;\n    },\n  },\n});\n\nexport const { \${5:increment} } = \${4:${name.toLowerCase()}}Slice.actions;\nexport default \${4:${name.toLowerCase()}}Slice.reducer;\n`,
   },
@@ -319,26 +319,26 @@ const SNIPPETS: SnippetDef[] = [
   {
     label: 'clw',
     detail: 'console.warn(...)',
-    documentation: 'Logs a warning message to the console',
+    documentation: 'Logs a warning to the browser console',
     getSnippet: () => `console.warn(\${1});\${0}`,
   },
   {
     label: 'cle',
     detail: 'console.error(...)',
-    documentation: 'Logs an error message to the console',
+    documentation: 'Logs an error to the browser console',
     getSnippet: () => `console.error(\${1});\${0}`,
   },
   {
     label: 'clt',
     detail: 'console.table(...)',
-    documentation: 'Logs data as an interactive table',
+    documentation: 'Displays tabular data as a table in the browser console',
     getSnippet: () => `console.table(\${1});\${0}`,
   },
   {
     label: 'cld',
     detail: 'console.dir(...)',
     documentation:
-      'Displays an interactive list of the properties of the specified object',
+      'Displays an interactive list of the properties of the specified JavaScript object',
     getSnippet: () => `console.dir(\${1});\${0}`,
   },
 ];
@@ -346,13 +346,18 @@ const SNIPPETS: SnippetDef[] = [
 let isRegistered = false;
 
 /**
- * Registers ES7+ React/Redux/React-Native snippet completion providers in Monaco.
+ * Registers React Snippet provider with Monaco Editor.
  */
 export function registerReactSnippets(monaco: Monaco): () => void {
   if (isRegistered) return () => {};
 
   const disposers: Array<{ dispose: () => void }> = [];
-  const targetLanguages = ['javascript', 'typescript', 'jsx', 'tsx'];
+  const targetLanguages: Array<'javascript' | 'typescript' | 'jsx' | 'tsx'> = [
+    'javascript',
+    'typescript',
+    'jsx',
+    'tsx',
+  ];
 
   for (const lang of targetLanguages) {
     /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -368,7 +373,11 @@ export function registerReactSnippets(monaco: Monaco): () => void {
 
         const componentName = getComponentNameFromPath(model.uri.path);
 
-        const suggestions = SNIPPETS.map((snippet) => ({
+        const applicableSnippets = SNIPPETS.filter(
+          (snippet) => !snippet.languages || snippet.languages.includes(lang)
+        );
+
+        const suggestions = applicableSnippets.map((snippet) => ({
           label: snippet.label,
           kind: monaco.languages.CompletionItemKind.Snippet,
           detail: snippet.detail,

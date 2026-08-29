@@ -208,6 +208,7 @@ export function WorkspaceProvider({
 
   const updateFileContent = useCallback((path: string, content: string) => {
     const norm = normalizePath(path);
+    if (norm.startsWith('/node_modules/')) return;
     setFileContents((prev) => ({ ...prev, [norm]: content }));
     setDirtyFiles((prev) => new Set(prev).add(norm));
   }, []);
@@ -215,6 +216,7 @@ export function WorkspaceProvider({
   const saveFile = useCallback(
     async (path: string) => {
       const norm = normalizePath(path);
+      if (norm.startsWith('/node_modules/')) return;
       const content = fileContents[norm];
       if (content !== undefined) {
         await vfs.writeFile(norm, content);
@@ -234,6 +236,7 @@ export function WorkspaceProvider({
     try {
       // Save all dirty files into VFS
       for (const dirtyPath of dirtyFiles) {
+        if (dirtyPath.startsWith('/node_modules/')) continue;
         const content = fileContents[dirtyPath];
         if (content !== undefined) {
           await vfs.writeFile(dirtyPath, content);

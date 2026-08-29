@@ -8,6 +8,7 @@ import {
 
 /**
  * Searches a file's content for the declaration of a symbol (interface, type, function, class, const, default export).
+ * Returns null if no explicit declaration match is found.
  */
 export function findSymbolLocationInContent(
   content: string,
@@ -48,7 +49,7 @@ export function findSymbolLocationInContent(
     }
   }
 
-  return { lineNumber: 1, column: 1, length: symbolName.length };
+  return null;
 }
 
 /**
@@ -224,6 +225,10 @@ export function resolveModuleTarget(
   return null;
 }
 
+let activeGetVfsFiles: (() => Record<string, string>) | null = null;
+let activeOnOpenFile:
+  | ((path: string, position?: { lineNumber: number; column: number }) => void)
+  | null = null;
 let isRegistered = false;
 
 /**
@@ -238,6 +243,8 @@ export function registerDefinitionProvider(
     position?: { lineNumber: number; column: number }
   ) => void
 ): () => void {
+  activeGetVfsFiles = getVfsFiles;
+  activeOnOpenFile = onOpenFile;
   if (isRegistered) return () => {};
 
   const disposers: Array<{ dispose: () => void }> = [];
@@ -255,7 +262,9 @@ export function registerDefinitionProvider(
         if (!resource || !resource.path) return false;
         const normPath = normalizePath(resource.path);
         const packageVirtualFiles = getAllPackageVirtualFiles();
-        const files = { ...packageVirtualFiles, ...getVfsFiles() };
+        const filesGetter = activeGetVfsFiles || getVfsFiles;
+        const openFileHandler = activeOnOpenFile || onOpenFile;
+        const files = { ...packageVirtualFiles, ...filesGetter() };
 
         if (files[normPath] !== undefined) {
           let pos: { lineNumber: number; column: number } | undefined =
@@ -276,7 +285,7 @@ export function registerDefinitionProvider(
               };
             }
           }
-          onOpenFile(normPath, pos);
+          openFileHandler(normPath, pos);
           return true;
         }
         return false;
@@ -294,7 +303,8 @@ export function registerDefinitionProvider(
       provideDefinition(model: any, position: any): any {
         const lineContent = model.getLineContent(position.lineNumber);
         const packageVirtualFiles = getAllPackageVirtualFiles();
-        const files = { ...packageVirtualFiles, ...getVfsFiles() };
+        const filesGetter = activeGetVfsFiles || getVfsFiles;
+        const files = { ...packageVirtualFiles, ...filesGetter() };
         const currentFile = model.uri.path || '/src/App.tsx';
         const fullContent = model.getValue();
 
@@ -400,7 +410,8 @@ export function registerDefinitionProvider(
       provideLinks(model: any): any {
         const links: any[] = [];
         const packageVirtualFiles = getAllPackageVirtualFiles();
-        const files = { ...packageVirtualFiles, ...getVfsFiles() };
+        const filesGetter = activeGetVfsFiles || getVfsFiles;
+        const files = { ...packageVirtualFiles, ...filesGetter() };
         const currentFile = model.uri.path || '/src/App.tsx';
         const lineCount = model.getLineCount();
 

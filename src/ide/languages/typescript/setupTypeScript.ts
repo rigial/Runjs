@@ -36,7 +36,10 @@ declare module '*.json' {
 `;
 
 let isConfigured = false;
-const extraLibDisposers: Map<string, { dispose: () => void }> = new Map();
+const extraLibDisposers: Map<
+  string,
+  { tsDisposer: { dispose: () => void }; jsDisposer?: { dispose: () => void } }
+> = new Map();
 
 /**
  * Configures TypeScript & JavaScript diagnostics, compiler options, and ambient declarations in Monaco.
@@ -48,7 +51,7 @@ export function setupTypeScript(monaco: Monaco): void {
     typeof monaco.languages.typescript.typescriptDefaults.setCompilerOptions
   >[0] = {
     target: monaco.languages.typescript.ScriptTarget.ESNext,
-    allowNonTextFiles: true,
+    allowNonTsExtensions: true,
     moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
     module: monaco.languages.typescript.ModuleKind.ESNext,
     noEmit: true,
@@ -119,21 +122,45 @@ export function setupTypeScript(monaco: Monaco): void {
     REACT_DOM_TYPES_CONTENT,
     'file:///node_modules/@types/react-dom/index.d.ts'
   );
+  monaco.languages.typescript.javascriptDefaults.addExtraLib(
+    REACT_DOM_TYPES_CONTENT,
+    'file:///node_modules/@types/react-dom/index.d.ts'
+  );
 
   // Add Canvas Confetti typings
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
     CANVAS_CONFETTI_TYPES_CONTENT,
     'file:///node_modules/canvas-confetti/index.d.ts'
   );
+  monaco.languages.typescript.javascriptDefaults.addExtraLib(
+    CANVAS_CONFETTI_TYPES_CONTENT,
+    'file:///node_modules/canvas-confetti/index.d.ts'
+  );
 
-  // Add React Router typings
+  // Add React Router & React Router DOM typings
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
     REACT_ROUTER_TYPES_CONTENT,
     'file:///node_modules/react-router/index.d.ts'
   );
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    REACT_ROUTER_TYPES_CONTENT,
+    'file:///node_modules/react-router-dom/index.d.ts'
+  );
+  monaco.languages.typescript.javascriptDefaults.addExtraLib(
+    REACT_ROUTER_TYPES_CONTENT,
+    'file:///node_modules/react-router/index.d.ts'
+  );
+  monaco.languages.typescript.javascriptDefaults.addExtraLib(
+    REACT_ROUTER_TYPES_CONTENT,
+    'file:///node_modules/react-router-dom/index.d.ts'
+  );
 
   // Add generic asset module declarations
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    GENERIC_AMBIENT_TYPES,
+    'file:///node_modules/@types/ambient/index.d.ts'
+  );
+  monaco.languages.typescript.javascriptDefaults.addExtraLib(
     GENERIC_AMBIENT_TYPES,
     'file:///node_modules/@types/ambient/index.d.ts'
   );
@@ -151,9 +178,10 @@ export function syncVfsToMonacoTypeScript(
   files: Record<string, string>
 ): void {
   // Clear obsolete extraLibs that are no longer in VFS
-  for (const [filePath, disposer] of extraLibDisposers.entries()) {
+  for (const [filePath, disposerPair] of extraLibDisposers.entries()) {
     if (!(filePath in files)) {
-      disposer.dispose();
+      disposerPair.tsDisposer.dispose();
+      disposerPair.jsDisposer?.dispose();
       extraLibDisposers.delete(filePath);
     }
   }
@@ -174,7 +202,8 @@ export function syncVfsToMonacoTypeScript(
       // Dispose existing extraLib for this path before re-registering
       const existing = extraLibDisposers.get(normPath);
       if (existing) {
-        existing.dispose();
+        existing.tsDisposer.dispose();
+        existing.jsDisposer?.dispose();
       }
 
       try {
@@ -183,7 +212,12 @@ export function syncVfsToMonacoTypeScript(
             content,
             uri
           );
-        extraLibDisposers.set(normPath, tsDisposer);
+        const jsDisposer =
+          monaco.languages.typescript.javascriptDefaults.addExtraLib(
+            content,
+            uri
+          );
+        extraLibDisposers.set(normPath, { tsDisposer, jsDisposer });
       } catch (err) {
         console.warn('Failed to add extraLib for', normPath, err);
       }
@@ -195,8 +229,9 @@ export function syncVfsToMonacoTypeScript(
  * Clean up all registered extraLibs.
  */
 export function disposeTypeScript(): void {
-  for (const disposer of extraLibDisposers.values()) {
-    disposer.dispose();
+  for (const disposerPair of extraLibDisposers.values()) {
+    disposerPair.tsDisposer.dispose();
+    disposerPair.jsDisposer?.dispose();
   }
   extraLibDisposers.clear();
 }

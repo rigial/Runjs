@@ -400,6 +400,7 @@ export function resolveImportPath(
   return null;
 }
 
+let activeGetVfsFiles: (() => Record<string, string>) | null = null;
 let isRegistered = false;
 
 /**
@@ -409,6 +410,7 @@ export function registerImportCompletion(
   monaco: Monaco,
   getVfsFiles: () => Record<string, string>
 ): () => void {
+  activeGetVfsFiles = getVfsFiles;
   if (isRegistered) return () => {};
 
   const disposers: Array<{ dispose: () => void }> = [];
@@ -421,7 +423,7 @@ export function registerImportCompletion(
       provideCompletionItems(model: any, position: any): any {
         const lineContent = model.getLineContent(position.lineNumber);
         const lineUntilCursor = lineContent.substring(0, position.column - 1);
-        const files = getVfsFiles();
+        const files = activeGetVfsFiles ? activeGetVfsFiles() : getVfsFiles();
         const availablePaths = Object.keys(files).map((p) => normalizePath(p));
         const currentFile = model.uri.path || '/src/App.tsx';
 
@@ -433,9 +435,13 @@ export function registerImportCompletion(
 
         if (importFromQuoteMatch) {
           const currentTyped = importFromQuoteMatch[1] || '';
-          const quoteStartIndex = lineUntilCursor.lastIndexOf(
-            lineUntilCursor.includes("'") ? "'" : '"'
-          );
+          const matchText = importFromQuoteMatch[0];
+          const matchStart =
+            importFromQuoteMatch.index ??
+            lineUntilCursor.lastIndexOf(matchText);
+          const quoteStartIndex =
+            matchStart + matchText.length - currentTyped.length - 1;
+
           const range = {
             startLineNumber: position.lineNumber,
             endLineNumber: position.lineNumber,
@@ -479,9 +485,10 @@ export function registerImportCompletion(
             }
           }
 
-          // Relative Project File Suggestions
+          // Relative Project File Suggestions (exclude virtual package declaration files under /node_modules/)
           for (const filePath of availablePaths) {
             if (filePath === normalizePath(currentFile)) continue;
+            if (filePath.startsWith('/node_modules/')) continue;
             const relPath = getRelativeImportPath(currentFile, filePath);
 
             suggestions.push({

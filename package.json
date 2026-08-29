@@ -15,7 +15,12 @@
     "lint": "eslint ./src",
     "pretty": "prettier --write ./src",
     "preview": "vite preview",
-    "check": "npm run pretty && npm run lint"
+    "check": "npm run pretty && npm run lint",
+    "pages:dev": "wrangler pages dev ./dist",
+    "pages:deploy": "pnpm run build && wrangler pages deploy ./dist",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "pnpm run build && wrangler deploy",
+    "deploy": "pnpm run pages:deploy"
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",
@@ -54,6 +59,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.0",
     "typescript-eslint": "^8.18.1",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "wrangler": "^4.127.0"
   }
 }

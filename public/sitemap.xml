@@ -1,613 +1,607 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://runjs.rigial.com/</loc>
+    <loc>https://runjs.in/</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/js</loc>
-    <lastmod>2026-08-29T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://runjs.rigial.com/ts</loc>
-    <lastmod>2026-08-29T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://runjs.rigial.com/react</loc>
-    <lastmod>2026-08-29T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://runjs.rigial.com/problems</loc>
+    <loc>https://runjs.in/problems</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/interview</loc>
+    <loc>https://runjs.in/js</loc>
+    <lastmod>2026-08-29T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://runjs.in/ts</loc>
+    <lastmod>2026-08-29T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://runjs.in/react</loc>
+    <lastmod>2026-08-29T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://runjs.in/interview</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/about</loc>
+    <loc>https://runjs.in/about</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/dashboard</loc>
+    <loc>https://runjs.in/problems/two-sum</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://runjs.rigial.com/problems/two-sum</loc>
-    <lastmod>2026-08-29T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/reverse-string</loc>
+    <loc>https://runjs.in/problems/reverse-string</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/valid-anagram</loc>
+    <loc>https://runjs.in/problems/valid-anagram</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/debounce-function</loc>
+    <loc>https://runjs.in/problems/debounce-function</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/deep-clone</loc>
+    <loc>https://runjs.in/problems/deep-clone</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/flatten-array</loc>
+    <loc>https://runjs.in/problems/flatten-array</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/memoize-function</loc>
+    <loc>https://runjs.in/problems/memoize-function</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/promise-all-polyfill</loc>
+    <loc>https://runjs.in/problems/promise-all-polyfill</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/event-emitter</loc>
+    <loc>https://runjs.in/problems/event-emitter</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/lru-cache</loc>
+    <loc>https://runjs.in/problems/lru-cache</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/curry-function</loc>
+    <loc>https://runjs.in/problems/curry-function</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/chunk-array</loc>
+    <loc>https://runjs.in/problems/chunk-array</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/group-anagrams</loc>
+    <loc>https://runjs.in/problems/group-anagrams</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/get-object-property</loc>
+    <loc>https://runjs.in/problems/get-object-property</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/function-composition</loc>
+    <loc>https://runjs.in/problems/function-composition</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/deep-equal</loc>
+    <loc>https://runjs.in/problems/deep-equal</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/allow-one-function-call</loc>
+    <loc>https://runjs.in/problems/allow-one-function-call</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/promise-race-polyfill</loc>
+    <loc>https://runjs.in/problems/promise-race-polyfill</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/find-smallest-number</loc>
+    <loc>https://runjs.in/problems/find-smallest-number</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/find-largest-number</loc>
+    <loc>https://runjs.in/problems/find-largest-number</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/count-negative</loc>
+    <loc>https://runjs.in/problems/count-negative</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/loop-a-to-z</loc>
+    <loc>https://runjs.in/problems/loop-a-to-z</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/custom-sort</loc>
+    <loc>https://runjs.in/problems/custom-sort</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/remove-duplicates-from-array</loc>
+    <loc>https://runjs.in/problems/remove-duplicates-from-array</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/voting-eligibility</loc>
+    <loc>https://runjs.in/problems/voting-eligibility</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/max-subarray</loc>
+    <loc>https://runjs.in/problems/max-subarray</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/validate-palindrome</loc>
+    <loc>https://runjs.in/problems/validate-palindrome</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/groupbyarr-key</loc>
+    <loc>https://runjs.in/problems/groupbyarr-key</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/sum</loc>
+    <loc>https://runjs.in/problems/sum</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/implement-a-stack</loc>
+    <loc>https://runjs.in/problems/implement-a-stack</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/power-of-four</loc>
+    <loc>https://runjs.in/problems/power-of-four</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/count-even-numbers</loc>
+    <loc>https://runjs.in/problems/count-even-numbers</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/capitalize-words</loc>
+    <loc>https://runjs.in/problems/capitalize-words</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/power-of-two</loc>
+    <loc>https://runjs.in/problems/power-of-two</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/count-vowels</loc>
+    <loc>https://runjs.in/problems/count-vowels</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/sum-of-all-numbers-in-an-array</loc>
+    <loc>https://runjs.in/problems/sum-of-all-numbers-in-an-array</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/find-missing-number</loc>
+    <loc>https://runjs.in/problems/find-missing-number</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/shuffle</loc>
+    <loc>https://runjs.in/problems/shuffle</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/largest-number-formed</loc>
+    <loc>https://runjs.in/problems/largest-number-formed</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/secret-code-shuffler</loc>
+    <loc>https://runjs.in/problems/secret-code-shuffler</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/fibonacci-series</loc>
+    <loc>https://runjs.in/problems/fibonacci-series</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/factorial-of-a-number</loc>
+    <loc>https://runjs.in/problems/factorial-of-a-number</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/sum-of-n-natural-numbers</loc>
+    <loc>https://runjs.in/problems/sum-of-n-natural-numbers</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/power-of-three</loc>
+    <loc>https://runjs.in/problems/power-of-three</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/arrayprototypereduce</loc>
+    <loc>https://runjs.in/problems/arrayprototypereduce</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/make-counter</loc>
+    <loc>https://runjs.in/problems/make-counter</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/reversewords</loc>
+    <loc>https://runjs.in/problems/reversewords</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/rate-limiter</loc>
+    <loc>https://runjs.in/problems/rate-limiter</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/promiseall-with-concurrency-limit</loc>
+    <loc>https://runjs.in/problems/promiseall-with-concurrency-limit</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/word-search</loc>
+    <loc>https://runjs.in/problems/word-search</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/topological-sort-dfs</loc>
+    <loc>https://runjs.in/problems/topological-sort-dfs</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/concurrency-limited-task-scheduler</loc>
+    <loc>https://runjs.in/problems/concurrency-limited-task-scheduler</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/sum-of-subarray-minimum</loc>
+    <loc>https://runjs.in/problems/sum-of-subarray-minimum</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/jsonstringify</loc>
+    <loc>https://runjs.in/problems/jsonstringify</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/list-format</loc>
+    <loc>https://runjs.in/problems/list-format</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/throttle</loc>
+    <loc>https://runjs.in/problems/throttle</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/detect-cycle-in-an-undirected-connected-graph-dfs</loc>
+    <loc>https://runjs.in/problems/detect-cycle-in-an-undirected-connected-graph-dfs</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/compress-string-with-limited-repetition</loc>
+    <loc>https://runjs.in/problems/compress-string-with-limited-repetition</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/priority-queue</loc>
+    <loc>https://runjs.in/problems/priority-queue</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/flatten-deep-object</loc>
+    <loc>https://runjs.in/problems/flatten-deep-object</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/pyramid-pattern</loc>
+    <loc>https://runjs.in/problems/pyramid-pattern</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/search-rotated-array</loc>
+    <loc>https://runjs.in/problems/search-rotated-array</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/topological-sort-bfs</loc>
+    <loc>https://runjs.in/problems/topological-sort-bfs</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/detect-data-type-in-js</loc>
+    <loc>https://runjs.in/problems/detect-data-type-in-js</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/find-the-single-element-in-a-sorted-array</loc>
+    <loc>https://runjs.in/problems/find-the-single-element-in-a-sorted-array</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/sum-of-consecutive-integers</loc>
+    <loc>https://runjs.in/problems/sum-of-consecutive-integers</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/objectassign</loc>
+    <loc>https://runjs.in/problems/objectassign</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/lazy-evaluation</loc>
+    <loc>https://runjs.in/problems/lazy-evaluation</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/oranges-rotting</loc>
+    <loc>https://runjs.in/problems/oranges-rotting</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/deep-omit</loc>
+    <loc>https://runjs.in/problems/deep-omit</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/shortest-distance-from-source-bfs</loc>
+    <loc>https://runjs.in/problems/shortest-distance-from-source-bfs</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/map-async-limit</loc>
+    <loc>https://runjs.in/problems/map-async-limit</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/longest-substring-no-repeats</loc>
+    <loc>https://runjs.in/problems/longest-substring-no-repeats</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/merge-array</loc>
+    <loc>https://runjs.in/problems/merge-array</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/spiral-matrix-pathfinder</loc>
+    <loc>https://runjs.in/problems/spiral-matrix-pathfinder</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/reverse-words-in-a-string</loc>
+    <loc>https://runjs.in/problems/reverse-words-in-a-string</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/search-in-a-2d-sorted-matrix</loc>
+    <loc>https://runjs.in/problems/search-in-a-2d-sorted-matrix</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/combination-sum</loc>
+    <loc>https://runjs.in/problems/combination-sum</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/longest-valid-parentheses</loc>
+    <loc>https://runjs.in/problems/longest-valid-parentheses</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/prims-mst-algorithm</loc>
+    <loc>https://runjs.in/problems/prims-mst-algorithm</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/shortest-distance-from-source-bellman-ford-algorithm</loc>
+    <loc>https://runjs.in/problems/shortest-distance-from-source-bellman-ford-algorithm</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/worker-pool</loc>
+    <loc>https://runjs.in/problems/worker-pool</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/implement-garbage-collector</loc>
+    <loc>https://runjs.in/problems/implement-garbage-collector</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/chinese-remainder-theorem</loc>
+    <loc>https://runjs.in/problems/chinese-remainder-theorem</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/sliding-window-maximum</loc>
+    <loc>https://runjs.in/problems/sliding-window-maximum</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/shortest-distance-from-source-dijkstras-algorithm</loc>
+    <loc>https://runjs.in/problems/shortest-distance-from-source-dijkstras-algorithm</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/median-of-two-sorted-arrays</loc>
+    <loc>https://runjs.in/problems/median-of-two-sorted-arrays</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/fibonacci-modulo-pisano-period</loc>
+    <loc>https://runjs.in/problems/fibonacci-modulo-pisano-period</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/kruskals-mst-algorithm</loc>
+    <loc>https://runjs.in/problems/kruskals-mst-algorithm</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/implement-a-queue-using-stack</loc>
+    <loc>https://runjs.in/problems/implement-a-queue-using-stack</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/design-autocomplete</loc>
+    <loc>https://runjs.in/problems/design-autocomplete</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/all-pairs-shortest-path-floyd-warshall-algorithm</loc>
+    <loc>https://runjs.in/problems/all-pairs-shortest-path-floyd-warshall-algorithm</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/create-task-scheduler-with-dependencies</loc>
+    <loc>https://runjs.in/problems/create-task-scheduler-with-dependencies</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://runjs.rigial.com/problems/first-missing-positive</loc>
+    <loc>https://runjs.in/problems/first-missing-positive</loc>
     <lastmod>2026-08-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

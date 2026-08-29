@@ -19,18 +19,17 @@ while ((match = slugRegex.exec(problemsContent)) !== null) {
   slugs.push(match[1]);
 }
 
-const baseUrl = 'https://runjs.rigial.com';
+const baseUrl = process.env.VITE_SITE_URL || 'https://runjs.in';
 const lastMod = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
 
 const coreRoutes = [
   { path: '', changefreq: 'weekly', priority: '1.0' },
+  { path: '/problems', changefreq: 'daily', priority: '0.9' },
   { path: '/js', changefreq: 'weekly', priority: '0.9' },
   { path: '/ts', changefreq: 'weekly', priority: '0.9' },
   { path: '/react', changefreq: 'weekly', priority: '0.9' },
-  { path: '/problems', changefreq: 'daily', priority: '0.9' },
   { path: '/interview', changefreq: 'weekly', priority: '0.8' },
   { path: '/about', changefreq: 'monthly', priority: '0.7' },
-  { path: '/dashboard', changefreq: 'monthly', priority: '0.6' },
 ];
 
 let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';

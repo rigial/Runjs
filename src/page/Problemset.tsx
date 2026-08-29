@@ -11,6 +11,8 @@ import {
   getAllProblemStates,
   toggleProblemStar,
 } from '../problem-engine/storage';
+import SEO from '../seo/SEO';
+import { getBreadcrumbSchema, getCanonicalUrl } from '../seo/seoConfig';
 import { Code2, Sparkles } from 'lucide-react';
 
 function Problemset() {
@@ -126,6 +128,33 @@ function Problemset() {
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <SEO
+        title="JavaScript Coding Challenges & Algorithm Practice"
+        description="Practice JavaScript algorithms, data structures, closures, promises, and polyfills with instant in-browser test execution, hints, and complexity analysis."
+        canonical="/problems"
+        keywords={[
+          'JavaScript coding challenges',
+          'JS algorithms',
+          'LeetCode JavaScript',
+          'JavaScript problem solving',
+          'frontend interview prep',
+          'JavaScript polyfills',
+        ]}
+        structuredData={[
+          getBreadcrumbSchema([
+            { name: 'Home', item: '/' },
+            { name: 'Problems', item: '/problems' },
+          ]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'JavaScript Coding Challenges & Algorithm Practice',
+            url: getCanonicalUrl('/problems'),
+            description:
+              'Practice JavaScript algorithms, data structures, closures, and promises with instant test runner.',
+          },
+        ]}
+      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

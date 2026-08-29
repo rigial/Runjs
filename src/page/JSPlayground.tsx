@@ -18,6 +18,8 @@ import Terminal from '../components/Terminal';
 import ThemeSelector from '../components/ThemeSelector';
 import useTheme from '../hook/useTheme';
 import { saveJSTSFile } from '../utils/commonFunction';
+import SEO from '../seo/SEO';
+import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
 import {
   Play,
   HelpCircle,
@@ -115,6 +117,26 @@ function JSPlayground() {
 
   return (
     <Fragment>
+      <SEO
+        title="Online JavaScript Compiler & Scratchpad (ES2024+)"
+        description="Interactive in-browser JavaScript sandbox with Monaco editor, infinite loop protection, custom font controls, and interactive Luna console."
+        canonical="/js"
+        keywords={[
+          'JavaScript playground',
+          'JavaScript online compiler',
+          'run JavaScript in browser',
+          'Monaco editor JS',
+          'JS scratchpad',
+          'browser JavaScript IDE',
+        ]}
+        structuredData={[
+          getBreadcrumbSchema([
+            { name: 'Home', item: '/' },
+            { name: 'JavaScript Playground', item: '/js' },
+          ]),
+          getWebApplicationSchema(),
+        ]}
+      />
       <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
         {/* Top IDE Navigation */}
         <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">

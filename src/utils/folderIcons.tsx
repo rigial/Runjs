@@ -6,5 +6,13 @@ export function fileIcon(fileSuffix: string) {
     json: 'https://img.icons8.com/color/48/000000/json.png',
   };
   const iconSrc = iconMap[fileSuffix];
-  return iconSrc ? <img src={iconSrc} /> : null;
+  return iconSrc ? (
+    <img
+      src={iconSrc}
+      alt={`${fileSuffix} file icon`}
+      width={16}
+      height={16}
+      loading="lazy"
+    />
+  ) : null;
 }

@@ -3,9 +3,10 @@ User-agent: *
 Allow: /
 Disallow: /bin
 Disallow: /404
+Disallow: /dashboard
 
 # Host
-Host: https://runjs.rigial.com
+Host: https://runjs.in
 
 # Sitemaps
-Sitemap: https://runjs.rigial.com/sitemap.xml
+Sitemap: https://runjs.in/sitemap.xml

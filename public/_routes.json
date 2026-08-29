@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/assets/*",
+    "/RunJS-*",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/manifest.json",
+    "/og-image.png",
+    "/runjs.in.webp"
+  ]
+}

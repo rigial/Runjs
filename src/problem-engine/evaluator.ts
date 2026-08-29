@@ -1,5 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
+import { loadTypscript } from '../utils/commonFunction';
 import { Problem, TestCase, TestResult, SubmissionResult } from './types';
 import { transform } from 'esbuild-wasm';
 
@@ -122,6 +123,7 @@ async function compileIfTypeScript(
   language: 'javascript' | 'typescript'
 ): Promise<string> {
   if (language === 'typescript') {
+    await loadTypscript();
     const result = await transform(code, {
       loader: 'ts',
       target: 'es2022',

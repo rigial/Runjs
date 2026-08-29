@@ -16,10 +16,19 @@ function CodeEditor({
   currentFontSize,
   editorRef,
   disableAutoSuggestion = false,
+  path,
+  onValidate,
 }: ICodeEditor) {
   const { resolvedTheme } = useTheme();
   const monacoInstanceRef = useRef<Monaco | null>(null);
   const emmetDisposerRef = useRef<(() => void) | null>(null);
+  const defaultPath =
+    path ||
+    (language === 'typescript'
+      ? 'script.ts'
+      : language === 'javascript'
+        ? 'script.js'
+        : undefined);
 
   useEffect(() => {
     if (monacoInstanceRef.current) {
@@ -45,6 +54,7 @@ function CodeEditor({
         height="100%"
         theme={getMonacoThemeName(resolvedTheme)}
         language={language}
+        path={defaultPath}
         value={code}
         onMount={(editor, monaco) => {
           monacoInstanceRef.current = monaco;
@@ -52,8 +62,38 @@ function CodeEditor({
           monaco.editor.setTheme(getMonacoThemeName(resolvedTheme));
           editorRef.current = editor;
         }}
+        onValidate={onValidate}
         beforeMount={(monaco) => {
           registerMonacoThemes(monaco);
+
+          // Configure TypeScript language service diagnostics & compiler options
+          monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+            noSemanticValidation: false,
+            noSyntaxValidation: false,
+            noSuggestionDiagnostics: false,
+          });
+
+          monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+            target: monaco.languages.typescript.ScriptTarget.ESNext,
+            allowNonTextFiles: true,
+            moduleResolution:
+              monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+            module: monaco.languages.typescript.ModuleKind.CommonJS,
+            noEmit: true,
+            esModuleInterop: true,
+            jsx: monaco.languages.typescript.JsxEmit.React,
+            reactNamespace: 'React',
+            allowJs: true,
+            strict: true,
+            noImplicitAny: true,
+            strictNullChecks: true,
+            strictFunctionTypes: true,
+            strictBindCallApply: true,
+            strictPropertyInitialization: true,
+            noImplicitThis: true,
+            alwaysStrict: true,
+          });
+
           if (emmetDisposerRef.current) {
             emmetDisposerRef.current();
           }
@@ -63,6 +103,7 @@ function CodeEditor({
         }}
         onChange={onChange}
         options={{
+          hover: { enabled: 'on', delay: 300 },
           fontSize: currentFontSize,
           fontFamily:
             "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, Monaco, Consolas, monospace",

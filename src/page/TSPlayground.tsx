@@ -1,5 +1,5 @@
 import { transform } from 'esbuild-wasm';
-import { Fragment, memo, useRef, useState } from 'react';
+import { Fragment, memo, useCallback, useRef, useState } from 'react';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
 import useLocalStorageState from '../hook/useLocalStorageState';
@@ -8,7 +8,7 @@ import useComplieCode from '../hook/useComplieCode';
 import useDebounceLocalStorageState from '../hook/useDebounceLocalStorageState';
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
 import { Link } from 'react-router';
-import { ModalRef } from '../utils/interface';
+import { ITypeScriptError, ModalRef } from '../utils/interface';
 import HelpModal from '../components/HelpModal';
 import useWarnOnClose from '../hook/useWarnOnClose ';
 import useFormatDocument from '../hook/useFormatDocument';
@@ -18,7 +18,7 @@ import CodeEditor from '../components/CodeEditor';
 import Terminal from '../components/Terminal';
 import ThemeSelector from '../components/ThemeSelector';
 import useTheme from '../hook/useTheme';
-import { saveJSTSFile } from '../utils/commonFunction';
+import { loadTypscript, saveJSTSFile } from '../utils/commonFunction';
 import {
   Play,
   HelpCircle,
@@ -41,12 +41,43 @@ function TSPlayground() {
     'editor'
   );
   const [isRunning, setIsRunning] = useState(false);
+  const [tsErrors, setTsErrors] = useState<ITypeScriptError[]>([]);
+  const [terminalTab, setTerminalTab] = useState<'console' | 'tsErrors'>('console');
   const consoleRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<ModalRef>(null);
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   const editorRef = useRef<any>(null);
   const { resolvedTheme } = useTheme();
   const isDesktop = useMediaQuery('(min-width: 640px)');
+
+  const handleValidate = useCallback((markers: any[]) => {
+    const formatted: ITypeScriptError[] = markers
+      .filter((m) => m.severity === 8 || m.severity === 4)
+      .map((m) => ({
+        message: m.message,
+        code: typeof m.code === 'object' ? m.code?.value : m.code,
+        startLineNumber: m.startLineNumber,
+        startColumn: m.startColumn,
+        endLineNumber: m.endLineNumber,
+        endColumn: m.endColumn,
+        severity: m.severity === 8 ? 'error' : 'warning',
+      }));
+    setTsErrors(formatted);
+  }, []);
+
+  const handleErrorClick = useCallback((error: ITypeScriptError) => {
+    if (editorRef.current) {
+      editorRef.current.revealPositionInCenter({
+        lineNumber: error.startLineNumber,
+        column: error.startColumn,
+      });
+      editorRef.current.setPosition({
+        lineNumber: error.startLineNumber,
+        column: error.startColumn,
+      });
+      editorRef.current.focus();
+    }
+  }, []);
 
   function handleFontSize(operation: 'increaseFontSize' | 'decreaseFontSize') {
     let fontSize = Number(currentFontSize);
@@ -91,6 +122,7 @@ function TSPlayground() {
       };
 
       try {
+        await loadTypscript();
         const parseJavascriptCode = await transform(code ?? '', {
           loader: 'ts',
         });
@@ -291,10 +323,12 @@ function TSPlayground() {
                   <div className="flex-1 overflow-hidden">
                     <CodeEditor
                       language="typescript"
+                      path="script.ts"
                       code={code}
                       editorRef={editorRef}
                       currentFontSize={Number(currentFontSize)}
                       onChange={(value) => setCode(value ?? '')}
+                      onValidate={handleValidate}
                     />
                   </div>
                 </div>
@@ -304,6 +338,11 @@ function TSPlayground() {
                   <Terminal
                     clearTerminal={clearTerminal}
                     consoleRef={consoleRef}
+                    language="typescript"
+                    tsErrors={tsErrors}
+                    onErrorClick={handleErrorClick}
+                    activeTab={terminalTab}
+                    onTabChange={setTerminalTab}
                   />
                 </div>
               </Split>
@@ -318,10 +357,12 @@ function TSPlayground() {
               >
                 <CodeEditor
                   language="typescript"
+                  path="script.ts"
                   code={code}
                   editorRef={editorRef}
                   currentFontSize={Number(currentFontSize)}
                   onChange={(value) => setCode(value ?? '')}
+                  onValidate={handleValidate}
                 />
               </div>
               <div
@@ -332,6 +373,11 @@ function TSPlayground() {
                 <Terminal
                   clearTerminal={clearTerminal}
                   consoleRef={consoleRef}
+                  language="typescript"
+                  tsErrors={tsErrors}
+                  onErrorClick={handleErrorClick}
+                  activeTab={terminalTab}
+                  onTabChange={setTerminalTab}
                 />
               </div>
             </div>

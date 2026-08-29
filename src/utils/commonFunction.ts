@@ -1,4 +1,4 @@
-import { initialize } from 'esbuild-wasm';
+import { initialize, version } from 'esbuild-wasm';
 
 export function saveJSTSFile(
   javascriptCode: string,
@@ -15,13 +15,29 @@ export function saveJSTSFile(
   URL.revokeObjectURL(link.href);
 }
 
-export async function loadTypscript() {
-  try {
-    await initialize({
-      worker: true,
-      wasmURL: 'https://unpkg.com/esbuild-wasm@0.24.2/esbuild.wasm',
-    });
-  } catch (error) {
-    console.log('Error', error);
+let initPromise: Promise<void> | null = null;
+
+export async function loadTypscript(): Promise<void> {
+  if (!initPromise) {
+    initPromise = (async () => {
+      try {
+        await initialize({
+          worker: true,
+          wasmURL: `https://unpkg.com/esbuild-wasm@${version}/esbuild.wasm`,
+        });
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.message.includes('Cannot call "initialize" more than once')
+        ) {
+          return;
+        }
+        initPromise = null;
+        console.error('Failed to initialize esbuild-wasm:', error);
+        throw error;
+      }
+    })();
   }
+  return initPromise;
 }
+

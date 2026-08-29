@@ -1,5 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
+import { loadTypscript } from '../utils/commonFunction';
 import { Problem, TestCase, TestResult, SubmissionResult } from './types';
 import { transform } from 'esbuild-wasm';
 
@@ -117,11 +118,19 @@ export function formatValueForDisplay(val: any): string {
   }
 }
 
+/**
+ * Transpiles TypeScript source code to executable JavaScript via esbuild-wasm if needed.
+ *
+ * @param code The input source code.
+ * @param language The language of the problem submission ('javascript' | 'typescript').
+ * @returns Promise resolving to transpiled JavaScript code.
+ */
 async function compileIfTypeScript(
   code: string,
   language: 'javascript' | 'typescript'
 ): Promise<string> {
   if (language === 'typescript') {
+    await loadTypscript();
     const result = await transform(code, {
       loader: 'ts',
       target: 'es2022',

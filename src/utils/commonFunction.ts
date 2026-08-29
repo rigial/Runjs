@@ -1,5 +1,12 @@
-import { initialize } from 'esbuild-wasm';
+import { initialize, version } from 'esbuild-wasm';
 
+/**
+ * Triggers a browser download for JavaScript or TypeScript source code.
+ *
+ * @param javascriptCode The source code content to download.
+ * @param fileName The output filename (without extension).
+ * @param lang File extension/language type ('js' or 'ts').
+ */
 export function saveJSTSFile(
   javascriptCode: string,
   fileName: string,
@@ -15,13 +22,35 @@ export function saveJSTSFile(
   URL.revokeObjectURL(link.href);
 }
 
-export async function loadTypscript() {
-  try {
-    await initialize({
-      worker: true,
-      wasmURL: 'https://unpkg.com/esbuild-wasm@0.24.2/esbuild.wasm',
-    });
-  } catch (error) {
-    console.log('Error', error);
+let initPromise: Promise<void> | null = null;
+
+/**
+ * Initializes the esbuild WebAssembly service using the matching package version from unpkg.
+ * Subsequent calls reuse the existing initialization promise.
+ *
+ * @returns Promise that resolves once esbuild-wasm is ready for compilation.
+ */
+export async function loadTypscript(): Promise<void> {
+  if (!initPromise) {
+    initPromise = (async () => {
+      try {
+        await initialize({
+          worker: true,
+          wasmURL: `https://unpkg.com/esbuild-wasm@${version}/esbuild.wasm`,
+        });
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.message.includes('Cannot call "initialize" more than once')
+        ) {
+          return;
+        }
+        initPromise = null;
+        console.error('Failed to initialize esbuild-wasm:', error);
+        throw error;
+      }
+    })();
   }
+  return initPromise;
 }
+

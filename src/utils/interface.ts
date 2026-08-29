@@ -55,6 +55,16 @@ export interface ITokenThemeRule {
   fontStyle?: string;
 }
 
+export interface ITypeScriptError {
+  message: string;
+  code?: string | number;
+  startLineNumber: number;
+  startColumn: number;
+  endLineNumber: number;
+  endColumn: number;
+  severity: 'error' | 'warning' | 'info';
+}
+
 export interface ICodeEditor {
   code: string;
   language: 'javascript' | 'typescript';
@@ -63,6 +73,9 @@ export interface ICodeEditor {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   editorRef: React.RefObject<any>;
   disableAutoSuggestion?: boolean;
+  path?: string;
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  onValidate?: (markers: any[]) => void;
 }
 
 export interface IAppLoading {
@@ -97,6 +110,11 @@ export interface ISearchInput {
 export interface ITerminal {
   consoleRef: React.RefObject<HTMLDivElement | null>;
   clearTerminal: () => void;
+  language?: 'javascript' | 'typescript';
+  tsErrors?: ITypeScriptError[];
+  onErrorClick?: (error: ITypeScriptError) => void;
+  activeTab?: 'console' | 'tsErrors';
+  onTabChange?: (tab: 'console' | 'tsErrors') => void;
 }
 
 export type AnswerBlockType = 'para' | 'heading' | 'points' | 'code';

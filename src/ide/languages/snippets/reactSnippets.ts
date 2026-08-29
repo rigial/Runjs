@@ -9,8 +9,10 @@ export interface SnippetDefinition {
 }
 
 /**
- * Derives a PascalCase component name from a file path.
+ * Derives a valid PascalCase component identifier from a file path.
  * e.g. /src/components/user-card.tsx -> UserCard
+ * e.g. /src/components/user.card.tsx -> UserCard
+ * e.g. /src/123button.tsx -> Comp123button
  */
 export function getComponentNameFromPath(filePath?: string): string {
   if (!filePath) return 'MyComponent';
@@ -18,10 +20,24 @@ export function getComponentNameFromPath(filePath?: string): string {
   const baseName = fileNameWithExt.replace(/\.[^/.]+$/, '');
   if (!baseName || baseName === 'index') return 'MyComponent';
 
-  // Convert kebab-case, snake_case or regular name to PascalCase
-  return baseName
-    .replace(/[-_](\w)/g, (_, c) => c.toUpperCase())
-    .replace(/^\w/, (c) => c.toUpperCase());
+  // Replace any non-alphanumeric character (e.g. dots, hyphens, spaces, underscores) with a separator
+  const cleanName = baseName.replace(/[^a-zA-Z0-9_$]+/g, '-');
+
+  // Convert kebab/separator words to PascalCase
+  let pascal = cleanName
+    .split(/[-_]+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+
+  if (!pascal) return 'MyComponent';
+
+  // If identifier begins with a digit, prefix with Comp
+  if (/^[0-9]/.test(pascal)) {
+    pascal = `Comp${pascal}`;
+  }
+
+  return pascal;
 }
 
 /**
@@ -83,6 +99,7 @@ export const SNIPPETS: SnippetDefinition[] = [
     label: 'rfcp',
     detail: 'React Function Component with Props Type',
     documentation: 'Creates a React Function Component with Props interface',
+    languages: ['typescript', 'tsx'],
     getSnippet: (name) =>
       `import React from 'react';\n\ninterface \${1:${name}}Props {\n  \${2:children?: React.ReactNode;}\n}\n\nexport function \${1:${name}}({ \${3} }: \${1:${name}}Props) {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n}\n\nexport default \${1:${name}};\n`,
   },
@@ -91,6 +108,7 @@ export const SNIPPETS: SnippetDefinition[] = [
     detail: 'React Arrow Function Component with Props Type',
     documentation:
       'Creates a React Arrow Function Component with Props interface',
+    languages: ['typescript', 'tsx'],
     getSnippet: (name) =>
       `import React from 'react';\n\ninterface \${1:${name}}Props {\n  \${2:children?: React.ReactNode;}\n}\n\nexport const \${1:${name}}: React.FC<\${1:${name}}Props> = ({ \${3} }) => {\n  return (\n    <div>\n      \${0}\n    </div>\n  );\n};\n\nexport default \${1:${name}};\n`,
   },

@@ -4,6 +4,7 @@ import {
   REACT_TYPES_CONTENT,
   LUCIDE_REACT_TYPES_CONTENT,
   REACT_DOM_TYPES_CONTENT,
+  REACT_DOM_CLIENT_TYPES_CONTENT,
   CANVAS_CONFETTI_TYPES_CONTENT,
   REACT_ROUTER_TYPES_CONTENT,
 } from './packageDefinitions';
@@ -125,6 +126,14 @@ export function setupTypeScript(monaco: Monaco): void {
   monaco.languages.typescript.javascriptDefaults.addExtraLib(
     REACT_DOM_TYPES_CONTENT,
     'file:///node_modules/@types/react-dom/index.d.ts'
+  );
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    REACT_DOM_CLIENT_TYPES_CONTENT,
+    'file:///node_modules/@types/react-dom/client.d.ts'
+  );
+  monaco.languages.typescript.javascriptDefaults.addExtraLib(
+    REACT_DOM_CLIENT_TYPES_CONTENT,
+    'file:///node_modules/@types/react-dom/client.d.ts'
   );
 
   // Add Canvas Confetti typings

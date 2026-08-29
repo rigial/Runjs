@@ -348,28 +348,6 @@ export function MultiTabEditor({
                 }
               );
 
-              // Setup TypeScript & Project-wide VFS sync
-              setupTypeScript(monaco);
-              syncVfsToMonacoTypeScript(monaco, allFilesRef.current);
-
-              // Register language services and store disposers
-              const snippetsDisposer = registerReactSnippets(monaco);
-              const importDisposer = registerImportCompletion(
-                monaco,
-                () => allFilesRef.current
-              );
-              const defDisposer = registerDefinitionProvider(
-                monaco,
-                () => allFilesRef.current,
-                handleOpenFile
-              );
-
-              languageDisposersRef.current = [
-                snippetsDisposer,
-                importDisposer,
-                defDisposer,
-              ];
-
               // Mouse Down Handler for seamless Ctrl/Cmd + click navigation
               editor.onMouseDown((e: any) => {
                 if (e.event.ctrlKey || e.event.metaKey) {
@@ -499,13 +477,21 @@ export function MultiTabEditor({
               registerMonacoThemes(monaco);
               setupTypeScript(monaco);
               syncVfsToMonacoTypeScript(monaco, allFilesRef.current);
-              registerReactSnippets(monaco);
-              registerImportCompletion(monaco, () => allFilesRef.current);
-              registerDefinitionProvider(
+              const snippetsDisposer = registerReactSnippets(monaco);
+              const importDisposer = registerImportCompletion(
+                monaco,
+                () => allFilesRef.current
+              );
+              const defDisposer = registerDefinitionProvider(
                 monaco,
                 () => allFilesRef.current,
                 handleOpenFile
               );
+              languageDisposersRef.current = [
+                snippetsDisposer,
+                importDisposer,
+                defDisposer,
+              ];
               emmetJSX(monaco, ['javascript', 'typescript', 'jsx', 'tsx']);
               emmetCSS(monaco, ['css', 'scss', 'sass', 'less']);
               emmetHTML(monaco, ['html']);

@@ -336,22 +336,29 @@ export const REACT_DOM_TYPES_CONTENT = `/**
  * Type definitions for react-dom
  */
 
-import * as React from 'react';
-
-declare module 'react-dom' {
-  export function render(element: React.ReactElement, container: Element | null, callback?: () => void): any;
+declare namespace ReactDOM {
+  export function render(element: any, container: Element | null, callback?: () => void): any;
   export function unmountComponentAtNode(container: Element): boolean;
-  export function createPortal(children: React.ReactNode, container: Element, key?: null | string): React.ReactElement;
+  export function createPortal(children: any, container: Element, key?: null | string): any;
 }
 
+declare module 'react-dom' {
+  export = ReactDOM;
+  export as namespace ReactDOM;
+}
+`;
+
+export const REACT_DOM_CLIENT_TYPES_CONTENT = `/**
+ * Type definitions for react-dom/client
+ */
+
 declare module 'react-dom/client' {
-  import { ReactNode } from 'react';
   export interface Root {
-    render(children: ReactNode): void;
+    render(children: any): void;
     unmount(): void;
   }
   export function createRoot(container: Element | DocumentFragment): Root;
-  export function hydrateRoot(container: Element | DocumentFragment, initialChildren: ReactNode): Root;
+  export function hydrateRoot(container: Element | DocumentFragment, initialChildren: any): Root;
 }
 `;
 
@@ -421,8 +428,8 @@ export const PACKAGE_DECLARATIONS: Record<
     content: REACT_DOM_TYPES_CONTENT,
   },
   'react-dom/client': {
-    path: '/node_modules/@types/react-dom/index.d.ts',
-    content: REACT_DOM_TYPES_CONTENT,
+    path: '/node_modules/@types/react-dom/client.d.ts',
+    content: REACT_DOM_CLIENT_TYPES_CONTENT,
   },
   'canvas-confetti': {
     path: '/node_modules/canvas-confetti/index.d.ts',

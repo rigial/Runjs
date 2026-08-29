@@ -53,6 +53,27 @@ export function findSymbolLocationInContent(
 }
 
 /**
+ * Finds the location of `export default` in a file's content.
+ */
+export function findDefaultExportLocationInContent(
+  content: string
+): { lineNumber: number; column: number; length: number } | null {
+  const lines = content.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const match = line.match(/\bexport\s+default\b/);
+    if (match && match.index !== undefined) {
+      return {
+        lineNumber: i + 1,
+        column: match.index + 1,
+        length: 14,
+      };
+    }
+  }
+  return { lineNumber: 1, column: 1, length: 1 };
+}
+
+/**
  * Detects if a word position in a line is a JSX tag name (e.g. `<input` or `</input`).
  */
 export function isJsxTagAtPosition(
@@ -110,18 +131,21 @@ export function findLocalSymbolLocation(
   return null;
 }
 
+export interface ImportedSymbolInfo {
+  moduleSpecifier: string;
+  isDefault: boolean;
+  exportedName?: string;
+}
+
 /**
- * Parses all imports in a file to map imported identifier names to their source module specifier.
+ * Parses all imports in a file to map imported identifier names to their source module specifier and exported symbol name.
  */
 export function parseImportMap(
   content: string
-): Map<string, { moduleSpecifier: string; isDefault: boolean }> {
-  const map = new Map<
-    string,
-    { moduleSpecifier: string; isDefault: boolean }
-  >();
+): Map<string, ImportedSymbolInfo> {
+  const map = new Map<string, ImportedSymbolInfo>();
 
-  // 1. import Default, { A, B } from '...'
+  // 1. import Default, { A, B as C } from '...'
   const defaultAndNamed = content.matchAll(
     /import\s+([A-Za-z0-9_$]+)\s*,\s*\{([^}]+)\}\s*from\s*['"]([^'"]+)['"]/g
   );
@@ -137,8 +161,13 @@ export function parseImportMap(
         const trimmed = p.trim();
         if (trimmed) {
           const parts = trimmed.split(/\s+as\s+/);
+          const exportedName = parts[0].trim();
           const localName = (parts[1] || parts[0]).trim();
-          map.set(localName, { moduleSpecifier: mod, isDefault: false });
+          map.set(localName, {
+            moduleSpecifier: mod,
+            isDefault: false,
+            exportedName,
+          });
         }
       }
     }
@@ -155,8 +184,13 @@ export function parseImportMap(
       const trimmed = p.trim();
       if (trimmed) {
         const parts = trimmed.split(/\s+as\s+/);
+        const exportedName = parts[0].trim();
         const localName = (parts[1] || parts[0]).trim();
-        map.set(localName, { moduleSpecifier: mod, isDefault: false });
+        map.set(localName, {
+          moduleSpecifier: mod,
+          isDefault: false,
+          exportedName,
+        });
       }
     }
   }
@@ -373,7 +407,14 @@ export function registerDefinitionProvider(
           );
 
           if (target) {
-            const loc = findSymbolLocationInContent(target.content, symbolName);
+            const loc = importedFrom.isDefault
+              ? findDefaultExportLocationInContent(target.content) ||
+                findSymbolLocationInContent(target.content, symbolName)
+              : findSymbolLocationInContent(
+                  target.content,
+                  importedFrom.exportedName || symbolName
+                );
+
             return {
               uri: monaco.Uri.file(target.targetPath),
               range: {
@@ -431,8 +472,9 @@ export function registerDefinitionProvider(
               );
 
               if (target) {
-                const quoteStart =
-                  line.indexOf(m[0]) + m[0].lastIndexOf(importSpec);
+                const matchStart =
+                  m.index !== undefined ? m.index : line.indexOf(m[0]);
+                const quoteStart = matchStart + m[0].lastIndexOf(importSpec);
                 const range = {
                   startLineNumber: i,
                   startColumn: quoteStart + 1,

@@ -53,4 +53,3 @@ export async function loadTypscript(): Promise<void> {
   }
   return initPromise;
 }
-

@@ -1,35 +1,188 @@
-import { memo, useMemo, useState } from 'react';
-import {
-  SandpackProvider,
-  SandpackPreview,
-  SandpackConsole,
-} from '@codesandbox/sandpack-react';
-import SandpackFileExplorer from '@rainetian/sandpack-file-explorer';
+import { memo, useRef, useState, useEffect, useCallback } from 'react';
+import { useParams, Link } from 'react-router';
+import { SandpackProvider } from '@codesandbox/sandpack-react';
 import Split from 'react-split';
-import ReactEditor from '../components/ReactEditor';
-import { fileIcon } from '../utils/folderIcons';
-import { Link } from 'react-router';
+import { WorkspaceProvider } from '../ide/state/workspaceContext';
+import { useWorkspace } from '../ide/state/useWorkspace';
+import { FileExplorer } from '../ide/components/FileExplorer/FileExplorer';
+import { MultiTabEditor } from '../ide/components/Editor/MultiTabEditor';
+import { XtermTerminal } from '../ide/components/Terminal/XtermTerminal';
+import { LivePreview } from '../ide/components/Preview/LivePreview';
+import {
+  IdeConsole,
+  IdeConsoleRef,
+} from '../ide/components/Console/IdeConsole';
 import ThemeSelector from '../components/ThemeSelector';
+import HelpModal from '../components/HelpModal';
+import { ModalRef } from '../utils/interface';
 import useTheme from '../hook/useTheme';
 import useMediaQuery from '../hook/useMediaQuery';
-import { ChevronLeft, Atom } from 'lucide-react';
+import useWarnOnClose from '../hook/useWarnOnClose ';
+import { TEMPLATES } from '../ide/templates/defaultTemplates';
+import SEO from '../seo/SEO';
+import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
+import {
+  ChevronLeft,
+  Atom,
+  Save,
+  AlignLeft,
+  ZoomIn,
+  ZoomOut,
+  HelpCircle,
+  FolderTree,
+  Terminal as TerminalIcon,
+  MessageSquare,
+  Edit2,
+  Check,
+} from 'lucide-react';
 
-type MobileTab = 'files' | 'code' | 'preview' | 'console';
+type MobileTab = 'files' | 'code' | 'preview' | 'terminal' | 'console';
 
-function ReactPlayground() {
+function ReactWorkspace() {
+  const {
+    vfs,
+    projectName,
+    activeFile,
+    openFiles,
+    dirtyFiles,
+    fileContents,
+    fontSize,
+    isSaving,
+    isExplorerOpen,
+    isTerminalOpen,
+    isConsoleOpen,
+    sandpackFiles,
+    templateId,
+    setActiveFile,
+    openFile,
+    closeFile,
+    closeOtherFiles,
+    closeAllFiles,
+    updateFileContent,
+    saveFile,
+    saveProject,
+    setProjectName,
+    switchTemplate,
+    toggleExplorer,
+    toggleTerminal,
+    toggleConsole,
+    setFontSize,
+    handleFileDeleted,
+    handleFileRenamed,
+  } = useWorkspace();
+
   const { resolvedTheme } = useTheme();
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [activeMobileTab, setActiveMobileTab] = useState<MobileTab>('code');
-  const filesIcon = useMemo(
-    () => (fileSuffix: string) => fileIcon(fileSuffix),
-    []
-  );
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [titleValue, setTitleValue] = useState(projectName);
+  const [devServerKey, setDevServerKey] = useState(0);
+
+  const consoleRef = useRef<IdeConsoleRef>(null);
+  const helpDialogRef = useRef<ModalRef>(null);
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const editorRef = useRef<any>(null);
+
+  useWarnOnClose();
+
+  useEffect(() => {
+    setTitleValue(projectName);
+  }, [projectName]);
+
+  // Intercept window postMessage logs from Sandpack preview iframe to Luna console
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Sandpack preview runs in a sandboxed iframe with a distinct/null origin or same origin
+      if (event.origin !== 'null' && event.origin !== window.location.origin) {
+        return;
+      }
+      const data = event.data;
+      if (data && typeof data === 'object') {
+        if (data.type === 'console' && data.log) {
+          const { method, data: logData } = data.log;
+          const args = Array.isArray(logData)
+            ? logData
+            : logData === undefined
+              ? []
+              : [logData];
+          if (consoleRef.current) {
+            switch (method) {
+              case 'error':
+                consoleRef.current.error(...args);
+                break;
+              case 'warn':
+                consoleRef.current.warn(...args);
+                break;
+              case 'info':
+                consoleRef.current.info(...args);
+                break;
+              default:
+                consoleRef.current.log(...args);
+                break;
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  // Global keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+S / Ctrl+S
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        saveProject();
+      }
+      // Cmd+B / Ctrl+B: Toggle Explorer
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        toggleExplorer();
+      }
+      // Cmd+` / Ctrl+`: Toggle Terminal
+      if ((e.metaKey || e.ctrlKey) && e.key === '`') {
+        e.preventDefault();
+        toggleTerminal();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [saveProject, toggleExplorer, toggleTerminal]);
+
+  const handleTitleSubmit = () => {
+    if (titleValue.trim()) {
+      setProjectName(titleValue.trim());
+    }
+    setIsEditingTitle(false);
+  };
+
+  const handleFormat = () => {
+    if (editorRef.current) {
+      editorRef.current.getAction('editor.action.formatDocument')?.run();
+    }
+  };
+
+  const handleFontSize = (direction: 'increase' | 'decrease') => {
+    if (direction === 'increase') {
+      setFontSize(Math.min(fontSize + 1, 28));
+    } else {
+      setFontSize(Math.max(fontSize - 1, 10));
+    }
+  };
+
+  const handleDevServerRestart = useCallback(() => {
+    setDevServerKey((prev) => prev + 1);
+  }, []);
 
   return (
     <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
       {/* Top IDE Header */}
       <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">
-        {/* Left: Brand & Info */}
+        {/* Left: Brand, Project Title & Template Switcher */}
         <div className="flex items-center gap-3">
           <Link
             to="/dashboard"
@@ -42,17 +195,167 @@ function ReactPlayground() {
             </div>
           </Link>
 
+          {/* Project Title with Inline Rename */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-[var(--text-primary)]">
-              React Sandbox
-            </span>
+            {isEditingTitle ? (
+              <div className="flex items-center gap-1">
+                <input
+                  autoFocus
+                  type="text"
+                  value={titleValue}
+                  onChange={(e) => setTitleValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleTitleSubmit();
+                    if (e.key === 'Escape') setIsEditingTitle(false);
+                  }}
+                  onBlur={handleTitleSubmit}
+                  className="px-1.5 py-0.5 rounded border border-[var(--border-focus)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={handleTitleSubmit}
+                  className="p-1 rounded text-emerald-500 hover:bg-[var(--bg-surface-hover)]"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div
+                onClick={() => setIsEditingTitle(true)}
+                title="Click to rename"
+                className="group flex items-center gap-1 cursor-pointer"
+              >
+                <span className="text-xs font-semibold text-[var(--text-primary)] group-hover:text-cyan-500 transition-colors">
+                  {projectName}
+                </span>
+                <Edit2 className="w-3 h-3 text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            )}
+
             <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold rounded bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
-              Sandpack React
+              React + Vite
             </span>
+          </div>
+
+          {/* Template Selector Dropdown */}
+          <div className="hidden lg:flex items-center ml-2">
+            <select
+              aria-label="Project Template"
+              onChange={(e) => switchTemplate(e.target.value)}
+              value={templateId}
+              className="px-2 py-1 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface-muted)] text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] outline-none cursor-pointer"
+            >
+              {TEMPLATES.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.icon} {t.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
-        {/* Right: Theme Selector & Mobile Tabs */}
+        {/* Center: Actions (Save, Format, Font Zoom, Panel Toggles) */}
+        <div className="hidden md:flex items-center gap-1.5">
+          {/* Save Project Button */}
+          <button
+            type="button"
+            onClick={saveProject}
+            disabled={isSaving}
+            title="Save Project (⌘S)"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-cyan-500 hover:bg-cyan-600 active:bg-cyan-700 text-black text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+          >
+            <Save className={`w-3.5 h-3.5 ${isSaving ? 'animate-spin' : ''}`} />
+            <span>{isSaving ? 'Saving...' : 'Save'}</span>
+            <kbd className="hidden lg:inline-block ml-1 px-1 py-0.2 text-[9px] font-mono bg-black/15 text-black rounded">
+              ⌘S
+            </kbd>
+          </button>
+
+          {/* Format Document */}
+          <button
+            type="button"
+            onClick={handleFormat}
+            title="Format Document (Shift+Alt+F)"
+            className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+          >
+            <AlignLeft className="w-4 h-4" />
+          </button>
+
+          {/* Font Size Adjusters */}
+          <div className="flex items-center rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] p-0.5">
+            <button
+              type="button"
+              onClick={() => handleFontSize('decrease')}
+              title="Decrease font size"
+              className="p-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+            <span className="px-1.5 text-[11px] font-mono text-[var(--text-muted)]">
+              {fontSize}px
+            </span>
+            <button
+              type="button"
+              onClick={() => handleFontSize('increase')}
+              title="Increase font size"
+              className="p-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+            >
+              <ZoomIn className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="h-4 w-px bg-[var(--border-default)] mx-1" />
+
+          {/* Panel Toggle Buttons */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={toggleExplorer}
+              title="Toggle File Explorer (⌘B)"
+              aria-label="Toggle File Explorer"
+              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-xs font-medium transition-all ${
+                isExplorerOpen
+                  ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-semibold'
+                  : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+              }`}
+            >
+              <FolderTree className="w-3.5 h-3.5" />
+              <span className="hidden xl:inline text-[11px]">Files</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={toggleTerminal}
+              title="Toggle Terminal (⌘`)"
+              aria-label="Toggle Terminal"
+              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-xs font-medium transition-all ${
+                isTerminalOpen
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold'
+                  : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+              }`}
+            >
+              <TerminalIcon className="w-3.5 h-3.5" />
+              <span className="hidden xl:inline text-[11px]">Terminal</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={toggleConsole}
+              title="Toggle Luna Console"
+              aria-label="Toggle Console"
+              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-xs font-medium transition-all ${
+                isConsoleOpen
+                  ? 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold'
+                  : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+              }`}
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span className="hidden xl:inline text-[11px]">Console</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Right: Theme Selector, Shortcuts & Mobile Tabs */}
         <div className="flex items-center gap-2">
           {/* Mobile View Toggle */}
           <div className="flex md:hidden rounded-md border border-[var(--border-default)] bg-[var(--bg-surface-muted)] p-0.5">
@@ -61,6 +364,7 @@ function ReactPlayground() {
                 { id: 'files', label: 'Files' },
                 { id: 'code', label: 'Code' },
                 { id: 'preview', label: 'Preview' },
+                { id: 'terminal', label: 'Term' },
                 { id: 'console', label: 'Console' },
               ] as const
             ).map((tab) => (
@@ -81,100 +385,267 @@ function ReactPlayground() {
           </div>
 
           <ThemeSelector compact={true} />
+
+          {/* Help Shortcuts */}
+          <button
+            type="button"
+            onClick={() => helpDialogRef.current?.open()}
+            title="Keyboard Shortcuts"
+            className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+          >
+            <HelpCircle className="w-4 h-4" />
+          </button>
         </div>
       </nav>
 
-      {/* Sandpack Workspace */}
+      {/* Main Workspace with SandpackProvider Runtime */}
       <div className="flex-1 w-full overflow-hidden">
-        <SandpackProvider
-          options={{
-            recompileMode: 'delayed',
-            recompileDelay: 500,
-          }}
-          template="react"
-          theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
-          style={{ height: '100%' }}
-        >
-          {isDesktop ? (
-            <Split
-              className="flex h-full w-full split"
-              sizes={[16, 44, 40]}
-              minSize={120}
-              gutterSize={6}
-            >
-              {/* File Explorer */}
-              <div className="h-full overflow-auto bg-[var(--bg-surface)] border-r border-[var(--border-default)]">
-                <SandpackFileExplorer
-                  fileIcon={filesIcon}
-                  style={{ height: '100%' }}
-                />
-              </div>
-
-              {/* React Code Editor */}
-              <div className="h-full overflow-hidden bg-[var(--bg-app)]">
-                <ReactEditor />
-              </div>
-
-              {/* Preview & Console */}
+        {Object.keys(sandpackFiles).length > 0 && (
+          <SandpackProvider
+            key={devServerKey}
+            files={sandpackFiles}
+            template="react"
+            theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+            options={{
+              recompileMode: 'delayed',
+              recompileDelay: 300,
+            }}
+            style={{ height: '100%', width: '100%' }}
+          >
+            {isDesktop ? (
+              /* Desktop Multi-Split Layout */
               <Split
-                className="flex flex-col h-full w-full"
-                direction="vertical"
-                sizes={[65, 35]}
-                minSize={100}
+                className="flex h-full w-full split"
+                sizes={isExplorerOpen ? [18, 44, 38] : [0, 56, 44]}
+                minSize={isExplorerOpen ? [140, 300, 260] : [0, 300, 260]}
                 gutterSize={6}
               >
-                <div className="h-full overflow-auto bg-[var(--bg-surface)]">
-                  <SandpackPreview showNavigator style={{ height: '100%' }} />
-                </div>
-                <div className="h-full overflow-auto bg-[var(--bg-app)]">
-                  <SandpackConsole
-                    resetOnPreviewRestart
-                    style={{ height: '100%' }}
+                {/* 1. Left: File Explorer */}
+                <div
+                  className={`h-full overflow-hidden bg-[var(--bg-surface)] ${
+                    isExplorerOpen ? 'block' : 'hidden'
+                  }`}
+                >
+                  <FileExplorer
+                    vfs={vfs}
+                    activeFile={activeFile}
+                    dirtyFiles={dirtyFiles}
+                    onSelectFile={setActiveFile}
+                    onFileDeleted={handleFileDeleted}
+                    onFileRenamed={handleFileRenamed}
                   />
                 </div>
+
+                {/* 2. Center: Code Editor & Bottom Terminal */}
+                <div className="h-full overflow-hidden bg-[var(--bg-app)]">
+                  {isTerminalOpen ? (
+                    <Split
+                      className="flex flex-col h-full w-full"
+                      direction="vertical"
+                      sizes={[65, 35]}
+                      minSize={[150, 100]}
+                      gutterSize={6}
+                    >
+                      <div className="h-full overflow-hidden">
+                        <MultiTabEditor
+                          activeFile={activeFile}
+                          openFiles={openFiles}
+                          dirtyFiles={dirtyFiles}
+                          content={fileContents[activeFile] ?? ''}
+                          onSelectTab={setActiveFile}
+                          onCloseTab={closeFile}
+                          onCloseOtherTabs={closeOtherFiles}
+                          onCloseAllTabs={closeAllFiles}
+                          onChangeCode={updateFileContent}
+                          onSaveFile={saveFile}
+                          fontSize={fontSize}
+                          editorRef={editorRef}
+                        />
+                      </div>
+                      <div className="h-full overflow-hidden">
+                        <XtermTerminal
+                          vfs={vfs}
+                          onDevServerRestart={handleDevServerRestart}
+                          onOpenFile={openFile}
+                        />
+                      </div>
+                    </Split>
+                  ) : (
+                    <div className="h-full overflow-hidden">
+                      <MultiTabEditor
+                        activeFile={activeFile}
+                        openFiles={openFiles}
+                        dirtyFiles={dirtyFiles}
+                        content={fileContents[activeFile] ?? ''}
+                        onSelectTab={setActiveFile}
+                        onCloseTab={closeFile}
+                        onCloseOtherTabs={closeOtherFiles}
+                        onCloseAllTabs={closeAllFiles}
+                        onChangeCode={updateFileContent}
+                        onSaveFile={saveFile}
+                        fontSize={fontSize}
+                        editorRef={editorRef}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. Right: Live Preview & Bottom Console */}
+                <div className="h-full overflow-hidden bg-[var(--bg-app)]">
+                  {isConsoleOpen ? (
+                    <Split
+                      className="flex flex-col h-full w-full"
+                      direction="vertical"
+                      sizes={[60, 40]}
+                      minSize={[150, 100]}
+                      gutterSize={6}
+                    >
+                      <div className="h-full overflow-hidden">
+                        <LivePreview
+                          onRestartDevServer={handleDevServerRestart}
+                        />
+                      </div>
+                      <div className="h-full overflow-hidden">
+                        <IdeConsole ref={consoleRef} />
+                      </div>
+                    </Split>
+                  ) : (
+                    <div className="h-full overflow-hidden">
+                      <LivePreview
+                        onRestartDevServer={handleDevServerRestart}
+                      />
+                    </div>
+                  )}
+                </div>
               </Split>
-            </Split>
-          ) : (
-            <div className="h-full w-full overflow-hidden">
-              <div
-                className={`h-full overflow-auto bg-[var(--bg-surface)] ${
-                  activeMobileTab === 'files' ? '' : 'hidden'
-                }`}
-              >
-                <SandpackFileExplorer
-                  fileIcon={filesIcon}
-                  style={{ height: '100%' }}
-                />
+            ) : (
+              /* Mobile Single Tab Layout */
+              <div className="h-full w-full overflow-hidden">
+                <div
+                  className={`h-full overflow-hidden ${
+                    activeMobileTab === 'files' ? 'block' : 'hidden'
+                  }`}
+                >
+                  <FileExplorer
+                    vfs={vfs}
+                    activeFile={activeFile}
+                    dirtyFiles={dirtyFiles}
+                    onSelectFile={(path) => {
+                      setActiveFile(path);
+                      setActiveMobileTab('code');
+                    }}
+                    onFileDeleted={handleFileDeleted}
+                    onFileRenamed={handleFileRenamed}
+                  />
+                </div>
+
+                <div
+                  className={`h-full overflow-hidden ${
+                    activeMobileTab === 'code' ? 'block' : 'hidden'
+                  }`}
+                >
+                  <MultiTabEditor
+                    activeFile={activeFile}
+                    openFiles={openFiles}
+                    dirtyFiles={dirtyFiles}
+                    content={fileContents[activeFile] ?? ''}
+                    onSelectTab={setActiveFile}
+                    onCloseTab={closeFile}
+                    onCloseOtherTabs={closeOtherFiles}
+                    onCloseAllTabs={closeAllFiles}
+                    onChangeCode={updateFileContent}
+                    onSaveFile={saveFile}
+                    fontSize={fontSize}
+                    editorRef={editorRef}
+                  />
+                </div>
+
+                <div
+                  className={`h-full overflow-hidden ${
+                    activeMobileTab === 'preview' ? 'block' : 'hidden'
+                  }`}
+                >
+                  <LivePreview onRestartDevServer={handleDevServerRestart} />
+                </div>
+
+                <div
+                  className={`h-full overflow-hidden ${
+                    activeMobileTab === 'terminal' ? 'block' : 'hidden'
+                  }`}
+                >
+                  <XtermTerminal
+                    vfs={vfs}
+                    onDevServerRestart={handleDevServerRestart}
+                    onOpenFile={(p) => {
+                      openFile(p);
+                      setActiveMobileTab('code');
+                    }}
+                  />
+                </div>
+
+                <div
+                  className={`h-full overflow-hidden ${
+                    activeMobileTab === 'console' ? 'block' : 'hidden'
+                  }`}
+                >
+                  <IdeConsole ref={consoleRef} />
+                </div>
               </div>
-              <div
-                className={`h-full overflow-hidden bg-[var(--bg-app)] ${
-                  activeMobileTab === 'code' ? '' : 'hidden'
-                }`}
-              >
-                <ReactEditor />
-              </div>
-              <div
-                className={`h-full overflow-auto bg-[var(--bg-surface)] ${
-                  activeMobileTab === 'preview' ? '' : 'hidden'
-                }`}
-              >
-                <SandpackPreview showNavigator style={{ height: '100%' }} />
-              </div>
-              <div
-                className={`h-full overflow-auto bg-[var(--bg-app)] ${
-                  activeMobileTab === 'console' ? '' : 'hidden'
-                }`}
-              >
-                <SandpackConsole
-                  resetOnPreviewRestart
-                  style={{ height: '100%' }}
-                />
-              </div>
-            </div>
-          )}
-        </SandpackProvider>
+            )}
+          </SandpackProvider>
+        )}
       </div>
+
+      <HelpModal ref={helpDialogRef} />
     </main>
+  );
+}
+
+function ReactPlayground() {
+  const { id } = useParams();
+
+  return (
+    <WorkspaceProvider initialProjectId={id}>
+      <SEO
+        title={
+          id
+            ? 'Saved React Playground'
+            : 'Online React & Vite Playground (Sandpack)'
+        }
+        description={
+          id
+            ? 'Saved React workspace in RunJS'
+            : 'In-browser React development environment with multi-file explorer, Sandpack live bundler, interactive preview, and xterm terminal.'
+        }
+        canonical={id ? undefined : '/react'}
+        noIndex={Boolean(id)}
+        noFollow={Boolean(id)}
+        keywords={
+          id
+            ? undefined
+            : [
+                'React playground',
+                'online React sandbox',
+                'Sandpack React IDE',
+                'React in browser',
+                'Vite playground online',
+                'browser React compiler',
+              ]
+        }
+        structuredData={
+          id
+            ? undefined
+            : [
+                getBreadcrumbSchema([
+                  { name: 'Home', item: '/' },
+                  { name: 'React Playground', item: '/react' },
+                ]),
+                getWebApplicationSchema(),
+              ]
+        }
+      />
+      <ReactWorkspace />
+    </WorkspaceProvider>
   );
 }
 

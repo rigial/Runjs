@@ -1,5 +1,12 @@
 import { transform } from 'esbuild-wasm';
-import { Fragment, memo, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import LunaConsole from 'luna-console';
 import { Link, useNavigate, useParams } from 'react-router';
 import useLocalStorageState from '../hook/useLocalStorageState';
@@ -20,6 +27,7 @@ import Terminal from '../components/Terminal';
 import ThemeSelector from '../components/ThemeSelector';
 import useTheme from '../hook/useTheme';
 import { loadTypscript, saveJSTSFile } from '../utils/commonFunction';
+import SEO from '../seo/SEO';
 import {
   Play,
   HelpCircle,
@@ -46,7 +54,9 @@ function TSsaved() {
   );
   const [isRunning, setIsRunning] = useState(false);
   const [tsErrors, setTsErrors] = useState<ITypeScriptError[]>([]);
-  const [terminalTab, setTerminalTab] = useState<'console' | 'tsErrors'>('console');
+  const [terminalTab, setTerminalTab] = useState<'console' | 'tsErrors'>(
+    'console'
+  );
   const consoleRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<ModalRef>(null);
   /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -195,6 +205,12 @@ function TSsaved() {
 
   return (
     <Fragment>
+      <SEO
+        title={`${fileName}.ts - Saved TypeScript`}
+        description="Saved TypeScript workspace in RunJS"
+        noIndex={true}
+        noFollow={true}
+      />
       <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
         {/* Top IDE Navigation */}
         <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">

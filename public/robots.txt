@@ -1,2 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Disallow: /bin
+Disallow: /404
+Disallow: /dashboard
+
+# Host
+Host: https://runjs.in
+
+# Sitemaps
+Sitemap: https://runjs.in/sitemap.xml

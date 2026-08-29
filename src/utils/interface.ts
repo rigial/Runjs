@@ -10,12 +10,16 @@ export interface UserCodeBase {
   createdAt: Date;
   fileName: string;
   isDelete: boolean;
-  language: 'js' | 'ts' | 'html';
+  language: 'js' | 'ts' | 'html' | 'react';
   lastModifiedAt: Date;
   star: number;
   tag: string;
   id: string;
   dbUpload: boolean;
+  files?: Record<string, string>;
+  activeFile?: string;
+  openFiles?: string[];
+  template?: string;
 }
 
 export interface TaggedResult {

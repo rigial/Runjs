@@ -27,8 +27,27 @@ function ProjectTable({
   const dialogRef = useRef<ModalRef>(null);
   const [renameData, setRenameData] = useState<UserCodeBase>();
 
-  function handleDownload(val: UserCodeBase) {
-    if (val.language !== 'html') {
+  async function handleDownload(val: UserCodeBase) {
+    if (val.language === 'react' && val.files) {
+      try {
+        const JSZip = (await import('jszip')).default;
+        const zip = new JSZip();
+        for (const [filePath, content] of Object.entries(val.files)) {
+          const relPath = filePath.startsWith('/')
+            ? filePath.slice(1)
+            : filePath;
+          zip.file(relPath, content);
+        }
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${val.fileName || 'react-project'}.zip`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      } catch (e) {
+        console.error('Failed to download React zip:', e);
+      }
+    } else if (val.language === 'js' || val.language === 'ts') {
       saveJSTSFile(val.code, val.fileName, val.language);
     }
   }
@@ -76,33 +95,40 @@ function ProjectTable({
 
   const getLanguageBadge = (lang: string) => {
     switch (lang) {
+      case 'react':
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 w-fit shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+            React + Vite
+          </span>
+        );
       case 'js':
         return (
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 w-fit shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
             JavaScript
-          </div>
+          </span>
         );
       case 'ts':
         return (
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 w-fit shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             TypeScript
-          </div>
+          </span>
         );
       case 'html':
         return (
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 w-fit shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
             HTML
-          </div>
+          </span>
         );
       default:
         return (
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20 w-fit shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-gray-500" />
             {lang.toUpperCase()}
-          </div>
+          </span>
         );
     }
   };

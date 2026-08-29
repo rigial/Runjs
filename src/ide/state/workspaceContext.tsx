@@ -6,6 +6,7 @@ import { getCode, updateCode, addCode } from '../../db/operations';
 import { normalizePath } from '../fs/pathUtils';
 import useLocalStorageState from '../../hook/useLocalStorageState';
 import { WorkspaceContext } from './workspaceTypes';
+import { getAllPackageVirtualFiles } from '../languages/typescript/packageDefinitions';
 
 interface WorkspaceProviderProps {
   initialProjectId?: string;
@@ -115,6 +116,16 @@ export function WorkspaceProvider({
     async function loadActiveContent() {
       if (!activeFile || dirtyFiles.has(activeFile)) return;
       if (fileContents[activeFile] !== undefined) return;
+      if (activeFile.startsWith('/node_modules/')) {
+        const pkgFiles = getAllPackageVirtualFiles();
+        if (pkgFiles[activeFile]) {
+          setFileContents((prev) => ({
+            ...prev,
+            [activeFile]: pkgFiles[activeFile],
+          }));
+          return;
+        }
+      }
       if (await vfs.exists(activeFile)) {
         const content = await vfs.readFile(activeFile);
         setFileContents((prev) =>

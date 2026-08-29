@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
 import Editor, { Monaco } from '@monaco-editor/react';
 import {
   getBasename,
@@ -15,6 +21,21 @@ import {
 } from '../../../utils/monacoThemes';
 import AppLoading from '../../../components/AppLoading';
 import { X, AlignLeft, Save, ChevronRight, Code2 } from 'lucide-react';
+import { registerReactSnippets } from '../../languages/snippets/reactSnippets';
+import {
+  setupTypeScript,
+  syncVfsToMonacoTypeScript,
+} from '../../languages/typescript/setupTypeScript';
+import { registerImportCompletion } from '../../languages/imports/importCompletion';
+import {
+  registerDefinitionProvider,
+  findSymbolLocationInContent,
+  findLocalSymbolLocation,
+  isJsxTagAtPosition,
+  parseImportMap,
+  resolveModuleTarget,
+} from '../../languages/navigation/definitionProvider';
+import { getAllPackageVirtualFiles } from '../../languages/typescript/packageDefinitions';
 
 interface MultiTabEditorProps {
   activeFile: string;
@@ -30,6 +51,7 @@ interface MultiTabEditorProps {
   fontSize: number;
   /* eslint-disable @typescript-eslint/no-explicit-any */
   editorRef?: React.MutableRefObject<any>;
+  allFiles?: Record<string, string>;
 }
 
 export function MultiTabEditor({
@@ -45,12 +67,18 @@ export function MultiTabEditor({
   onSaveFile,
   fontSize,
   editorRef: externalEditorRef,
+  allFiles = {},
 }: MultiTabEditorProps) {
   const { resolvedTheme } = useTheme();
   const internalEditorRef = useRef<any>(null);
   const monacoInstanceRef = useRef<Monaco | null>(null);
   const activeFileRef = useRef(activeFile);
   const onSaveFileRef = useRef(onSaveFile);
+  const allFilesRef = useRef(allFiles);
+  const pendingPositionRef = useRef<{
+    lineNumber: number;
+    column: number;
+  } | null>(null);
 
   useEffect(() => {
     activeFileRef.current = activeFile;
@@ -59,6 +87,15 @@ export function MultiTabEditor({
   useEffect(() => {
     onSaveFileRef.current = onSaveFile;
   }, [onSaveFile]);
+
+  useEffect(() => {
+    const packageVirtualFiles = getAllPackageVirtualFiles();
+    const merged = { ...packageVirtualFiles, ...allFiles };
+    allFilesRef.current = merged;
+    if (monacoInstanceRef.current) {
+      syncVfsToMonacoTypeScript(monacoInstanceRef.current, allFiles);
+    }
+  }, [allFiles]);
 
   const [tabContextMenu, setTabContextMenu] = useState<{
     x: number;
@@ -77,6 +114,37 @@ export function MultiTabEditor({
       );
     }
   }, [resolvedTheme]);
+
+  // Handle jump-to-position when switching tabs via Go to Definition / Ctrl+Click
+  useEffect(() => {
+    if (pendingPositionRef.current) {
+      const pos = pendingPositionRef.current;
+      pendingPositionRef.current = null;
+      const editor = externalEditorRef?.current || internalEditorRef.current;
+      if (editor) {
+        setTimeout(() => {
+          try {
+            editor.setPosition(pos);
+            editor.revealPositionInCenter(pos);
+            editor.focus();
+          } catch {
+            // Model may be transitioning
+          }
+        }, 50);
+      }
+    }
+  }, [activeFile, externalEditorRef]);
+
+  const handleOpenFile = useCallback(
+    (path: string, position?: { lineNumber: number; column: number }) => {
+      const norm = normalizePath(path);
+      if (position) {
+        pendingPositionRef.current = position;
+      }
+      onSelectTab(norm);
+    },
+    [onSelectTab]
+  );
 
   const handleTabContextMenu = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -123,6 +191,14 @@ export function MultiTabEditor({
     return norm.split('/').filter(Boolean);
   }, [activeFile]);
 
+  // Effective content including virtual package files fallback
+  const effectiveContent = useMemo(() => {
+    if (content !== undefined && content !== '') return content;
+    const pkgFiles = getAllPackageVirtualFiles();
+    if (pkgFiles[activeFile]) return pkgFiles[activeFile];
+    return allFilesRef.current[activeFile] ?? '';
+  }, [content, activeFile]);
+
   return (
     <div className="h-full w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
       {/* Tab Strip */}
@@ -130,7 +206,11 @@ export function MultiTabEditor({
         {openFiles.map((path) => {
           const isActive = path === activeFile;
           const isDirty = dirtyFiles.has(path);
-          const name = getBasename(path);
+          const name = path.startsWith('/node_modules/')
+            ? path
+                .replace('/node_modules/', '')
+                .replace(/\/index\.d\.ts$/, '.d.ts')
+            : getBasename(path);
 
           return (
             <div
@@ -144,7 +224,7 @@ export function MultiTabEditor({
               }`}
             >
               <FileIcon path={path} className="w-3.5 h-3.5" />
-              <span className="truncate max-w-[120px]">{name}</span>
+              <span className="truncate max-w-[130px]">{name}</span>
 
               {/* Close or Dirty Dot */}
               <div className="flex items-center justify-center w-4 h-4 ml-0.5">
@@ -233,7 +313,7 @@ export function MultiTabEditor({
             height="100%"
             language={language}
             path={activeFile}
-            value={content}
+            value={effectiveContent}
             onChange={(value) => onChangeCode(activeFile, value ?? '')}
             onMount={(editor, monaco) => {
               internalEditorRef.current = editor;
@@ -253,9 +333,147 @@ export function MultiTabEditor({
                   }
                 }
               );
+
+              // Setup TypeScript & Project-wide VFS sync
+              setupTypeScript(monaco);
+              syncVfsToMonacoTypeScript(monaco, allFilesRef.current);
+
+              // Register ES7+ React Snippets
+              registerReactSnippets(monaco);
+
+              // Register Import Auto-Suggestions
+              registerImportCompletion(monaco, () => allFilesRef.current);
+
+              // Register Go to Definition Provider & Document Links
+              registerDefinitionProvider(
+                monaco,
+                () => allFilesRef.current,
+                handleOpenFile
+              );
+
+              // Mouse Down Handler for seamless Ctrl/Cmd + click navigation
+              editor.onMouseDown((e: any) => {
+                if (e.event.ctrlKey || e.event.metaKey) {
+                  const pos = e.target.position;
+                  if (!pos) return;
+                  const model = editor.getModel();
+                  if (!model) return;
+
+                  const lineContent = model.getLineContent(pos.lineNumber);
+                  const files = allFilesRef.current;
+                  const currentFilePath = activeFileRef.current;
+
+                  // 1. Check if clicking on import path string (e.g. 'lucide-react', 'react', './types', './components/Button')
+                  const stringMatches =
+                    lineContent.matchAll(/['"]([^'"]+)['"]/g);
+                  for (const m of stringMatches) {
+                    const rawStr = m[0];
+                    const innerStr = m[1];
+                    const startCol = m.index !== undefined ? m.index + 1 : 1;
+                    const endCol = startCol + rawStr.length;
+
+                    if (pos.column >= startCol && pos.column <= endCol) {
+                      const target = resolveModuleTarget(
+                        currentFilePath,
+                        innerStr,
+                        files
+                      );
+                      if (target) {
+                        e.event.preventDefault();
+                        e.event.stopPropagation();
+                        handleOpenFile(target.targetPath, {
+                          lineNumber: 1,
+                          column: 1,
+                        });
+                        return;
+                      }
+                    }
+                  }
+
+                  // 2. Check if clicking on an identifier, JSX tag, or local variable
+                  const word = model.getWordAtPosition(pos);
+                  if (word) {
+                    const symbolName = word.word;
+                    const fullContent = model.getValue();
+
+                    // A. If clicking on an HTML JSX tag (e.g. <input, <button, <form)
+                    if (
+                      isJsxTagAtPosition(lineContent, word.startColumn) &&
+                      /^[a-z]+$/.test(symbolName)
+                    ) {
+                      const reactTarget = resolveModuleTarget(
+                        currentFilePath,
+                        'react',
+                        files
+                      );
+                      if (reactTarget) {
+                        const loc = findSymbolLocationInContent(
+                          reactTarget.content,
+                          symbolName
+                        );
+                        e.event.preventDefault();
+                        e.event.stopPropagation();
+                        handleOpenFile(reactTarget.targetPath, {
+                          lineNumber: loc?.lineNumber || 1,
+                          column: loc?.column || 1,
+                        });
+                        return;
+                      }
+                    }
+
+                    // B. If clicking on an imported symbol
+                    const importMap = parseImportMap(fullContent);
+                    const imported = importMap.get(symbolName);
+                    if (imported) {
+                      const target = resolveModuleTarget(
+                        currentFilePath,
+                        imported.moduleSpecifier,
+                        files
+                      );
+                      if (target) {
+                        const loc = findSymbolLocationInContent(
+                          target.content,
+                          symbolName
+                        );
+                        e.event.preventDefault();
+                        e.event.stopPropagation();
+                        handleOpenFile(target.targetPath, {
+                          lineNumber: loc?.lineNumber || 1,
+                          column: loc?.column || 1,
+                        });
+                        return;
+                      }
+                    }
+
+                    // C. If clicking on a local variable / function in the current file
+                    const localLoc = findLocalSymbolLocation(
+                      fullContent,
+                      symbolName
+                    );
+                    if (localLoc) {
+                      e.event.preventDefault();
+                      e.event.stopPropagation();
+                      handleOpenFile(currentFilePath, {
+                        lineNumber: localLoc.lineNumber,
+                        column: localLoc.column,
+                      });
+                      return;
+                    }
+                  }
+                }
+              });
             }}
             beforeMount={(monaco) => {
               registerMonacoThemes(monaco);
+              setupTypeScript(monaco);
+              syncVfsToMonacoTypeScript(monaco, allFilesRef.current);
+              registerReactSnippets(monaco);
+              registerImportCompletion(monaco, () => allFilesRef.current);
+              registerDefinitionProvider(
+                monaco,
+                () => allFilesRef.current,
+                handleOpenFile
+              );
               emmetJSX(monaco, ['javascript', 'typescript', 'jsx', 'tsx']);
               emmetCSS(monaco, ['css', 'scss', 'sass', 'less']);
               emmetHTML(monaco, ['html']);
@@ -283,6 +501,21 @@ export function MultiTabEditor({
                 bracketPairs: true,
                 indentation: true,
               },
+              quickSuggestions: {
+                other: true,
+                comments: false,
+                strings: true,
+              },
+              suggestOnTriggerCharacters: true,
+              acceptSuggestionOnEnter: 'on',
+              acceptSuggestionOnCommitCharacter: true,
+              tabCompletion: 'on',
+              wordBasedSuggestions: 'matchingDocuments',
+              parameterHints: { enabled: true },
+              renderValidationDecorations: 'on',
+              glyphMargin: true,
+              lightbulb: { enabled: 'on' as any },
+              hover: { enabled: 'on' as any, delay: 200 },
             }}
           />
         ) : (

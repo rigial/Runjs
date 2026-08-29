@@ -1,4 +1,4 @@
-import { memo, useRef, useState, useEffect, useCallback } from 'react';
+import { memo, useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router';
 import { SandpackProvider } from '@codesandbox/sandpack-react';
 import Split from 'react-split';
@@ -80,6 +80,11 @@ function ReactWorkspace() {
   const helpDialogRef = useRef<ModalRef>(null);
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const editorRef = useRef<any>(null);
+
+  const allFiles = useMemo(
+    () => ({ ...sandpackFiles, ...fileContents }),
+    [sandpackFiles, fileContents]
+  );
 
   useWarnOnClose();
 
@@ -458,6 +463,7 @@ function ReactWorkspace() {
                           onSaveFile={saveFile}
                           fontSize={fontSize}
                           editorRef={editorRef}
+                          allFiles={allFiles}
                         />
                       </div>
                       <div className="h-full overflow-hidden">
@@ -483,6 +489,7 @@ function ReactWorkspace() {
                         onSaveFile={saveFile}
                         fontSize={fontSize}
                         editorRef={editorRef}
+                        allFiles={allFiles}
                       />
                     </div>
                   )}
@@ -555,6 +562,7 @@ function ReactWorkspace() {
                     onSaveFile={saveFile}
                     fontSize={fontSize}
                     editorRef={editorRef}
+                    allFiles={allFiles}
                   />
                 </div>
 

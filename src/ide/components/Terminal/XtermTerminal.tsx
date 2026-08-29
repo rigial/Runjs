@@ -13,6 +13,52 @@ import {
   Sparkles,
 } from 'lucide-react';
 
+const DARK_TERMINAL_THEME = {
+  background: '#0e1117',
+  foreground: '#f0f6fc',
+  cursor: '#38bdf8',
+  selectionBackground: '#1e3a8a',
+  black: '#161b22',
+  red: '#f85149',
+  green: '#3fb950',
+  yellow: '#d29922',
+  blue: '#58a6ff',
+  magenta: '#bc8cff',
+  cyan: '#39c5cf',
+  white: '#b1bac4',
+  brightBlack: '#6e7681',
+  brightRed: '#ff7b72',
+  brightGreen: '#56d364',
+  brightYellow: '#e3b341',
+  brightBlue: '#79c0ff',
+  brightMagenta: '#d2a8ff',
+  brightCyan: '#56d4dd',
+  brightWhite: '#f0f6fc',
+};
+
+const LIGHT_TERMINAL_THEME = {
+  background: '#ffffff',
+  foreground: '#0f172a',
+  cursor: '#0284c7',
+  selectionBackground: '#bae6fd',
+  black: '#24292f',
+  red: '#cf222e',
+  green: '#1a7f37',
+  yellow: '#9a6700',
+  blue: '#0969da',
+  magenta: '#8250df',
+  cyan: '#1b7c83',
+  white: '#6e7781',
+  brightBlack: '#57606a',
+  brightRed: '#a40e26',
+  brightGreen: '#116329',
+  brightYellow: '#4d2d00',
+  brightBlue: '#0550ae',
+  brightMagenta: '#5a32a3',
+  brightCyan: '#116329',
+  brightWhite: '#24292f',
+};
+
 interface XtermTerminalProps {
   vfs: FileSystem;
   onDevServerRestart?: () => void;
@@ -32,20 +78,31 @@ export function XtermTerminal({
   const shellRef = useRef<Shell | null>(null);
   const { resolvedTheme } = useTheme();
 
+  const onDevServerRestartRef = useRef(onDevServerRestart);
+  const onOpenFileRef = useRef(onOpenFile);
+
+  useEffect(() => {
+    onDevServerRestartRef.current = onDevServerRestart;
+  }, [onDevServerRestart]);
+
+  useEffect(() => {
+    onOpenFileRef.current = onOpenFile;
+  }, [onOpenFile]);
+
   // Command line state
   const currentLineRef = useRef('');
   const cursorPositionRef = useRef(0);
   const historyRef = useRef<string[]>([]);
   const historyIndexRef = useRef(-1);
 
-  // Initialize Shell
+  // Initialize Shell only when vfs changes
   useEffect(() => {
     shellRef.current = new Shell({
       vfs,
-      onDevServerRestart,
-      onOpenFile,
+      onDevServerRestart: () => onDevServerRestartRef.current?.(),
+      onOpenFile: (p) => onOpenFileRef.current?.(p),
     });
-  }, [vfs, onDevServerRestart, onOpenFile]);
+  }, [vfs]);
 
   // Initialize xterm
   useEffect(() => {
@@ -58,51 +115,7 @@ export function XtermTerminal({
         "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, Monaco, Consolas, monospace",
       fontSize: 12,
       lineHeight: 1.35,
-      theme: isDark
-        ? {
-            background: '#0e1117',
-            foreground: '#f0f6fc',
-            cursor: '#38bdf8',
-            selectionBackground: '#1e3a8a',
-            black: '#161b22',
-            red: '#f85149',
-            green: '#3fb950',
-            yellow: '#d29922',
-            blue: '#58a6ff',
-            magenta: '#bc8cff',
-            cyan: '#39c5cf',
-            white: '#b1bac4',
-            brightBlack: '#6e7681',
-            brightRed: '#ff7b72',
-            brightGreen: '#56d364',
-            brightYellow: '#e3b341',
-            brightBlue: '#79c0ff',
-            brightMagenta: '#d2a8ff',
-            brightCyan: '#56d4dd',
-            brightWhite: '#f0f6fc',
-          }
-        : {
-            background: '#ffffff',
-            foreground: '#0f172a',
-            cursor: '#0284c7',
-            selectionBackground: '#bae6fd',
-            black: '#24292f',
-            red: '#cf222e',
-            green: '#1a7f37',
-            yellow: '#9a6700',
-            blue: '#0969da',
-            magenta: '#8250df',
-            cyan: '#1b7c83',
-            white: '#6e7781',
-            brightBlack: '#57606a',
-            brightRed: '#a40e26',
-            brightGreen: '#116329',
-            brightYellow: '#4d2d00',
-            brightBlue: '#0550ae',
-            brightMagenta: '#5a32a3',
-            brightCyan: '#125459',
-            brightWhite: '#24292f',
-          },
+      theme: isDark ? DARK_TERMINAL_THEME : LIGHT_TERMINAL_THEME,
     });
 
     const fitAddon = new FitAddon();
@@ -264,18 +277,8 @@ export function XtermTerminal({
     if (!terminalRef.current) return;
     const isDark = resolvedTheme === 'dark';
     terminalRef.current.options.theme = isDark
-      ? {
-          background: '#0e1117',
-          foreground: '#f0f6fc',
-          cursor: '#38bdf8',
-          selectionBackground: '#1e3a8a',
-        }
-      : {
-          background: '#ffffff',
-          foreground: '#0f172a',
-          cursor: '#0284c7',
-          selectionBackground: '#bae6fd',
-        };
+      ? DARK_TERMINAL_THEME
+      : LIGHT_TERMINAL_THEME;
   }, [resolvedTheme]);
 
   const handleClear = () => {

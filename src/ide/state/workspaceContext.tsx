@@ -21,6 +21,7 @@ export function WorkspaceProvider({
   );
   const [projectName, setProjectName] = useState('React App');
   const [projectTag, setProjectTag] = useState('react');
+  const [templateId, setTemplateId] = useState('vite-react');
   const [activeFile, setActiveFileState] = useState('/src/App.jsx');
   const [openFiles, setOpenFiles] = useState<string[]>([
     '/src/App.jsx',
@@ -46,9 +47,10 @@ export function WorkspaceProvider({
   );
   const fontSize = Number(currentFontSize) || 14;
 
-  const vfsRef = useRef<VirtualFileSystem>(
-    new VirtualFileSystem(VITE_REACT_TEMPLATE.files)
-  );
+  const vfsRef = useRef<VirtualFileSystem | null>(null);
+  if (!vfsRef.current) {
+    vfsRef.current = new VirtualFileSystem(VITE_REACT_TEMPLATE.files);
+  }
   const vfs = vfsRef.current;
 
   // Sync VFS to sandpackFiles for runtime bundler
@@ -79,11 +81,15 @@ export function WorkspaceProvider({
                 ]
               );
               setActiveFileState(dbCode.activeFile || '/src/App.jsx');
+              setTemplateId(
+                dbCode.files['/src/App.tsx'] ? 'vite-react-ts' : 'vite-react'
+              );
             } else if (dbCode.code) {
               // Backward compatibility for single-file code
               const template = { ...VITE_REACT_TEMPLATE.files };
               template['/src/App.jsx'] = dbCode.code;
               await vfs.fromJSON(template);
+              setTemplateId('vite-react');
             }
             await syncSandpackFiles();
             return;
@@ -97,6 +103,7 @@ export function WorkspaceProvider({
       await vfs.fromJSON(VITE_REACT_TEMPLATE.files);
       setOpenFiles(VITE_REACT_TEMPLATE.openFiles);
       setActiveFileState(VITE_REACT_TEMPLATE.activeFile);
+      setTemplateId('vite-react');
       await syncSandpackFiles();
     }
 
@@ -106,13 +113,19 @@ export function WorkspaceProvider({
   // Read current active file content whenever active file or VFS updates
   useEffect(() => {
     async function loadActiveContent() {
-      if (activeFile && (await vfs.exists(activeFile))) {
+      if (!activeFile || dirtyFiles.has(activeFile)) return;
+      if (fileContents[activeFile] !== undefined) return;
+      if (await vfs.exists(activeFile)) {
         const content = await vfs.readFile(activeFile);
-        setFileContents((prev) => ({ ...prev, [activeFile]: content }));
+        setFileContents((prev) =>
+          prev[activeFile] === content
+            ? prev
+            : { ...prev, [activeFile]: content }
+        );
       }
     }
     loadActiveContent();
-  }, [activeFile, vfs]);
+  }, [activeFile, vfs, dirtyFiles, fileContents]);
 
   // Subscribe to VFS modifications
   useEffect(() => {
@@ -141,15 +154,21 @@ export function WorkspaceProvider({
   const closeFile = useCallback(
     (path: string) => {
       const norm = normalizePath(path);
+      let nextActive: string | null = null;
+
       setOpenFiles((prev) => {
         const next = prev.filter((p) => p !== norm);
         if (activeFile === norm) {
           const idx = prev.indexOf(norm);
-          const nextActive = next[idx] || next[idx - 1] || '';
-          setActiveFileState(nextActive);
+          nextActive = next[idx] || next[idx - 1] || '';
         }
         return next;
       });
+
+      if (nextActive !== null) {
+        setActiveFileState(nextActive);
+      }
+
       setDirtyFiles((prev) => {
         const next = new Set(prev);
         next.delete(norm);
@@ -218,6 +237,8 @@ export function WorkspaceProvider({
         allFiles['/src/main.jsx'] ||
         '';
 
+      const existing = await getCode(projectId);
+
       const payload: UserCodeBase = {
         id: projectId,
         fileName: projectName,
@@ -227,17 +248,16 @@ export function WorkspaceProvider({
         htmlCode: allFiles['/index.html'] || '',
         cssCode: allFiles['/src/App.css'] || allFiles['/src/index.css'] || '',
         jsCode: mainCode,
-        createdAt: new Date(),
+        createdAt: existing?.createdAt || new Date(),
         lastModifiedAt: new Date(),
         isDelete: false,
-        star: 0,
+        star: existing?.star ?? 0,
         dbUpload: false,
         files: allFiles,
         activeFile,
         openFiles,
       };
 
-      const existing = await getCode(projectId);
       if (existing) {
         await updateCode(projectId, payload);
       } else {
@@ -260,9 +280,9 @@ export function WorkspaceProvider({
   ]);
 
   const switchTemplate = useCallback(
-    async (templateId: string) => {
+    async (newTemplateId: string) => {
       const template =
-        TEMPLATES.find((t) => t.id === templateId) || VITE_REACT_TEMPLATE;
+        TEMPLATES.find((t) => t.id === newTemplateId) || VITE_REACT_TEMPLATE;
       if (
         window.confirm(
           `Switch to template "${template.name}"? Current unsaved changes will be replaced.`
@@ -271,6 +291,7 @@ export function WorkspaceProvider({
         await vfs.fromJSON(template.files);
         setOpenFiles(template.openFiles);
         setActiveFileState(template.activeFile);
+        setTemplateId(template.id);
         setDirtyFiles(new Set());
         await syncSandpackFiles();
       }
@@ -322,6 +343,7 @@ export function WorkspaceProvider({
         projectId,
         projectName,
         projectTag,
+        templateId,
         activeFile,
         openFiles,
         dirtyFiles,

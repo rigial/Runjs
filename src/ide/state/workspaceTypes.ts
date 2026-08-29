@@ -6,6 +6,7 @@ export interface WorkspaceContextType {
   projectId: string;
   projectName: string;
   projectTag: string;
+  templateId: string;
   activeFile: string;
   openFiles: string[];
   dirtyFiles: Set<string>;

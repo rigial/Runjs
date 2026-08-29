@@ -52,6 +52,7 @@ function ReactWorkspace() {
     isTerminalOpen,
     isConsoleOpen,
     sandpackFiles,
+    templateId,
     setActiveFile,
     openFile,
     closeFile,
@@ -91,23 +92,32 @@ function ReactWorkspace() {
   // Intercept window postMessage logs from Sandpack preview iframe to Luna console
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      // Sandpack preview runs in a sandboxed iframe with a distinct/null origin or same origin
+      if (event.origin !== 'null' && event.origin !== window.location.origin) {
+        return;
+      }
       const data = event.data;
       if (data && typeof data === 'object') {
         if (data.type === 'console' && data.log) {
           const { method, data: logData } = data.log;
+          const args = Array.isArray(logData)
+            ? logData
+            : logData === undefined
+              ? []
+              : [logData];
           if (consoleRef.current) {
             switch (method) {
               case 'error':
-                consoleRef.current.error(...(logData || []));
+                consoleRef.current.error(...args);
                 break;
               case 'warn':
-                consoleRef.current.warn(...(logData || []));
+                consoleRef.current.warn(...args);
                 break;
               case 'info':
-                consoleRef.current.info(...(logData || []));
+                consoleRef.current.info(...args);
                 break;
               default:
-                consoleRef.current.log(...(logData || []));
+                consoleRef.current.log(...args);
                 break;
             }
           }
@@ -232,7 +242,7 @@ function ReactWorkspace() {
             <select
               aria-label="Project Template"
               onChange={(e) => switchTemplate(e.target.value)}
-              defaultValue="vite-react"
+              value={templateId}
               className="px-2 py-1 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface-muted)] text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] outline-none cursor-pointer"
             >
               {TEMPLATES.map((t) => (

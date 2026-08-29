@@ -49,6 +49,16 @@ export function MultiTabEditor({
   const { resolvedTheme } = useTheme();
   const internalEditorRef = useRef<any>(null);
   const monacoInstanceRef = useRef<Monaco | null>(null);
+  const activeFileRef = useRef(activeFile);
+  const onSaveFileRef = useRef(onSaveFile);
+
+  useEffect(() => {
+    activeFileRef.current = activeFile;
+  }, [activeFile]);
+
+  useEffect(() => {
+    onSaveFileRef.current = onSaveFile;
+  }, [onSaveFile]);
 
   const [tabContextMenu, setTabContextMenu] = useState<{
     x: number;
@@ -138,32 +148,28 @@ export function MultiTabEditor({
 
               {/* Close or Dirty Dot */}
               <div className="flex items-center justify-center w-4 h-4 ml-0.5">
-                {isDirty ? (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onCloseTab(path);
-                    }}
-                    title="Close"
-                    className="w-full h-full flex items-center justify-center rounded hover:bg-[var(--bg-surface-hover)]"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:hidden" />
-                    <X className="w-3 h-3 hidden group-hover:block text-[var(--text-muted)] hover:text-[var(--text-primary)]" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onCloseTab(path);
-                    }}
-                    title="Close"
-                    className="w-full h-full flex items-center justify-center rounded hover:bg-[var(--bg-surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                  >
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onCloseTab(path);
+                  }}
+                  title="Close"
+                  className={`w-full h-full flex items-center justify-center rounded hover:bg-[var(--bg-surface-hover)] ${
+                    isDirty
+                      ? ''
+                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  {isDirty ? (
+                    <>
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:hidden" />
+                      <X className="w-3 h-3 hidden group-hover:block text-[var(--text-muted)] hover:text-[var(--text-primary)]" />
+                    </>
+                  ) : (
                     <X className="w-3 h-3" />
-                  </button>
-                )}
+                  )}
+                </button>
               </div>
             </div>
           );
@@ -242,7 +248,9 @@ export function MultiTabEditor({
               editor.addCommand(
                 monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
                 () => {
-                  onSaveFile(activeFile);
+                  if (activeFileRef.current) {
+                    onSaveFileRef.current(activeFileRef.current);
+                  }
                 }
               );
             }}

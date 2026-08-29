@@ -61,17 +61,7 @@ export const IdeConsole = forwardRef<IdeConsoleRef, IdeConsoleProps>(
       }
     }, [resolvedTheme]);
 
-    // Filter sync
-    useEffect(() => {
-      if (lunaConsoleRef.current) {
-        lunaConsoleRef.current.setOption(
-          'filter',
-          filterLevel === 'all' ? undefined : filterLevel
-        );
-      }
-    }, [filterLevel]);
-
-    // Search filter sync
+    // Filter & search sync
     useEffect(() => {
       if (lunaConsoleRef.current) {
         lunaConsoleRef.current.setOption(
@@ -79,7 +69,7 @@ export const IdeConsole = forwardRef<IdeConsoleRef, IdeConsoleProps>(
           searchTerm || (filterLevel === 'all' ? undefined : filterLevel)
         );
       }
-    }, [searchTerm]);
+    }, [filterLevel, searchTerm]);
 
     useImperativeHandle(ref, () => ({
       log: (...args: unknown[]) => {

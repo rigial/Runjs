@@ -146,7 +146,7 @@ export class Shell {
       case 'code':
       case 'open': {
         if (!cmdArgs[0]) return '\x1b[31musage: code <file>\x1b[0m';
-        const targetPath = joinPaths(this.cwd, cmdArgs[0]);
+        const targetPath = this.resolvePath(cmdArgs[0]);
         this.onOpenFile?.(targetPath);
         return `\x1b[32mOpened ${cmdArgs[0]} in editor\x1b[0m`;
       }
@@ -229,32 +229,44 @@ export class Shell {
     ].join('\r\n');
   }
 
+  /**
+   * Resolves a target path consistently relative to virtual root or current working directory.
+   */
+  private resolvePath(target?: string): string {
+    if (!target || target === '.' || target === '') {
+      return this.cwd;
+    }
+    if (
+      target === '~' ||
+      target === '/' ||
+      target === '~/project' ||
+      target === '/project'
+    ) {
+      return '/';
+    }
+    if (target.startsWith('~/project/')) {
+      return normalizePath(target.slice('~/project'.length));
+    }
+    if (target.startsWith('/project/')) {
+      return normalizePath(target.slice('/project'.length));
+    }
+    if (target.startsWith('~/')) {
+      return normalizePath(target.slice(1));
+    }
+    if (target.startsWith('/')) {
+      return normalizePath(target);
+    }
+    return normalizePath(joinPaths(this.cwd, target));
+  }
+
   private async cmdCd(args: string[]): Promise<string> {
     const target = args[0];
-
-    // cd with no args, ~ or / returns to root
-    if (!target || target === '~' || target === '/' || target === '~/project') {
-      this.cwd = '/';
-      return '';
-    }
-
-    if (target === '.') {
-      return '';
-    }
-
-    let targetPath: string;
-    if (target.startsWith('/')) {
-      targetPath = normalizePath(target);
-    } else if (target.startsWith('~/project')) {
-      targetPath = normalizePath(target.replace(/^~\/project/, ''));
-    } else {
-      targetPath = normalizePath(joinPaths(this.cwd, target));
-    }
+    const targetPath = this.resolvePath(target);
 
     try {
       const exists = await this.vfs.exists(targetPath);
       if (!exists) {
-        return `\x1b[31mcd: no such file or directory: ${target}\x1b[0m`;
+        return `\x1b[31mcd: no such file or directory: ${target || ''}\x1b[0m`;
       }
       const stat = await this.vfs.stat(targetPath);
       if (!stat.isDirectory) {
@@ -263,7 +275,7 @@ export class Shell {
       this.cwd = targetPath;
       return '';
     } catch {
-      return `\x1b[31mcd: no such file or directory: ${target}\x1b[0m`;
+      return `\x1b[31mcd: no such file or directory: ${target || ''}\x1b[0m`;
     }
   }
 
@@ -275,7 +287,7 @@ export class Shell {
   }
 
   private async cmdLs(args: string[]): Promise<string> {
-    const targetDir = args[0] ? joinPaths(this.cwd, args[0]) : this.cwd;
+    const targetDir = this.resolvePath(args[0]);
 
     try {
       const items = await this.vfs.readdir(targetDir);
@@ -293,13 +305,13 @@ export class Shell {
       }
       return formatted.join('  ');
     } catch {
-      return `\x1b[31mls: ${targetDir}: No such directory\x1b[0m`;
+      return `\x1b[31mls: ${args[0] || targetDir}: No such directory\x1b[0m`;
     }
   }
 
   private async cmdCat(args: string[]): Promise<string> {
     if (!args[0]) return '\x1b[31musage: cat <file>\x1b[0m';
-    const targetPath = joinPaths(this.cwd, args[0]);
+    const targetPath = this.resolvePath(args[0]);
 
     try {
       const content = await this.vfs.readFile(targetPath);
@@ -311,7 +323,7 @@ export class Shell {
 
   private async cmdTouch(args: string[]): Promise<string> {
     if (!args[0]) return '\x1b[31musage: touch <file>\x1b[0m';
-    const targetPath = joinPaths(this.cwd, args[0]);
+    const targetPath = this.resolvePath(args[0]);
 
     try {
       if (!(await this.vfs.exists(targetPath))) {
@@ -325,7 +337,7 @@ export class Shell {
 
   private async cmdMkdir(args: string[]): Promise<string> {
     if (!args[0]) return '\x1b[31musage: mkdir <dir>\x1b[0m';
-    const targetPath = joinPaths(this.cwd, args[0]);
+    const targetPath = this.resolvePath(args[0]);
 
     try {
       await this.vfs.createFolder(targetPath);
@@ -339,7 +351,7 @@ export class Shell {
     const rawPaths = args.filter((a) => !a.startsWith('-'));
     if (rawPaths.length === 0) return '\x1b[31musage: rm [-rf] <path>\x1b[0m';
 
-    const targetPath = joinPaths(this.cwd, rawPaths[0]);
+    const targetPath = this.resolvePath(rawPaths[0]);
     try {
       await this.vfs.delete(targetPath);
       return '';
@@ -350,8 +362,8 @@ export class Shell {
 
   private async cmdMv(args: string[]): Promise<string> {
     if (args.length < 2) return '\x1b[31musage: mv <src> <dest>\x1b[0m';
-    const fromPath = joinPaths(this.cwd, args[0]);
-    const toPath = joinPaths(this.cwd, args[1]);
+    const fromPath = this.resolvePath(args[0]);
+    const toPath = this.resolvePath(args[1]);
 
     try {
       await this.vfs.rename(fromPath, toPath);
@@ -363,8 +375,8 @@ export class Shell {
 
   private async cmdCp(args: string[]): Promise<string> {
     if (args.length < 2) return '\x1b[31musage: cp <src> <dest>\x1b[0m';
-    const fromPath = joinPaths(this.cwd, args[0]);
-    const toPath = joinPaths(this.cwd, args[1]);
+    const fromPath = this.resolvePath(args[0]);
+    const toPath = this.resolvePath(args[1]);
 
     try {
       const content = await this.vfs.readFile(fromPath);
@@ -446,12 +458,16 @@ export class Shell {
     }
 
     if (sub === 'uninstall' || sub === 'rm' || sub === 'remove') {
-      const pkgs = args.slice(1);
+      const pkgs = args.slice(1).filter((a) => !a.startsWith('-'));
       if (pkgs.length === 0) {
         return '\x1b[31musage: npm uninstall <package-name>\x1b[0m';
       }
 
       const res = await PackageManager.uninstall(this.vfs, pkgs);
+      if (!res.success || res.packages.length === 0) {
+        return `\x1b[31m✖ Removal failed: ${res.error || 'no matching package'}\x1b[0m`;
+      }
+
       return [
         `\x1b[32m✔ Removed ${res.packages.join(', ')} from package.json\x1b[0m`,
         `\x1b[1m${res.message}\x1b[0m`,
@@ -461,6 +477,10 @@ export class Shell {
 
     if (sub === 'run') {
       const script = args[1]?.toLowerCase();
+      if (!script) {
+        return '\x1b[31musage: npm run <script> (e.g. dev, build)\x1b[0m';
+      }
+
       if (script === 'dev' || script === 'start') {
         this.onDevServerRestart?.();
         return [

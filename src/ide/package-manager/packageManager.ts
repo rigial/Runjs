@@ -39,11 +39,12 @@ export interface PackageJsonStructure {
 export class PackageManager {
   /**
    * Fetches latest or matching version from NPM registry.
+   * Returns null if package is confirmed not found (404).
    */
   public static async resolvePackageVersion(
     name: string,
     requestedVersion?: string
-  ): Promise<string> {
+  ): Promise<string | null> {
     if (requestedVersion && requestedVersion !== 'latest') {
       return requestedVersion.startsWith('^') ||
         requestedVersion.startsWith('~')
@@ -51,11 +52,27 @@ export class PackageManager {
         : `^${requestedVersion}`;
     }
 
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let signal: AbortSignal | undefined;
+
     try {
+      if (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal) {
+        signal = AbortSignal.timeout(5000);
+      } else if (typeof AbortController !== 'undefined') {
+        const controller = new AbortController();
+        timeoutId = setTimeout(() => controller.abort(), 5000);
+        signal = controller.signal;
+      }
+
       const response = await fetch(
         `https://registry.npmjs.org/${encodeURIComponent(name)}/latest`,
-        { headers: { Accept: 'application/json' } }
+        { headers: { Accept: 'application/json' }, signal }
       );
+
+      if (response.status === 404) {
+        return null;
+      }
+
       if (response.ok) {
         const data = await response.json();
         if (data.version) {
@@ -63,7 +80,9 @@ export class PackageManager {
         }
       }
     } catch {
-      // Offline or CORS fallback
+      // Offline, network error, or timeout: fallback to 'latest'
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId);
     }
 
     return 'latest';
@@ -75,9 +94,9 @@ export class PackageManager {
   public static async getPackageJson(
     vfs: FileSystem
   ): Promise<PackageJsonStructure> {
+    let content: string;
     try {
-      const content = await vfs.readFile('/package.json');
-      return JSON.parse(content);
+      content = await vfs.readFile('/package.json');
     } catch {
       return {
         name: 'react-app',
@@ -86,6 +105,18 @@ export class PackageManager {
         dependencies: {},
         devDependencies: {},
       };
+    }
+
+    try {
+      const parsed = JSON.parse(content);
+      if (!parsed || typeof parsed !== 'object') {
+        throw new Error('package.json root must be an object');
+      }
+      return parsed as PackageJsonStructure;
+    } catch (e) {
+      throw new Error(
+        `/package.json is not valid JSON: ${(e as Error).message}`
+      );
     }
   }
 
@@ -109,8 +140,22 @@ export class PackageManager {
     isDev = false
   ): Promise<InstallResult> {
     const startTime = performance.now();
-    const pkg = await this.getPackageJson(vfs);
+    let pkg: PackageJsonStructure;
+
+    try {
+      pkg = await this.getPackageJson(vfs);
+    } catch (e) {
+      return {
+        success: false,
+        packages: [],
+        durationMs: Math.round(performance.now() - startTime),
+        message: '',
+        error: (e as Error).message,
+      };
+    }
+
     const installed: PackageInfo[] = [];
+    const failed: string[] = [];
 
     if (!pkg.dependencies) pkg.dependencies = {};
     if (!pkg.devDependencies) pkg.devDependencies = {};
@@ -136,6 +181,11 @@ export class PackageManager {
       }
 
       const resolvedVersion = await this.resolvePackageVersion(name, version);
+      if (resolvedVersion === null) {
+        failed.push(name);
+        continue;
+      }
+
       targetSection[name] = resolvedVersion;
 
       installed.push({
@@ -143,6 +193,17 @@ export class PackageManager {
         version: resolvedVersion,
         isDev,
       });
+    }
+
+    if (failed.length > 0) {
+      const durationMs = Math.round(performance.now() - startTime);
+      return {
+        success: false,
+        packages: installed,
+        durationMs,
+        message: '',
+        error: `404 Not Found: package(s) not found: ${failed.join(', ')}`,
+      };
     }
 
     await this.savePackageJson(vfs, pkg);
@@ -166,7 +227,20 @@ export class PackageManager {
     packageNames: string[]
   ): Promise<UninstallResult> {
     const startTime = performance.now();
-    const pkg = await this.getPackageJson(vfs);
+    let pkg: PackageJsonStructure;
+
+    try {
+      pkg = await this.getPackageJson(vfs);
+    } catch (e) {
+      return {
+        success: false,
+        packages: [],
+        durationMs: Math.round(performance.now() - startTime),
+        message: '',
+        error: (e as Error).message,
+      };
+    }
+
     const removed: string[] = [];
 
     for (const name of packageNames) {
@@ -179,6 +253,16 @@ export class PackageManager {
         delete pkg.devDependencies[cleanName];
         if (!removed.includes(cleanName)) removed.push(cleanName);
       }
+    }
+
+    if (removed.length === 0 && packageNames.length > 0) {
+      return {
+        success: false,
+        packages: [],
+        durationMs: Math.round(performance.now() - startTime),
+        message: '',
+        error: `No matching packages found to uninstall: ${packageNames.join(', ')}`,
+      };
     }
 
     await this.savePackageJson(vfs, pkg);

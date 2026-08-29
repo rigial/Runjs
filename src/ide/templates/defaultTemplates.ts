@@ -443,6 +443,13 @@ export const VITE_REACT_TS_TEMPLATE: ProjectTemplate = {
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>`,
+    '/vite.config.ts': `import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+});`,
     '/src/types.ts': `export interface TodoItem {
   id: string;
   title: string;

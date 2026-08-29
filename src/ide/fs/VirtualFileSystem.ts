@@ -83,6 +83,10 @@ export class VirtualFileSystem implements FileSystem {
 
   public async writeFile(path: string, content: string): Promise<void> {
     const norm = normalizePath(path);
+    const current = this.entries.get(norm);
+    if (current?.isDirectory) {
+      throw new Error(`Path is a directory: ${norm}`);
+    }
     this.ensureParentDirectories(norm);
     const isNew = !this.entries.has(norm);
     const existing = this.entries.get(norm);
@@ -141,6 +145,11 @@ export class VirtualFileSystem implements FileSystem {
     }
     if (this.entries.has(normTo)) {
       throw new Error(`Target path already exists: ${normTo}`);
+    }
+    if (normTo === normFrom || normTo.startsWith(normFrom + '/')) {
+      throw new Error(
+        `Cannot move a directory into itself: ${normFrom} -> ${normTo}`
+      );
     }
 
     const sourceEntry = this.entries.get(normFrom)!;

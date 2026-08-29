@@ -9,6 +9,8 @@ import {
   Boxes,
   Palette,
   Image,
+  Folder,
+  FolderOpen,
 } from 'lucide-react';
 import { getBasename, getExtension } from '../../fs/pathUtils';
 
@@ -27,13 +29,9 @@ export function FileIcon({
 }: FileIconProps) {
   if (isDirectory) {
     return isOpen ? (
-      <span className={`text-amber-500 flex items-center ${className}`}>
-        📁
-      </span>
+      <FolderOpen className={`${className} text-amber-500`} />
     ) : (
-      <span className={`text-amber-500 flex items-center ${className}`}>
-        📁
-      </span>
+      <Folder className={`${className} text-amber-500`} />
     );
   }
 

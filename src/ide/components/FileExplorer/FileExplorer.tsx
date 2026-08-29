@@ -200,11 +200,19 @@ export function FileExplorer({
       }
 
       const blob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
+      link.href = url;
       link.download = 'runjs-react-project.zip';
+      link.style.display = 'none';
+      document.body.appendChild(link);
       link.click();
-      URL.revokeObjectURL(link.href);
+      setTimeout(() => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
+        URL.revokeObjectURL(url);
+      }, 100);
     } catch (e) {
       console.error('Failed to export ZIP:', e);
     }
@@ -214,15 +222,29 @@ export function FileExplorer({
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const text = await file.text();
-      const targetPath = joinPaths('/src', file.name);
-      await vfs.writeFile(targetPath, text);
-    }
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const targetPath = joinPaths('/src', file.name);
+        try {
+          const exists = await vfs.exists(targetPath);
+          if (exists) {
+            const shouldOverwrite = window.confirm(
+              `"${file.name}" already exists in /src. Overwrite it?`
+            );
+            if (!shouldOverwrite) continue;
+          }
+          const text = await file.text();
+          await vfs.writeFile(targetPath, text);
+        } catch (err) {
+          console.error(`Failed to upload ${file.name}:`, err);
+          alert(`Failed to upload "${file.name}".`);
+        }
+      }
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 

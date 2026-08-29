@@ -11,7 +11,10 @@ import { addCode, updateCode } from '../db/operations';
 import { useNavigate } from 'react-router';
 import { X, Sparkles, Tag as TagIcon, Check } from 'lucide-react';
 
-import { VITE_REACT_TEMPLATE } from '../ide/templates/defaultTemplates';
+import {
+  VITE_REACT_TEMPLATE,
+  VITE_REACT_TS_TEMPLATE,
+} from '../ide/templates/defaultTemplates';
 
 interface LanguageOption {
   id: 'js' | 'ts' | 'react';
@@ -98,6 +101,7 @@ const CreatePlayground = ({
   const [fileName, setFileName] = useState('');
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [lang, setLang] = useState<'js' | 'ts' | 'react' | 'html'>('js');
+  const [reactFlavor, setReactFlavor] = useState<'js' | 'ts'>('js');
 
   useEffect(() => {
     setTag(renameData?.tag ?? '');
@@ -142,23 +146,27 @@ const CreatePlayground = ({
     let newCode: UserCodeBase;
 
     if (lang === 'react') {
+      const selectedTemplate =
+        reactFlavor === 'ts' ? VITE_REACT_TS_TEMPLATE : VITE_REACT_TEMPLATE;
+      const mainAppFile =
+        reactFlavor === 'ts' ? '/src/App.tsx' : '/src/App.jsx';
       newCode = {
         id: id,
-        code: VITE_REACT_TEMPLATE.files['/src/App.jsx'],
-        htmlCode: VITE_REACT_TEMPLATE.files['/index.html'],
-        cssCode: VITE_REACT_TEMPLATE.files['/src/App.css'],
-        jsCode: VITE_REACT_TEMPLATE.files['/src/App.jsx'],
+        code: selectedTemplate.files[mainAppFile],
+        htmlCode: selectedTemplate.files['/index.html'],
+        cssCode: selectedTemplate.files['/src/App.css'] || '',
+        jsCode: selectedTemplate.files[mainAppFile],
         createdAt: new Date(),
         fileName: cleanFileName,
         isDelete: false,
         language: 'react',
         lastModifiedAt: new Date(),
         star: 0,
-        tag: tagName.trim() || 'react',
+        tag: tagName.trim() || (reactFlavor === 'ts' ? 'react-ts' : 'react'),
         dbUpload: false,
-        files: VITE_REACT_TEMPLATE.files,
-        activeFile: VITE_REACT_TEMPLATE.activeFile,
-        openFiles: VITE_REACT_TEMPLATE.openFiles,
+        files: selectedTemplate.files,
+        activeFile: selectedTemplate.activeFile,
+        openFiles: selectedTemplate.openFiles,
       };
     } else {
       newCode = {
@@ -321,20 +329,64 @@ const CreatePlayground = ({
 
           {/* Language Selector Cards (Only in create mode) */}
           {!edit && (
-            <div>
-              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-                Language
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {LANGUAGE_OPTIONS.map((option) => (
-                  <LanguageCard
-                    key={option.id}
-                    option={option}
-                    isSelected={lang === option.id}
-                    onSelect={(selectedLang) => setLang(selectedLang)}
-                  />
-                ))}
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                  Language
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {LANGUAGE_OPTIONS.map((option) => (
+                    <LanguageCard
+                      key={option.id}
+                      option={option}
+                      isSelected={lang === option.id}
+                      onSelect={(selectedLang) => setLang(selectedLang)}
+                    />
+                  ))}
+                </div>
               </div>
+
+              {lang === 'react' && (
+                <div>
+                  <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                    Template Variant
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setReactFlavor('js')}
+                      className={`px-3 py-2 text-xs rounded-lg border text-left transition-all ${
+                        reactFlavor === 'js'
+                          ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400 font-semibold ring-1 ring-cyan-500'
+                          : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>JavaScript (JSX)</span>
+                        {reactFlavor === 'js' && (
+                          <Check className="w-3.5 h-3.5" />
+                        )}
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setReactFlavor('ts')}
+                      className={`px-3 py-2 text-xs rounded-lg border text-left transition-all ${
+                        reactFlavor === 'ts'
+                          ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400 font-semibold ring-1 ring-cyan-500'
+                          : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>TypeScript (TSX)</span>
+                        {reactFlavor === 'ts' && (
+                          <Check className="w-3.5 h-3.5" />
+                        )}
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

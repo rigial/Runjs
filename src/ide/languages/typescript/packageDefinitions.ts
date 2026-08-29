@@ -8,6 +8,8 @@ export const REACT_TYPES_CONTENT = `/**
  */
 
 declare namespace React {
+  export type Key = string | number | bigint;
+
   export type ReactNode =
     | ReactElement
     | string
@@ -21,8 +23,13 @@ declare namespace React {
   export type ReactElement<P = any, T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>> = {
     type: T;
     props: P;
-    key: string | null;
+    key: Key | null;
   };
+
+  export interface ReactPortal extends ReactElement {
+    key: Key | null;
+    children: ReactNode;
+  }
 
   export type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
   export type JSXElementConstructor<P> = ((props: P) => ReactElement<any, any> | null) | (new (props: P) => Component<any, any>);
@@ -339,7 +346,11 @@ export const REACT_DOM_TYPES_CONTENT = `/**
 
 declare namespace ReactDOM {
   export const version: string;
-  export function createPortal(children: any, container: Element | DocumentFragment, key?: null | string): any;
+  export function createPortal(
+    children: React.ReactNode,
+    container: Element | DocumentFragment,
+    key?: React.Key | null
+  ): React.ReactPortal;
   export function flushSync<R>(fn: () => R): R;
 }
 
@@ -355,11 +366,14 @@ export const REACT_DOM_CLIENT_TYPES_CONTENT = `/**
 
 declare module 'react-dom/client' {
   export interface Root {
-    render(children: any): void;
+    render(children: React.ReactNode): void;
     unmount(): void;
   }
   export function createRoot(container: Element | DocumentFragment): Root;
-  export function hydrateRoot(container: Element | DocumentFragment, initialChildren: any): Root;
+  export function hydrateRoot(
+    container: Element | DocumentFragment,
+    initialChildren: React.ReactNode
+  ): Root;
 }
 `;
 

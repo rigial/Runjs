@@ -32,6 +32,9 @@ import {
   Tag as TagIcon,
 } from 'lucide-react';
 
+/**
+ * Saved TypeScript snippet viewer and editor page component.
+ */
 function TSsaved() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -53,7 +56,7 @@ function TSsaved() {
 
   const handleValidate = useCallback((markers: any[]) => {
     const formatted: ITypeScriptError[] = markers
-      .filter((m) => m.severity === 8 || m.severity === 4)
+      .filter((m) => m.severity === 8)
       .map((m) => ({
         message: m.message,
         code: typeof m.code === 'object' ? m.code?.value : m.code,
@@ -61,12 +64,13 @@ function TSsaved() {
         startColumn: m.startColumn,
         endLineNumber: m.endLineNumber,
         endColumn: m.endColumn,
-        severity: m.severity === 8 ? 'error' : 'warning',
+        severity: 'error' as const,
       }));
     setTsErrors(formatted);
   }, []);
 
   const handleErrorClick = useCallback((error: ITypeScriptError) => {
+    setActiveMobileTab('editor');
     if (editorRef.current) {
       editorRef.current.revealPositionInCenter({
         lineNumber: error.startLineNumber,

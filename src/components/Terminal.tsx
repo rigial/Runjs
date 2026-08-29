@@ -8,6 +8,9 @@ import {
   ArrowUpRight,
 } from 'lucide-react';
 
+/**
+ * Terminal component displaying console logs and TypeScript compilation/type diagnostics.
+ */
 function Terminal({
   consoleRef,
   clearTerminal,
@@ -21,11 +24,10 @@ function Terminal({
   const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : internalTab;
 
   const handleTabChange = (tab: 'console' | 'tsErrors') => {
-    if (onTabChange) {
-      onTabChange(tab);
-    } else {
+    if (controlledActiveTab === undefined) {
       setInternalTab(tab);
     }
+    onTabChange?.(tab);
   };
 
   const isTypeScript = language === 'typescript';

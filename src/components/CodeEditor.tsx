@@ -9,6 +9,9 @@ import {
   registerMonacoThemes,
 } from '../utils/monacoThemes';
 
+/**
+ * Monaco code editor component with syntax highlighting, emmet expansion, and TypeScript diagnostics support.
+ */
 function CodeEditor({
   code,
   language,

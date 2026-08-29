@@ -1,5 +1,12 @@
 import { initialize, version } from 'esbuild-wasm';
 
+/**
+ * Triggers a browser download for JavaScript or TypeScript source code.
+ *
+ * @param javascriptCode The source code content to download.
+ * @param fileName The output filename (without extension).
+ * @param lang File extension/language type ('js' or 'ts').
+ */
 export function saveJSTSFile(
   javascriptCode: string,
   fileName: string,
@@ -17,6 +24,12 @@ export function saveJSTSFile(
 
 let initPromise: Promise<void> | null = null;
 
+/**
+ * Initializes the esbuild WebAssembly service using the matching package version from unpkg.
+ * Subsequent calls reuse the existing initialization promise.
+ *
+ * @returns Promise that resolves once esbuild-wasm is ready for compilation.
+ */
 export async function loadTypscript(): Promise<void> {
   if (!initPromise) {
     initPromise = (async () => {

@@ -30,6 +30,9 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 
+/**
+ * TypeScript Playground page component providing live code editing, diagnostics, and in-browser execution.
+ */
 function TSPlayground() {
   const [code, setCode] = useDebounceLocalStorageState(
     'tscode',
@@ -52,7 +55,7 @@ function TSPlayground() {
 
   const handleValidate = useCallback((markers: any[]) => {
     const formatted: ITypeScriptError[] = markers
-      .filter((m) => m.severity === 8 || m.severity === 4)
+      .filter((m) => m.severity === 8)
       .map((m) => ({
         message: m.message,
         code: typeof m.code === 'object' ? m.code?.value : m.code,
@@ -60,12 +63,13 @@ function TSPlayground() {
         startColumn: m.startColumn,
         endLineNumber: m.endLineNumber,
         endColumn: m.endColumn,
-        severity: m.severity === 8 ? 'error' : 'warning',
+        severity: 'error' as const,
       }));
     setTsErrors(formatted);
   }, []);
 
   const handleErrorClick = useCallback((error: ITypeScriptError) => {
+    setActiveMobileTab('editor');
     if (editorRef.current) {
       editorRef.current.revealPositionInCenter({
         lineNumber: error.startLineNumber,

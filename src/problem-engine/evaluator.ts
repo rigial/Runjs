@@ -118,6 +118,13 @@ export function formatValueForDisplay(val: any): string {
   }
 }
 
+/**
+ * Transpiles TypeScript source code to executable JavaScript via esbuild-wasm if needed.
+ *
+ * @param code The input source code.
+ * @param language The language of the problem submission ('javascript' | 'typescript').
+ * @returns Promise resolving to transpiled JavaScript code.
+ */
 async function compileIfTypeScript(
   code: string,
   language: 'javascript' | 'typescript'

@@ -333,13 +333,14 @@ export const Loader2: LucideIcon;
 `;
 
 export const REACT_DOM_TYPES_CONTENT = `/**
- * Type definitions for react-dom
+ * Type definitions for react-dom 19
+ * Project: https://react.dev/
  */
 
 declare namespace ReactDOM {
-  export function render(element: any, container: Element | null, callback?: () => void): any;
-  export function unmountComponentAtNode(container: Element): boolean;
-  export function createPortal(children: any, container: Element, key?: null | string): any;
+  export const version: string;
+  export function createPortal(children: any, container: Element | DocumentFragment, key?: null | string): any;
+  export function flushSync<R>(fn: () => R): R;
 }
 
 declare module 'react-dom' {

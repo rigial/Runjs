@@ -19,8 +19,6 @@ import Terminal from '../components/Terminal';
 import ThemeSelector from '../components/ThemeSelector';
 import useTheme from '../hook/useTheme';
 import { loadTypscript, saveJSTSFile } from '../utils/commonFunction';
-import SEO from '../seo/SEO';
-import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
 import {
   Play,
   HelpCircle,
@@ -161,25 +159,6 @@ function TSPlayground() {
 
   return (
     <Fragment>
-      <SEO
-        title="Online TypeScript Playground with esbuild Wasm"
-        description="Fast, client-side TypeScript compiler powered by esbuild WebAssembly. Type check, compile, and execute TypeScript directly in your browser."
-        canonical="/ts"
-        keywords={[
-          'TypeScript playground',
-          'online TypeScript compiler',
-          'esbuild wasm TypeScript',
-          'run TypeScript in browser',
-          'Monaco TypeScript IDE',
-        ]}
-        structuredData={[
-          getBreadcrumbSchema([
-            { name: 'Home', item: '/' },
-            { name: 'TypeScript Playground', item: '/ts' },
-          ]),
-          getWebApplicationSchema(),
-        ]}
-      />
       <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
         {/* Top IDE Navigation */}
         <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">

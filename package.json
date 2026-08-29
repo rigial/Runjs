@@ -9,9 +9,7 @@
   "packageManager": "pnpm@11.21.0",
   "scripts": {
     "dev": "vite --host",
-    "generate:sitemap": "node scripts/generate-sitemap.js",
-    "verify:seo": "node scripts/verify-seo.js",
-    "build": "node scripts/generate-sitemap.js && tsc -b && vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint ./src",
     "pretty": "prettier --write ./src",
     "preview": "vite preview",

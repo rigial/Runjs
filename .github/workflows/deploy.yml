@@ -31,10 +31,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint and SEO verification
-        run: |
-          pnpm run lint
-          pnpm run verify:seo
+      - name: Run linter
+        run: pnpm run lint
 
       - name: Build production bundle
         run: pnpm run build

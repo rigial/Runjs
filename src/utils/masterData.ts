@@ -117,11 +117,16 @@ const packageList = [
       'Emmet expansion and abbreviations engine integrated with Monaco editor.',
   },
   {
-    packageLink:
-      'https://www.npmjs.com/package/@rainetian/sandpack-file-explorer',
-    packageName: '@rainetian/sandpack-file-explorer',
+    packageLink: 'https://www.npmjs.com/package/@xterm/xterm',
+    packageName: '@xterm/xterm',
     packageDescription:
-      'Multi-file directory tree explorer for custom React Sandpack projects.',
+      'Full-featured in-browser terminal emulator with interactive shell and npm support.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/jszip',
+    packageName: 'jszip',
+    packageDescription:
+      'In-browser ZIP archive generation for multi-file project export.',
   },
 ];
 

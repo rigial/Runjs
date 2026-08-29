@@ -1,2 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Disallow: /bin
+Disallow: /404
+
+# Host
+Host: https://runjs.rigial.com
+
+# Sitemaps
+Sitemap: https://runjs.rigial.com/sitemap.xml

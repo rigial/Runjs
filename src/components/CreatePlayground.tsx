@@ -11,8 +11,10 @@ import { addCode, updateCode } from '../db/operations';
 import { useNavigate } from 'react-router';
 import { X, Sparkles, Tag as TagIcon, Check } from 'lucide-react';
 
+import { VITE_REACT_TEMPLATE } from '../ide/templates/defaultTemplates';
+
 interface LanguageOption {
-  id: 'js' | 'ts';
+  id: 'js' | 'ts' | 'react';
   label: string;
   description: string;
   textColorClass: string;
@@ -40,12 +42,21 @@ const LANGUAGE_OPTIONS: LanguageOption[] = [
     activeBgClass: 'bg-blue-500/10',
     activeRingClass: 'ring-blue-500',
   },
+  {
+    id: 'react',
+    label: 'React + Vite',
+    description: 'Live HMR, Multi-file, NPM terminal',
+    textColorClass: 'text-cyan-500',
+    activeBorderClass: 'border-cyan-500',
+    activeBgClass: 'bg-cyan-500/10',
+    activeRingClass: 'ring-cyan-500',
+  },
 ];
 
 interface LanguageCardProps {
   option: LanguageOption;
   isSelected: boolean;
-  onSelect: (id: 'js' | 'ts') => void;
+  onSelect: (id: 'js' | 'ts' | 'react') => void;
 }
 
 function LanguageCard({ option, isSelected, onSelect }: LanguageCardProps) {
@@ -86,7 +97,7 @@ const CreatePlayground = ({
   const [tagName, setTag] = useState('');
   const [fileName, setFileName] = useState('');
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
-  const [lang, setLang] = useState<'js' | 'ts' | 'html'>('js');
+  const [lang, setLang] = useState<'js' | 'ts' | 'react' | 'html'>('js');
 
   useEffect(() => {
     setTag(renameData?.tag ?? '');
@@ -125,25 +136,51 @@ const CreatePlayground = ({
     }
     const id = uuidv4();
     const cleanFileName =
-      fileName.trim() || (lang === 'ts' ? 'main' : 'script');
-    const newCode: UserCodeBase = {
-      id: id,
-      code:
-        lang === 'ts'
-          ? `// RunJS TypeScript Playground\ninterface Greeting {\n  message: string;\n  date: Date;\n}\n\nconst greet: Greeting = {\n  message: "Hello from RunJS TypeScript!",\n  date: new Date()\n};\n\nconsole.log(greet.message);\nconsole.log("Current time:", greet.date.toLocaleTimeString());\n`
-          : `// RunJS JavaScript Playground\nconsole.log("Hello from RunJS!");\n\nconst numbers = [1, 2, 3, 4, 5];\nconst squared = numbers.map(n => n ** 2);\nconsole.log("Squared numbers:", squared);\n`,
-      htmlCode: '',
-      cssCode: '',
-      jsCode: '',
-      createdAt: new Date(),
-      fileName: cleanFileName,
-      isDelete: false,
-      language: lang,
-      lastModifiedAt: new Date(),
-      star: 0,
-      tag: tagName.trim(),
-      dbUpload: false,
-    };
+      fileName.trim() ||
+      (lang === 'ts' ? 'main' : lang === 'react' ? 'react-app' : 'script');
+
+    let newCode: UserCodeBase;
+
+    if (lang === 'react') {
+      newCode = {
+        id: id,
+        code: VITE_REACT_TEMPLATE.files['/src/App.jsx'],
+        htmlCode: VITE_REACT_TEMPLATE.files['/index.html'],
+        cssCode: VITE_REACT_TEMPLATE.files['/src/App.css'],
+        jsCode: VITE_REACT_TEMPLATE.files['/src/App.jsx'],
+        createdAt: new Date(),
+        fileName: cleanFileName,
+        isDelete: false,
+        language: 'react',
+        lastModifiedAt: new Date(),
+        star: 0,
+        tag: tagName.trim() || 'react',
+        dbUpload: false,
+        files: VITE_REACT_TEMPLATE.files,
+        activeFile: VITE_REACT_TEMPLATE.activeFile,
+        openFiles: VITE_REACT_TEMPLATE.openFiles,
+      };
+    } else {
+      newCode = {
+        id: id,
+        code:
+          lang === 'ts'
+            ? `// RunJS TypeScript Playground\ninterface Greeting {\n  message: string;\n  date: Date;\n}\n\nconst greet: Greeting = {\n  message: "Hello from RunJS TypeScript!",\n  date: new Date()\n};\n\nconsole.log(greet.message);\nconsole.log("Current time:", greet.date.toLocaleTimeString());\n`
+            : `// RunJS JavaScript Playground\nconsole.log("Hello from RunJS!");\n\nconst numbers = [1, 2, 3, 4, 5];\nconst squared = numbers.map(n => n ** 2);\nconsole.log("Squared numbers:", squared);\n`,
+        htmlCode: '',
+        cssCode: '',
+        jsCode: '',
+        createdAt: new Date(),
+        fileName: cleanFileName,
+        isDelete: false,
+        language: lang,
+        lastModifiedAt: new Date(),
+        star: 0,
+        tag: tagName.trim(),
+        dbUpload: false,
+      };
+    }
+
     try {
       await addCode(newCode);
       dialogRef.current?.close();
@@ -288,7 +325,7 @@ const CreatePlayground = ({
               <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                 Language
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 {LANGUAGE_OPTIONS.map((option) => (
                   <LanguageCard
                     key={option.id}

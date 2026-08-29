@@ -24,9 +24,12 @@ function Dashboard() {
         (val) => val.isDelete === false
       );
       const tagHashMap: Tag = {};
-      filterIsnotDeleted.forEach(
-        (val) => (tagHashMap[val.tag] = (tagHashMap[val.tag] ?? 0) + 1)
-      );
+      filterIsnotDeleted.forEach((val) => {
+        const cleanTag = val.tag?.trim();
+        if (cleanTag) {
+          tagHashMap[cleanTag] = (tagHashMap[cleanTag] ?? 0) + 1;
+        }
+      });
       setUserSavedCode(filterIsnotDeleted);
       setFilterData(filterIsnotDeleted);
       setTags(tagHashMap);
@@ -56,10 +59,11 @@ function Dashboard() {
     if (searchTerm === '') {
       return setFilterData(userSavedCode);
     }
+    const lowerSearch = searchTerm.toLowerCase();
     const filter = userSavedCode.filter(
       (val) =>
-        val.fileName.toLowerCase().includes(searchTerm) ||
-        val.tag.toLowerCase().includes(searchTerm)
+        val.fileName.toLowerCase().includes(lowerSearch) ||
+        (val.tag && val.tag.toLowerCase().includes(lowerSearch))
     );
     return setFilterData(filter);
   }
@@ -80,6 +84,7 @@ function Dashboard() {
   const starredCount = userSavedCode.filter((c) => c.star === 1).length;
   const jsCount = userSavedCode.filter((c) => c.language === 'js').length;
   const tsCount = userSavedCode.filter((c) => c.language === 'ts').length;
+  const reactCount = userSavedCode.filter((c) => c.language === 'react').length;
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
@@ -117,6 +122,12 @@ function Dashboard() {
             </div>
 
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-xs">
+              <span className="w-2 h-2 rounded-full bg-cyan-500" />
+              <span className="text-[var(--text-secondary)]">React:</span>
+              <span className="font-semibold text-[var(--text-primary)]">
+                {reactCount}
+              </span>
+              <span className="text-[var(--text-muted)] mx-0.5">/</span>
               <span className="w-2 h-2 rounded-full bg-amber-500" />
               <span className="text-[var(--text-secondary)]">JS:</span>
               <span className="font-semibold text-[var(--text-primary)]">

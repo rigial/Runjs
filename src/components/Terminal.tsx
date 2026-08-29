@@ -20,8 +20,11 @@ function Terminal({
   activeTab: controlledActiveTab,
   onTabChange,
 }: ITerminal) {
-  const [internalTab, setInternalTab] = useState<'console' | 'tsErrors'>('console');
-  const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : internalTab;
+  const [internalTab, setInternalTab] = useState<'console' | 'tsErrors'>(
+    'console'
+  );
+  const activeTab =
+    controlledActiveTab !== undefined ? controlledActiveTab : internalTab;
 
   const handleTabChange = (tab: 'console' | 'tsErrors') => {
     if (controlledActiveTab === undefined) {
@@ -181,7 +184,8 @@ function Terminal({
                   No TypeScript Errors
                 </h4>
                 <p className="text-xs text-[var(--text-muted)] mt-1 max-w-sm">
-                  TypeScript type-checking passed cleanly. No syntax or semantic diagnostics found.
+                  TypeScript type-checking passed cleanly. No syntax or semantic
+                  diagnostics found.
                 </p>
               </div>
             )}
@@ -193,4 +197,3 @@ function Terminal({
 }
 
 export default memo(Terminal);
-

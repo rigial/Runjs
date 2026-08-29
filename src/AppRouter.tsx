@@ -36,6 +36,7 @@ function AppRouter() {
           <Route path="/problems/:slug" element={<ProblemSolving />} />
           <Route path="/js" element={<JSPlayground />} />
           <Route path="/react" element={<ReactPlayground />} />
+          <Route path="/react/:id" element={<ReactPlayground />} />
           <Route path="/js/:id" element={<JSsaved />} />
           <Route path="/ts" element={<TSPlayground />} />
           <Route path="/ts/:id" element={<TSsaved />} />

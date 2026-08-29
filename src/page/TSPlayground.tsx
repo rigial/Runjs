@@ -45,7 +45,9 @@ function TSPlayground() {
   );
   const [isRunning, setIsRunning] = useState(false);
   const [tsErrors, setTsErrors] = useState<ITypeScriptError[]>([]);
-  const [terminalTab, setTerminalTab] = useState<'console' | 'tsErrors'>('console');
+  const [terminalTab, setTerminalTab] = useState<'console' | 'tsErrors'>(
+    'console'
+  );
   const consoleRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<ModalRef>(null);
   /* eslint-disable  @typescript-eslint/no-explicit-any */

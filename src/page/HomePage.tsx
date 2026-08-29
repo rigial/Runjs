@@ -2,8 +2,6 @@ import { Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import HomeIdeDemo from '../components/HomeIdeDemo';
-import SEO from '../seo/SEO';
-import { getWebApplicationSchema, getWebSiteSchema } from '../seo/seoConfig';
 import {
   Play,
   Zap,
@@ -18,21 +16,6 @@ import {
 function HomePage() {
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
-      <SEO
-        title="RunJS - In-Browser JavaScript, TypeScript & React Playground"
-        description="Run, practice, and master JavaScript, TypeScript, and React directly in your browser. Zero setup, Monaco editor, esbuild WebAssembly compilation, and interactive coding challenges."
-        canonical="/"
-        keywords={[
-          'JavaScript playground',
-          'online JS compiler',
-          'TypeScript online',
-          'React playground',
-          'coding challenges',
-          'esbuild wasm',
-          'web IDE',
-        ]}
-        structuredData={[getWebApplicationSchema(), getWebSiteSchema()]}
-      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">

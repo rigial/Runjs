@@ -27,7 +27,6 @@ import Terminal from '../components/Terminal';
 import ThemeSelector from '../components/ThemeSelector';
 import useTheme from '../hook/useTheme';
 import { loadTypscript, saveJSTSFile } from '../utils/commonFunction';
-import SEO from '../seo/SEO';
 import {
   Play,
   HelpCircle,
@@ -205,12 +204,6 @@ function TSsaved() {
 
   return (
     <Fragment>
-      <SEO
-        title={`${fileName}.ts - Saved TypeScript`}
-        description="Saved TypeScript workspace in RunJS"
-        noIndex={true}
-        noFollow={true}
-      />
       <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
         {/* Top IDE Navigation */}
         <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">

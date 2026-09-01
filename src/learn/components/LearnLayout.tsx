@@ -17,7 +17,7 @@ function LearnLayoutInner({ children, showSidebar = true }: LearnLayoutProps) {
       <Navbar />
 
       {showSidebar ? (
-        <div className="flex-1 flex w-full">
+        <div className="flex-1 flex w-full max-w-7xl mx-auto">
           {/* Sidebar */}
           <LearnSidebar
             isOpen={sidebarOpen}
@@ -27,15 +27,15 @@ function LearnLayoutInner({ children, showSidebar = true }: LearnLayoutProps) {
           {/* Main Content */}
           <div className="flex-1 min-w-0 flex flex-col">
             {/* Mobile sidebar toggle */}
-            <div className="lg:hidden px-4 py-2 border-b border-[var(--border-subtle)]">
+            <div className="lg:hidden px-4 py-2.5 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] flex items-center justify-between">
               <SidebarToggle onClick={() => setSidebarOpen(true)} />
             </div>
 
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 min-w-0">{children}</main>
           </div>
         </div>
       ) : (
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 min-w-0">{children}</main>
       )}
 
       <Footer />

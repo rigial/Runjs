@@ -99,7 +99,7 @@ function LessonContent() {
   };
 
   return (
-    <article className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <article className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 min-w-0">
       {/* Breadcrumb */}
       {location && (
         <nav className="flex items-center gap-1.5 text-[11px] text-[var(--text-muted)] mb-6 flex-wrap">
@@ -290,7 +290,7 @@ function LessonContent() {
         )}
 
         {/* Prev / Next navigation */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
           {prevSlug ? (
             <button
               type="button"

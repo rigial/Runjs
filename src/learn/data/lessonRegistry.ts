@@ -21,30 +21,19 @@ export const allLessons: Lesson[] = [
   ...part9Lessons,
 ];
 
-// O(1) hash map for fast lesson retrieval by slug
 const lessonMap = new Map<string, Lesson>();
 for (const lesson of allLessons) {
   lessonMap.set(lesson.slug, lesson);
 }
 
-/** Get a lesson by its slug */
 export function getLessonBySlug(slug: string): Lesson | undefined {
   return lessonMap.get(slug);
 }
 
-/** Get total exercise count across all lessons */
-export function getTotalExerciseCount(): number {
-  return allLessons.reduce((sum, lesson) => sum + lesson.exercises.length, 0);
+export function getAllLessons(): Lesson[] {
+  return allLessons;
 }
 
-/** Search lessons by query string */
-export function searchLessons(query: string): Lesson[] {
-  const q = query.toLowerCase().trim();
-  if (!q) return [];
-  return allLessons.filter(
-    (l) =>
-      l.title.toLowerCase().includes(q) ||
-      l.description.toLowerCase().includes(q) ||
-      l.tags.some((t) => t.toLowerCase().includes(q))
-  );
+export function getTotalExerciseCount(): number {
+  return allLessons.reduce((acc, lesson) => acc + (lesson.exercises?.length || 0), 0);
 }

@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 import type { Exercise } from '../types';
 import { Eye, EyeOff, Lightbulb, Play, RotateCcw } from 'lucide-react';
 
@@ -18,6 +18,15 @@ function ExerciseComponent({
   const [showSolution, setShowSolution] = useState(false);
   const [hintsRevealed, setHintsRevealed] = useState(0);
   const [completed, setCompleted] = useState(false);
+
+  // Reset state when exercise changes
+  useEffect(() => {
+    setCode(exercise.starterCode);
+    setOutput(null);
+    setShowSolution(false);
+    setHintsRevealed(0);
+    setCompleted(false);
+  }, [exercise]);
 
   const handleRun = useCallback(() => {
     const logs: string[] = [];

@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 import type { QuizQuestion } from '../types';
 import { CheckCircle2, XCircle, RotateCcw, Trophy } from 'lucide-react';
 
@@ -13,6 +13,15 @@ function QuizComponent({ questions, onComplete }: QuizComponentProps) {
   const [isAnswered, setIsAnswered] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+
+  // Reset quiz state whenever questions change
+  useEffect(() => {
+    setCurrentIndex(0);
+    setSelectedAnswer(null);
+    setIsAnswered(false);
+    setCorrectCount(0);
+    setIsComplete(false);
+  }, [questions]);
 
   const currentQuestion = questions[currentIndex];
 

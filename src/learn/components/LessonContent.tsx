@@ -183,14 +183,14 @@ function LessonContent() {
 
           {/* Bullet Points */}
           {section.bulletPoints && section.bulletPoints.length > 0 && (
-            <ul className="space-y-1.5 my-3 ml-4">
+            <ul className="space-y-2 my-3 ml-2">
               {section.bulletPoints.map((point, bIdx) => (
                 <li
                   key={bIdx}
-                  className="text-sm text-[var(--text-secondary)] leading-relaxed flex items-start gap-2"
+                  className="text-sm text-[var(--text-secondary)] leading-relaxed flex items-start gap-2.5"
                 >
-                  <span className="text-amber-500 mt-1.5 shrink-0">•</span>
-                  <span>{point}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-2" />
+                  <span className="flex-1">{point}</span>
                 </li>
               ))}
             </ul>
@@ -228,7 +228,7 @@ function LessonContent() {
           </h2>
           {lesson.exercises.map((exercise, eIdx) => (
             <ExerciseComponent
-              key={eIdx}
+              key={`${slug}-exercise-${eIdx}`}
               exercise={exercise}
               exerciseNumber={eIdx + 1}
               onComplete={() =>
@@ -246,6 +246,7 @@ function LessonContent() {
             Test Your Understanding
           </h2>
           <QuizComponent
+            key={`${slug}-quiz`}
             questions={lesson.quiz}
             onComplete={(score) => saveQuizScore(slug, score)}
           />

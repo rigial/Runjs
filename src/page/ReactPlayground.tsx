@@ -18,6 +18,7 @@ import { ModalRef } from '../utils/interface';
 import useTheme from '../hook/useTheme';
 import useMediaQuery from '../hook/useMediaQuery';
 import useWarnOnClose from '../hook/useWarnOnClose ';
+import SEO from '../components/SEO';
 import { TEMPLATES } from '../ide/templates/defaultTemplates';
 import {
   ChevronLeft,
@@ -612,6 +613,18 @@ function ReactPlayground() {
 
   return (
     <WorkspaceProvider initialProjectId={id}>
+      <SEO
+        title="Online React Playground & In-Browser IDE"
+        description="Build and preview React applications in real time with multi-tab editor, terminal, file explorer, package manager, and live iframe preview."
+        keywords={[
+          'react playground',
+          'online react editor',
+          'react sandbox',
+          'sandpack react',
+          'runjs react',
+        ]}
+        canonical={id ? `/react/${id}` : '/react'}
+      />
       <ReactWorkspace />
     </WorkspaceProvider>
   );

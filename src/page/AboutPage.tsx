@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { packageList } from '../utils/masterData';
 import { ExternalLink, Sparkles, Package, Calendar } from 'lucide-react';
+import SEO from '../components/SEO';
 
 function GithubIcon({ className = 'w-3.5 h-3.5' }: { className?: string }) {
   return (
@@ -59,6 +60,11 @@ function YoutubeIcon({ className = 'w-3.5 h-3.5' }: { className?: string }) {
 function AboutPage() {
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <SEO
+        title="About RunJS — Open Source Web Developer Playground"
+        description="Learn about RunJS, its mission, creator M R Kishore Kumar, and the open-source libraries that power the in-browser JavaScript learning platform."
+        canonical="/about"
+      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

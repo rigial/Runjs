@@ -52,6 +52,7 @@ export const playgroundLinks: PlaygroundItem[] = [
 ];
 
 export const primaryNavLinks: NavItem[] = [
+  { title: 'Learn JS', link: '/learn', badge: '0→Hero' },
   { title: 'Problems', link: '/problems', badge: 'DSA' },
   { title: 'Interview Q&A', link: '/interview' },
   { title: 'Dashboard', link: '/dashboard' },
@@ -83,6 +84,10 @@ const navigation = [
   {
     title: 'Home',
     link: '/',
+  },
+  {
+    title: 'Learn JS',
+    link: '/learn',
   },
   {
     title: 'Problems',

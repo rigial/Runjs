@@ -6,6 +6,7 @@ import { JSInterviewQuestionList } from '../utils/interface';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import Footer from '../components/Footer';
 import { Search, Sparkles, X } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function InterviewQuestion() {
   const [activeQuestion, setActiveQuestion] = useLocalStorageState(
@@ -38,6 +39,17 @@ export default function InterviewQuestion() {
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <SEO
+        title="JavaScript Technical Interview Questions & Answers"
+        description="Comprehensive collection of JavaScript interview questions covering closures, prototypes, the event loop, async/await, and scope with code explanations."
+        keywords={[
+          'javascript interview questions',
+          'frontend interview',
+          'js technical questions',
+          'javascript concepts',
+        ]}
+        canonical="/interview"
+      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

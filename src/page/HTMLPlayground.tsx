@@ -41,6 +41,7 @@ import useFormatDocument from '../hook/useFormatDocument';
 import { compileHtmlDocument } from '../utils/htmlCompiler';
 import { getCode, updateCode } from '../db/operations';
 import { ModalRef, UserCodeBase } from '../utils/interface';
+import SEO from '../components/SEO';
 
 const DEFAULT_HTML = `<div class="container">
   <h1>Hello RunJS</h1>
@@ -1024,6 +1025,19 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
 
   return (
     <Fragment>
+      <SEO
+        title="Online HTML, CSS & JavaScript Playground"
+        description="Interactive frontend web playground with 3-panel HTML/CSS/JS editors, live iframe preview, console logging, and responsive layouts."
+        keywords={[
+          'html playground',
+          'css editor',
+          'javascript online editor',
+          'frontend playground',
+          'codepen alternative',
+          'runjs html',
+        ]}
+        canonical={id ? `/html/${id}` : '/html'}
+      />
       <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
         {/* Top Navbar */}
         <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">

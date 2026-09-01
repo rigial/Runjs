@@ -14,6 +14,10 @@ const Bin = lazy(() => import('./page/Bin'));
 const PageNotFound = lazy(() => import('./page/PageNotFound'));
 const JSsaved = lazy(() => import('./page/JSsaved'));
 const TSsaved = lazy(() => import('./page/TSsaved'));
+const HTMLPlayground = lazy(() => import('./page/HTMLPlayground'));
+const HTMLStandalonePreview = lazy(
+  () => import('./page/HTMLStandalonePreview')
+);
 
 const Problemset = lazy(() => import('./page/Problemset'));
 const ProblemSolving = lazy(() => import('./page/ProblemSolving'));
@@ -40,6 +44,9 @@ function AppRouter() {
           <Route path="/js/:id" element={<JSsaved />} />
           <Route path="/ts" element={<TSPlayground />} />
           <Route path="/ts/:id" element={<TSsaved />} />
+          <Route path="/html" element={<HTMLPlayground />} />
+          <Route path="/html/:id" element={<HTMLPlayground />} />
+          <Route path="/html-preview" element={<HTMLStandalonePreview />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/interview" element={<Interview />} />
           <Route path="/bin" element={<Bin />} />

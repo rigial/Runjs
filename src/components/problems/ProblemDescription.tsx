@@ -4,6 +4,7 @@ import { getGithubIssueUrl } from '../../utils/githubIssues';
 import SubmissionHistory from './SubmissionHistory';
 import CodeSnippet from '../CodeSnippet';
 import ProblemMarkdown from './ProblemMarkdown';
+import { parseInlineFormatting } from './parseInlineMarkdown';
 import {
   FileText,
   Lightbulb,
@@ -204,7 +205,7 @@ function ProblemDescription({
                             Explanation:
                           </span>
                           <div className="flex-1 text-[var(--text-secondary)] leading-relaxed pl-1 sm:pl-0">
-                            {example.explanation}
+                            {parseInlineFormatting(example.explanation)}
                           </div>
                         </div>
                       )}

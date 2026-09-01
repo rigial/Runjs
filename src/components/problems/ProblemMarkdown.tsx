@@ -1,48 +1,10 @@
 import React, { memo, useState } from 'react';
 import { Copy, Check } from 'lucide-react';
+import { parseInlineFormatting } from './parseInlineMarkdown';
 
 interface ProblemMarkdownProps {
   content: string;
   className?: string;
-}
-
-function parseInlineFormatting(text: string): React.ReactNode[] {
-  // Regex matches `inline code` or **bold** or *italic*
-  const tokens = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g);
-
-  return tokens.map((token, index) => {
-    if (token.startsWith('`') && token.endsWith('`') && token.length >= 2) {
-      const code = token.slice(1, -1);
-      return (
-        <code
-          key={index}
-          className="px-1.5 py-0.5 mx-0.5 rounded bg-[var(--bg-surface)] text-amber-600 dark:text-amber-400 font-mono text-[11px] sm:text-xs border border-[var(--border-default)] shadow-2xs font-medium"
-        >
-          {code}
-        </code>
-      );
-    }
-    if (token.startsWith('**') && token.endsWith('**') && token.length >= 4) {
-      const boldText = token.slice(2, -2);
-      return (
-        <strong
-          key={index}
-          className="font-semibold text-[var(--text-primary)]"
-        >
-          {boldText}
-        </strong>
-      );
-    }
-    if (token.startsWith('*') && token.endsWith('*') && token.length >= 2) {
-      const italicText = token.slice(1, -1);
-      return (
-        <em key={index} className="italic text-[var(--text-primary)]">
-          {italicText}
-        </em>
-      );
-    }
-    return token;
-  });
 }
 
 function CodeBlockItem({ code, lang }: { code: string; lang?: string }) {
@@ -194,49 +156,84 @@ function ProblemMarkdown({ content, className = '' }: ProblemMarkdownProps) {
           // Not a list item: flush any pending list
           flushList(`line-${partIndex}-${lineIdx}`);
 
-          // Headings
-          if (line.startsWith('#### ')) {
-            elements.push(
-              <h5
-                key={lineIdx}
-                className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider mt-3 mb-1"
-              >
-                {parseInlineFormatting(line.slice(5))}
-              </h5>
-            );
-            return;
-          }
-          if (line.startsWith('### ')) {
-            elements.push(
-              <h4
-                key={lineIdx}
-                className="text-xs sm:text-sm font-bold text-amber-500 uppercase tracking-wider mt-4 mb-1.5"
-              >
-                {parseInlineFormatting(line.slice(4))}
-              </h4>
-            );
-            return;
-          }
-          if (line.startsWith('## ')) {
-            elements.push(
-              <h3
-                key={lineIdx}
-                className="text-sm sm:text-base font-bold text-[var(--text-primary)] mt-5 mb-2 pb-1 border-b border-[var(--border-subtle)]"
-              >
-                {parseInlineFormatting(line.slice(3))}
-              </h3>
-            );
-            return;
-          }
-          if (line.startsWith('# ')) {
-            elements.push(
-              <h2
-                key={lineIdx}
-                className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-5 mb-2"
-              >
-                {parseInlineFormatting(line.slice(2))}
-              </h2>
-            );
+          // Check if line is a heading: # to ######
+          const headingMatch = line.match(/^(#{1,6})\s+(.*)$/);
+          if (headingMatch) {
+            const level = headingMatch[1].length;
+            const headingText = headingMatch[2].trim();
+
+            // Filter out dangling "Code" or "Solution Code" header if it is at the very end of content
+            const isDanglingCodeHeader =
+              /^(solution\s+)?code$/i.test(
+                headingText.replace(/[*_#:`]/g, '').trim()
+              ) &&
+              lines
+                .slice(lineIdx + 1)
+                .every(
+                  (remaining) =>
+                    !remaining.trim() ||
+                    /^(#{1,6})\s+code$/i.test(remaining.trim())
+                );
+
+            if (isDanglingCodeHeader) {
+              return;
+            }
+
+            if (level === 1) {
+              elements.push(
+                <h2
+                  key={lineIdx}
+                  className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-5 mb-2"
+                >
+                  {parseInlineFormatting(headingText)}
+                </h2>
+              );
+            } else if (level === 2) {
+              elements.push(
+                <h3
+                  key={lineIdx}
+                  className="text-sm sm:text-base font-bold text-[var(--text-primary)] mt-5 mb-2 pb-1 border-b border-[var(--border-subtle)]"
+                >
+                  {parseInlineFormatting(headingText)}
+                </h3>
+              );
+            } else if (level === 3) {
+              elements.push(
+                <h4
+                  key={lineIdx}
+                  className="text-xs sm:text-sm font-bold text-amber-500 uppercase tracking-wider mt-4 mb-1.5"
+                >
+                  {parseInlineFormatting(headingText)}
+                </h4>
+              );
+            } else if (level === 4) {
+              elements.push(
+                <h5
+                  key={lineIdx}
+                  className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider mt-3 mb-1"
+                >
+                  {parseInlineFormatting(headingText)}
+                </h5>
+              );
+            } else if (level === 5) {
+              elements.push(
+                <h6
+                  key={lineIdx}
+                  className="text-xs font-bold text-amber-500/90 dark:text-amber-400 mt-2.5 mb-1"
+                >
+                  {parseInlineFormatting(headingText)}
+                </h6>
+              );
+            } else {
+              elements.push(
+                <div
+                  key={lineIdx}
+                  className="text-xs font-semibold text-[var(--text-secondary)] mt-2 mb-1 italic"
+                >
+                  {parseInlineFormatting(headingText)}
+                </div>
+              );
+            }
             return;
           }
 

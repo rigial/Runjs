@@ -20353,20 +20353,17 @@ Remember: Floyd-Warshall finds ALL pairs shortest paths in O(V³) time, perfect 
 #### Algorithm
 
 ##### Initialize dist matrix:
-- dist[i][i] = 0 (distance from node to itself)
-- dist[i][j] = Infinity for all other pairs
-- Set dist[i][j] = weight for each edge [i, j, weight]
+- \`dist[i][i] = 0\` (distance from node to itself)
+- \`dist[i][j] = Infinity\` for all other pairs
+- Set \`dist[i][j] = weight\` for each edge \`[i, j, weight]\`
 
 ##### For each intermediate node k (from 0 to V-1):
+- For each source node \`i\`:
+- For each destination node \`j\`:
+- \`dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])\`
+- (Try going from \`i\` to \`j\` via \`k\`)
 
-- For each source node i:
-- For each destination node j:
-- dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
-- (Try going from i to j via k)
-
-##### Return the distance matrix.
-
-#### Code`,
+##### Return the distance matrix.`,
       code: `function floydWarshall(V, edges) {
   const dist = Array.from({ length: V }, (_, i) =>
     Array.from({ length: V }, (_, j) => (i === j ? 0 : Infinity))

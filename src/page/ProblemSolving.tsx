@@ -40,6 +40,7 @@ import {
   Terminal as TerminalIcon,
   Sparkles,
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 function ProblemSolving() {
   const { slug } = useParams<{ slug: string }>();
@@ -284,6 +285,11 @@ function ProblemSolving() {
   if (!problem) {
     return (
       <div className="h-screen w-full flex flex-col items-center justify-center bg-[var(--bg-app)] text-[var(--text-primary)] p-6 space-y-4">
+        <SEO
+          title="Problem Not Found"
+          description="The requested JavaScript challenge could not be found."
+          noindex={true}
+        />
         <div className="text-3xl font-bold">Problem Not Found</div>
         <p className="text-sm text-[var(--text-secondary)]">
           The requested coding challenge was not found.
@@ -299,8 +305,31 @@ function ProblemSolving() {
     );
   }
 
+  const problemJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Question',
+    name: problem.title,
+    text: problem.description,
+    educationalLevel: problem.difficulty,
+    about: problem.topics.map((t) => ({ '@type': 'Thing', name: t })),
+  };
+
   return (
     <div className="h-screen w-full flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] overflow-hidden">
+      <SEO
+        title={`${problem.title} — JavaScript Challenge`}
+        description={problem.description.slice(0, 160)}
+        keywords={[
+          problem.title,
+          ...problem.topics,
+          'javascript challenge',
+          'algorithm',
+          'runjs',
+        ]}
+        canonical={`/problems/${problem.slug}`}
+        ogType="article"
+        jsonLd={problemJsonLd}
+      />
       {/* Top Solved Screen Navigation */}
       <ProblemHeader
         problem={problem}

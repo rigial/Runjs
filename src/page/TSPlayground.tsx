@@ -29,6 +29,7 @@ import {
   Code2,
   ChevronLeft,
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 /**
  * TypeScript Playground page component providing live code editing, diagnostics, and in-browser execution.
@@ -159,6 +160,18 @@ function TSPlayground() {
 
   return (
     <Fragment>
+      <SEO
+        title="Online TypeScript Playground & Compiler"
+        description="Write and run TypeScript directly in your browser with instant esbuild-wasm compilation, type diagnostics, and real-time execution."
+        keywords={[
+          'typescript playground',
+          'typescript compiler',
+          'run typescript online',
+          'ts compiler in browser',
+          'esbuild wasm typescript',
+        ]}
+        canonical="/ts"
+      />
       <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
         {/* Top IDE Navigation */}
         <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">

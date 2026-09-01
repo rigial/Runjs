@@ -13,10 +13,67 @@ import {
   Cpu,
   GraduationCap,
 } from 'lucide-react';
+import SEO from '../components/SEO';
+
+const homeJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://runjs.rigial.com/#website',
+      url: 'https://runjs.rigial.com/',
+      name: 'RunJS',
+      description: 'The in-browser developer playground and JavaScript interactive learning platform.',
+      publisher: {
+        '@type': 'Organization',
+        name: 'RunJS',
+        url: 'https://runjs.rigial.com',
+        logo: 'https://runjs.rigial.com/runjs.in.webp',
+      },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': 'https://runjs.rigial.com/#software',
+      name: 'RunJS Online JavaScript Compiler & Playground',
+      operatingSystem: 'Any',
+      applicationCategory: 'DeveloperApplication',
+      browserRequirements: 'Requires modern web browser',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+      featureList: [
+        'JavaScript Online Compiler',
+        'TypeScript Playground with instant compilation',
+        'React Playground with live preview',
+        'HTML & CSS Preview Studio',
+        '175+ Interactive JavaScript Curriculum Lessons',
+        '40+ Coding Interview Problem Challenges',
+      ],
+    },
+  ],
+};
 
 function HomePage() {
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <SEO
+        title="RunJS — Online JavaScript, TypeScript & React Playground"
+        titleTemplate="%s"
+        description="RunJS is an online JavaScript compiler, TypeScript runner, and React playground with 175+ interactive curriculum lessons and coding interview challenges."
+        keywords={[
+          'runjs',
+          'javascript online compiler',
+          'typescript playground',
+          'react online compiler',
+          'learn javascript',
+          'js online ide',
+          'coding practice',
+        ]}
+        canonical="/"
+        jsonLd={homeJsonLd}
+      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">

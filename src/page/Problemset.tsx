@@ -12,6 +12,21 @@ import {
   toggleProblemStar,
 } from '../problem-engine/storage';
 import { Code2, Sparkles } from 'lucide-react';
+import SEO from '../components/SEO';
+
+const problemsetJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'JavaScript Coding Challenges and Problems',
+  description:
+    'Practice JavaScript algorithms, data structures, and frontend coding interview questions with live test runner.',
+  itemListElement: PROBLEMS.slice(0, 30).map((p, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: p.title,
+    url: `https://runjs.rigial.com/problems/${p.slug}`,
+  })),
+};
 
 function Problemset() {
   const navigate = useNavigate();
@@ -126,6 +141,19 @@ function Problemset() {
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <SEO
+        title="JavaScript Coding Challenges & Interview Practice"
+        description="Solve 40+ interactive JavaScript coding problems with live test suites, automated test execution, hints, and complexity analysis."
+        keywords={[
+          'javascript problems',
+          'coding challenges',
+          'leetcode javascript',
+          'frontend interview practice',
+          'javascript algorithms',
+        ]}
+        canonical="/problems"
+        jsonLd={problemsetJsonLd}
+      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

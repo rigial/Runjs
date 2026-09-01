@@ -6,6 +6,8 @@ import {
   getPreviousLessonSlug,
 } from '../data/curriculum';
 import { useLearnProgress } from '../hooks/useLearnProgress';
+import SEO from '../../components/SEO';
+import { generateLessonJsonLd } from '../seo/lessonJsonLd';
 import CodeBlock from './CodeBlock';
 import QuizComponent from './QuizComponent';
 import ExerciseComponent from './ExerciseComponent';
@@ -53,6 +55,11 @@ function LessonContent() {
   if (!lesson || !slug) {
     return (
       <div className="flex-1 flex items-center justify-center p-8">
+        <SEO
+          title="Lesson Not Found"
+          description="The requested JavaScript lesson could not be found."
+          noindex={true}
+        />
         <div className="text-center max-w-md">
           <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">
             Lesson Not Found
@@ -71,6 +78,8 @@ function LessonContent() {
       </div>
     );
   }
+
+  const jsonLd = generateLessonJsonLd(lesson);
 
   const difficultyColors = {
     beginner: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
@@ -103,6 +112,14 @@ function LessonContent() {
 
   return (
     <article className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 min-w-0">
+      <SEO
+        title={`${lesson.title} - JavaScript Tutorial`}
+        description={lesson.description}
+        keywords={lesson.tags}
+        canonical={`/learn/${lesson.slug}`}
+        ogType="article"
+        jsonLd={jsonLd}
+      />
       {/* Dynamic Breadcrumb */}
       <DynamicBreadcrumb currentSlug={slug} />
 

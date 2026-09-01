@@ -9,8 +9,7 @@
   "packageManager": "pnpm@11.21.0",
   "scripts": {
     "dev": "vite --host",
-    "sitemap": "python3 scripts/generate_sitemap.py",
-    "build": "python3 scripts/generate_sitemap.py && tsc -b && vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint ./src",
     "pretty": "prettier --write ./src",
     "preview": "vite preview",

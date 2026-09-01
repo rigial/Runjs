@@ -395,7 +395,7 @@ function Navbar() {
         {/* Right Side: Quick Action + Theme Selector + Mobile Menu Trigger */}
         <div className="flex items-center justify-end gap-2.5 flex-1">
           {/* Start Coding CTA (hidden on active playground pages) */}
-          {!['/js', '/ts', '/react', '/html'].includes(location.pathname) && (
+          {!isPlaygroundActive && (
             <Link
               to="/js"
               className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"

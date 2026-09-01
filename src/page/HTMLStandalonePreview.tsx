@@ -10,11 +10,7 @@ export default function HTMLStandalonePreview() {
 
   const [doc, setDoc] = useState<string>(() => {
     try {
-      return (
-        localStorage.getItem(targetStorageKey) ||
-        localStorage.getItem('runjs_html_live_doc') ||
-        ''
-      );
+      return localStorage.getItem(targetStorageKey) || '';
     } catch {
       return '';
     }
@@ -52,11 +48,7 @@ export default function HTMLStandalonePreview() {
 
     // 2. Listen via storage event (reliable cross-tab fallback)
     const handleStorage = (event: StorageEvent) => {
-      if (
-        (event.key === targetStorageKey ||
-          event.key === 'runjs_html_live_doc') &&
-        event.newValue
-      ) {
+      if (event.key === targetStorageKey && event.newValue) {
         setDoc(event.newValue);
         setIsSyncing(true);
         setTimeout(() => setIsSyncing(false), 600);

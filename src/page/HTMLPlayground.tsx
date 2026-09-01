@@ -363,7 +363,6 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
     const timer = setTimeout(async () => {
       try {
         await updateCode(currentId, {
-          ...savedProject,
           htmlCode: html,
           cssCode: css,
           jsCode: javascript,
@@ -541,8 +540,10 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
       const a = document.createElement('a');
       a.href = url;
       a.download = `${savedProject?.fileName || 'runjs-html-project'}.zip`;
+      document.body.appendChild(a);
       a.click();
-      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (err) {
       console.error('Download failed', err);
     }

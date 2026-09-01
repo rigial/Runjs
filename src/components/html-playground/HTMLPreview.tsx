@@ -155,7 +155,6 @@ export const HTMLPreview = forwardRef<HTMLPreviewRef, HTMLPreviewProps>(
         try {
           localStorage.setItem(storageKey, compiledDoc);
           localStorage.setItem(`${storageKey}_time`, Date.now().toString());
-          localStorage.setItem('runjs_html_live_doc', compiledDoc);
         } catch (e) {
           console.error('Failed to sync live preview to localStorage', e);
         }
@@ -209,7 +208,6 @@ export const HTMLPreview = forwardRef<HTMLPreviewRef, HTMLPreviewProps>(
       try {
         localStorage.setItem(storageKey, compiledDoc);
         localStorage.setItem(`${storageKey}_time`, Date.now().toString());
-        localStorage.setItem('runjs_html_live_doc', compiledDoc);
       } catch (e) {
         console.error('Failed to cache live doc', e);
       }

@@ -1,4 +1,4 @@
-import { Editor, Monaco } from '@monaco-editor/react';
+import { Editor, Monaco, type OnMount } from '@monaco-editor/react';
 import { memo, useEffect, useRef } from 'react';
 import AppLoading from './AppLoading';
 import { emmetJSX } from 'emmet-monaco-es';
@@ -9,6 +9,8 @@ import {
   registerMonacoThemes,
 } from '../utils/monacoThemes';
 import { Check, Copy, Code2 } from 'lucide-react';
+
+type EditorInstance = Parameters<OnMount>[0];
 
 interface CodeSnippetProps {
   code: string;
@@ -26,6 +28,7 @@ function CodeSnippet({
   actionButton,
 }: CodeSnippetProps) {
   const { resolvedTheme } = useTheme();
+  const editorRef = useRef<EditorInstance | null>(null);
   const monacoInstanceRef = useRef<Monaco | null>(null);
   const emmetDisposerRef = useRef<(() => void) | null>(null);
   const { copied, copy } = useCopyToClipboard();
@@ -52,7 +55,8 @@ function CodeSnippet({
   }, []);
 
   const handleCopy = () => {
-    copy(code);
+    const textToCopy = editorRef.current?.getValue() ?? code;
+    copy(textToCopy);
   };
 
   return (
@@ -91,6 +95,7 @@ function CodeSnippet({
       <Editor
         loading={<AppLoading freeLoading={true} />}
         onMount={(editor, monaco) => {
+          editorRef.current = editor;
           monacoInstanceRef.current = monaco;
           registerMonacoThemes(monaco);
           monaco.editor.setTheme(getMonacoThemeName(resolvedTheme));

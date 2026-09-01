@@ -1,5 +1,3 @@
-import { addInfiniteLoopProtection } from './addInfiniteLoopProtection';
-
 export interface CompileHtmlOptions {
   html: string;
   css: string;
@@ -167,6 +165,68 @@ const HARNESS_SCRIPT = `
 `;
 
 /**
+ * Injects infinite loop protection into JavaScript code for the HTML playground.
+ * Each loop receives an independent iteration budget (default 50,000 iterations)
+ * that resets on non-continuous invocations.
+ * Ignores loop keywords inside string literals, template literals, and comments.
+ */
+export function addHtmlLoopProtection(
+  code: string,
+  maxIterations = 50000
+): string {
+  if (!code || !code.trim()) return code;
+
+  try {
+    const tokens: string[] = [];
+    const placeholder = (idx: number) => `___RUNJS_LITERAL_${idx}___`;
+    const literalRegex =
+      /(\/\*[\s\S]*?\*\/|\/\/[^\r\n]*|(?<![\w$])\/(?:\\.|[^/\\\r\n])+\/[gimsuy]*|`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g;
+
+    const masked = code.replace(literalRegex, (match) => {
+      const idx = tokens.length;
+      tokens.push(match);
+      return placeholder(idx);
+    });
+
+    let loopId = 0;
+    const transformed = masked.replace(
+      /\b(for\s*\([^{}]*\)|while\s*\([^{}]*\)|do)\s*\{/g,
+      (match) => {
+        const id = loopId++;
+        return `${match} __runjs_check_loop(${id}, ${maxIterations});`;
+      }
+    );
+
+    if (loopId === 0) return code;
+
+    const helper = `
+const __runjs_loop_data = new Map();
+function __runjs_check_loop(id, max = ${maxIterations}) {
+  let rec = __runjs_loop_data.get(id);
+  const now = Date.now();
+  if (!rec || now - rec.lastTime > 500) {
+    rec = { count: 0, lastTime: now };
+    __runjs_loop_data.set(id, rec);
+  }
+  rec.lastTime = now;
+  if (++rec.count > max) {
+    throw new RangeError('Potential infinite loop detected: exceeded ' + max + ' iterations.');
+  }
+}
+`;
+
+    const unmasked = transformed.replace(
+      /___RUNJS_LITERAL_(\d+)___/g,
+      (_, idxStr) => tokens[Number(idxStr)] ?? ''
+    );
+
+    return `${helper}\n${unmasked}`;
+  } catch {
+    return code;
+  }
+}
+
+/**
  * Combines HTML, CSS, and JS into a standalone, sandboxed HTML document string.
  */
 export function compileHtmlDocument({
@@ -179,7 +239,7 @@ export function compileHtmlDocument({
   let processedJs = javascript;
   if (enableLoopProtection && javascript.trim()) {
     try {
-      processedJs = addInfiniteLoopProtection(javascript);
+      processedJs = addHtmlLoopProtection(javascript);
     } catch {
       processedJs = javascript;
     }

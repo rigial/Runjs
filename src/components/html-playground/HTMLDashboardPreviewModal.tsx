@@ -59,7 +59,8 @@ export default function HTMLDashboardPreviewModal({
     if (!project) return;
     const handleMessage = (event: MessageEvent) => {
       const data = event.data;
-      if (!data || data.sender !== SENDER_KEY) return;
+      if (!data || typeof data !== 'object' || data.source !== SENDER_KEY)
+        return;
 
       if (data.type === 'console' && data.method && Array.isArray(data.args)) {
         const method = data.method as 'log' | 'info' | 'warn' | 'error';
@@ -71,6 +72,8 @@ export default function HTMLDashboardPreviewModal({
           `${data.message || 'Error'} (Line ${data.lineno ?? '?'})`
         );
         setIsConsoleOpen(true);
+      } else if (data.type === 'clear') {
+        consoleDrawerRef.current?.clear();
       }
     };
 
@@ -99,6 +102,13 @@ export default function HTMLDashboardPreviewModal({
   };
 
   const handleOpenInNewTab = () => {
+    const storageKey = `runjs_html_live_doc_${project.id}`;
+    try {
+      localStorage.setItem(storageKey, compiledDoc);
+      localStorage.setItem(`${storageKey}_time`, Date.now().toString());
+    } catch (e) {
+      console.error('Failed to cache live doc', e);
+    }
     const previewUrl = `${window.location.origin}/html-preview?target=${project.id}`;
     window.open(previewUrl, `runjs_html_preview_${project.id}`);
   };

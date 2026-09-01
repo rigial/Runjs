@@ -46,11 +46,14 @@ function ProjectTable({
           zip.file(relPath, content);
         }
         const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
+        link.href = url;
         link.download = `${val.fileName || 'react-project'}.zip`;
+        document.body.appendChild(link);
         link.click();
-        URL.revokeObjectURL(link.href);
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
       } catch (e) {
         console.error('Failed to download React zip:', e);
       }
@@ -58,15 +61,47 @@ function ProjectTable({
       try {
         const JSZip = (await import('jszip')).default;
         const zip = new JSZip();
-        zip.file('index.html', val.htmlCode || '');
-        zip.file('style.css', val.cssCode || '');
-        zip.file('script.js', val.jsCode || val.code || '');
+
+        const htmlContent = val.htmlCode || '';
+        const cssContent = val.cssCode || '';
+        const jsContent = val.jsCode || val.code || '';
+
+        let entryHtml = htmlContent;
+        if (cssContent && !entryHtml.includes('style.css')) {
+          if (entryHtml.includes('</head>')) {
+            entryHtml = entryHtml.replace(
+              '</head>',
+              '  <link rel="stylesheet" href="style.css">\n</head>'
+            );
+          } else {
+            entryHtml =
+              `<link rel="stylesheet" href="style.css">\n` + entryHtml;
+          }
+        }
+        if (jsContent && !entryHtml.includes('script.js')) {
+          if (entryHtml.includes('</body>')) {
+            entryHtml = entryHtml.replace(
+              '</body>',
+              '  <script src="script.js"></script>\n</body>'
+            );
+          } else {
+            entryHtml = entryHtml + `\n<script src="script.js"></script>`;
+          }
+        }
+
+        zip.file('index.html', entryHtml);
+        zip.file('style.css', cssContent);
+        zip.file('script.js', jsContent);
+
         const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
+        link.href = url;
         link.download = `${val.fileName || 'html-project'}.zip`;
+        document.body.appendChild(link);
         link.click();
-        URL.revokeObjectURL(link.href);
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
       } catch (e) {
         console.error('Failed to download HTML zip:', e);
       }

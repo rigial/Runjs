@@ -103,9 +103,7 @@ function CodeBlock({ example }: CodeBlockProps) {
         logs.push(String(result));
       }
     } catch (err) {
-      logs.push(
-        `Error: ${err instanceof Error ? err.message : String(err)}`
-      );
+      logs.push(`Error: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       console.log = originalLog;
       console.warn = originalWarn;

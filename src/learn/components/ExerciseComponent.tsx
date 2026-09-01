@@ -6,7 +6,14 @@ import {
   getMonacoThemeName,
   registerMonacoThemes,
 } from '../../utils/monacoThemes';
-import { Eye, EyeOff, Lightbulb, Play, RotateCcw, CheckCircle2 } from 'lucide-react';
+import {
+  Eye,
+  EyeOff,
+  Lightbulb,
+  Play,
+  RotateCcw,
+  CheckCircle2,
+} from 'lucide-react';
 
 type EditorInstance = Parameters<OnMount>[0];
 
@@ -85,9 +92,7 @@ function ExerciseComponent({
         logs.push(String(result));
       }
     } catch (err) {
-      logs.push(
-        `Error: ${err instanceof Error ? err.message : String(err)}`
-      );
+      logs.push(`Error: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       console.log = originalLog;
       console.warn = originalWarn;
@@ -114,8 +119,10 @@ function ExerciseComponent({
   }, [onComplete]);
 
   const difficultyColors = {
-    beginner: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    intermediate: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    beginner:
+      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    intermediate:
+      'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
     advanced: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
   };
 

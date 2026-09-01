@@ -12,13 +12,18 @@ export interface SEOProps {
   noindex?: boolean;
 }
 
-const DEFAULT_TITLE = 'RunJS | Online JavaScript, TypeScript & React Playground';
+const DEFAULT_TITLE =
+  'RunJS | Online JavaScript, TypeScript & React Playground';
 const DEFAULT_DESCRIPTION =
   'RunJS is an interactive developer playground and full JavaScript learning platform. Write, test, and master JavaScript with 175+ structured lessons and real-time execution.';
 const DEFAULT_OG_IMAGE = 'https://runjs.rigial.com/runjs.in.webp';
 const BASE_URL = 'https://runjs.rigial.com';
 
-function updateMetaTag(attrName: 'name' | 'property', attrValue: string, content: string | undefined) {
+function updateMetaTag(
+  attrName: 'name' | 'property',
+  attrValue: string,
+  content: string | undefined
+) {
   if (content === undefined) return;
   let element = document.querySelector(`meta[${attrName}="${attrValue}"]`);
   if (!element) {
@@ -31,7 +36,9 @@ function updateMetaTag(attrName: 'name' | 'property', attrValue: string, content
 
 function updateLinkTag(rel: string, href: string | undefined) {
   if (!href) return;
-  let element = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
+  let element = document.querySelector(
+    `link[rel="${rel}"]`
+  ) as HTMLLinkElement | null;
   if (!element) {
     element = document.createElement('link');
     element.setAttribute('rel', rel);
@@ -51,9 +58,7 @@ export default function SEO({
   jsonLd,
   noindex = false,
 }: SEOProps) {
-  const fullTitle = title
-    ? titleTemplate.replace('%s', title)
-    : DEFAULT_TITLE;
+  const fullTitle = title ? titleTemplate.replace('%s', title) : DEFAULT_TITLE;
 
   const fullCanonical = canonical
     ? canonical.startsWith('http')
@@ -65,7 +70,8 @@ export default function SEO({
 
   const keywordsString = Array.isArray(keywords)
     ? keywords.join(', ')
-    : keywords || 'javascript, typescript, react, code playground, learn javascript, web development, runjs';
+    : keywords ||
+      'javascript, typescript, react, code playground, learn javascript, web development, runjs';
 
   useEffect(() => {
     // 1. Update document title
@@ -74,7 +80,13 @@ export default function SEO({
     // 2. Standard Meta Tags
     updateMetaTag('name', 'description', description);
     updateMetaTag('name', 'keywords', keywordsString);
-    updateMetaTag('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
+    updateMetaTag(
+      'name',
+      'robots',
+      noindex
+        ? 'noindex, nofollow'
+        : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+    );
     updateLinkTag('canonical', fullCanonical);
 
     // 3. OpenGraph Tags
@@ -94,7 +106,9 @@ export default function SEO({
     // 5. Schema.org JSON-LD structured data
     const existingScript = document.getElementById('seo-json-ld');
     if (jsonLd) {
-      const script = (existingScript as HTMLScriptElement) || document.createElement('script');
+      const script =
+        (existingScript as HTMLScriptElement) ||
+        document.createElement('script');
       script.id = 'seo-json-ld';
       script.type = 'application/ld+json';
       script.text = JSON.stringify(jsonLd);
@@ -104,7 +118,16 @@ export default function SEO({
     } else if (existingScript) {
       existingScript.remove();
     }
-  }, [fullTitle, description, keywordsString, fullCanonical, ogType, ogImage, jsonLd, noindex]);
+  }, [
+    fullTitle,
+    description,
+    keywordsString,
+    fullCanonical,
+    ogType,
+    ogImage,
+    jsonLd,
+    noindex,
+  ]);
 
   return null;
 }

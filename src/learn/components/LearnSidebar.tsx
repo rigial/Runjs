@@ -104,7 +104,11 @@ function TopicTree({
                           to={`/learn/${slug}`}
                           onClick={() => {
                             onClose();
-                            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                            window.scrollTo({
+                              top: 0,
+                              left: 0,
+                              behavior: 'instant',
+                            });
                           }}
                           className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] transition-colors ${
                             isActive
@@ -123,8 +127,7 @@ function TopicTree({
                             {slug
                               .split('-')
                               .map(
-                                (w) =>
-                                  w.charAt(0).toUpperCase() + w.slice(1)
+                                (w) => w.charAt(0).toUpperCase() + w.slice(1)
                               )
                               .join(' ')}
                           </span>

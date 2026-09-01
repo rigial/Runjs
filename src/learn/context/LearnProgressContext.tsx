@@ -47,10 +47,7 @@ export interface LearnProgressContextType {
   progress: UserProgress;
   markLessonRead: (lessonSlug: string) => void;
   saveQuizScore: (lessonSlug: string, score: number) => void;
-  markExerciseCompleted: (
-    lessonSlug: string,
-    exercisesTotal: number
-  ) => void;
+  markExerciseCompleted: (lessonSlug: string, exercisesTotal: number) => void;
   setLastLesson: (lessonSlug: string) => void;
   getLessonProgress: (lessonSlug: string) => LessonProgress | null;
   getStats: (totalLessons: number, totalExercises: number) => LearningStats;
@@ -59,9 +56,9 @@ export interface LearnProgressContextType {
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
-const LearnProgressContext = createContext<LearnProgressContextType | undefined>(
-  undefined
-);
+const LearnProgressContext = createContext<
+  LearnProgressContextType | undefined
+>(undefined);
 
 // ─── Provider ────────────────────────────────────────────────────────────────
 
@@ -106,14 +103,15 @@ export const LearnProgressProvider: React.FC<{ children: React.ReactNode }> = ({
     [progress.lessons]
   );
 
-  const recordStudyActivity = useCallback((prev: UserProgress): UserProgress => {
-    const today = getTodayDate();
-    const newStreak =
-      prev.lastStudyDate === today
-        ? prev.streakDays
-        : prev.streakDays + 1;
-    return { ...prev, streakDays: newStreak, lastStudyDate: today };
-  }, []);
+  const recordStudyActivity = useCallback(
+    (prev: UserProgress): UserProgress => {
+      const today = getTodayDate();
+      const newStreak =
+        prev.lastStudyDate === today ? prev.streakDays : prev.streakDays + 1;
+      return { ...prev, streakDays: newStreak, lastStudyDate: today };
+    },
+    []
+  );
 
   const markLessonRead = useCallback(
     (lessonSlug: string) => {

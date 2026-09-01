@@ -102,7 +102,10 @@ export function generateLessonJsonLd(lesson: Lesson): Record<string, unknown> {
   };
 }
 
-export function generateCurriculumJsonLd(totalLessons: number, totalTopics: number): Record<string, unknown> {
+export function generateCurriculumJsonLd(
+  totalLessons: number,
+  totalTopics: number
+): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Course',

@@ -1,10 +1,7 @@
 import { memo, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { getLessonBySlug } from '../data/lessonRegistry';
-import {
-  getNextLessonSlug,
-  getPreviousLessonSlug,
-} from '../data/curriculum';
+import { getNextLessonSlug, getPreviousLessonSlug } from '../data/curriculum';
 import { useLearnProgress } from '../hooks/useLearnProgress';
 import SEO from '../../components/SEO';
 import { generateLessonJsonLd } from '../seo/lessonJsonLd';
@@ -95,7 +92,9 @@ function LessonContent() {
     },
     warning: {
       bg: 'bg-amber-500/5 border-amber-500/20',
-      icon: <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />,
+      icon: (
+        <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+      ),
       label: 'Warning',
     },
     note: {
@@ -345,7 +344,9 @@ function LessonContent() {
           ) : (
             <Link
               to="/learn"
-              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
+              onClick={() =>
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+              }
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-semibold text-[var(--text-primary)] transition-colors shadow-2xs"
             >
               <span>❮ Home</span>
@@ -382,7 +383,9 @@ function LessonContent() {
           ) : (
             <Link
               to="/learn"
-              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
+              onClick={() =>
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+              }
               className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-xs"
             >
               <span>Curriculum Complete 🎉</span>

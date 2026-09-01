@@ -38,16 +38,35 @@ import {
   FunctionSquare,
   Wand2,
   Component,
-  Infinity,
+  Infinity as InfinityIcon,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 // Icon map for topic icons
 const iconMap: Record<string, LucideIcon> = {
-  Rocket, Calculator, Repeat, FunctionSquare, Layers, Box,
-  LayoutList, Database, Type, Hash, GitBranch, Component,
-  ShieldAlert, Timer, Workflow, Infinity, Wand2, Package,
-  FileCode, MousePointerClick, Globe, GraduationCap, Lightbulb,
+  Rocket,
+  Calculator,
+  Repeat,
+  FunctionSquare,
+  Layers,
+  Box,
+  LayoutList,
+  Database,
+  Type,
+  Hash,
+  GitBranch,
+  Component,
+  ShieldAlert,
+  Timer,
+  Workflow,
+  Infinity: InfinityIcon,
+  Wand2,
+  Package,
+  FileCode,
+  MousePointerClick,
+  Globe,
+  GraduationCap,
+  Lightbulb,
 };
 
 function LearnHome() {
@@ -199,17 +218,13 @@ function LearnHome() {
 
         <div className="space-y-8">
           {curriculum.map((part) => {
-            const partLessonSlugs = part.topics.flatMap(
-              (t) => t.lessonSlugs
-            );
+            const partLessonSlugs = part.topics.flatMap((t) => t.lessonSlugs);
             const partCompleted = partLessonSlugs.filter(
               (s) => progress.lessons[s]?.isRead
             ).length;
             const partTotal = partLessonSlugs.length;
             const partPercentage =
-              partTotal > 0
-                ? Math.round((partCompleted / partTotal) * 100)
-                : 0;
+              partTotal > 0 ? Math.round((partCompleted / partTotal) * 100) : 0;
 
             return (
               <div key={part.slug}>
@@ -227,8 +242,7 @@ function LearnHome() {
                     </p>
                   </div>
                   <span className="text-[11px] font-semibold text-[var(--text-muted)] tabular-nums whitespace-nowrap ml-4">
-                    {partCompleted}/{partTotal} •{' '}
-                    {partPercentage}%
+                    {partCompleted}/{partTotal} • {partPercentage}%
                   </span>
                 </div>
 
@@ -256,23 +270,29 @@ function LearnHome() {
                       ? `/learn/${firstUnread}`
                       : `/learn/${topic.lessonSlugs[0]}`;
 
-                    const IconComponent =
-                      iconMap[topic.icon] || BookOpen;
+                    const IconComponent = iconMap[topic.icon] || BookOpen;
 
                     const colorClasses: Record<string, string> = {
-                      amber: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+                      amber:
+                        'bg-amber-500/10 text-amber-500 border-amber-500/20',
                       blue: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-                      emerald: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
-                      violet: 'bg-violet-500/10 text-violet-500 border-violet-500/20',
+                      emerald:
+                        'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+                      violet:
+                        'bg-violet-500/10 text-violet-500 border-violet-500/20',
                       rose: 'bg-rose-500/10 text-rose-500 border-rose-500/20',
-                      orange: 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+                      orange:
+                        'bg-orange-500/10 text-orange-500 border-orange-500/20',
                       teal: 'bg-teal-500/10 text-teal-500 border-teal-500/20',
                       cyan: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20',
-                      purple: 'bg-purple-500/10 text-purple-500 border-purple-500/20',
-                      indigo: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20',
+                      purple:
+                        'bg-purple-500/10 text-purple-500 border-purple-500/20',
+                      indigo:
+                        'bg-indigo-500/10 text-indigo-500 border-indigo-500/20',
                       sky: 'bg-sky-500/10 text-sky-500 border-sky-500/20',
                       red: 'bg-red-500/10 text-red-500 border-red-500/20',
-                      fuchsia: 'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20',
+                      fuchsia:
+                        'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20',
                       pink: 'bg-pink-500/10 text-pink-500 border-pink-500/20',
                       lime: 'bg-lime-500/10 text-lime-500 border-lime-500/20',
                     };

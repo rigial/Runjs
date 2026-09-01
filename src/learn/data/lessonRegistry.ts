@@ -35,5 +35,8 @@ export function getAllLessons(): Lesson[] {
 }
 
 export function getTotalExerciseCount(): number {
-  return allLessons.reduce((acc, lesson) => acc + (lesson.exercises?.length || 0), 0);
+  return allLessons.reduce(
+    (acc, lesson) => acc + (lesson.exercises?.length || 0),
+    0
+  );
 }

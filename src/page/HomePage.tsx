@@ -23,7 +23,8 @@ const homeJsonLd = {
       '@id': 'https://runjs.rigial.com/#website',
       url: 'https://runjs.rigial.com/',
       name: 'RunJS',
-      description: 'The in-browser developer playground and JavaScript interactive learning platform.',
+      description:
+        'The in-browser developer playground and JavaScript interactive learning platform.',
       publisher: {
         '@type': 'Organization',
         name: 'RunJS',
@@ -150,7 +151,8 @@ function HomePage() {
                   Learn JavaScript
                 </h2>
                 <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
-                  Go from zero to hero with interactive lessons, runnable examples, quizzes & exercises.
+                  Go from zero to hero with interactive lessons, runnable
+                  examples, quizzes & exercises.
                 </p>
               </div>
             </Link>

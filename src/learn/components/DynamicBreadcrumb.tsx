@@ -2,7 +2,14 @@ import { memo, useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { curriculum, findLessonLocation } from '../data/curriculum';
 import { getLessonBySlug } from '../data/lessonRegistry';
-import { ChevronRight, ChevronDown, Check, Home, BookOpen, Layers } from 'lucide-react';
+import {
+  ChevronRight,
+  ChevronDown,
+  Check,
+  Home,
+  BookOpen,
+  Layers,
+} from 'lucide-react';
 
 interface DynamicBreadcrumbProps {
   currentSlug: string;
@@ -93,7 +100,9 @@ function DynamicBreadcrumb({ currentSlug }: DynamicBreadcrumbProps) {
           aria-expanded={openMenu === 'part'}
           aria-label="Switch Part"
           className={`p-1 rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors cursor-pointer ${
-            openMenu === 'part' ? 'bg-[var(--bg-surface-hover)] text-[var(--text-primary)]' : ''
+            openMenu === 'part'
+              ? 'bg-[var(--bg-surface-hover)] text-[var(--text-primary)]'
+              : ''
           }`}
         >
           <ChevronDown className="w-3 h-3" />
@@ -127,7 +136,9 @@ function DynamicBreadcrumb({ currentSlug }: DynamicBreadcrumbProps) {
                       Part {p.partNumber}: {p.title}
                     </span>
                   </div>
-                  {isCurrent && <Check className="w-3.5 h-3.5 text-amber-500 shrink-0" />}
+                  {isCurrent && (
+                    <Check className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  )}
                 </button>
               );
             })}
@@ -152,7 +163,9 @@ function DynamicBreadcrumb({ currentSlug }: DynamicBreadcrumbProps) {
           aria-expanded={openMenu === 'topic'}
           aria-label="Switch Topic"
           className={`p-1 rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors cursor-pointer ${
-            openMenu === 'topic' ? 'bg-[var(--bg-surface-hover)] text-[var(--text-primary)]' : ''
+            openMenu === 'topic'
+              ? 'bg-[var(--bg-surface-hover)] text-[var(--text-primary)]'
+              : ''
           }`}
         >
           <ChevronDown className="w-3 h-3" />
@@ -184,7 +197,9 @@ function DynamicBreadcrumb({ currentSlug }: DynamicBreadcrumbProps) {
                     <Layers className="w-3.5 h-3.5 shrink-0 text-amber-500/70" />
                     <span className="truncate">{t.title}</span>
                   </div>
-                  {isCurrent && <Check className="w-3.5 h-3.5 text-amber-500 shrink-0" />}
+                  {isCurrent && (
+                    <Check className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  )}
                 </button>
               );
             })}
@@ -209,7 +224,9 @@ function DynamicBreadcrumb({ currentSlug }: DynamicBreadcrumbProps) {
             aria-expanded={openMenu === 'lesson'}
             aria-label="Switch Lesson in this Topic"
             className={`p-1 rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors cursor-pointer ${
-              openMenu === 'lesson' ? 'bg-[var(--bg-surface-hover)] text-[var(--text-primary)]' : ''
+              openMenu === 'lesson'
+                ? 'bg-[var(--bg-surface-hover)] text-[var(--text-primary)]'
+                : ''
             }`}
           >
             <ChevronDown className="w-3 h-3" />
@@ -244,7 +261,9 @@ function DynamicBreadcrumb({ currentSlug }: DynamicBreadcrumbProps) {
                   }`}
                 >
                   <span className="truncate">{title}</span>
-                  {isCurrent && <Check className="w-3.5 h-3.5 text-amber-500 shrink-0" />}
+                  {isCurrent && (
+                    <Check className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  )}
                 </button>
               );
             })}

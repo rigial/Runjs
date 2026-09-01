@@ -10,7 +10,8 @@ interface FooterProps {
 function Footer({ className = '', hasMarginTop }: FooterProps) {
   const location = useLocation();
   const isLearnPage = location.pathname.startsWith('/learn');
-  const applyMarginTop = hasMarginTop !== undefined ? hasMarginTop : !isLearnPage;
+  const applyMarginTop =
+    hasMarginTop !== undefined ? hasMarginTop : !isLearnPage;
 
   return (
     <footer

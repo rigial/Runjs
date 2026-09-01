@@ -186,6 +186,13 @@
     width: 100%;
   }
 
+  .split-vertical {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
   .gutter {
     background-color: var(--gutter-bg);
     transition: background-color 150ms ease;
@@ -238,19 +245,44 @@
 .luna-console {
   font-family:
     'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace !important;
-  font-size: 13px !important;
-  background: transparent !important;
+  font-size: 12px !important;
   height: 100% !important;
+  overflow-y: auto !important;
 }
 
-.dark .luna-console {
+.dark .luna-console,
+.dark .luna-console.luna-console-theme-dark {
   background-color: #0e1117 !important;
   color: #f0f6fc !important;
 }
 
+.dark .luna-console .luna-console-log-item {
+  color: #e6edf3 !important;
+  border-bottom-color: #21262d !important;
+}
+
+.dark .luna-console .luna-console-log-item.luna-console-error {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #fca5a5 !important;
+  border-top-color: rgba(239, 68, 68, 0.3) !important;
+  border-bottom-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.dark .luna-console .luna-console-log-item.luna-console-warn {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #fcd34d !important;
+  border-top-color: rgba(245, 158, 11, 0.3) !important;
+  border-bottom-color: rgba(245, 158, 11, 0.3) !important;
+}
+
 .light .luna-console {
-  background-color: #f8fafc !important;
+  background-color: #ffffff !important;
   color: #0f172a !important;
+}
+
+.light .luna-console .luna-console-log-item {
+  color: #1e293b !important;
+  border-bottom-color: #e2e8f0 !important;
 }
 
 /* Animation utilities */

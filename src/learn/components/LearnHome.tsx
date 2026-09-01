@@ -1,6 +1,10 @@
 import { memo, useMemo } from 'react';
 import { Link } from 'react-router';
-import { curriculum, getTotalLessonCount } from '../data/curriculum';
+import {
+  curriculum,
+  getTotalLessonCount,
+  getAllLessonSlugs,
+} from '../data/curriculum';
 import { getTotalExerciseCount } from '../data/lessonRegistry';
 import { useLearnProgress } from '../hooks/useLearnProgress';
 import {
@@ -56,8 +60,13 @@ function LearnHome() {
     [getStats, totalLessons, totalExercises]
   );
 
-  // Determine where to continue
-  const continueSlug = progress.lastLessonSlug;
+  const allSlugs = useMemo(() => getAllLessonSlugs(), []);
+  const firstLessonSlug = allSlugs[0] || 'intro';
+
+  // Determine if user has actually started learning (completed at least 1 lesson or exercise)
+  const hasStartedLearning =
+    stats.completedLessons > 0 || stats.completedExercises > 0;
+  const continueSlug = progress.lastLessonSlug || firstLessonSlug;
 
   return (
     <div className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
@@ -83,7 +92,7 @@ function LearnHome() {
 
         {/* CTA */}
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          {continueSlug ? (
+          {hasStartedLearning ? (
             <Link
               to={`/learn/${continueSlug}`}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-black text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -93,7 +102,7 @@ function LearnHome() {
             </Link>
           ) : (
             <Link
-              to="/learn/what-is-javascript"
+              to={`/learn/${firstLessonSlug}`}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-black text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Rocket className="w-4 h-4" />

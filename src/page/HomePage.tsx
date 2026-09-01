@@ -11,6 +11,7 @@ import {
   Layers,
   BookOpen,
   Cpu,
+  GraduationCap,
 } from 'lucide-react';
 
 function HomePage() {
@@ -46,10 +47,18 @@ function HomePage() {
           {/* CTA Buttons */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
             <Link
-              to="/problems"
+              to="/learn"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-sm font-semibold shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Sparkles className="w-4 h-4" />
+              <GraduationCap className="w-4 h-4" />
+              <span>Learn JavaScript 0 → Hero</span>
+            </Link>
+
+            <Link
+              to="/problems"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
+            >
+              <Sparkles className="w-4 h-4 text-amber-500" />
               <span>Explore Coding Challenges</span>
             </Link>
 
@@ -58,14 +67,36 @@ function HomePage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
             >
               <Play className="w-4 h-4 text-amber-500 fill-amber-500" />
-              <span>Open JavaScript Playground</span>
+              <span>Open Playground</span>
             </Link>
           </div>
         </section>
 
         {/* Language & Problem Cards Quick Links */}
         <section className="mt-14 max-w-6xl mx-auto w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 w-full text-left">
+            {/* Learn JS Card */}
+            <Link
+              to="/learn"
+              className="group p-6 rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-yellow-500/5 hover:border-amber-500/60 hover:from-amber-500/10 hover:to-yellow-500/10 transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between lg:col-span-1"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-500/15 text-amber-500 border border-amber-500/25 font-bold text-sm">
+                    <GraduationCap className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                    New
+                  </span>
+                </div>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
+                  Learn JavaScript
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  Go from zero to hero with interactive lessons, runnable examples, quizzes & exercises.
+                </p>
+              </div>
+            </Link>
             {/* Coding Problems Card */}
             <Link
               to="/problems"

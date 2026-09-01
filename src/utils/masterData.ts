@@ -4,6 +4,10 @@ const navigation = [
     link: '/',
   },
   {
+    title: 'Learn JS',
+    link: '/learn',
+  },
+  {
     title: 'Problems',
     link: '/problems',
   },

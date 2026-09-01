@@ -18,6 +18,9 @@ const TSsaved = lazy(() => import('./page/TSsaved'));
 const Problemset = lazy(() => import('./page/Problemset'));
 const ProblemSolving = lazy(() => import('./page/ProblemSolving'));
 
+const LearnHomePage = lazy(() => import('./page/LearnHomePage'));
+const LearnLessonPage = lazy(() => import('./page/LearnLessonPage'));
+
 function AppRouter() {
   useEffect(() => {
     async function asyncFunctionCall() {
@@ -34,6 +37,8 @@ function AppRouter() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/problems" element={<Problemset />} />
           <Route path="/problems/:slug" element={<ProblemSolving />} />
+          <Route path="/learn" element={<LearnHomePage />} />
+          <Route path="/learn/:slug" element={<LearnLessonPage />} />
           <Route path="/js" element={<JSPlayground />} />
           <Route path="/react" element={<ReactPlayground />} />
           <Route path="/react/:id" element={<ReactPlayground />} />

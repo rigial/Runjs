@@ -9802,7 +9802,7 @@ This function should mimic the behavior of the native \`reduce()\` method, inclu
 - \`callback\` must be a function. If not, throw a \`TypeError\`.
 - If no initial value is provided and the array is empty, throw a \`TypeError\`.
 - If no initial value is provided, use the first element of the array as the initial value, and start from the second element.
-- Do **not** use the built-in \`reduce()\` method.5:["$","di`,
+- Do **not** use the built-in \`reduce()\` method.`,
     examples: [
       {
         input: '[1,2,3,4],null,0',
@@ -9956,7 +9956,7 @@ console.log(counter.decrement()); // 4
 ### **Constraints & Edge Cases**  
 - The counter should handle negative initial values.  
 - The counter should not expose its internal value directly (encapsulation).  
-- Methods should be chainable (optional bonus).  5:["$"`,
+- Methods should be chainable (optional bonus).`,
     examples: [],
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'makeCounter',
@@ -10656,7 +10656,7 @@ Explanation:
 * If the \`board\` is empty, return an empty array.
 * If the \`words\` list is empty, return an empty array.
 * Words may appear more than once via different paths, but should only be added **once** in the result.
-* Words can appear diagonally as well — all 8 directions must be supported.5:["$","div",null`,
+* Words can appear diagonally as well — all 8 directions must be supported.`,
     examples: [
       {
         input: `[],["a"]`,
@@ -11410,7 +11410,7 @@ JSONStringify([undefined, function() {}, 5])
   - Omitted in objects
   - Converted to \`null\` in arrays
 - Throws \`TypeError\` on circular references
-- Does not handle special objects like \`Date\`, \`Set\`, \`Map\`, etc.5:["$","di`,
+- Does not handle special objects like \`Date\`, \`Set\`, \`Map\`, etc.`,
     examples: [
       {
         input: `"test"`,
@@ -12110,7 +12110,7 @@ If a character appears only once consecutively, do not append a count after it.
 - Empty string input should return an empty string.
 - Very long sequences of the same character must correctly split counts into chunks of 9 or less.
 - Strings with no consecutive repeats remain unchanged.
-- Single character input returns the character itself.5:["$","di`,
+- Single character input returns the character itself.`,
     examples: [
       {
         input: `"aaabbbcccccccccc"`,
@@ -12342,7 +12342,7 @@ pq.isEmpty(); // → false
 -  Stable ordering: elements with same priority should follow FIFO order.  
 -  Support all listed methods: enqueue, dequeue, peek, isEmpty, size.  
 -  The queue can hold any data type as \`value\`.  
--  \`dequeue()\` and \`peek()\` should return \`null\` if the queue is empty.  5:["$","div",null,`,
+-  \`dequeue()\` and \`peek()\` should return \`null\` if the queue is empty.`,
     examples: [
       {
         input: `["PriorityQueue","enqueue","enqueue","enqueue","dequeue","dequeue","dequeue"],[[],["A",3],["B",1],["C",2],[],[],[]]`,
@@ -13892,7 +13892,7 @@ customAssign({}, {a: undefined}, {b: null}) → {a: undefined, b: null}
 -  Only own, enumerable properties of source objects should be copied  
 -  If a source is \`null\` or \`undefined\`, it should be skipped (not throw an error)  
 -  Must return the modified \`target\` object  
--  Symbol properties should be ignored in this simplified version  5:["$"`,
+-  Symbol properties should be ignored in this simplified version`,
     examples: [
       {
         input: `{"a":1},{"b":2}`,
@@ -14090,7 +14090,7 @@ const result3 = lazy({divide}).divide(10, 2).divide(6, 3).execute();
 - Should return an array of results if multiple functions are queued.  
 - If no function is queued, \`.execute()\` should return an empty array.  
 - All arguments must be passed at chaining time and retained until execution.  
-- Must handle functions with varying numbers of arguments.5:["$"`,
+- Must handle functions with varying numbers of arguments.`,
     examples: [],
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'lazy',
@@ -14254,7 +14254,7 @@ The grid can be empty.
 * Rotten oranges spread the rot to adjacent fresh oranges in 4 directions: up, down, left, and right.
 * If fresh oranges are blocked by empty cells and can’t be reached, return -1.
 * If there are no fresh oranges initially, return 0.
-* If all oranges are already rotten, return 0.5:["$","di`,
+* If all oranges are already rotten, return 0.`,
     examples: [
       {
         input: '[[2,1,1],[1,1,0],[0,1,1]]',
@@ -17364,7 +17364,7 @@ pool.run(() => task(3, 200)).then(console.log);  // Task 3 waits for a slot
 - **Edge Cases:**  
   - Running with **maxWorkers = 1** (sequential execution).  
   - Handling **tasks that fail** (errors should not break the pool).  
-  - Ensuring **Promise-based execution**.  5:["$"`,
+  - Ensuring **Promise-based execution**.`,
     examples: [
       {
         input: `["WorkerPool"],[[3]]`,
@@ -17574,7 +17574,7 @@ Output:
 - If a root points to a non-existent key, it should be ignored safely.  
 - The graph can be cyclic, so cycles should not cause infinite loops.  
 - Empty roots → return an empty object.  
-- Empty graph → return an empty object.  5:["$"`,
+- Empty graph → return an empty object.`,
     examples: [
       {
         input: `{"A":["B"],"B":["C"],"C":[],"D":[]},["A"]`,
@@ -17773,6 +17773,7 @@ for (const node of reachable) {
     topics: ['Graph', 'Math'],
     acceptanceRate: '65%',
     description: `Given a system of modular congruences:
+
 \`\`\`
 x ≡ a₁ (mod m₁)
 x ≡ a₂ (mod m₂)
@@ -17782,56 +17783,36 @@ x ≡ aₙ (mod mₙ)
 
 Find the smallest non-negative integer \`x\` that satisfies all congruences. The generalized version handles cases where the moduli may not be pairwise coprime.
 
-## Examples
-
-\`\`\`
-Input: congruences = [[2, 6], [3, 9]]
-Output: 3
-Explanation: x ≡ 2 (mod 6) and x ≡ 3 (mod 9)
-The smallest solution is x = 3
-
-Input: congruences = [[1, 3], [2, 5], [3, 7]]
-Output: 52
-Explanation: x ≡ 1 (mod 3), x ≡ 2 (mod 5), x ≡ 3 (mod 7)
-The smallest solution is x = 52
-
-Input: congruences = [[2, 4], [3, 6]]
-Output: null
-Explanation: No solution exists (inconsistent system)
-
-Input: congruences = [[1, 2], [0, 4]]
-Output: 4
-Explanation: x ≡ 1 (mod 2) and x ≡ 0 (mod 4)
-The smallest solution is x = 4
-\`\`\`
-
-## Mathematical Background
+### Mathematical Background
 
 The Chinese Remainder Theorem states that if \`m₁, m₂, ..., mₙ\` are pairwise coprime, then there exists a unique solution modulo \`M = m₁ × m₂ × ... × mₙ\`.
 
-For the generalized case with non-coprime moduli, we use the Extended Euclidean Algorithm to find solutions.
-
-## Constraints
-
-* 1 ≤ n ≤ 10
-* 0 ≤ aᵢ < mᵢ ≤ 10^9
-* The system may or may not have a solution
-* Return null if no solution exists5:["$","div",null,{"children":["$","$L10",null,{"questionDa`,
+For the generalized case with non-coprime moduli, use the Extended Euclidean Algorithm to test consistency and find the solution. Return \`null\` if no solution exists.`,
     examples: [
       {
-        input: '[[2,6],[3,9]]',
-        output: 'null',
-      },
-      {
-        input: '[[1,3],[2,5],[3,7]]',
+        input: 'congruences = [[1, 3], [2, 5], [3, 7]]',
         output: '52',
+        explanation:
+          '52 ≡ 1 (mod 3), 52 ≡ 2 (mod 5), 52 ≡ 3 (mod 7). The smallest non-negative solution is x = 52.',
       },
       {
-        input: '[[2,4],[3,6]]',
+        input: 'congruences = [[2, 6], [3, 9]]',
         output: 'null',
+        explanation:
+          'x ≡ 2 (mod 6) implies x mod 3 = 2, but x ≡ 3 (mod 9) implies x mod 3 = 0. Since 2 ≠ 0, no solution exists.',
+      },
+      {
+        input: 'congruences = [[2, 4], [3, 6]]',
+        output: 'null',
+        explanation: 'No solution exists (inconsistent modular system).',
       },
     ],
-    constraints: ['Follow standard runtime and memory constraints.'],
+    constraints: [
+      '1 ≤ n ≤ 10',
+      '0 ≤ aᵢ < mᵢ ≤ 10^9',
+      'The system may or may not have a solution',
+      'Return null if no solution exists',
+    ],
     functionName: 'chineseRemainderTheorem',
     starterCode: {
       javascript: `function chineseRemainderTheorem(congruences) {
@@ -19373,7 +19354,7 @@ The Pisano period \`π(m)\` is the length of the period of the Fibonacci sequenc
 * 0 ≤ n ≤ 10^18
 * 1 ≤ m ≤ 10^9
 * For large \`n\`, use Pisano period optimization
-* For small \`n\`, direct calculation is acceptable5:["$","div",`,
+* For small \`n\`, direct calculation is acceptable`,
     examples: [
       {
         input: '0,10',
@@ -19878,7 +19859,7 @@ q.isEmpty();     // Output: false
 - Only standard stack operations (\`push\`, \`pop\`, \`peek\`, \`length\`) are allowed.  
 - All operations should have **amortized O(1)** time complexity.  
 - Calling \`dequeue\` or \`peek\` on an empty queue should throw an error or return a clear indicator like \`null\`.  
-- Support both integer and string data types as queue elements.5:["$","`,
+- Support both integer and string data types as queue elements.`,
     examples: [
       {
         input: `["QueueUsingStack","enqueue","enqueue","enqueue","dequeue","dequeue","peek"],[[],[10],[20],[30],[],[],[]]`,
@@ -20372,20 +20353,17 @@ Remember: Floyd-Warshall finds ALL pairs shortest paths in O(V³) time, perfect 
 #### Algorithm
 
 ##### Initialize dist matrix:
-- dist[i][i] = 0 (distance from node to itself)
-- dist[i][j] = Infinity for all other pairs
-- Set dist[i][j] = weight for each edge [i, j, weight]
+- \`dist[i][i] = 0\` (distance from node to itself)
+- \`dist[i][j] = Infinity\` for all other pairs
+- Set \`dist[i][j] = weight\` for each edge \`[i, j, weight]\`
 
 ##### For each intermediate node k (from 0 to V-1):
+- For each source node \`i\`:
+- For each destination node \`j\`:
+- \`dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])\`
+- (Try going from \`i\` to \`j\` via \`k\`)
 
-- For each source node i:
-- For each destination node j:
-- dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
-- (Try going from i to j via k)
-
-##### Return the distance matrix.
-
-#### Code`,
+##### Return the distance matrix.`,
       code: `function floydWarshall(V, edges) {
   const dist = Array.from({ length: V }, (_, i) =>
     Array.from({ length: V }, (_, j) => (i === j ? 0 : Infinity))

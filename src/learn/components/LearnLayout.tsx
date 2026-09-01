@@ -38,7 +38,7 @@ function LearnLayoutInner({ children, showSidebar = true }: LearnLayoutProps) {
         <main className="flex-1 min-w-0">{children}</main>
       )}
 
-      <Footer />
+      <Footer hasMarginTop={false} />
     </div>
   );
 }

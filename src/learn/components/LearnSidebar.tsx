@@ -102,7 +102,10 @@ function TopicTree({
                         <Link
                           key={slug}
                           to={`/learn/${slug}`}
-                          onClick={onClose}
+                          onClick={() => {
+                            onClose();
+                            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                          }}
                           className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] transition-colors ${
                             isActive
                               ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold'

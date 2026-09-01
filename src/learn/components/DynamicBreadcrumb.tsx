@@ -47,6 +47,7 @@ function DynamicBreadcrumb({ currentSlug }: DynamicBreadcrumbProps) {
     (targetSlug: string) => {
       setOpenMenu(null);
       navigate(`/learn/${targetSlug}`);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     },
     [navigate]
   );

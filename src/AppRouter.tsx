@@ -1,7 +1,19 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import { lazy, memo, Suspense, useEffect } from 'react';
 import AppLoading from './components/AppLoading';
 import { loadTypscript } from './utils/commonFunction';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [pathname]);
+
+  return null;
+}
 
 const HomePage = lazy(() => import('./page/HomePage'));
 const AboutPage = lazy(() => import('./page/AboutPage'));
@@ -35,6 +47,7 @@ function AppRouter() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<AppLoading />}>
         <Routes>
           <Route path="/" element={<HomePage />} />

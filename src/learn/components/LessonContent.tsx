@@ -43,6 +43,13 @@ function LessonContent() {
     }
   }, [slug, setLastLesson]);
 
+  // Always scroll window to top when changing lessons
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [slug]);
+
   if (!lesson || !slug) {
     return (
       <div className="flex-1 flex items-center justify-center p-8">
@@ -310,7 +317,10 @@ function LessonContent() {
           {prevSlug ? (
             <button
               type="button"
-              onClick={() => navigate(`/learn/${prevSlug}`)}
+              onClick={() => {
+                navigate(`/learn/${prevSlug}`);
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+              }}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-semibold text-[var(--text-primary)] transition-colors shadow-2xs cursor-pointer"
             >
               <span>❮ Previous</span>
@@ -318,6 +328,7 @@ function LessonContent() {
           ) : (
             <Link
               to="/learn"
+              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-semibold text-[var(--text-primary)] transition-colors shadow-2xs"
             >
               <span>❮ Home</span>
@@ -343,7 +354,10 @@ function LessonContent() {
           {nextSlug ? (
             <button
               type="button"
-              onClick={() => navigate(`/learn/${nextSlug}`)}
+              onClick={() => {
+                navigate(`/learn/${nextSlug}`);
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+              }}
               className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-bold transition-all shadow-xs cursor-pointer"
             >
               <span>Next ❯</span>
@@ -351,6 +365,7 @@ function LessonContent() {
           ) : (
             <Link
               to="/learn"
+              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
               className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-xs"
             >
               <span>Curriculum Complete 🎉</span>

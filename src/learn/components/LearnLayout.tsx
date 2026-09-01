@@ -17,7 +17,7 @@ function LearnLayoutInner({ children, showSidebar = true }: LearnLayoutProps) {
       <Navbar />
 
       {showSidebar ? (
-        <div className="flex-1 flex w-full max-w-7xl mx-auto">
+        <div className="flex-1 flex w-full">
           {/* Sidebar */}
           <LearnSidebar
             isOpen={sidebarOpen}

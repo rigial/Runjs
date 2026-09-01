@@ -1,407 +1,496 @@
 import type { Part } from '../types';
 
-/**
- * The complete JavaScript learning curriculum.
- * Topics are ordered from absolute beginner to advanced/professional level.
- * This structure is used to build the sidebar navigation, roadmap, and progress tracking.
- */
 export const curriculum: Part[] = [
   {
-    slug: 'js-fundamentals',
-    title: 'JavaScript Fundamentals',
-    description:
-      'Start from scratch — learn the building blocks that every JavaScript program is made of.',
-    partNumber: 1,
-    topics: [
+    "slug": "part1-language-fundamentals",
+    "title": "The JavaScript Language: Fundamentals",
+    "description": "From your first program to variables, operators, loops, and clean coding style.",
+    "partNumber": 1,
+    "topics": [
       {
-        slug: 'getting-started',
-        title: 'Getting Started',
-        description: 'Your first steps into the world of JavaScript.',
-        icon: 'Rocket',
-        accentColor: 'amber',
-        lessonSlugs: [
-          'what-is-javascript',
-          'hello-world',
-          'variables-and-constants',
-          'data-types',
-          'type-conversions',
-        ],
+        "slug": "01-getting-started",
+        "title": "Getting Started",
+        "description": "Comprehensive coverage of getting started.",
+        "icon": "Sparkles",
+        "accentColor": "amber",
+        "lessonSlugs": [
+          "intro",
+          "manuals-specifications",
+          "code-editors",
+          "devtools"
+        ]
       },
       {
-        slug: 'operators-and-logic',
-        title: 'Operators & Logic',
-        description: 'Make decisions and perform calculations in your code.',
-        icon: 'Calculator',
-        accentColor: 'blue',
-        lessonSlugs: [
-          'arithmetic-operators',
-          'comparison-operators',
-          'logical-operators',
-          'conditionals-if-else',
-          'switch-statement',
-          'ternary-operator',
-        ],
+        "slug": "02-first-steps",
+        "title": "First Steps",
+        "description": "Comprehensive coverage of first steps.",
+        "icon": "Terminal",
+        "accentColor": "blue",
+        "lessonSlugs": [
+          "hello-world",
+          "structure",
+          "strict-mode",
+          "variables",
+          "types",
+          "alert-prompt-confirm",
+          "type-conversions",
+          "operators",
+          "comparison",
+          "ifelse",
+          "logical-operators",
+          "nullish-coalescing-operator",
+          "while-for",
+          "switch",
+          "function-basics",
+          "function-expressions",
+          "arrow-functions-basics",
+          "javascript-specials"
+        ]
       },
       {
-        slug: 'loops-and-iteration',
-        title: 'Loops & Iteration',
-        description: 'Repeat actions and process collections of data.',
-        icon: 'Repeat',
-        accentColor: 'emerald',
-        lessonSlugs: [
-          'for-loop',
-          'while-and-do-while',
-          'break-and-continue',
-          'for-of-and-for-in',
-        ],
-      },
-    ],
+        "slug": "03-code-quality",
+        "title": "Code Quality & Debugging",
+        "description": "Comprehensive coverage of code quality & debugging.",
+        "icon": "ShieldCheck",
+        "accentColor": "emerald",
+        "lessonSlugs": [
+          "debugging-chrome",
+          "coding-style",
+          "comments",
+          "ninja-code",
+          "testing-mocha",
+          "polyfills"
+        ]
+      }
+    ]
   },
   {
-    slug: 'functions-in-depth',
-    title: 'Functions In Depth',
-    description:
-      'Master functions — the most important building block in JavaScript development.',
-    partNumber: 2,
-    topics: [
+    "slug": "part2-objects-and-types",
+    "title": "Objects & Data Types",
+    "description": "Deep dive into JavaScript objects, primitives, arrays, maps, and JSON.",
+    "partNumber": 2,
+    "topics": [
       {
-        slug: 'function-basics',
-        title: 'Function Basics',
-        description:
-          'Learn to write reusable blocks of code with functions.',
-        icon: 'FunctionSquare',
-        accentColor: 'violet',
-        lessonSlugs: [
-          'function-declarations',
-          'parameters-and-return',
-          'arrow-functions',
-          'default-parameters',
-          'rest-parameters',
-        ],
+        "slug": "04-object-basics",
+        "title": "Object Basics",
+        "description": "Comprehensive coverage of object basics.",
+        "icon": "Box",
+        "accentColor": "indigo",
+        "lessonSlugs": [
+          "object",
+          "object-copy",
+          "garbage-collection",
+          "object-methods",
+          "constructor-new",
+          "optional-chaining",
+          "symbol",
+          "object-toprimitive"
+        ]
       },
       {
-        slug: 'advanced-functions',
-        title: 'Advanced Functions',
-        description:
-          'Closures, callbacks, and higher-order function patterns.',
-        icon: 'Layers',
-        accentColor: 'rose',
-        lessonSlugs: [
-          'scope-and-closures',
-          'callback-functions',
-          'higher-order-functions',
-          'iife-pattern',
-          'recursion',
-        ],
-      },
-    ],
+        "slug": "05-data-types",
+        "title": "Data Types & Collections",
+        "description": "Comprehensive coverage of data types & collections.",
+        "icon": "Layers",
+        "accentColor": "purple",
+        "lessonSlugs": [
+          "primitives-methods",
+          "number",
+          "string",
+          "array",
+          "array-methods",
+          "iterable",
+          "map-set",
+          "weakmap-weakset",
+          "keys-values-entries",
+          "destructuring-assignment",
+          "date",
+          "json"
+        ]
+      }
+    ]
   },
   {
-    slug: 'objects-and-data',
-    title: 'Objects & Data Structures',
-    description:
-      'Organize and manipulate data using JavaScript\'s powerful built-in structures.',
-    partNumber: 3,
-    topics: [
+    "slug": "part3-functions-and-prototypes",
+    "title": "Advanced Functions & Prototypes",
+    "description": "Master closures, decorators, call/apply/bind, property flags, and the prototype chain.",
+    "partNumber": 3,
+    "topics": [
       {
-        slug: 'objects',
-        title: 'Working with Objects',
-        description: 'Create, access, and transform object data.',
-        icon: 'Box',
-        accentColor: 'orange',
-        lessonSlugs: [
-          'object-basics',
-          'object-methods-and-this',
-          'object-destructuring',
-          'spread-and-rest-objects',
-          'optional-chaining',
-          'object-keys-values-entries',
-        ],
+        "slug": "06-advanced-functions",
+        "title": "Advanced Functions & Scope",
+        "description": "Comprehensive coverage of advanced functions & scope.",
+        "icon": "Cpu",
+        "accentColor": "cyan",
+        "lessonSlugs": [
+          "recursion",
+          "rest-parameters-spread",
+          "closure",
+          "var",
+          "global-object",
+          "function-object",
+          "new-function",
+          "settimeout-setinterval",
+          "call-apply-decorators",
+          "bind",
+          "arrow-functions"
+        ]
       },
       {
-        slug: 'arrays',
-        title: 'Arrays & Iteration',
-        description: 'Master the array — JavaScript\'s most versatile data structure.',
-        icon: 'LayoutList',
-        accentColor: 'teal',
-        lessonSlugs: [
-          'array-basics',
-          'array-methods-mutating',
-          'array-methods-non-mutating',
-          'map-filter-reduce',
-          'array-destructuring',
-          'spread-and-rest-arrays',
-        ],
+        "slug": "07-object-properties",
+        "title": "Property Flags & Descriptors",
+        "description": "Comprehensive coverage of property flags & descriptors.",
+        "icon": "Sliders",
+        "accentColor": "rose",
+        "lessonSlugs": [
+          "property-descriptors",
+          "property-accessors"
+        ]
       },
       {
-        slug: 'maps-sets-and-more',
-        title: 'Maps, Sets & More',
-        description: 'Beyond arrays and objects — specialized data collections.',
-        icon: 'Database',
-        accentColor: 'cyan',
-        lessonSlugs: [
-          'map-and-weakmap',
-          'set-and-weakset',
-          'json-essentials',
-          'date-and-time',
-        ],
-      },
-    ],
+        "slug": "08-prototypes",
+        "title": "Prototypes & Inheritance",
+        "description": "Comprehensive coverage of prototypes & inheritance.",
+        "icon": "GitBranch",
+        "accentColor": "amber",
+        "lessonSlugs": [
+          "prototype-inheritance",
+          "function-prototype",
+          "native-prototypes",
+          "prototype-methods"
+        ]
+      }
+    ]
   },
   {
-    slug: 'strings-and-numbers',
-    title: 'Strings, Numbers & RegExp',
-    description:
-      'Deep dive into text processing, numeric precision, and pattern matching.',
-    partNumber: 4,
-    topics: [
+    "slug": "part4-classes-errors-async",
+    "title": "Classes, Error Handling & Async",
+    "description": "OOP syntax, inheritance, resilient try/catch patterns, Promises, and async/await.",
+    "partNumber": 4,
+    "topics": [
       {
-        slug: 'strings-deep-dive',
-        title: 'Strings Deep Dive',
-        description: 'Everything you need to know about text manipulation.',
-        icon: 'Type',
-        accentColor: 'purple',
-        lessonSlugs: [
-          'string-methods',
-          'template-literals',
-          'string-searching',
-        ],
+        "slug": "09-classes",
+        "title": "Classes & OOP",
+        "description": "Comprehensive coverage of classes & oop.",
+        "icon": "Component",
+        "accentColor": "sky",
+        "lessonSlugs": [
+          "class",
+          "class-inheritance",
+          "static-properties-methods",
+          "private-protected-properties-methods",
+          "extend-natives",
+          "instanceof",
+          "mixins"
+        ]
       },
       {
-        slug: 'numbers-and-math',
-        title: 'Numbers & Math',
-        description: 'Number precision, the Math object, and numeric gotchas.',
-        icon: 'Hash',
-        accentColor: 'indigo',
-        lessonSlugs: [
-          'number-essentials',
-          'math-object',
-          'bigint',
-        ],
+        "slug": "10-error-handling",
+        "title": "Error Handling",
+        "description": "Comprehensive coverage of error handling.",
+        "icon": "AlertTriangle",
+        "accentColor": "red",
+        "lessonSlugs": [
+          "try-catch",
+          "custom-errors"
+        ]
       },
-    ],
+      {
+        "slug": "11-async",
+        "title": "Promises & Async/Await",
+        "description": "Comprehensive coverage of promises & async/await.",
+        "icon": "Timer",
+        "accentColor": "emerald",
+        "lessonSlugs": [
+          "callbacks",
+          "promise-basics",
+          "promise-chaining",
+          "promise-error-handling",
+          "promise-api",
+          "promisify",
+          "microtask-queue",
+          "async-await"
+        ]
+      }
+    ]
   },
   {
-    slug: 'oop-and-prototypes',
-    title: 'OOP & Prototypes',
-    description:
-      'Understand how JavaScript\'s object system really works under the hood.',
-    partNumber: 5,
-    topics: [
+    "slug": "part5-generators-modules-misc",
+    "title": "Generators, Modules & Metaprogramming",
+    "description": "Generators, async iterators, ES Modules, Proxies, Reflect, and eval.",
+    "partNumber": 5,
+    "topics": [
       {
-        slug: 'prototypes',
-        title: 'Prototypes & Inheritance',
-        description: 'The prototype chain — JavaScript\'s inheritance model.',
-        icon: 'GitBranch',
-        accentColor: 'amber',
-        lessonSlugs: [
-          'prototype-basics',
-          'prototype-chain',
-          'constructor-functions',
-        ],
+        "slug": "12-generators-iterators",
+        "title": "Generators & Iterators",
+        "description": "Comprehensive coverage of generators & iterators.",
+        "icon": "Infinity",
+        "accentColor": "fuchsia",
+        "lessonSlugs": [
+          "generators",
+          "async-iterators-generators"
+        ]
       },
       {
-        slug: 'classes',
-        title: 'ES6 Classes',
-        description: 'Modern class syntax and object-oriented patterns.',
-        icon: 'Component',
-        accentColor: 'sky',
-        lessonSlugs: [
-          'class-basics',
-          'class-inheritance',
-          'static-and-private',
-          'getters-and-setters',
-        ],
+        "slug": "13-modules",
+        "title": "ES Modules",
+        "description": "Comprehensive coverage of es modules.",
+        "icon": "Package",
+        "accentColor": "lime",
+        "lessonSlugs": [
+          "modules-intro",
+          "import-export",
+          "modules-dynamic-imports"
+        ]
       },
-    ],
+      {
+        "slug": "99-js-misc",
+        "title": "Miscellaneous JavaScript",
+        "description": "Comprehensive coverage of miscellaneous javascript.",
+        "icon": "Wand2",
+        "accentColor": "pink",
+        "lessonSlugs": [
+          "proxy",
+          "eval",
+          "currying-partials",
+          "reference-type",
+          "bigint",
+          "unicode",
+          "weakref-finalizationregistry"
+        ]
+      }
+    ]
   },
   {
-    slug: 'error-handling',
-    title: 'Error Handling',
-    description:
-      'Write resilient code that handles failures gracefully.',
-    partNumber: 6,
-    topics: [
+    "slug": "part6-browser-document",
+    "title": "Browser: Document & DOM",
+    "description": "The DOM tree, element queries, modifying nodes, styles, sizes, and coordinates.",
+    "partNumber": 6,
+    "topics": [
       {
-        slug: 'errors',
-        title: 'Handling Errors',
-        description: 'Try-catch, custom errors, and debugging strategies.',
-        icon: 'ShieldAlert',
-        accentColor: 'red',
-        lessonSlugs: [
-          'try-catch-finally',
-          'error-types',
-          'custom-errors',
-          'debugging-techniques',
-        ],
-      },
-    ],
+        "slug": "1-document",
+        "title": "Document & DOM Manipulation",
+        "description": "Comprehensive coverage of document & dom manipulation.",
+        "icon": "FileCode",
+        "accentColor": "orange",
+        "lessonSlugs": [
+          "browser-environment",
+          "dom-nodes",
+          "dom-navigation",
+          "searching-elements-dom",
+          "basic-dom-node-properties",
+          "dom-attributes-and-properties",
+          "modifying-document",
+          "styles-and-classes",
+          "size-and-scroll",
+          "size-and-scroll-window",
+          "coordinates"
+        ]
+      }
+    ]
   },
   {
-    slug: 'async-javascript',
-    title: 'Asynchronous JavaScript',
-    description:
-      'Master callbacks, promises, and async/await to handle time-dependent operations.',
-    partNumber: 7,
-    topics: [
+    "slug": "part7-browser-events-forms",
+    "title": "Browser: Events & Forms",
+    "description": "Event bubbling, delegation, keyboard/mouse events, form controls, and lifecycle.",
+    "partNumber": 7,
+    "topics": [
       {
-        slug: 'async-fundamentals',
-        title: 'Async Fundamentals',
-        description: 'Understand how JavaScript handles asynchronous tasks.',
-        icon: 'Timer',
-        accentColor: 'emerald',
-        lessonSlugs: [
-          'event-loop-explained',
-          'settimeout-setinterval',
-          'callbacks-and-callback-hell',
-        ],
+        "slug": "2-events",
+        "title": "Introduction to Events",
+        "description": "Comprehensive coverage of introduction to events.",
+        "icon": "MousePointerClick",
+        "accentColor": "red",
+        "lessonSlugs": [
+          "introduction-browser-events",
+          "bubbling-and-capturing",
+          "event-delegation",
+          "default-browser-action",
+          "dispatch-events"
+        ]
       },
       {
-        slug: 'promises-and-async',
-        title: 'Promises & Async/Await',
-        description: 'Modern asynchronous patterns for clean, readable code.',
-        icon: 'Workflow',
-        accentColor: 'blue',
-        lessonSlugs: [
-          'promise-basics',
-          'promise-chaining',
-          'promise-all-race-any',
-          'async-await',
-          'error-handling-async',
-        ],
+        "slug": "3-event-details",
+        "title": "UI Event Details",
+        "description": "Comprehensive coverage of ui event details.",
+        "icon": "HandMetal",
+        "accentColor": "amber",
+        "lessonSlugs": [
+          "mouse-events-basics",
+          "mousemove-mouseover-mouseout-mouseenter-mouseleave",
+          "mouse-drag-and-drop",
+          "pointer-events",
+          "keyboard-events",
+          "onscroll"
+        ]
       },
-    ],
+      {
+        "slug": "4-forms-controls",
+        "title": "Forms & Controls",
+        "description": "Comprehensive coverage of forms & controls.",
+        "icon": "CheckSquare",
+        "accentColor": "blue",
+        "lessonSlugs": [
+          "form-elements",
+          "focus-blur",
+          "events-change-input",
+          "forms-submit"
+        ]
+      },
+      {
+        "slug": "5-loading",
+        "title": "Document & Resource Loading",
+        "description": "Comprehensive coverage of document & resource loading.",
+        "icon": "Clock",
+        "accentColor": "emerald",
+        "lessonSlugs": [
+          "onload-ondomcontentloaded",
+          "script-async-defer",
+          "onload-onerror"
+        ]
+      },
+      {
+        "slug": "99-ui-misc",
+        "title": "UI Miscellaneous",
+        "description": "Comprehensive coverage of ui miscellaneous.",
+        "icon": "Compass",
+        "accentColor": "purple",
+        "lessonSlugs": [
+          "mutation-observer",
+          "selection-range",
+          "event-loop"
+        ]
+      }
+    ]
   },
   {
-    slug: 'advanced-concepts',
-    title: 'Advanced Concepts',
-    description:
-      'Level up with generators, iterators, proxies, symbols, and metaprogramming.',
-    partNumber: 8,
-    topics: [
+    "slug": "part8-network-storage-binary",
+    "title": "Network Requests, Storage & Binary Data",
+    "description": "Fetch API, WebSockets, Server-Sent Events, Cookies, IndexedDB, and File/Blob.",
+    "partNumber": 8,
+    "topics": [
       {
-        slug: 'iterators-generators',
-        title: 'Iterators & Generators',
-        description: 'Lazy evaluation and custom iteration protocols.',
-        icon: 'Infinity',
-        accentColor: 'fuchsia',
-        lessonSlugs: [
-          'iterators-and-iterables',
-          'generator-functions',
-          'async-generators',
-        ],
+        "slug": "5-network",
+        "title": "Network Requests",
+        "description": "Comprehensive coverage of network requests.",
+        "icon": "Globe",
+        "accentColor": "sky",
+        "lessonSlugs": [
+          "fetch",
+          "formdata",
+          "fetch-progress",
+          "fetch-abort",
+          "fetch-crossorigin",
+          "fetch-api",
+          "url",
+          "xmlhttprequest",
+          "resume-upload",
+          "long-polling",
+          "websocket",
+          "server-sent-events"
+        ]
       },
       {
-        slug: 'metaprogramming',
-        title: 'Metaprogramming',
-        description: 'Symbols, Proxies, Reflect — program the language itself.',
-        icon: 'Wand2',
-        accentColor: 'pink',
-        lessonSlugs: [
-          'symbols',
-          'proxy-and-reflect',
-          'well-known-symbols',
-        ],
+        "slug": "6-data-storage",
+        "title": "Storing Data in the Browser",
+        "description": "Comprehensive coverage of storing data in the browser.",
+        "icon": "Database",
+        "accentColor": "indigo",
+        "lessonSlugs": [
+          "cookie",
+          "localstorage",
+          "indexeddb"
+        ]
       },
       {
-        slug: 'modules-and-tooling',
-        title: 'Modules & Tooling',
-        description: 'Organize code with ES modules and modern tooling.',
-        icon: 'Package',
-        accentColor: 'lime',
-        lessonSlugs: [
-          'es-modules',
-          'dynamic-imports',
-          'module-patterns',
-        ],
+        "slug": "4-binary",
+        "title": "Binary Data & Files",
+        "description": "Comprehensive coverage of binary data & files.",
+        "icon": "Binary",
+        "accentColor": "teal",
+        "lessonSlugs": [
+          "arraybuffer-binary-arrays",
+          "text-decoder",
+          "blob",
+          "file"
+        ]
       },
-    ],
+      {
+        "slug": "3-frames-and-windows",
+        "title": "Frames & Windows",
+        "description": "Comprehensive coverage of frames & windows.",
+        "icon": "AppWindow",
+        "accentColor": "rose",
+        "lessonSlugs": [
+          "popup-windows",
+          "cross-window-communication",
+          "clickjacking"
+        ]
+      }
+    ]
   },
   {
-    slug: 'dom-and-browser',
-    title: 'DOM & Browser APIs',
-    description:
-      'Interact with web pages — manipulate HTML, handle events, and use browser APIs.',
-    partNumber: 9,
-    topics: [
+    "slug": "part9-animation-regex-components",
+    "title": "Animation, Web Components & Regular Expressions",
+    "description": "CSS/JS animations, Custom Elements, Shadow DOM, and comprehensive RegExp mastery.",
+    "partNumber": 9,
+    "topics": [
       {
-        slug: 'dom-essentials',
-        title: 'DOM Essentials',
-        description: 'Select, create, and modify elements on the page.',
-        icon: 'FileCode',
-        accentColor: 'orange',
-        lessonSlugs: [
-          'dom-tree-overview',
-          'selecting-elements',
-          'modifying-elements',
-          'creating-and-removing',
-        ],
+        "slug": "7-animation",
+        "title": "Animation & Transitions",
+        "description": "Comprehensive coverage of animation & transitions.",
+        "icon": "Activity",
+        "accentColor": "pink",
+        "lessonSlugs": [
+          "bezier-curve",
+          "css-animations",
+          "js-animation"
+        ]
       },
       {
-        slug: 'events',
-        title: 'Events & Interactions',
-        description: 'Respond to user actions and browser events.',
-        icon: 'MousePointerClick',
-        accentColor: 'red',
-        lessonSlugs: [
-          'event-basics',
-          'event-bubbling-capturing',
-          'event-delegation',
-          'form-events',
-        ],
+        "slug": "8-web-components",
+        "title": "Web Components",
+        "description": "Comprehensive coverage of web components.",
+        "icon": "Boxes",
+        "accentColor": "violet",
+        "lessonSlugs": [
+          "webcomponents-intro",
+          "custom-elements",
+          "shadow-dom",
+          "template-element",
+          "slots-composition",
+          "shadow-dom-style",
+          "shadow-dom-events"
+        ]
       },
       {
-        slug: 'browser-apis',
-        title: 'Useful Browser APIs',
-        description: 'Storage, fetch, timers, and other essential web APIs.',
-        icon: 'Globe',
-        accentColor: 'sky',
-        lessonSlugs: [
-          'local-storage-session-storage',
-          'fetch-api',
-          'url-and-history',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'interview-and-practice',
-    title: 'Interview & Practice',
-    description:
-      'Sharpen your skills with real-world patterns, common interview topics, and coding challenges.',
-    partNumber: 10,
-    topics: [
-      {
-        slug: 'interview-concepts',
-        title: 'Interview Must-Knows',
-        description: 'The concepts that come up in every JavaScript interview.',
-        icon: 'GraduationCap',
-        accentColor: 'amber',
-        lessonSlugs: [
-          'hoisting-explained',
-          'this-keyword-deep-dive',
-          'call-apply-bind',
-          'debounce-and-throttle',
-          'shallow-vs-deep-copy',
-          'event-loop-interview',
-        ],
-      },
-      {
-        slug: 'real-world-patterns',
-        title: 'Real-World Patterns',
-        description: 'Design patterns and techniques used in production code.',
-        icon: 'Lightbulb',
-        accentColor: 'emerald',
-        lessonSlugs: [
-          'module-pattern',
-          'observer-pattern',
-          'singleton-pattern',
-          'factory-pattern',
-          'currying-and-composition',
-        ],
-      },
-    ],
-  },
+        "slug": "9-regular-expressions",
+        "title": "Regular Expressions",
+        "description": "Comprehensive coverage of regular expressions.",
+        "icon": "Regex",
+        "accentColor": "amber",
+        "lessonSlugs": [
+          "regexp-introduction",
+          "regexp-character-classes",
+          "regexp-unicode",
+          "regexp-anchors",
+          "regexp-multiline-mode",
+          "regexp-boundary",
+          "regexp-escaping",
+          "regexp-character-sets-and-ranges",
+          "regexp-quantifiers",
+          "regexp-greedy-and-lazy",
+          "regexp-groups",
+          "regexp-backreferences",
+          "regexp-alternation",
+          "regexp-lookahead-lookbehind",
+          "regexp-catastrophic-backtracking",
+          "regexp-sticky",
+          "regexp-methods"
+        ]
+      }
+    ]
+  }
 ];
 
 // ─── Helper functions ────────────────────────────────────────────────────────

@@ -1,22 +1,29 @@
 import type { Lesson } from '../types';
+import { part1Lessons } from './lessons/part1-language-fundamentals';
+import { part2Lessons } from './lessons/part2-objects-and-types';
+import { part3Lessons } from './lessons/part3-functions-and-prototypes';
+import { part4Lessons } from './lessons/part4-classes-errors-async';
+import { part5Lessons } from './lessons/part5-generators-modules-misc';
+import { part6Lessons } from './lessons/part6-browser-document';
+import { part7Lessons } from './lessons/part7-browser-events-forms';
+import { part8Lessons } from './lessons/part8-network-storage-binary';
+import { part9Lessons } from './lessons/part9-animation-regex-components';
 
-// Import all lesson data files
-import { fundamentalLessons } from './lessons/fundamentals';
-import { functionsAndObjectsLessons } from './lessons/functions-and-objects';
-import { intermediateLessons } from './lessons/intermediate';
-import { advancedLessons } from './lessons/advanced';
-
-/** Combined array of every lesson in the curriculum */
-const allLessonsArray: Lesson[] = [
-  ...fundamentalLessons,
-  ...functionsAndObjectsLessons,
-  ...intermediateLessons,
-  ...advancedLessons,
+export const allLessons: Lesson[] = [
+  ...part1Lessons,
+  ...part2Lessons,
+  ...part3Lessons,
+  ...part4Lessons,
+  ...part5Lessons,
+  ...part6Lessons,
+  ...part7Lessons,
+  ...part8Lessons,
+  ...part9Lessons,
 ];
 
-/** Lookup map: slug -> Lesson for O(1) access */
+// O(1) hash map for fast lesson retrieval by slug
 const lessonMap = new Map<string, Lesson>();
-for (const lesson of allLessonsArray) {
+for (const lesson of allLessons) {
   lessonMap.set(lesson.slug, lesson);
 }
 
@@ -25,34 +32,19 @@ export function getLessonBySlug(slug: string): Lesson | undefined {
   return lessonMap.get(slug);
 }
 
-/** Get all lessons */
-export function getAllLessons(): Lesson[] {
-  return allLessonsArray;
-}
-
-/** Get total number of exercises across all lessons */
+/** Get total exercise count across all lessons */
 export function getTotalExerciseCount(): number {
-  return allLessonsArray.reduce(
-    (sum, lesson) => sum + lesson.exercises.length,
-    0
-  );
+  return allLessons.reduce((sum, lesson) => sum + lesson.exercises.length, 0);
 }
 
 /** Search lessons by query string */
 export function searchLessons(query: string): Lesson[] {
-  if (!query.trim()) return [];
-  const lowerQuery = query.toLowerCase();
-  return allLessonsArray.filter(
-    (lesson) =>
-      lesson.title.toLowerCase().includes(lowerQuery) ||
-      lesson.description.toLowerCase().includes(lowerQuery) ||
-      lesson.tags.some((tag) => tag.toLowerCase().includes(lowerQuery)) ||
-      lesson.sections.some(
-        (section) =>
-          section.heading.toLowerCase().includes(lowerQuery) ||
-          section.paragraphs.some((p) =>
-            p.toLowerCase().includes(lowerQuery)
-          )
-      )
+  const q = query.toLowerCase().trim();
+  if (!q) return [];
+  return allLessons.filter(
+    (l) =>
+      l.title.toLowerCase().includes(q) ||
+      l.description.toLowerCase().includes(q) ||
+      l.tags.some((t) => t.toLowerCase().includes(q))
   );
 }

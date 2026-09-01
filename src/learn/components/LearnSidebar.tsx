@@ -29,9 +29,7 @@ function TopicTree({
     const expanded = new Set<string>();
     for (const part of curriculum) {
       for (const topic of part.topics) {
-        if (topic.lessonSlugs.includes(currentLessonSlug ?? '')) {
-          expanded.add(topic.slug);
-        }
+        expanded.add(topic.slug);
       }
     }
     return expanded;
@@ -185,7 +183,7 @@ function LearnSidebar({ isOpen, onClose }: LearnSidebarProps) {
       )}
 
       {/* Desktop Sticky Sidebar (in-flow, visible only on lg screens) */}
-      <aside className="hidden lg:flex flex-col w-64 xl:w-72 shrink-0 border-r border-[var(--border-default)] sticky top-14 h-[calc(100vh-56px)] self-start bg-[var(--bg-surface)]">
+      <aside className="hidden lg:flex flex-col w-56 xl:w-60 shrink-0 border-r border-[var(--border-default)] sticky top-14 h-[calc(100vh-56px)] self-start bg-[var(--bg-surface)]">
         <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--border-subtle)] shrink-0">
           <BookOpen className="w-4 h-4 text-amber-500" />
           <span className="text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider">

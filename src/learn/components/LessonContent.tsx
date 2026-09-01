@@ -97,7 +97,7 @@ function LessonContent() {
   };
 
   return (
-    <article className="w-full max-w-4xl px-6 sm:px-10 lg:px-12 py-6 sm:py-8 min-w-0">
+    <article className="w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-5 sm:py-7 min-w-0">
       {/* Breadcrumb */}
       {location && (
         <nav className="flex items-center gap-1.5 text-[11px] text-[var(--text-muted)] mb-4 flex-wrap">

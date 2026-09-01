@@ -1,6 +1,14 @@
-import { memo, useState, useCallback, useEffect } from 'react';
+import { memo, useState, useCallback, useEffect, useRef } from 'react';
+import { Editor, Monaco, type OnMount } from '@monaco-editor/react';
 import type { Exercise } from '../types';
-import { Eye, EyeOff, Lightbulb, Play, RotateCcw } from 'lucide-react';
+import useTheme from '../../hook/useTheme';
+import {
+  getMonacoThemeName,
+  registerMonacoThemes,
+} from '../../utils/monacoThemes';
+import { Eye, EyeOff, Lightbulb, Play, RotateCcw, CheckCircle2 } from 'lucide-react';
+
+type EditorInstance = Parameters<OnMount>[0];
 
 interface ExerciseComponentProps {
   exercise: Exercise;
@@ -13,15 +21,29 @@ function ExerciseComponent({
   exerciseNumber,
   onComplete,
 }: ExerciseComponentProps) {
+  const { resolvedTheme } = useTheme();
+  const editorRef = useRef<EditorInstance | null>(null);
+  const monacoInstanceRef = useRef<Monaco | null>(null);
+
   const [code, setCode] = useState(exercise.starterCode);
   const [output, setOutput] = useState<string | null>(null);
   const [showSolution, setShowSolution] = useState(false);
   const [hintsRevealed, setHintsRevealed] = useState(0);
   const [completed, setCompleted] = useState(false);
 
+  // Sync theme changes with Monaco
+  useEffect(() => {
+    if (monacoInstanceRef.current) {
+      monacoInstanceRef.current.editor.setTheme(
+        getMonacoThemeName(resolvedTheme)
+      );
+    }
+  }, [resolvedTheme]);
+
   // Reset state when exercise changes
   useEffect(() => {
     setCode(exercise.starterCode);
+    editorRef.current?.setValue(exercise.starterCode);
     setOutput(null);
     setShowSolution(false);
     setHintsRevealed(0);
@@ -55,8 +77,10 @@ function ExerciseComponent({
       logs.push('Error: ' + args.map(String).join(' '));
     };
 
+    const codeToRun = editorRef.current?.getValue() ?? code;
+
     try {
-      const result = (0, eval)(code);
+      const result = (0, eval)(codeToRun);
       if (result !== undefined && logs.length === 0) {
         logs.push(String(result));
       }
@@ -78,6 +102,7 @@ function ExerciseComponent({
 
   const handleReset = useCallback(() => {
     setCode(exercise.starterCode);
+    editorRef.current?.setValue(exercise.starterCode);
     setOutput(null);
     setShowSolution(false);
     setHintsRevealed(0);
@@ -94,8 +119,11 @@ function ExerciseComponent({
     advanced: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
   };
 
+  const lineCount = code ? code.split('\n').length : 1;
+  const computedHeight = `${Math.min(Math.max(lineCount * 21 + 36, 140), 320)}px`;
+
   return (
-    <div className="my-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] overflow-hidden">
+    <div className="my-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] overflow-hidden shadow-2xs">
       {/* Header */}
       <div className="px-4 py-3 border-b border-[var(--border-subtle)] bg-[var(--bg-surface-muted)] flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -109,8 +137,9 @@ function ExerciseComponent({
           </span>
         </div>
         {completed && (
-          <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-            ✓ Completed
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            Completed
           </span>
         )}
       </div>
@@ -125,24 +154,67 @@ function ExerciseComponent({
         </p>
       </div>
 
-      {/* Code Editor Area */}
+      {/* Monaco Code Editor Area */}
       <div className="p-4">
-        <textarea
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          className="w-full h-36 p-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] text-[var(--text-primary)] font-mono text-xs leading-relaxed resize-y focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all"
-          spellCheck={false}
-          placeholder="Write your solution here..."
-        />
+        <div className="rounded-lg border border-[var(--border-default)] overflow-hidden bg-[var(--bg-app)] focus-within:ring-2 focus-within:ring-amber-500/30 focus-within:border-amber-500/50 transition-all">
+          <Editor
+            height={computedHeight}
+            width="100%"
+            defaultLanguage="javascript"
+            language="javascript"
+            value={code}
+            theme={getMonacoThemeName(resolvedTheme)}
+            onChange={(value) => setCode(value ?? '')}
+            onMount={(editor, monaco) => {
+              editorRef.current = editor;
+              monacoInstanceRef.current = monaco;
+              registerMonacoThemes(monaco);
+              monaco.editor.setTheme(getMonacoThemeName(resolvedTheme));
+            }}
+            beforeMount={(monaco) => {
+              registerMonacoThemes(monaco);
+            }}
+            loading={
+              <div
+                style={{ height: computedHeight }}
+                className="flex items-center justify-center bg-[var(--bg-app)] text-xs font-mono text-[var(--text-muted)]"
+              >
+                Loading exercise editor...
+              </div>
+            }
+            options={{
+              readOnly: false,
+              minimap: { enabled: false },
+              fontSize: 13,
+              fontFamily:
+                "'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace",
+              lineHeight: 21,
+              lineNumbers: 'on',
+              lineNumbersMinChars: 3,
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+              renderLineHighlight: 'line',
+              folding: false,
+              glyphMargin: false,
+              tabSize: 2,
+              wordWrap: 'on',
+              scrollbar: {
+                verticalScrollbarSize: 6,
+                horizontalScrollbarSize: 6,
+                alwaysConsumeMouseWheel: false,
+              },
+            }}
+          />
+        </div>
 
         {/* Action buttons */}
         <div className="flex flex-wrap items-center gap-2 mt-3">
           <button
             type="button"
             onClick={handleRun}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer"
           >
-            <Play className="w-3.5 h-3.5" />
+            <Play className="w-3.5 h-3.5 fill-current" />
             Run Code
           </button>
 
@@ -151,9 +223,9 @@ function ExerciseComponent({
               <button
                 type="button"
                 onClick={handleRevealHint}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium hover:bg-amber-500/20 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium hover:bg-amber-500/20 transition-colors cursor-pointer"
               >
-                <Lightbulb className="w-3.5 h-3.5" />
+                <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
                 Hint ({hintsRevealed}/{exercise.hints.length})
               </button>
             )}
@@ -161,7 +233,7 @@ function ExerciseComponent({
           <button
             type="button"
             onClick={() => setShowSolution(!showSolution)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] text-[var(--text-secondary)] text-xs font-medium hover:bg-[var(--bg-surface-hover)] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] text-[var(--text-secondary)] text-xs font-medium hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors cursor-pointer"
           >
             {showSolution ? (
               <>
@@ -179,7 +251,7 @@ function ExerciseComponent({
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] text-[var(--text-muted)] text-xs font-medium hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-default)] text-[var(--text-muted)] text-xs font-medium hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset
@@ -189,7 +261,7 @@ function ExerciseComponent({
             <button
               type="button"
               onClick={handleMarkComplete}
-              className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-black text-xs font-semibold transition-colors"
+              className="ml-auto inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-bold transition-all shadow-xs cursor-pointer"
             >
               Mark Complete ✓
             </button>
@@ -234,12 +306,12 @@ function ExerciseComponent({
       {showSolution && (
         <div className="px-4 pb-4">
           <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 overflow-hidden">
-            <div className="px-3 py-2 border-b border-emerald-500/10">
+            <div className="px-3 py-2 border-b border-emerald-500/10 flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 Solution
               </span>
             </div>
-            <pre className="p-3 text-xs font-mono text-[var(--text-primary)] whitespace-pre-wrap overflow-x-auto">
+            <pre className="p-3 text-xs font-mono text-[var(--text-primary)] whitespace-pre-wrap overflow-x-auto bg-[var(--bg-app)]">
               {exercise.solution}
             </pre>
           </div>

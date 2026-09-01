@@ -2,7 +2,6 @@ import { memo, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { getLessonBySlug } from '../data/lessonRegistry';
 import {
-  findLessonLocation,
   getNextLessonSlug,
   getPreviousLessonSlug,
 } from '../data/curriculum';
@@ -10,11 +9,11 @@ import { useLearnProgress } from '../hooks/useLearnProgress';
 import CodeBlock from './CodeBlock';
 import QuizComponent from './QuizComponent';
 import ExerciseComponent from './ExerciseComponent';
+import DynamicBreadcrumb from './DynamicBreadcrumb';
 import {
   Clock,
   CheckCircle2,
   BookOpen,
-  ChevronRight,
   AlertTriangle,
   Info,
   Lightbulb,
@@ -33,7 +32,6 @@ function LessonContent() {
   } = useLearnProgress();
 
   const lesson = slug ? getLessonBySlug(slug) : undefined;
-  const location = slug ? findLessonLocation(slug) : null;
   const progress = slug ? getLessonProgress(slug) : null;
   const nextSlug = slug ? getNextLessonSlug(slug) : null;
   const prevSlug = slug ? getPreviousLessonSlug(slug) : null;
@@ -98,29 +96,8 @@ function LessonContent() {
 
   return (
     <article className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 min-w-0">
-      {/* Breadcrumb */}
-      {location && (
-        <nav className="flex items-center gap-1.5 text-[11px] text-[var(--text-muted)] mb-4 flex-wrap">
-          <Link
-            to="/learn"
-            className="hover:text-[var(--text-secondary)] transition-colors"
-          >
-            Learn
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-[var(--text-secondary)]">
-            {location.part.title}
-          </span>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-[var(--text-secondary)]">
-            {location.topic.title}
-          </span>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-[var(--text-primary)] font-medium">
-            {lesson.title}
-          </span>
-        </nav>
-      )}
+      {/* Dynamic Breadcrumb */}
+      <DynamicBreadcrumb currentSlug={slug} />
 
       {/* Top W3Schools-style Navigation Bar */}
       <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-[var(--border-subtle)] flex-wrap">

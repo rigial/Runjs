@@ -65,7 +65,7 @@ function HomePage() {
 
         {/* Language & Problem Cards Quick Links */}
         <section className="mt-14 max-w-6xl mx-auto w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 w-full text-left">
             {/* Coding Problems Card */}
             <Link
               to="/problems"
@@ -158,6 +158,30 @@ function HomePage() {
                 <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
                   Multi-file explorer, live component previews, and full
                   in-browser React bundler support.
+                </p>
+              </div>
+            </Link>
+
+            {/* HTML/CSS/JS Card */}
+            <Link
+              to="/html"
+              className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-orange-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500/10 text-orange-500 border border-orange-500/20 font-bold text-sm">
+                    &lt;/&gt;
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-orange-500/15 text-orange-600 dark:text-orange-400">
+                    CodePen
+                  </span>
+                </div>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-orange-500 transition-colors">
+                  HTML/CSS/JS
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  CodePen-style playground with 3-pane Monaco editors, sandboxed
+                  live preview, and console.
                 </p>
               </div>
             </Link>

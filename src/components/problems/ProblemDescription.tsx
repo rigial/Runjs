@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 import { Problem, SubmissionResult } from '../../problem-engine/types';
 import { getGithubIssueUrl } from '../../utils/githubIssues';
 import SubmissionHistory from './SubmissionHistory';
+import CodeSnippet from '../CodeSnippet';
 import {
   FileText,
   Lightbulb,
@@ -361,30 +362,31 @@ function ProblemDescription({
               </p>
             </div>
 
-            {/* Solution Code Block */}
+            {/* Solution Code Block in Monaco Editor */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                  Implementation
-                </h4>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
+                Implementation
+              </h4>
 
-                {onLoadCodeIntoEditor && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      problem.solution?.code &&
-                      onLoadCodeIntoEditor(problem.solution.code)
-                    }
-                    className="text-[11px] text-amber-500 hover:underline font-medium"
-                  >
-                    Load Solution into Editor
-                  </button>
-                )}
-              </div>
-
-              <pre className="p-4 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] font-mono text-xs text-[var(--text-primary)] overflow-x-auto shadow-2xs">
-                <code>{problem.solution.code}</code>
-              </pre>
+              <CodeSnippet
+                code={problem.solution.code}
+                language="javascript"
+                title="JavaScript Solution"
+                actionButton={
+                  onLoadCodeIntoEditor && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        problem.solution?.code &&
+                        onLoadCodeIntoEditor(problem.solution.code)
+                      }
+                      className="text-[11px] text-amber-500 hover:text-amber-400 hover:underline font-medium px-2 py-0.5 rounded transition-colors cursor-pointer"
+                    >
+                      Load Solution into Editor
+                    </button>
+                  )
+                }
+              />
             </div>
           </div>
         )}

@@ -494,7 +494,7 @@ function deepClone(value) {
     return new RegExp(value.source, value.flags);
   }
   if (Array.isArray(value)) {
-    return value.map(item => deepClone(item));
+    return value.map((item) => deepClone(item));
   }
   const copy = {};
   for (const key of Object.keys(value)) {
@@ -926,7 +926,7 @@ The EventEmitter should provide two methods:
         if (index !== -1) {
           listeners.splice(index, 1);
         }
-      }
+      },
     };
   }
 
@@ -935,7 +935,7 @@ The EventEmitter should provide two methods:
     if (!listeners || listeners.length === 0) {
       return [];
     }
-    return listeners.map(fn => fn(...args));
+    return listeners.map((fn) => fn(...args));
   }
 }`,
       complexity: {
@@ -1550,10 +1550,20 @@ function deepEqual(a, b) {
       explanation: `First check reference equality and NaN. If both are objects (and not null), verify matching arrays/objects key lengths, then recursively compare all child properties.`,
       code: `function deepEqual(a, b) {
   if (a === b) return true;
-  if (typeof a === 'number' && typeof b === 'number' && Number.isNaN(a) && Number.isNaN(b)) {
+  if (
+    typeof a === 'number' &&
+    typeof b === 'number' &&
+    Number.isNaN(a) &&
+    Number.isNaN(b)
+  ) {
     return true;
   }
-  if (a === null || b === null || typeof a !== 'object' || typeof b !== 'object') {
+  if (
+    a === null ||
+    b === null ||
+    typeof a !== 'object' ||
+    typeof b !== 'object'
+  ) {
     return false;
   }
   if (Array.isArray(a) !== Array.isArray(b)) {
@@ -1564,7 +1574,10 @@ function deepEqual(a, b) {
   if (keysA.length !== keysB.length) return false;
 
   for (const key of keysA) {
-    if (!Object.prototype.hasOwnProperty.call(b, key) || !deepEqual(a[key], b[key])) {
+    if (
+      !Object.prototype.hasOwnProperty.call(b, key) ||
+      !deepEqual(a[key], b[key])
+    ) {
       return false;
     }
   }
@@ -3261,37 +3274,37 @@ Make sure your function works correctly for various edge cases:
 
 **Solution Code**`,
       code: `function customSort(arr) {
-    const chars = [];
-    const nums = [];
+  const chars = [];
+  const nums = [];
 
-    // Separate characters and numbers
-    for (let item of arr) {
-        if (typeof item === 'string' && item.length === 1) {
-            chars.push(item);
-        } else if (typeof item === 'number') {
-            nums.push(item);
-        }
+  // Separate characters and numbers
+  for (let item of arr) {
+    if (typeof item === 'string' && item.length === 1) {
+      chars.push(item);
+    } else if (typeof item === 'number') {
+      nums.push(item);
     }
+  }
 
-    // Custom bubble sort for characters
-    for (let i = 0; i < chars.length; i++) {
-        for (let j = 0; j < chars.length - i - 1; j++) {
-            if (chars[j] > chars[j + 1]) {
-                [chars[j], chars[j + 1]] = [chars[j + 1], chars[j]];
-            }
-        }
+  // Custom bubble sort for characters
+  for (let i = 0; i < chars.length; i++) {
+    for (let j = 0; j < chars.length - i - 1; j++) {
+      if (chars[j] > chars[j + 1]) {
+        [chars[j], chars[j + 1]] = [chars[j + 1], chars[j]];
+      }
     }
+  }
 
-    // Custom bubble sort for numbers
-    for (let i = 0; i < nums.length; i++) {
-        for (let j = 0; j < nums.length - i - 1; j++) {
-            if (nums[j] > nums[j + 1]) {
-                [nums[j], nums[j + 1]] = [nums[j + 1], nums[j]];
-            }
-        }
+  // Custom bubble sort for numbers
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = 0; j < nums.length - i - 1; j++) {
+      if (nums[j] > nums[j + 1]) {
+        [nums[j], nums[j + 1]] = [nums[j + 1], nums[j]];
+      }
     }
+  }
 
-    return [...chars, ...nums];
+  return [...chars, ...nums];
 }`,
       complexity: {
         time: 'O(n)',
@@ -3433,7 +3446,7 @@ This approach ensures that:
       code: `function removeDuplicates(arr) {
   // your code here
 }
-removeDuplicates([1, 2, 2, 3, 4, 4])`,
+removeDuplicates([1, 2, 2, 3, 4, 4]);`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -3521,14 +3534,14 @@ Write a program that checks this condition and returns:
       explanation:
         'We implement the optimal solution for checkVotingEligibility considering constraints and edge cases.',
       code: `function checkVotingEligibility(age) {
-  if (typeof age !== "number" || age < 0) {
-    return "Invalid age";
+  if (typeof age !== 'number' || age < 0) {
+    return 'Invalid age';
   }
 
   if (age >= 18) {
-    return "Eligible to vote";
+    return 'Eligible to vote';
   } else {
-    return "Not eligible to vote";
+    return 'Not eligible to vote';
   }
 }`,
       complexity: {
@@ -6353,11 +6366,11 @@ return cleaned === cleaned.split('').reverse().join('');
 
 ### **Solution Code**`,
       code: `function validatePalindrome(str) {
-    // Remove non-alphanumeric characters and convert to lowercase
-    const cleaned = str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  // Remove non-alphanumeric characters and convert to lowercase
+  const cleaned = str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 
-    // Compare cleaned string with its reverse
-    return cleaned === cleaned.split('').reverse().join('');
+  // Compare cleaned string with its reverse
+  return cleaned === cleaned.split('').reverse().join('');
 }`,
       complexity: {
         time: 'O(n)',
@@ -6571,13 +6584,16 @@ for (const item of arr) {
       explanation:
         'We implement the optimal solution for groupBy considering constraints and edge cases.',
       code: `function groupBy(arr, key) {
-    // Your implementation
+  // Your implementation
 }
-groupBy([
+groupBy(
+  [
     { name: 'Alice', age: 25 },
     { name: 'Bob', age: 30 },
-    { name: 'Charlie', age: 25 }
-],'age');`,
+    { name: 'Charlie', age: 25 },
+  ],
+  'age'
+);`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -6699,7 +6715,7 @@ args.reduce((acc, curr) => acc + curr, 0);
 
 ### **Solution Code**`,
       code: `function sum(...args) {
-    return args.reduce((acc, curr) => acc + curr, 0);
+  return args.reduce((acc, curr) => acc + curr, 0);
 }`,
       complexity: {
         time: 'O(n)',
@@ -6930,65 +6946,65 @@ clear() {
 
 ### **Solution Code**`,
       code: `class Stack {
-    constructor() {
-        // Initialize empty array to store stack elements
-        this.items = [];
+  constructor() {
+    // Initialize empty array to store stack elements
+    this.items = [];
+  }
+
+  /**
+   * Add element to the top of the stack
+   * @param {*} element - Element to add to the stack
+   * @returns {number} New size of the stack
+   */
+  push(element) {
+    this.items.push(element);
+    return this.items.length;
+  }
+
+  /**
+   * Remove and return the top element from the stack
+   * @returns {*} The top element of the stack or undefined if empty
+   */
+  pop() {
+    if (this.isEmpty()) {
+      return undefined;
     }
-    
-    /**
-     * Add element to the top of the stack
-     * @param {*} element - Element to add to the stack
-     * @returns {number} New size of the stack
-     */
-    push(element) {
-        this.items.push(element);
-        return this.items.length;
+    return this.items.pop();
+  }
+
+  /**
+   * Return the top element without removing it
+   * @returns {*} The top element of the stack or undefined if empty
+   */
+  peek() {
+    if (this.isEmpty()) {
+      return undefined;
     }
-    
-    /**
-     * Remove and return the top element from the stack
-     * @returns {*} The top element of the stack or undefined if empty
-     */
-    pop() {
-        if (this.isEmpty()) {
-            return undefined;
-        }
-        return this.items.pop();
-    }
-    
-    /**
-     * Return the top element without removing it
-     * @returns {*} The top element of the stack or undefined if empty
-     */
-    peek() {
-        if (this.isEmpty()) {
-            return undefined;
-        }
-        return this.items[this.items.length - 1];
-    }
-    
-    /**
-     * Check if the stack is empty
-     * @returns {boolean} True if stack is empty, false otherwise
-     */
-    isEmpty() {
-        return this.items.length === 0;
-    }
-    
-    /**
-     * Return the number of elements in the stack
-     * @returns {number} Number of elements in the stack
-     */
-    size() {
-        return this.items.length;
-    }
-    
-    /**
-     * Remove all elements from the stack
-     */
-    clear() {
-        this.items = [];
-    }
+    return this.items[this.items.length - 1];
+  }
+
+  /**
+   * Check if the stack is empty
+   * @returns {boolean} True if stack is empty, false otherwise
+   */
+  isEmpty() {
+    return this.items.length === 0;
+  }
+
+  /**
+   * Return the number of elements in the stack
+   * @returns {number} Number of elements in the stack
+   */
+  size() {
+    return this.items.length;
+  }
+
+  /**
+   * Remove all elements from the stack
+   */
+  clear() {
+    this.items = [];
+  }
 }`,
       complexity: {
         time: 'O(n)',
@@ -8195,16 +8211,16 @@ countVowels("")              // → 0
 
 ### **Solution Code**`,
       code: `function countVowels(str) {
-    const vowels = new Set(['a', 'e', 'i', 'o', 'u']);
-    let count = 0;
+  const vowels = new Set(['a', 'e', 'i', 'o', 'u']);
+  let count = 0;
 
-    for (let char of str.toLowerCase()) {
-        if (vowels.has(char)) {
-            count++;
-        }
+  for (let char of str.toLowerCase()) {
+    if (vowels.has(char)) {
+      count++;
     }
+  }
 
-    return count;
+  return count;
 }`,
       complexity: {
         time: 'O(n)',
@@ -8505,10 +8521,10 @@ return expectedSum - actualSum;
 
 ### **Solution Code**`,
       code: `function findMissingNumber(nums) {
-    const n = nums.length;
-    const expectedSum = (n * (n + 1)) / 2;
-    const actualSum = nums.reduce((acc, num) => acc + num, 0);
-    return expectedSum - actualSum;
+  const n = nums.length;
+  const expectedSum = (n * (n + 1)) / 2;
+  const actualSum = nums.reduce((acc, num) => acc + num, 0);
+  return expectedSum - actualSum;
 }`,
       complexity: {
         time: 'O(n)',
@@ -8605,12 +8621,12 @@ return result;
 
 ### **Solution Code**`,
       code: `function shuffle(array) {
-    const result = array.slice(); // make a copy
-    for (let i = result.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [result[i], result[j]] = [result[j], result[i]]; // swap
-    }
-    return result;
+  const result = array.slice(); // make a copy
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]]; // swap
+  }
+  return result;
 }`,
       complexity: {
         time: 'O(n)',
@@ -8741,7 +8757,7 @@ const input = [3, 30, 34, 5, 9];
 ### Solution Code`,
       code: `function formLargestNumber(arr) {
   // Convert all numbers to strings
-  const nums = arr.map(num => num.toString());
+  const nums = arr.map((num) => num.toString());
 
   // Sort using custom comparator
   nums.sort((a, b) => {
@@ -8982,13 +8998,13 @@ for (let i = 0; i < s.length; i += 2) {
   if (!s || s.length === 0 || s.length % 2 !== 0) {
     return '';
   }
-  
+
   let result = '';
-  
+
   for (let i = 0; i < s.length; i += 2) {
     const letter = s[i];
     const shift = parseInt(s[i + 1]);
-    
+
     // Check if current character is a letter
     if (letter >= 'a' && letter <= 'z') {
       // Calculate new character code
@@ -8996,7 +9012,7 @@ for (let i = 0; i < s.length; i += 2) {
       result += String.fromCharCode(newCharCode);
     }
   }
-  
+
   return result;
 }`,
       complexity: {
@@ -9740,11 +9756,11 @@ A power of three can be identified by repeatedly dividing by 3 until we reach 1.
 #### Code`,
       code: `function isPowerOfThree(n) {
   if (n <= 0) return false;
-  
+
   while (n % 3 === 0) {
     n = n / 3;
   }
-  
+
   return n === 1;
 }`,
       complexity: {
@@ -9873,38 +9889,38 @@ return accumulator;
 7. Return the final accumulated result.
 
 ### **Solution Code**`,
-      code: `Array.prototype.myReduce = function(callback, initialValue) {
-    if (this == null) {
-        throw new TypeError("Array.prototype.myReduce called on null or undefined");
-    }
-    if (typeof callback !== "function") {
-        throw new TypeError(callback + " is not a function");
-    }
+      code: `Array.prototype.myReduce = function (callback, initialValue) {
+  if (this == null) {
+    throw new TypeError('Array.prototype.myReduce called on null or undefined');
+  }
+  if (typeof callback !== 'function') {
+    throw new TypeError(callback + ' is not a function');
+  }
 
-    const arr = Object(this);
-    const len = arr.length >>> 0;
-    let i = 0;
-    let accumulator;
+  const arr = Object(this);
+  const len = arr.length >>> 0;
+  let i = 0;
+  let accumulator;
 
-    if (arguments.length >= 2) {
-        accumulator = initialValue;
-    } else {
-        while (i < len && !(i in arr)) {
-            i++;
-        }
-        if (i >= len) {
-            throw new TypeError("Reduce of empty array with no initial value");
-        }
-        accumulator = arr[i++];
+  if (arguments.length >= 2) {
+    accumulator = initialValue;
+  } else {
+    while (i < len && !(i in arr)) {
+      i++;
     }
-
-    for (; i < len; i++) {
-        if (i in arr) {
-            accumulator = callback(accumulator, arr[i], i, arr);
-        }
+    if (i >= len) {
+      throw new TypeError('Reduce of empty array with no initial value');
     }
+    accumulator = arr[i++];
+  }
 
-    return accumulator;
+  for (; i < len; i++) {
+    if (i in arr) {
+      accumulator = callback(accumulator, arr[i], i, arr);
+    }
+  }
+
+  return accumulator;
 };`,
       complexity: {
         time: 'O(n)',
@@ -9971,26 +9987,26 @@ console.log(counter.decrement()); // 4
 
 ### **Solution Code**`,
       code: `function makeCounter(initialValue = 0) {
-    let count = initialValue;
-    
-    return {
-        increment: function() {
-            count++;
-            return count;
-        },
-        decrement: function() {
-            count--;
-            return count;
-        },
-        reset: function() {
-            count = initialValue;
-            return count;
-        },
-        // Optional: Get current value without modifying
-        getValue: function() {
-            return count;
-        }
-    };
+  let count = initialValue;
+
+  return {
+    increment: function () {
+      count++;
+      return count;
+    },
+    decrement: function () {
+      count--;
+      return count;
+    },
+    reset: function () {
+      count = initialValue;
+      return count;
+    },
+    // Optional: Get current value without modifying
+    getValue: function () {
+      return count;
+    },
+  };
 }`,
       complexity: {
         time: 'O(n)',
@@ -10384,12 +10400,12 @@ The goal is to return the **indices of requests** that are allowed based on a **
 
   for (let i = 0; i < requests.length; i++) {
     const currentTime = requests[i];
-    
+
     // Remove timestamps that are outside the current window
     while (queue.length > 0 && queue[0] <= currentTime - windowSize) {
       queue.shift();
     }
-    
+
     // Check if adding this request would exceed the limit
     if (queue.length < limit) {
       allowed.push(i);
@@ -10532,32 +10548,32 @@ async function executeNextPromise() {
       code: `function promiseAllWithConcurrencyLimit(functions, limit) {
   // Handle edge case of empty input
   if (functions.length === 0) return Promise.resolve([]);
-  
+
   // Use Math.min to handle case where limit > functions.length
   const concurrencyLimit = Math.min(limit, functions.length);
   const results = new Array(functions.length);
   let nextPromiseIndex = 0;
   let completedPromises = 0;
-  
+
   return new Promise((resolve, reject) => {
     // Helper function to execute the next promise
     async function executeNextPromise() {
       const currentIndex = nextPromiseIndex++;
-      
+
       try {
         // Execute the function to get its promise
         const result = await functions[currentIndex]();
-        
+
         // Store result in the correct position to maintain order
         results[currentIndex] = result;
         completedPromises++;
-        
+
         // If all promises completed, resolve the main promise
         if (completedPromises === functions.length) {
           resolve(results);
           return;
         }
-        
+
         // If there are more promises to execute, continue
         if (nextPromiseIndex < functions.length) {
           executeNextPromise();
@@ -10567,7 +10583,7 @@ async function executeNextPromise() {
         reject(error);
       }
     }
-    
+
     // Start executing promises up to the concurrency limit
     for (let i = 0; i < concurrencyLimit; i++) {
       executeNextPromise();
@@ -10779,7 +10795,13 @@ return result;
 
 function findWords(board, words) {
   // Handle edge cases
-  if (!board || board.length === 0 || !board[0].length || !words || words.length === 0) {
+  if (
+    !board ||
+    board.length === 0 ||
+    !board[0].length ||
+    !words ||
+    words.length === 0
+  ) {
     return [];
   }
 
@@ -10801,8 +10823,14 @@ function findWords(board, words) {
   const cols = board[0].length;
 
   const directions = [
-    [-1, 0], [1, 0], [0, -1], [0, 1],   // up, down, left, right
-    [-1, -1], [-1, 1], [1, -1], [1, 1]  // 4 diagonals
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1], // up, down, left, right
+    [-1, -1],
+    [-1, 1],
+    [1, -1],
+    [1, 1], // 4 diagonals
   ];
 
   // Step 2: Backtracking DFS
@@ -10822,8 +10850,10 @@ function findWords(board, words) {
       const nr = r + dr;
       const nc = c + dc;
       if (
-        nr >= 0 && nr < rows &&
-        nc >= 0 && nc < cols &&
+        nr >= 0 &&
+        nr < rows &&
+        nc >= 0 &&
+        nc < cols &&
         board[nr][nc] !== '#'
       ) {
         backtrack(nr, nc, nextNode);
@@ -10956,26 +10986,26 @@ Use depth-first search and push nodes to stack after exploring all neighbors.
 
 #### Code`,
       code: `function topologicalSort(n, adj) {
-    const visited = new Array(n).fill(false);
-    const stack = [];
+  const visited = new Array(n).fill(false);
+  const stack = [];
 
-    function dfs(node) {
-        visited[node] = true;
+  function dfs(node) {
+    visited[node] = true;
 
-        for (let neighbor of adj[node]) {
-            if (!visited[neighbor]) {
-                dfs(neighbor);
-            }
-        }
-
-        stack.push(node);
+    for (let neighbor of adj[node]) {
+      if (!visited[neighbor]) {
+        dfs(neighbor);
+      }
     }
 
-    for (let i = 0; i < n; i++) {
-        if (!visited[i]) dfs(i);
-    }
+    stack.push(node);
+  }
 
-    return stack.reverse();
+  for (let i = 0; i < n; i++) {
+    if (!visited[i]) dfs(i);
+  }
+
+  return stack.reverse();
 }`,
       complexity: {
         time: 'O(V + E)',
@@ -11788,7 +11818,7 @@ The key aspects of implementing throttle:
   let lastCall = 0;
   let lastResult;
 
-  return function(...args) {
+  return function (...args) {
     const now = Date.now();
     // If enough time has passed since the last call
     if (now - lastCall >= delay) {
@@ -12237,9 +12267,9 @@ if (s.length === 1) return s;
       explanation:
         'We implement the optimal solution for compressString considering constraints and edge cases.',
       code: `function compressString(str) {
-  if (!str) return "";
+  if (!str) return '';
 
-  let result = "";
+  let result = '';
   let count = 1;
 
   for (let i = 1; i <= str.length; i++) {
@@ -12248,16 +12278,16 @@ if (s.length === 1) return s;
     } else {
       // For counts > 9, split into chunks of 9
       while (count > 9) {
-        result += str[i - 1] + "9";
+        result += str[i - 1] + '9';
         count -= 9;
       }
       if (count === 1) {
         // Check if previous splitting happened (means count was reduced)
         // We can detect that if result ends with the same char + '9' chunk, so check last chars
-        let lastNineChunk = result.endsWith(str[i - 1] + "9");
+        let lastNineChunk = result.endsWith(str[i - 1] + '9');
         if (lastNineChunk) {
           // Append '1' for leftover 1 after splitting
-          result += str[i - 1] + "1";
+          result += str[i - 1] + '1';
         } else {
           // Normal single char with count 1, append only char
           result += str[i - 1];
@@ -12481,43 +12511,43 @@ size() {
 
 ### **Solution Code**`,
       code: `class PriorityQueue {
-    constructor() {
-        this.items = [];
+  constructor() {
+    this.items = [];
+  }
+
+  enqueue(value, priority) {
+    const newItem = { value, priority };
+    let inserted = false;
+
+    // Insert based on priority
+    for (let i = 0; i < this.items.length; i++) {
+      if (priority < this.items[i].priority) {
+        this.items.splice(i, 0, newItem);
+        inserted = true;
+        break;
+      }
     }
 
-    enqueue(value, priority) {
-        const newItem = { value, priority };
-        let inserted = false;
-
-        // Insert based on priority
-        for (let i = 0; i < this.items.length; i++) {
-            if (priority < this.items[i].priority) {
-                this.items.splice(i, 0, newItem);
-                inserted = true;
-                break;
-            }
-        }
-
-        if (!inserted) {
-            this.items.push(newItem); // lowest priority, push to end
-        }
+    if (!inserted) {
+      this.items.push(newItem); // lowest priority, push to end
     }
+  }
 
-    dequeue() {
-        return this.isEmpty() ? null : this.items.shift().value;
-    }
+  dequeue() {
+    return this.isEmpty() ? null : this.items.shift().value;
+  }
 
-    peek() {
-        return this.isEmpty() ? null : this.items[0].value;
-    }
+  peek() {
+    return this.isEmpty() ? null : this.items[0].value;
+  }
 
-    isEmpty() {
-        return this.items.length === 0;
-    }
+  isEmpty() {
+    return this.items.length === 0;
+  }
 
-    size() {
-        return this.items.length;
-    }
+  size() {
+    return this.items.length;
+  }
 }`,
       complexity: {
         time: 'O(n)',
@@ -13008,32 +13038,32 @@ return -1;
 
 ### **Solution Code**`,
       code: `function searchRotatedArray(nums, target) {
-    let left = 0;
-    let right = nums.length - 1;
+  let left = 0;
+  let right = nums.length - 1;
 
-    while (left <= right) {
-        const mid = Math.floor((left + right) / 2);
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
 
-        if (nums[mid] === target) return mid;
+    if (nums[mid] === target) return mid;
 
-        // Check if the left half is sorted
-        if (nums[left] <= nums[mid]) {
-            if (nums[left] <= target && target < nums[mid]) {
-                right = mid - 1; // target is in left half
-            } else {
-                left = mid + 1; // target is in right half
-            }
-        } else {
-            // Right half is sorted
-            if (nums[mid] < target && target <= nums[right]) {
-                left = mid + 1; // target is in right half
-            } else {
-                right = mid - 1; // target is in left half
-            }
-        }
+    // Check if the left half is sorted
+    if (nums[left] <= nums[mid]) {
+      if (nums[left] <= target && target < nums[mid]) {
+        right = mid - 1; // target is in left half
+      } else {
+        left = mid + 1; // target is in right half
+      }
+    } else {
+      // Right half is sorted
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1; // target is in right half
+      } else {
+        right = mid - 1; // target is in left half
+      }
     }
+  }
 
-    return -1;
+  return -1;
 }`,
       complexity: {
         time: 'O(n)',
@@ -13189,44 +13219,44 @@ if (result.length !== n) {
 
 #### Code`,
       code: `function topologicalSortKahn(n, adj) {
-    const inDegree = new Array(n).fill(0);
-    const queue = [];
-    const result = [];
+  const inDegree = new Array(n).fill(0);
+  const queue = [];
+  const result = [];
 
-    // 1. Compute in-degree for each node
-    for (let i = 0; i < n; i++) {
-        for (let neighbor of adj[i]) {
-            inDegree[neighbor]++;
-        }
+  // 1. Compute in-degree for each node
+  for (let i = 0; i < n; i++) {
+    for (let neighbor of adj[i]) {
+      inDegree[neighbor]++;
     }
+  }
 
-    // 2. Push all nodes with 0 in-degree into the queue
-    for (let i = 0; i < n; i++) {
-        if (inDegree[i] === 0) {
-            queue.push(i);
-        }
+  // 2. Push all nodes with 0 in-degree into the queue
+  for (let i = 0; i < n; i++) {
+    if (inDegree[i] === 0) {
+      queue.push(i);
     }
+  }
 
-    // 3. BFS - process nodes with zero in-degree
-    while (queue.length > 0) {
-        const node = queue.shift();
-        result.push(node);
+  // 3. BFS - process nodes with zero in-degree
+  while (queue.length > 0) {
+    const node = queue.shift();
+    result.push(node);
 
-        // Reduce in-degree of neighbors
-        for (let neighbor of adj[node]) {
-            inDegree[neighbor]--;
-            if (inDegree[neighbor] === 0) {
-                queue.push(neighbor);
-            }
-        }
+    // Reduce in-degree of neighbors
+    for (let neighbor of adj[node]) {
+      inDegree[neighbor]--;
+      if (inDegree[neighbor] === 0) {
+        queue.push(neighbor);
+      }
     }
+  }
 
-    // If result has fewer nodes → cycle exists
-    if (result.length !== n) {
-        return "Cycle detected — Topological Sort not possible";
-    }
+  // If result has fewer nodes → cycle exists
+  if (result.length !== n) {
+    return 'Cycle detected — Topological Sort not possible';
+  }
 
-    return result;
+  return result;
 }`,
       complexity: {
         time: 'O(V + E)',
@@ -13383,9 +13413,9 @@ return typeof value;
 
 ### **Solution Code**`,
       code: `function detectType(value) {
-    if (value === null) return 'null';
-    if (Array.isArray(value)) return 'array';
-    return typeof value;
+  if (value === null) return 'null';
+  if (Array.isArray(value)) return 'array';
+  return typeof value;
 }`,
       complexity: {
         time: 'O(n)',
@@ -13489,11 +13519,9 @@ return arr[low];
 - At each step, compute \`mid\`.
 - Ensure \`mid\` is even so that we always compare a full pair (\`mid\` and \`mid+1\`).
 - Depending on whether \`arr[mid]\` equals \`arr[mid+1]\`, we eliminate half the search space.`,
-      code: `function findSingleElement(arr) {
+      code: `function findSingleElement(arr) {}
 
-}
-
-findSingleElement([1, 1, 2])`,
+findSingleElement([1, 1, 2]);`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -13824,8 +13852,8 @@ Use the mathematical formula for the sum of consecutive integers to check if a v
       code: `function isSumOfConsecutive(n) {
   if (n < 1) return false;
   if (n === 1) return false;
-  
-  for (let k = 2; k * (k + 1) / 2 <= n; k++) {
+
+  for (let k = 2; (k * (k + 1)) / 2 <= n; k++) {
     const numerator = n - (k * (k - 1)) / 2;
     if (numerator % k === 0) {
       return true;
@@ -14006,23 +14034,23 @@ return to;
 
 ### **Solution Code**`,
       code: `function customAssign(target, ...sources) {
-    if (target === null || target === undefined) {
-        throw new TypeError('Cannot convert undefined or null to object');
+  if (target === null || target === undefined) {
+    throw new TypeError('Cannot convert undefined or null to object');
+  }
+
+  const to = Object(target);
+
+  for (const source of sources) {
+    if (source === null || source === undefined) continue;
+
+    for (const key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        to[key] = source[key];
+      }
     }
+  }
 
-    const to = Object(target);
-
-    for (const source of sources) {
-        if (source === null || source === undefined) continue;
-
-        for (const key in source) {
-            if (Object.prototype.hasOwnProperty.call(source, key)) {
-                to[key] = source[key];
-            }
-        }
-    }
-
-    return to;
+  return to;
 }`,
       complexity: {
         time: 'O(n)',
@@ -14396,8 +14424,6 @@ After processing, if any fresh oranges remain, return -1. Otherwise, return the 
   // Write your code here
 }
 
-
-
 // Example usage
 orangesRotting([
   [2, 1, 1],
@@ -14619,20 +14645,20 @@ Primitives (string, number, boolean, etc.) don’t need processing.`,
 
 ### **Solution Code**`,
       code: `function deepOmit(obj, keysToOmit) {
-    if (Array.isArray(obj)) {
-        return obj.map(item => deepOmit(item, keysToOmit));
-    }
+  if (Array.isArray(obj)) {
+    return obj.map((item) => deepOmit(item, keysToOmit));
+  }
 
-    if (obj !== null && typeof obj === 'object') {
-        return Object.keys(obj).reduce((acc, key) => {
-            if (!keysToOmit.includes(key)) {
-                acc[key] = deepOmit(obj[key], keysToOmit);
-            }
-            return acc;
-        }, {});
-    }
+  if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).reduce((acc, key) => {
+      if (!keysToOmit.includes(key)) {
+        acc[key] = deepOmit(obj[key], keysToOmit);
+      }
+      return acc;
+    }, {});
+  }
 
-    return obj; // primitive
+  return obj; // primitive
 }`,
       complexity: {
         time: 'O(n)',
@@ -14889,23 +14915,23 @@ Add neighbor to queue.
 
 #### Code`,
       code: `function shortestDistance(graph, src) {
-    const dist = Array(graph.length).fill(Infinity);
-    dist[src] = 0;
+  const dist = Array(graph.length).fill(Infinity);
+  dist[src] = 0;
 
-    let q = [src];
+  let q = [src];
 
-    while (q.length) {
-        let curr = q.shift();
+  while (q.length) {
+    let curr = q.shift();
 
-        for (let neighbour of graph[curr]) {
-            if (dist[neighbour] === Infinity) {
-                dist[neighbour] = dist[curr] + 1;
-                q.push(neighbour);
-            }
-        }
+    for (let neighbour of graph[curr]) {
+      if (dist[neighbour] === Infinity) {
+        dist[neighbour] = dist[curr] + 1;
+        q.push(neighbour);
+      }
     }
+  }
 
-    return dist;
+  return dist;
 }`,
       complexity: {
         time: 'O(V + E)',
@@ -15029,34 +15055,34 @@ This ensures you only return when everything is processed.`,
 
 ### **Solution Code**`,
       code: `function mapAsyncLimit(arr, limit, asyncFn) {
-    return new Promise((resolve, reject) => {
-        const results = new Array(arr.length);
-        let i = 0; // current index to process
-        let active = 0;
-        let completed = 0;
+  return new Promise((resolve, reject) => {
+    const results = new Array(arr.length);
+    let i = 0; // current index to process
+    let active = 0;
+    let completed = 0;
 
-        function runNext() {
-            if (completed === arr.length) return resolve(results);
-            if (i === arr.length || active >= limit) return;
+    function runNext() {
+      if (completed === arr.length) return resolve(results);
+      if (i === arr.length || active >= limit) return;
 
-            const currentIndex = i++;
-            active++;
+      const currentIndex = i++;
+      active++;
 
-            Promise.resolve(asyncFn(arr[currentIndex]))
-                .then(result => {
-                    results[currentIndex] = result;
-                    active--;
-                    completed++;
-                    runNext();
-                    if (completed === arr.length) resolve(results);
-                })
-                .catch(reject);
+      Promise.resolve(asyncFn(arr[currentIndex]))
+        .then((result) => {
+          results[currentIndex] = result;
+          active--;
+          completed++;
+          runNext();
+          if (completed === arr.length) resolve(results);
+        })
+        .catch(reject);
 
-            runNext(); // try to start more tasks if below limit
-        }
+      runNext(); // try to start more tasks if below limit
+    }
 
-        runNext(); // start the initial wave
-    });
+    runNext(); // start the initial wave
+  });
 }`,
       complexity: {
         time: 'O(n)',
@@ -15212,20 +15238,20 @@ maxLen = Math.max(maxLen, end - start + 1);
 
 ### **Solution Code**`,
       code: `function lengthOfLongestSubstring(s) {
-    let maxLen = 0;
-    let charSet = new Set();
-    let start = 0;
+  let maxLen = 0;
+  let charSet = new Set();
+  let start = 0;
 
-    for (let end = 0; end < s.length; end++) {
-        while (charSet.has(s[end])) {
-            charSet.delete(s[start]);
-            start++;
-        }
-        charSet.add(s[end]);
-        maxLen = Math.max(maxLen, end - start + 1);
+  for (let end = 0; end < s.length; end++) {
+    while (charSet.has(s[end])) {
+      charSet.delete(s[start]);
+      start++;
     }
+    charSet.add(s[end]);
+    maxLen = Math.max(maxLen, end - start + 1);
+  }
 
-    return maxLen;
+  return maxLen;
 }`,
       complexity: {
         time: 'O(n)',
@@ -15474,21 +15500,21 @@ return Array.from(map.values());
 
 ### **Solution Code**`,
       code: `function mergeData(arr1, arr2) {
-    const map = new Map();
+  const map = new Map();
 
-    for (let item of arr1) {
-        map.set(item.id, { ...item });
+  for (let item of arr1) {
+    map.set(item.id, { ...item });
+  }
+
+  for (let item of arr2) {
+    if (map.has(item.id)) {
+      map.set(item.id, { ...map.get(item.id), ...item }); // arr2 overrides
+    } else {
+      map.set(item.id, { ...item });
     }
+  }
 
-    for (let item of arr2) {
-        if (map.has(item.id)) {
-            map.set(item.id, { ...map.get(item.id), ...item }); // arr2 overrides
-        } else {
-            map.set(item.id, { ...item });
-        }
-    }
-
-    return Array.from(map.values());
+  return Array.from(map.values());
 }`,
       complexity: {
         time: 'O(n)',
@@ -15720,15 +15746,19 @@ while (top <= bottom && left <= right) {
   if (!matrix || matrix.length === 0 || matrix[0].length === 0) {
     return [];
   }
-  
+
   const rows = matrix.length;
   const cols = matrix[0].length;
   const result = [];
-  const visited = Array(rows).fill().map(() => Array(cols).fill(false));
-  
-  let top = 0, bottom = rows - 1;
-  let left = 0, right = cols - 1;
-  
+  const visited = Array(rows)
+    .fill()
+    .map(() => Array(cols).fill(false));
+
+  let top = 0,
+    bottom = rows - 1;
+  let left = 0,
+    right = cols - 1;
+
   while (top <= bottom && left <= right) {
     // Traverse right
     for (let col = left; col <= right; col++) {
@@ -15738,7 +15768,7 @@ while (top <= bottom && left <= right) {
       }
     }
     top++;
-    
+
     // Traverse down
     for (let row = top; row <= bottom; row++) {
       if (!visited[row][right] && matrix[row][right] !== -1) {
@@ -15747,7 +15777,7 @@ while (top <= bottom && left <= right) {
       }
     }
     right--;
-    
+
     // Traverse left
     if (top <= bottom) {
       for (let col = right; col >= left; col--) {
@@ -15758,7 +15788,7 @@ while (top <= bottom && left <= right) {
       }
       bottom--;
     }
-    
+
     // Traverse up
     if (left <= right) {
       for (let row = bottom; row >= top; row--) {
@@ -15770,7 +15800,7 @@ while (top <= bottom && left <= right) {
       left++;
     }
   }
-  
+
   return result;
 }`,
       complexity: {
@@ -16538,7 +16568,7 @@ Use a stack to track indices of unmatched parentheses, then calculate the longes
   const n = s.length;
   let longest = 0;
   const stack = [];
-  
+
   // First pass: mark unmatched parentheses
   for (let i = 0; i < n; i++) {
     if (s[i] === '(') {
@@ -16551,21 +16581,22 @@ Use a stack to track indices of unmatched parentheses, then calculate the longes
       }
     }
   }
-  
+
   // If stack is empty, entire string is valid
   if (stack.length === 0) {
     return n;
   }
-  
+
   // Find longest valid substring between unmatched indices
-  let a = n, b = 0;
+  let a = n,
+    b = 0;
   while (stack.length > 0) {
     b = stack.pop();
     longest = Math.max(longest, a - b - 1);
     a = b;
   }
   longest = Math.max(longest, a);
-  
+
   return longest;
 }`,
       complexity: {
@@ -17257,31 +17288,31 @@ If any distance can still be improved, a negative cycle exists → return null.
 
 #### Code`,
       code: `function bellmanFord(edges, V, src) {
-    let dist = new Array(V).fill(Infinity);
-    dist[src] = 0;
+  let dist = new Array(V).fill(Infinity);
+  dist[src] = 0;
 
-    for (let i = 0; i < V - 1; i++) {
-        let updated = false;
+  for (let i = 0; i < V - 1; i++) {
+    let updated = false;
 
-        for (let [u, v, w] of edges) {
-            if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
-                updated = true;
-            }
-        }
-
-        if (!updated) break;  // Early termination optimization
-    }
-
-    // check negative cycle
     for (let [u, v, w] of edges) {
-        if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
-            console.log("Negative weight cycle detected!!");
-            return null;
-        }
+      if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
+        dist[v] = dist[u] + w;
+        updated = true;
+      }
     }
 
-    return dist;
+    if (!updated) break; // Early termination optimization
+  }
+
+  // check negative cycle
+  for (let [u, v, w] of edges) {
+    if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
+      console.log('Negative weight cycle detected!!');
+      return null;
+    }
+  }
+
+  return dist;
 }`,
       complexity: {
         time: 'O(V × E)',
@@ -17707,26 +17738,26 @@ for (const node of reachable) {
 
 ### **Solution Code**`,
       code: `function garbageCollector(graph, roots) {
-    const reachable = new Set();
+  const reachable = new Set();
 
-    function dfs(node) {
-        if (!graph[node] || reachable.has(node)) return;
-        reachable.add(node);
-        for (const neighbor of graph[node]) {
-            dfs(neighbor);
-        }
+  function dfs(node) {
+    if (!graph[node] || reachable.has(node)) return;
+    reachable.add(node);
+    for (const neighbor of graph[node]) {
+      dfs(neighbor);
     }
+  }
 
-    for (const root of roots) {
-        dfs(root);
-    }
+  for (const root of roots) {
+    dfs(root);
+  }
 
-    const cleanedGraph = {};
-    for (const node of reachable) {
-        cleanedGraph[node] = graph[node];
-    }
+  const cleanedGraph = {};
+  for (const node of reachable) {
+    cleanedGraph[node] = graph[node];
+  }
 
-    return cleanedGraph;
+  return cleanedGraph;
 }`,
       complexity: {
         time: 'O(n)',
@@ -18214,27 +18245,27 @@ Use a deque to maintain indices of potential maximum elements in decreasing orde
   const n = nums.length;
   const result = [];
   const deque = []; // Store indices of potential maximums
-  
+
   for (let i = 0; i < n; i++) {
     // Remove indices from front that are out of current window
     if (deque.length > 0 && deque[0] <= i - k) {
       deque.shift();
     }
-    
+
     // Remove indices from back if corresponding values are <= current value
     while (deque.length > 0 && nums[deque[deque.length - 1]] <= nums[i]) {
       deque.pop();
     }
-    
+
     // Add current index to deque
     deque.push(i);
-    
+
     // Once we have at least k elements, add max to result
     if (i >= k - 1) {
       result.push(nums[deque[0]]);
     }
   }
-  
+
   return result;
 }`,
       complexity: {
@@ -18684,88 +18715,94 @@ Push [neighbor, newDist] to heap.
 
 #### Code`,
       code: `class MinHeap {
-    constructor() {
-        this.heap = [];
+  constructor() {
+    this.heap = [];
+  }
+
+  push(value) {
+    this.heap.push(value);
+    this.bubbleUp(this.heap.length - 1);
+  }
+
+  pop() {
+    if (this.heap.length === 1) return this.heap.pop();
+
+    const top = this.heap[0];
+    this.heap[0] = this.heap.pop();
+    this.bubbleDown(0);
+
+    return top;
+  }
+
+  size() {
+    return this.heap.length;
+  }
+
+  bubbleUp(index) {
+    while (index > 0) {
+      let parent = Math.floor((index - 1) / 2);
+
+      if (this.heap[parent][1] > this.heap[index][1]) {
+        [this.heap[parent], this.heap[index]] = [
+          this.heap[index],
+          this.heap[parent],
+        ];
+        index = parent;
+      } else break;
     }
+  }
 
-    push(value) {
-        this.heap.push(value);
-        this.bubbleUp(this.heap.length - 1);
+  bubbleDown(index) {
+    let length = this.heap.length;
+
+    while (true) {
+      let left = 2 * index + 1;
+      let right = 2 * index + 2;
+      let smallest = index;
+
+      if (left < length && this.heap[left][1] < this.heap[smallest][1]) {
+        smallest = left;
+      }
+      if (right < length && this.heap[right][1] < this.heap[smallest][1]) {
+        smallest = right;
+      }
+
+      if (smallest !== index) {
+        [this.heap[smallest], this.heap[index]] = [
+          this.heap[index],
+          this.heap[smallest],
+        ];
+        index = smallest;
+      } else break;
     }
-
-    pop() {
-        if (this.heap.length === 1) return this.heap.pop();
-
-        const top = this.heap[0];
-        this.heap[0] = this.heap.pop();
-        this.bubbleDown(0);
-
-        return top;
-    }
-
-    size() {
-        return this.heap.length;
-    }
-
-    bubbleUp(index) {
-        while (index > 0) {
-            let parent = Math.floor((index - 1) / 2);
-
-            if (this.heap[parent][1] > this.heap[index][1]) {
-                [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
-                index = parent;
-            } else break;
-        }
-    }
-
-    bubbleDown(index) {
-        let length = this.heap.length;
-
-        while (true) {
-            let left = 2 * index + 1;
-            let right = 2 * index + 2;
-            let smallest = index;
-
-            if (left < length && this.heap[left][1] < this.heap[smallest][1]) {
-                smallest = left;
-            }
-            if (right < length && this.heap[right][1] < this.heap[smallest][1]) {
-                smallest = right;
-            }
-
-            if (smallest !== index) {
-                [this.heap[smallest], this.heap[index]] = [this.heap[index], this.heap[smallest]];
-                index = smallest;
-            } else break;
-        }
-    }
+  }
 }
 
 function dijkstras(graph, src) {
-    let n = graph.length;
-    let dist = new Array(n).fill(Infinity);
-    dist[src] = 0;
+  let n = graph.length;
+  let dist = new Array(n).fill(Infinity);
+  dist[src] = 0;
 
-    let pq = new MinHeap();
-    pq.push([src, 0]);
+  let pq = new MinHeap();
+  pq.push([src, 0]);
 
-    while (pq.size()) {
-        let [node, nodeDist] = pq.pop();
+  while (pq.size()) {
+    let [node, nodeDist] = pq.pop();
 
-        // ignore stale entries
-        if (nodeDist > dist[node]) continue;
+    // ignore stale entries
+    if (nodeDist > dist[node]) continue;
 
-        for (let [neighbor, weight] of graph[node]) {
-            let newDist = dist[node] + weight;
+    for (let [neighbor, weight] of graph[node]) {
+      let newDist = dist[node] + weight;
 
-            if (newDist < dist[neighbor]) {
-                dist[neighbor] = newDist;
-                pq.push([neighbor, newDist]);
-            }
-        }
+      if (newDist < dist[neighbor]) {
+        dist[neighbor] = newDist;
+        pq.push([neighbor, newDist]);
+      }
     }
+  }
 
-    return dist;
+  return dist;
 }`,
       complexity: {
         time: 'O((V + E) log V)',
@@ -19242,25 +19279,25 @@ Use binary search to find the correct partition point in the smaller array, ensu
   if (nums1.length > nums2.length) {
     return findMedianSortedArrays(nums2, nums1);
   }
-  
+
   const m = nums1.length;
   const n = nums2.length;
   const total = m + n;
   const leftSize = Math.floor((total + 1) / 2); // Left partition size
-  
+
   let low = 0;
   let high = m;
-  
+
   while (low <= high) {
     const mid1 = Math.floor((low + high) / 2);
     const mid2 = leftSize - mid1;
-    
+
     // Values around partition points
     const l1 = mid1 > 0 ? nums1[mid1 - 1] : Number.MIN_SAFE_INTEGER;
     const r1 = mid1 < m ? nums1[mid1] : Number.MAX_SAFE_INTEGER;
     const l2 = mid2 > 0 ? nums2[mid2 - 1] : Number.MIN_SAFE_INTEGER;
     const r2 = mid2 < n ? nums2[mid2] : Number.MAX_SAFE_INTEGER;
-    
+
     // Check if partition is correct
     if (l1 <= r2 && l2 <= r1) {
       // Found correct partition, calculate median
@@ -19279,7 +19316,7 @@ Use binary search to find the correct partition point in the smaller array, ensu
       low = mid1 + 1;
     }
   }
-  
+
   return 0;
 }`,
       complexity: {
@@ -19790,7 +19827,7 @@ for (let [x, y, w] of edges) {
 
 function kruskalsMST(n, edges) {
   if (!edges || edges.length === 0) return 0;
-  
+
   edges.sort((a, b) => a[2] - b[2]);
 
   let uf = new UnionFind(n);
@@ -19969,38 +20006,38 @@ peek() {
 
 ### **Solution Code**`,
       code: `class QueueUsingStack {
-    constructor() {
-        this.inStack = [];
-        this.outStack = [];
-    }
+  constructor() {
+    this.inStack = [];
+    this.outStack = [];
+  }
 
-    enqueue(value) {
-        this.inStack.push(value);
-    }
+  enqueue(value) {
+    this.inStack.push(value);
+  }
 
-    dequeue() {
-        if (this.isEmpty()) return null;
-        if (this.outStack.length === 0) {
-            while (this.inStack.length) {
-                this.outStack.push(this.inStack.pop());
-            }
-        }
-        return this.outStack.pop();
+  dequeue() {
+    if (this.isEmpty()) return null;
+    if (this.outStack.length === 0) {
+      while (this.inStack.length) {
+        this.outStack.push(this.inStack.pop());
+      }
     }
+    return this.outStack.pop();
+  }
 
-    peek() {
-        if (this.isEmpty()) return null;
-        if (this.outStack.length === 0) {
-            while (this.inStack.length) {
-                this.outStack.push(this.inStack.pop());
-            }
-        }
-        return this.outStack[this.outStack.length - 1];
+  peek() {
+    if (this.isEmpty()) return null;
+    if (this.outStack.length === 0) {
+      while (this.inStack.length) {
+        this.outStack.push(this.inStack.pop());
+      }
     }
+    return this.outStack[this.outStack.length - 1];
+  }
 
-    isEmpty() {
-        return this.inStack.length === 0 && this.outStack.length === 0;
-    }
+  isEmpty() {
+    return this.inStack.length === 0 && this.outStack.length === 0;
+  }
 }`,
       complexity: {
         time: 'O(n)',
@@ -20182,44 +20219,44 @@ dfs(node, prefix);
 
 ### **Solution Code**`,
       code: `class AutocompleteSystem {
-    constructor() {
-        this.root = {}; // Root is a plain object
-    }
+  constructor() {
+    this.root = {}; // Root is a plain object
+  }
 
-    insert(word) {
-        let node = this.root;
-        for (let char of word) {
-            if (!node[char]) {
-                node[char] = {};
-            }
-            node = node[char];
+  insert(word) {
+    let node = this.root;
+    for (let char of word) {
+      if (!node[char]) {
+        node[char] = {};
+      }
+      node = node[char];
+    }
+    node.isEnd = true; // Mark end of a word
+  }
+
+  search(prefix) {
+    const results = [];
+
+    const dfs = (node, path) => {
+      if (node.isEnd) {
+        results.push(path);
+      }
+      for (let char in node) {
+        if (char !== 'isEnd') {
+          dfs(node[char], path + char);
         }
-        node.isEnd = true; // Mark end of a word
+      }
+    };
+
+    let node = this.root;
+    for (let char of prefix) {
+      if (!node[char]) return [];
+      node = node[char];
     }
 
-    search(prefix) {
-        const results = [];
-
-        const dfs = (node, path) => {
-            if (node.isEnd) {
-                results.push(path);
-            }
-            for (let char in node) {
-                if (char !== 'isEnd') {
-                    dfs(node[char], path + char);
-                }
-            }
-        };
-
-        let node = this.root;
-        for (let char of prefix) {
-            if (!node[char]) return [];
-            node = node[char];
-        }
-
-        dfs(node, prefix);
-        return results;
-    }
+    dfs(node, prefix);
+    return results;
+  }
 }`,
       complexity: {
         time: 'O(n)',
@@ -20350,23 +20387,23 @@ Remember: Floyd-Warshall finds ALL pairs shortest paths in O(V³) time, perfect 
 
 #### Code`,
       code: `function floydWarshall(V, edges) {
-    const dist = Array.from({ length: V }, (_, i) =>
-        Array.from({ length: V }, (_, j) => (i === j) ? 0 : Infinity)
-    );
+  const dist = Array.from({ length: V }, (_, i) =>
+    Array.from({ length: V }, (_, j) => (i === j ? 0 : Infinity))
+  );
 
-    for (let [i, j, w] of edges) {
-        dist[i][j] = w;
+  for (let [i, j, w] of edges) {
+    dist[i][j] = w;
+  }
+
+  for (let k = 0; k < V; k++) {
+    for (let i = 0; i < V; i++) {
+      for (let j = 0; j < V; j++) {
+        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+      }
     }
+  }
 
-    for (let k = 0; k < V; k++) {
-        for (let i = 0; i < V; i++) {
-            for (let j = 0; j < V; j++) {
-                dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
-            }
-        }
-    }
-
-    return dist;
+  return dist;
 }`,
       complexity: {
         time: 'O(V³)',
@@ -20571,72 +20608,71 @@ execute() {
 
 ### **Solution Code**`,
       code: `class TaskSchedulerWithDependencies {
-    constructor() {
-        this.graph = new Map(); // Adjacency list
-        this.inDegree = new Map(); // Track dependencies count
+  constructor() {
+    this.graph = new Map(); // Adjacency list
+    this.inDegree = new Map(); // Track dependencies count
+  }
+
+  addTask(taskId, dependencies) {
+    if (!this.graph.has(taskId)) {
+      this.graph.set(taskId, []);
+      this.inDegree.set(taskId, 0);
     }
 
-    addTask(taskId, dependencies) {
-        if (!this.graph.has(taskId)) {
-            this.graph.set(taskId, []);
-            this.inDegree.set(taskId, 0);
-        }
+    for (const dep of dependencies) {
+      if (!this.graph.has(dep)) {
+        this.graph.set(dep, []);
+        this.inDegree.set(dep, 0);
+      }
+      this.graph.get(dep).push(taskId);
+      this.inDegree.set(taskId, (this.inDegree.get(taskId) || 0) + 1);
+    }
+  }
 
-        for (const dep of dependencies) {
-            if (!this.graph.has(dep)) {
-                this.graph.set(dep, []);
-                this.inDegree.set(dep, 0);
-            }
-            this.graph.get(dep).push(taskId);
-            this.inDegree.set(taskId, (this.inDegree.get(taskId) || 0) + 1);
-        }
+  execute() {
+    const queue = [];
+    const executionOrder = [];
+
+    // Enqueue tasks with no dependencies (in-degree = 0)
+    for (const [task, degree] of this.inDegree) {
+      if (degree === 0) {
+        queue.push(task);
+      }
     }
 
-    execute() {
-        const queue = [];
-        const executionOrder = [];
+    while (queue.length > 0) {
+      const task = queue.shift();
+      executionOrder.push(task);
 
-        // Enqueue tasks with no dependencies (in-degree = 0)
-        for (const [task, degree] of this.inDegree) {
-            if (degree === 0) {
-                queue.push(task);
-            }
+      for (const dependentTask of this.graph.get(task)) {
+        this.inDegree.set(dependentTask, this.inDegree.get(dependentTask) - 1);
+        if (this.inDegree.get(dependentTask) === 0) {
+          queue.push(dependentTask);
         }
-
-        while (queue.length > 0) {
-            const task = queue.shift();
-            executionOrder.push(task);
-
-            for (const dependentTask of this.graph.get(task)) {
-                this.inDegree.set(dependentTask, this.inDegree.get(dependentTask) - 1);
-                if (this.inDegree.get(dependentTask) === 0) {
-                    queue.push(dependentTask);
-                }
-            }
-        }
-
-        // Check for a cycle (if tasks are left with non-zero in-degree)
-        if (executionOrder.length !== this.graph.size) {
-            throw new Error("Circular dependency detected!");
-        }
-
-        return executionOrder;
+      }
     }
+
+    // Check for a cycle (if tasks are left with non-zero in-degree)
+    if (executionOrder.length !== this.graph.size) {
+      throw new Error('Circular dependency detected!');
+    }
+
+    return executionOrder;
+  }
 }
-
 
 // Example usage:
 const scheduler = new TaskSchedulerWithDependencies();
-scheduler.addTask("A", ["B", "C"]);
-scheduler.addTask("B", ["D"]);
-scheduler.addTask("C", []);
-scheduler.addTask("D", []);
+scheduler.addTask('A', ['B', 'C']);
+scheduler.addTask('B', ['D']);
+scheduler.addTask('C', []);
+scheduler.addTask('D', []);
 
 console.log(scheduler.execute()); // ["D", "B", "C", "A"]
 
 // Circular dependency test
-scheduler.addTask("E", ["F"]);
-scheduler.addTask("F", ["E"]);
+scheduler.addTask('E', ['F']);
+scheduler.addTask('F', ['E']);
 console.log(scheduler.execute()); // Error: Circular dependency detected!`,
       complexity: {
         time: 'O(n)',
@@ -20897,7 +20933,7 @@ Use cyclic sort to place each positive number at its correct index (number-1), t
 - Return: Missing number or n+1 if all numbers present`,
       code: `function firstMissingPositive(nums) {
   const n = nums.length;
-  
+
   // Cyclic sort: place each number at its correct index
   for (let i = 0; i < n; i++) {
     // Keep swapping until the current number is in its correct position
@@ -20908,14 +20944,14 @@ Use cyclic sort to place each positive number at its correct index (number-1), t
       [nums[i], nums[correctIndex]] = [nums[correctIndex], nums[i]];
     }
   }
-  
+
   // Find the first missing positive
   for (let i = 0; i < n; i++) {
     if (nums[i] !== i + 1) {
       return i + 1;
     }
   }
-  
+
   // If all numbers from 1 to n are present, return n + 1
   return n + 1;
 }`,

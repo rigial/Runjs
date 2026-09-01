@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import { saveJSTSFile } from '../utils/commonFunction';
 import { deleteCode, updateCode } from '../db/operations';
 import CreatePlayground from './CreatePlayground';
+import HTMLDashboardPreviewModal from './html-playground/HTMLDashboardPreviewModal';
+import DeleteConfirmModal from './DeleteConfirmModal';
 import {
   Star,
   Download,
@@ -15,6 +17,7 @@ import {
   Clock,
   Tag as TagIcon,
   FolderOpen,
+  Eye,
 } from 'lucide-react';
 
 function ProjectTable({
@@ -26,6 +29,10 @@ function ProjectTable({
 }: IProjectTable) {
   const dialogRef = useRef<ModalRef>(null);
   const [renameData, setRenameData] = useState<UserCodeBase>();
+  const [previewProject, setPreviewProject] = useState<UserCodeBase | null>(
+    null
+  );
+  const [deleteTarget, setDeleteTarget] = useState<UserCodeBase | null>(null);
 
   async function handleDownload(val: UserCodeBase) {
     if (val.language === 'react' && val.files) {
@@ -39,13 +46,64 @@ function ProjectTable({
           zip.file(relPath, content);
         }
         const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
+        link.href = url;
         link.download = `${val.fileName || 'react-project'}.zip`;
+        document.body.appendChild(link);
         link.click();
-        URL.revokeObjectURL(link.href);
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
       } catch (e) {
         console.error('Failed to download React zip:', e);
+      }
+    } else if (val.language === 'html') {
+      try {
+        const JSZip = (await import('jszip')).default;
+        const zip = new JSZip();
+
+        const htmlContent = val.htmlCode || '';
+        const cssContent = val.cssCode || '';
+        const jsContent = val.jsCode || val.code || '';
+
+        let entryHtml = htmlContent;
+        if (cssContent && !entryHtml.includes('style.css')) {
+          if (entryHtml.includes('</head>')) {
+            entryHtml = entryHtml.replace(
+              '</head>',
+              '  <link rel="stylesheet" href="style.css">\n</head>'
+            );
+          } else {
+            entryHtml =
+              `<link rel="stylesheet" href="style.css">\n` + entryHtml;
+          }
+        }
+        if (jsContent && !entryHtml.includes('script.js')) {
+          if (entryHtml.includes('</body>')) {
+            entryHtml = entryHtml.replace(
+              '</body>',
+              '  <script src="script.js"></script>\n</body>'
+            );
+          } else {
+            entryHtml = entryHtml + `\n<script src="script.js"></script>`;
+          }
+        }
+
+        zip.file('index.html', entryHtml);
+        zip.file('style.css', cssContent);
+        zip.file('script.js', jsContent);
+
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${val.fileName || 'html-project'}.zip`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch (e) {
+        console.error('Failed to download HTML zip:', e);
       }
     } else if (val.language === 'js' || val.language === 'ts') {
       saveJSTSFile(val.code, val.fileName, val.language);
@@ -78,18 +136,14 @@ function ProjectTable({
     }
   }
 
-  async function handleConfirmDelete(id: string) {
-    if (
-      window.confirm(
-        'Are you sure you want to delete this playground permanently?'
-      )
-    ) {
-      try {
-        await deleteCode(id);
-        await dbcall();
-      } catch (error) {
-        console.log('Error', error);
-      }
+  async function handleExecuteDelete() {
+    if (!deleteTarget) return;
+    try {
+      await deleteCode(deleteTarget.id);
+      await dbcall();
+      setDeleteTarget(null);
+    } catch (error) {
+      console.log('Error', error);
     }
   }
 
@@ -296,6 +350,19 @@ function ProjectTable({
                       <div className="flex items-center justify-end gap-1">
                         {!bin ? (
                           <Fragment>
+                            {/* Live Preview for HTML */}
+                            {val.language === 'html' && (
+                              <button
+                                type="button"
+                                onClick={() => setPreviewProject(val)}
+                                title="Live Preview"
+                                aria-label="Live Preview"
+                                className="p-1.5 rounded-md text-[var(--text-secondary)] hover:text-orange-500 hover:bg-orange-500/10 transition-colors cursor-pointer"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                            )}
+
                             {/* Run Link */}
                             <Link
                               to={targetUrl}
@@ -358,10 +425,10 @@ function ProjectTable({
                             {/* Permanent Delete */}
                             <button
                               type="button"
-                              onClick={() => handleConfirmDelete(val.id)}
+                              onClick={() => setDeleteTarget(val)}
                               title="Delete Forever"
                               aria-label="Delete Forever"
-                              className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors border border-red-500/20"
+                              className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors border border-red-500/20 cursor-pointer"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                               <span>Delete</span>
@@ -384,6 +451,18 @@ function ProjectTable({
         edit={true}
         ref={dialogRef}
         tagSuggestions={tagSuggestions}
+      />
+
+      <HTMLDashboardPreviewModal
+        project={previewProject}
+        onClose={() => setPreviewProject(null)}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!deleteTarget}
+        projectName={deleteTarget?.fileName}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleExecuteDelete}
       />
     </Fragment>
   );

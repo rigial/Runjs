@@ -2,7 +2,7 @@ import { Editor, Monaco } from '@monaco-editor/react';
 import { memo, useEffect, useRef } from 'react';
 import AppLoading from './AppLoading';
 import { ICodeEditor } from '../utils/interface';
-import { emmetJSX } from 'emmet-monaco-es';
+import { emmetJSX, emmetCSS, emmetHTML } from 'emmet-monaco-es';
 import useTheme from '../hook/useTheme';
 import {
   getMonacoThemeName,
@@ -31,7 +31,11 @@ function CodeEditor({
       ? 'script.ts'
       : language === 'javascript'
         ? 'script.js'
-        : undefined);
+        : language === 'html'
+          ? 'index.html'
+          : language === 'css'
+            ? 'style.css'
+            : undefined);
 
   useEffect(() => {
     if (monacoInstanceRef.current) {
@@ -101,7 +105,13 @@ function CodeEditor({
             emmetDisposerRef.current();
           }
           if (!disableAutoSuggestion) {
-            emmetDisposerRef.current = emmetJSX(monaco, [language]);
+            if (language === 'html') {
+              emmetDisposerRef.current = emmetHTML(monaco, ['html']);
+            } else if (language === 'css') {
+              emmetDisposerRef.current = emmetCSS(monaco, ['css']);
+            } else {
+              emmetDisposerRef.current = emmetJSX(monaco, [language]);
+            }
           }
         }}
         onChange={onChange}

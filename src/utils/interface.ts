@@ -69,9 +69,23 @@ export interface ITypeScriptError {
   severity: 'error' | 'warning' | 'info';
 }
 
+export interface HtmlPlaygroundProject {
+  id?: string;
+  html: string;
+  css: string;
+  javascript: string;
+  fileName?: string;
+  tag?: string;
+  settings: {
+    autoRun: boolean;
+    fontSize: number;
+    theme?: string;
+  };
+}
+
 export interface ICodeEditor {
   code: string;
-  language: 'javascript' | 'typescript';
+  language: 'javascript' | 'typescript' | 'html' | 'css';
   onChange: OnChange;
   currentFontSize: number;
   /* eslint-disable  @typescript-eslint/no-explicit-any */

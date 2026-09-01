@@ -155,29 +155,29 @@
           "let var2 = null;",
           "",
           "let object = {",
-          "a: 1,",
-          "b: undefined",
+          "  a: 1,",
+          "  b: undefined,",
           "};",
           "",
           "function test(arg1, arg2) {",
-          "console.log(arg1);  // undefined: not provided",
-          "console.log(arg2);  // null: provided as such",
+          "  console.log(arg1); // undefined: not provided",
+          "  console.log(arg2); // null: provided as such",
           "}",
           "",
           "function clearProperty(prop) {",
-          "delete object[prop];",
+          "  delete object[prop];",
           "}",
           "",
-          "console.log(var1);     // undefined",
-          "console.log(var2);     // null",
+          "console.log(var1); // undefined",
+          "console.log(var2); // null",
           "console.log(object.a); // 1",
           "console.log(object.b); // undefined",
           "console.log(object.c); // undefined",
           "",
-          "test();               // Both arguments are undefined",
-          "test(1, null);        // arg1 is 1, arg2 is null",
+          "test(); // Both arguments are undefined",
+          "test(1, null); // arg1 is 1, arg2 is null",
           "",
-          "clearProperty('b');  // Removes property 'b' from object",
+          "clearProperty('b'); // Removes property 'b' from object",
           "console.log(object.b); // undefined: Property 'b' was removed, not set to null"
         ]
       }
@@ -288,7 +288,7 @@
           "",
           "console.log(sayHello()); // \"Hello, World!\"",
           "function sayHello() {",
-          "return \"Hello, World!\";",
+          "  return 'Hello, World!';",
           "}",
           "",
           "// The above code is equivalent to the following during the compile phase:",
@@ -327,9 +327,9 @@
           "",
           "console.log(globalVar); // Undefined",
           "console.log(globalFunction()); // \"Hello, Global!\"",
-          "var globalVar = \"I am global Var!\";",
+          "var globalVar = 'I am global Var!';",
           "function globalFunction() {",
-          "return \"Hello, Global!\";",
+          "  return 'Hello, Global!';",
           "}"
         ]
       },
@@ -348,18 +348,18 @@
         "type": "code",
         "data": [
           "function hoistingInLocalScope() {",
-          "// These local declarations are hoisted during the compile phase:",
-          "// var localVar;",
-          "// function localFunction() {}",
+          "  // These local declarations are hoisted during the compile phase:",
+          "  // var localVar;",
+          "  // function localFunction() {}",
           "",
-          "console.log(localVar); // Undefined",
-          "localVar = \"I am a local var!\";",
-          "console.log(localFunction()); // \"Hello, Local!\"",
+          "  console.log(localVar); // Undefined",
+          "  localVar = 'I am a local var!';",
+          "  console.log(localFunction()); // \"Hello, Local!\"",
           "",
-          "var localVar;",
-          "function localFunction() {",
-          "return \"Hello, Local!\";",
-          "}",
+          "  var localVar;",
+          "  function localFunction() {",
+          "    return 'Hello, Local!';",
+          "  }",
           "}"
         ]
       },
@@ -452,7 +452,7 @@
           "let globalVar = 'I am global';",
           "",
           "function testScope() {",
-          "console.log(globalVar); // Output: 'I am global'",
+          "  console.log(globalVar); // Output: 'I am global'",
           "}",
           "",
           "testScope();",
@@ -481,8 +481,8 @@
         "type": "code",
         "data": [
           "function testScope() {",
-          "let localVar = 'I am local';",
-          "console.log(localVar); // Output: 'I am local'",
+          "  let localVar = 'I am local';",
+          "  console.log(localVar); // Output: 'I am local'",
           "}",
           "",
           "// This statement will throw an error because localVar is not defined outside the function scope",
@@ -511,13 +511,13 @@
         "type": "code",
         "data": [
           "function testScope() {",
-          "let localVar = 'I am local';",
-          "if (true) {",
-          "let blockVar = 'I am local to this block';",
-          "console.log(localVar, blockVar); // Both will be accessible",
-          "}",
-          "// This statement will throw an error because blockVar is not defined outside the block scope",
-          "// console.log(blockVar);",
+          "  let localVar = 'I am local';",
+          "  if (true) {",
+          "    let blockVar = 'I am local to this block';",
+          "    console.log(localVar, blockVar); // Both will be accessible",
+          "  }",
+          "  // This statement will throw an error because blockVar is not defined outside the block scope",
+          "  // console.log(blockVar);",
           "}",
           "",
           "testScope();"
@@ -584,14 +584,14 @@
         "type": "code",
         "data": [
           "// Abstract equality",
-          "console.log('5' == 5);      // true",
-          "console.log(null == undefined);  // true",
-          "console.log(0 == false);    // true",
+          "console.log('5' == 5); // true",
+          "console.log(null == undefined); // true",
+          "console.log(0 == false); // true",
           "",
           "// Strict equality",
-          "console.log('5' === 5);     // false",
+          "console.log('5' === 5); // false",
           "console.log(null === undefined); // false",
-          "console.log(0 === false);   // false"
+          "console.log(0 === false); // false"
         ]
       }
     ]
@@ -644,16 +644,19 @@
         "type": "code",
         "data": [
           "function generatePassword() {",
-          "let password = '';",
-          "const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
-          "const passwordLength = 8;",
-          "for(let i = 0; i < passwordLength; i++) {",
-          "password += characters.charAt(Math.floor(Math.random() * characters.length));",
-          "}",
+          "  let password = '';",
+          "  const characters =",
+          "    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+          "  const passwordLength = 8;",
+          "  for (let i = 0; i < passwordLength; i++) {",
+          "    password += characters.charAt(",
+          "      Math.floor(Math.random() * characters.length)",
+          "    );",
+          "  }",
           "",
-          "return function getPassword() {",
-          "return password;",
-          "};",
+          "  return function getPassword() {",
+          "    return password;",
+          "  };",
           "}",
           "",
           "const getPassword = generatePassword();",
@@ -771,11 +774,11 @@
           "let globalVar = 10;",
           "",
           "function globalFunction() {",
-          "console.log('Global this: ', this.globalVar);",
-          "console.log('Global this in strict mode: ', this);",
+          "  console.log('Global this: ', this.globalVar);",
+          "  console.log('Global this in strict mode: ', this);",
           "}",
           "",
-          "globalFunction();  // Output: 10, window or undefined (in strict mode)",
+          "globalFunction(); // Output: 10, window or undefined (in strict mode)",
           "",
           "// In Node.js, it will be different, because \"window\" is not defined. But \"this\" will refer to the global object."
         ]
@@ -820,11 +823,11 @@
         "data": [
           "// Standard Function",
           "function greet(name) {",
-          "return \"Hello, \" + name + \"!\";",
+          "  return 'Hello, ' + name + '!';",
           "}",
           "",
           "// Arrow Function",
-          "const greetArrow = name => \"Hello, \" + name + \"!\";"
+          "const greetArrow = (name) => 'Hello, ' + name + '!';"
         ]
       },
       {
@@ -857,13 +860,13 @@
         "type": "code",
         "data": [
           "// Using traditional functions",
-          "document.getElementById('myButton').onclick = function() {",
-          "console.log('Button clicked:', this);  // Refers to the button element",
+          "document.getElementById('myButton').onclick = function () {",
+          "  console.log('Button clicked:', this); // Refers to the button element",
           "};",
           "",
           "// Using arrow functions",
           "document.getElementById('myButton').onclick = () => {",
-          "console.log('Button clicked:', this);  // Refers to the global/window object",
+          "  console.log('Button clicked:', this); // Refers to the global/window object",
           "};"
         ]
       },
@@ -913,10 +916,10 @@
       {
         "type": "code",
         "data": [
-          "let name = \"John\";",
+          "let name = 'John';",
           "let message = `Hi ${name}!`;",
           "",
-          "console.log(message);  // Output: \"Hi John!\""
+          "console.log(message); // Output: \"Hi John!\""
         ]
       },
       {
@@ -938,7 +941,8 @@
         "type": "code",
         "data": [
           "// Regular String",
-          "let poem = \"Roses are red,\\nViolets are blue,\\nSugar is sweet,\\nAnd so are you.\";",
+          "let poem =",
+          "  'Roses are red,\\nViolets are blue,\\nSugar is sweet,\\nAnd so are you.';",
           "",
           "// Template Literal",
           "let poemTemplate = `",
@@ -1008,19 +1012,19 @@
         "data": [
           "// Simple higher-order function",
           "function multiplier(factor) {",
-          "return function(num) {",
-          "return num * factor;",
-          "};",
+          "  return function (num) {",
+          "    return num * factor;",
+          "  };",
           "}",
           "",
           "// Invoke a higher-order function",
           "const twice = multiplier(2);",
-          "console.log(twice(5));  // Output: 10",
+          "console.log(twice(5)); // Output: 10",
           "",
           "// Functional programming with higher-order functions",
           "const numbers = [1, 2, 3, 4, 5];",
-          "const doubled = numbers.map(multiplier(2));  // [2, 4, 6, 8, 10]",
-          "const tripled = numbers.map(multiplier(3));  // [3, 6, 9, 12, 15]"
+          "const doubled = numbers.map(multiplier(2)); // [2, 4, 6, 8, 10]",
+          "const tripled = numbers.map(multiplier(3)); // [3, 6, 9, 12, 15]"
         ]
       }
     ]
@@ -1048,22 +1052,22 @@
         "data": [
           "// Define a function",
           "function greet() {",
-          "console.log('Hello!');",
+          "  console.log('Hello!');",
           "}",
           "",
           "// Assign the function to a variable",
           "let sayHello = greet;",
           "",
           "// Call the function through the variable",
-          "sayHello();  // Output: \"Hello!\"",
+          "sayHello(); // Output: \"Hello!\"",
           "",
           "// Reassign the variable to a new function",
-          "sayHello = function() {",
-          "console.log('Bonjour!');",
+          "sayHello = function () {",
+          "  console.log('Bonjour!');",
           "};",
           "",
           "// Call it again to see the new behavior",
-          "sayHello();  // Output: \"Bonjour!\""
+          "sayHello(); // Output: \"Bonjour!\""
         ]
       },
       {
@@ -1118,7 +1122,7 @@
           "const sayHello = () => console.log('Hello!');",
           "const runFunction = (func) => func();",
           "",
-          "runFunction(sayHello);  // Output: \"Hello!\""
+          "runFunction(sayHello); // Output: \"Hello!\""
         ]
       }
     ]
@@ -1144,9 +1148,9 @@
       {
         "type": "code",
         "data": [
-          "(function(){",
-          "var foo = 'bar';",
-          "console.log(foo);",
+          "(function () {",
+          "  var foo = 'bar';",
+          "  console.log(foo);",
           "})();"
         ]
       },
@@ -1201,7 +1205,7 @@
       },
       {
         "type": "code",
-        "data": ["(function(){", "console.log('Invoked!');", "})();"]
+        "data": ["(function () {", "  console.log('Invoked!');", "})();"]
       },
       {
         "type": "para",
@@ -1211,7 +1215,7 @@
       },
       {
         "type": "code",
-        "data": ["!function(){", "console.log('Invoked!');", "}();"]
+        "data": ["!(function () {", "  console.log('Invoked!');", "})();"]
       },
       {
         "type": "para",
@@ -1222,9 +1226,9 @@
       {
         "type": "code",
         "data": [
-          "(function factorial(n){",
-          "if (n <= 1) return 1;",
-          "return n * factorial(n-1);",
+          "(function factorial(n) {",
+          "  if (n <= 1) return 1;",
+          "  return n * factorial(n - 1);",
           "})(5);"
         ]
       },
@@ -1265,17 +1269,17 @@
         "type": "code",
         "data": [
           "function outerFunction() {",
-          "let outerVar = 'I am outer';  // This variable is in the lexical environment of outerFunction",
+          "  let outerVar = 'I am outer'; // This variable is in the lexical environment of outerFunction",
           "",
-          "function innerFunction() {",
-          "console.log(outerVar);  // Accesses outerVar from the lexical environment of outerFunction",
-          "}",
+          "  function innerFunction() {",
+          "    console.log(outerVar); // Accesses outerVar from the lexical environment of outerFunction",
+          "  }",
           "",
-          "return innerFunction;",
+          "  return innerFunction;",
           "}",
           "",
           "let myInnerFunction = outerFunction();",
-          "myInnerFunction();  // Logs: \"I am outer\""
+          "myInnerFunction(); // Logs: \"I am outer\""
         ]
       },
       {
@@ -1302,18 +1306,18 @@
         "type": "code",
         "data": [
           "function Gadget() {",
-          "let secret = 'top secret';",
-          "this.setSecret = function (value) {",
-          "secret = value;",
-          "};",
-          "this.getSecret = function () {",
-          "return secret;",
-          "};",
+          "  let secret = 'top secret';",
+          "  this.setSecret = function (value) {",
+          "    secret = value;",
+          "  };",
+          "  this.getSecret = function () {",
+          "    return secret;",
+          "  };",
           "}",
           "",
           "let phone = new Gadget();",
           "phone.setSecret('new secret');",
-          "console.log(phone.getSecret());  // 'new secret'"
+          "console.log(phone.getSecret()); // 'new secret'"
         ]
       },
       {
@@ -1347,24 +1351,24 @@
         "type": "code",
         "data": [
           "let myModule = (function () {",
-          "let privateVariable = 'I am private';",
+          "  let privateVariable = 'I am private';",
           "",
-          "function privateMethod() {",
-          "console.log('I am a private method');",
-          "}",
+          "  function privateMethod() {",
+          "    console.log('I am a private method');",
+          "  }",
           "",
-          "return {",
-          "publicMethod: function () {",
-          "console.log('I am a public method');",
-          "},",
-          "getPrivateVariable: function () {",
-          "return privateVariable;",
-          "}",
-          "};",
+          "  return {",
+          "    publicMethod: function () {",
+          "      console.log('I am a public method');",
+          "    },",
+          "    getPrivateVariable: function () {",
+          "      return privateVariable;",
+          "    },",
+          "  };",
           "})();",
           "",
-          "console.log(myModule.getPrivateVariable());  // 'I am private'",
-          "myModule.privateMethod();  // Throws an error because privateMethod is not exposed"
+          "console.log(myModule.getPrivateVariable()); // 'I am private'",
+          "myModule.privateMethod(); // Throws an error because privateMethod is not exposed"
         ]
       },
       {
@@ -1377,7 +1381,7 @@
       {
         "type": "heading",
         "data": [
-          "Explore all 100 answers here \ud83d\udc49 [Devinterview.io - JavaScript](https://devinterview.io/questions/web-and-mobile-development/javascript-interview-questions)"
+          "Explore all 100 answers here 👉 [Devinterview.io - JavaScript](https://devinterview.io/questions/web-and-mobile-development/javascript-interview-questions)"
         ]
       },
       {

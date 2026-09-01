@@ -31,7 +31,7 @@ function LearnLayoutInner({ children, showSidebar = true }: LearnLayoutProps) {
               <SidebarToggle onClick={() => setSidebarOpen(true)} />
             </div>
 
-            <main className="flex-1 min-w-0">{children}</main>
+            <main className="flex-1 min-w-0 flex justify-center">{children}</main>
           </div>
         </div>
       ) : (

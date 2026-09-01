@@ -49,15 +49,14 @@ function LearnSidebar({ isOpen, onClose }: LearnSidebarProps) {
   const currentLessonSlug = location.pathname.split('/').pop();
 
   const sidebarClasses = `
-    fixed lg:sticky top-0 left-0 z-50 lg:z-auto
+    fixed lg:sticky top-0 lg:top-14 left-0 z-50 lg:z-10
     h-screen lg:h-[calc(100vh-56px)]
     w-72 lg:w-64 xl:w-72
     bg-[var(--bg-surface)] lg:bg-transparent
     border-r border-[var(--border-default)]
-    overflow-y-auto
+    overflow-y-auto self-start
     transition-transform duration-200 ease-in-out
     ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-    scrollbar-none
   `;
 
   return (

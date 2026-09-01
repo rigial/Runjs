@@ -13,11 +13,11 @@ function LearnLayoutInner({ children, showSidebar = true }: LearnLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+    <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
       <Navbar />
 
       {showSidebar ? (
-        <div className="flex-1 flex">
+        <div className="flex-1 flex w-full">
           {/* Sidebar */}
           <LearnSidebar
             isOpen={sidebarOpen}
@@ -31,7 +31,7 @@ function LearnLayoutInner({ children, showSidebar = true }: LearnLayoutProps) {
               <SidebarToggle onClick={() => setSidebarOpen(true)} />
             </div>
 
-            <main className="flex-1 overflow-y-auto">{children}</main>
+            <main className="flex-1">{children}</main>
           </div>
         </div>
       ) : (

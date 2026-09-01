@@ -3,6 +3,7 @@ import { Problem, SubmissionResult } from '../../problem-engine/types';
 import { getGithubIssueUrl } from '../../utils/githubIssues';
 import SubmissionHistory from './SubmissionHistory';
 import CodeSnippet from '../CodeSnippet';
+import ProblemMarkdown from './ProblemMarkdown';
 import {
   FileText,
   Lightbulb,
@@ -157,9 +158,7 @@ function ProblemDescription({
             </div>
 
             {/* Description Text */}
-            <div className="prose prose-sm dark:prose-invert max-w-none text-xs sm:text-sm text-[var(--text-secondary)] space-y-3 whitespace-pre-line">
-              {problem.description}
-            </div>
+            <ProblemMarkdown content={problem.description} />
 
             {/* Examples */}
             {problem.examples && problem.examples.length > 0 && (
@@ -288,8 +287,8 @@ function ProblemDescription({
                     </button>
 
                     {isRevealed && (
-                      <div className="px-4 pb-4 pt-1 text-xs text-[var(--text-secondary)] border-t border-[var(--border-subtle)] bg-[var(--bg-app)]/50 leading-relaxed">
-                        {hint}
+                      <div className="px-4 pb-4 pt-2 text-xs text-[var(--text-secondary)] border-t border-[var(--border-subtle)] bg-[var(--bg-app)]/50 leading-relaxed">
+                        <ProblemMarkdown content={hint} />
                       </div>
                     )}
                   </div>
@@ -357,9 +356,7 @@ function ProblemDescription({
               <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
                 Approach Explanation
               </h4>
-              <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
-                {problem.solution.explanation}
-              </p>
+              <ProblemMarkdown content={problem.solution.explanation} />
             </div>
 
             {/* Solution Code Block in Monaco Editor */}

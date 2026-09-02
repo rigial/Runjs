@@ -30,6 +30,7 @@ export default function HTMLDashboardPreviewModal({
   const [iframeKey, setIframeKey] = useState(0);
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
   const consoleDrawerRef = useRef<HTMLConsoleRef>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Close on Escape
   useEffect(() => {
@@ -58,6 +59,13 @@ export default function HTMLDashboardPreviewModal({
   useEffect(() => {
     if (!project) return;
     const handleMessage = (event: MessageEvent) => {
+      if (
+        !iframeRef.current ||
+        event.source !== iframeRef.current.contentWindow
+      ) {
+        return;
+      }
+
       const data = event.data;
       if (!data || typeof data !== 'object' || data.source !== SENDER_KEY)
         return;
@@ -246,6 +254,7 @@ export default function HTMLDashboardPreviewModal({
               className="h-full bg-white rounded-lg shadow-lg border border-[var(--border-default)] overflow-hidden transition-all duration-200"
             >
               <iframe
+                ref={iframeRef}
                 key={iframeKey}
                 title={`Live Preview - ${project.fileName}`}
                 srcDoc={compiledDoc}

@@ -245,10 +245,13 @@ export function compileHtmlDocument({
     }
   }
 
-  const safeStyleTag = `<style id="runjs-user-styles">\n${css || ''}\n</style>`;
+  const escapedCss = (css || '').replace(/<\/style>/gi, '<\\/style>');
+  const escapedJs = processedJs.replace(/<\/script>/gi, '<\\/script>');
+
+  const safeStyleTag = `<style id="runjs-user-styles">\n${escapedCss}\n</style>`;
   const safeScriptTag = `<script id="runjs-user-scripts">
 try {
-${processedJs}
+${escapedJs}
 } catch (error) {
   console.error(error);
 }

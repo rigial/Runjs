@@ -8,6 +8,7 @@ import useAdjustFontSize from '../hook/useAdjustFontSize';
 import useComplieCode from '../hook/useComplieCode';
 import useDebounceLocalStorageState from '../hook/useDebounceLocalStorageState';
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
+import { runInSandbox } from '../utils/sandboxRunner';
 import { Link } from 'react-router';
 import { ITypeScriptError, ModalRef } from '../utils/interface';
 import HelpModal from '../components/HelpModal';
@@ -119,17 +120,6 @@ function TSPlayground() {
         theme: resolvedTheme === 'dark' ? 'dark' : 'light',
       });
 
-      type ConsoleMethods = 'log' | 'info' | 'warn' | 'error';
-      const customConsole: Record<
-        ConsoleMethods,
-        (...args: unknown[]) => void
-      > = {
-        log: (...args: unknown[]) => lunaConsole.log(...args),
-        info: (...args: unknown[]) => lunaConsole.info(...args),
-        warn: (...args: unknown[]) => lunaConsole.warn(...args),
-        error: (...args: unknown[]) => lunaConsole.error(...args),
-      };
-
       try {
         await loadTypscript();
         const parseJavascriptCode = await transform(code ?? '', {
@@ -137,13 +127,25 @@ function TSPlayground() {
         });
         let final = parseJavascriptCode.code;
         final = addInfiniteLoopProtection(final);
-        const executeCode = new Function('console', final);
-        executeCode(customConsole);
+        await runInSandbox(final, {
+          timeoutMs: 5000,
+          onLog: (type, args) => {
+            if (type === 'error') {
+              lunaConsole.error(...args);
+            } else if (type === 'warn') {
+              lunaConsole.warn(...args);
+            } else if (type === 'info') {
+              lunaConsole.info(...args);
+            } else {
+              lunaConsole.log(...args);
+            }
+          },
+        });
       } catch (error) {
-        customConsole.error(error);
+        lunaConsole.error(error);
       }
     }
-    setTimeout(() => setIsRunning(false), 200);
+    setIsRunning(false);
   }
 
   function handleDownload() {

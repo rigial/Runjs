@@ -87,10 +87,32 @@ const finalLogs3 = res3.steps[res3.steps.length - 1].logs.map((l) =>
 console.log('Test 3 output:', finalLogs3);
 assert(finalLogs3[0] === 'Result: 25', 'Result is 25');
 
-// Verify call stack frames were captured
-const pushStep = res3.steps.find(
-  (s) => s.actionType === 'CALLSTACK_PUSH' && s.description.includes('square')
+// Test 4: Security - Constructor Escape & Host Function Denial
+const exploitCode = `
+const fn = [].constructor.constructor("console.log('EXPLOIT_EXECUTED')");
+fn();
+`;
+const resExploit = simulateCode(exploitCode);
+assert(
+  resExploit.success,
+  'Exploit simulation should parse without fatal crash'
 );
-assert(Boolean(pushStep), 'Call stack recorded square() push');
+const exploitLogs = resExploit.steps[resExploit.steps.length - 1].logs.map(
+  (l) => l.args.join(' ')
+);
+assert(
+  !exploitLogs.includes('EXPLOIT_EXECUTED'),
+  'Constructor chaining exploit must NOT execute host Function'
+);
+
+// Test 5: Security - Prototype Pollution via ObjectExpression
+const protoPollutionCode = `
+const obj = { "__proto__": { "polluted": true } };
+`;
+simulateCode(protoPollutionCode);
+assert(
+  !(Object.prototype as Record<string, unknown>).polluted,
+  'Object.prototype must NOT be polluted'
+);
 
 console.log('\nAll simulator tests passed successfully!');

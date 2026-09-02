@@ -150,17 +150,23 @@ function isWorkerSupported(): boolean {
   );
 }
 
-function isCloneable(val: any): boolean {
-  try {
-    if (typeof structuredClone === 'function') {
-      structuredClone(val);
-      return true;
-    }
-    JSON.stringify(val);
-    return true;
-  } catch {
-    return false;
+function serializeWorkerInput(val: any, seen = new WeakSet()): any {
+  if (val === null || val === undefined) return val;
+  if (typeof val === 'function') {
+    return { __isSerializedFunction: true, code: val.toString() };
   }
+  if (typeof val !== 'object') return val;
+  if (seen.has(val)) return '[Circular]';
+  seen.add(val);
+  if (Array.isArray(val)) {
+    return val.map((item) => serializeWorkerInput(item, seen));
+  }
+  const out: Record<string, any> = {};
+  for (const [k, v] of Object.entries(val)) {
+    if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
+    out[k] = serializeWorkerInput(v, seen);
+  }
+  return out;
 }
 
 function runInWorker(
@@ -170,6 +176,44 @@ function runInWorker(
 ): Promise<{ actual: any; logs: string[] }> {
   return new Promise((resolve, reject) => {
     const workerScript = `
+      // Strip sensitive host storage and network capabilities from the worker
+      try { delete self.indexedDB; } catch(e) {}
+      try { delete self.caches; } catch(e) {}
+      try { delete self.fetch; } catch(e) {}
+      try { delete self.XMLHttpRequest; } catch(e) {}
+      try { delete self.importScripts; } catch(e) {}
+      try { delete self.WebSocket; } catch(e) {}
+      try { delete self.EventSource; } catch(e) {}
+      try { delete self.BroadcastChannel; } catch(e) {}
+      try { delete self.SharedWorker; } catch(e) {}
+      try {
+        Object.freeze(Object.prototype);
+        Object.freeze(Array.prototype);
+      } catch(e) {}
+
+      function reviveWorkerInput(val) {
+        if (val === null || val === undefined) return val;
+        if (typeof val === 'object') {
+          if (val.__isSerializedFunction && typeof val.code === 'string') {
+            try {
+              return new Function('return (' + val.code + ')')();
+            } catch(e) {
+              return function() {};
+            }
+          }
+          if (Array.isArray(val)) {
+            return val.map(reviveWorkerInput);
+          }
+          const out = {};
+          for (const k of Object.keys(val)) {
+            if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
+            out[k] = reviveWorkerInput(val[k]);
+          }
+          return out;
+        }
+        return val;
+      }
+
       self.onmessage = async function(e) {
         const { runnerCode, input } = e.data;
         const logs = [];
@@ -197,7 +241,8 @@ function runInWorker(
         try {
           const factory = new Function('console', runnerCode);
           const execute = factory(captureConsole);
-          const actual = await execute(input);
+          const revivedInput = reviveWorkerInput(input);
+          const actual = await execute(revivedInput);
           self.postMessage({ success: true, actual, logs });
         } catch (err) {
           self.postMessage({ success: false, error: err?.message || String(err), logs });
@@ -361,12 +406,13 @@ export async function runSingleTestCase(
     }
 
     const clonedInput = deepClone(testCase.input);
+    const workerInput = serializeWorkerInput(clonedInput);
 
     let actual: any;
-    if (isWorkerSupported() && isCloneable(clonedInput)) {
+    if (isWorkerSupported()) {
       const workerRes = await runInWorker(
         runnerFunctionBody,
-        clonedInput,
+        workerInput,
         timeoutMs
       );
       actual = workerRes.actual;

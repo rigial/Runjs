@@ -69,7 +69,7 @@ RunJS is designed with complete transparency and user data sovereignty:
 ### Prerequisites
 
 - **Node.js**: `>= 20.19.0`
-- **pnpm**: `>= 11.0.0` (or npm / yarn)
+- **pnpm**: `>= 12.0.0` (or npm / yarn)
 
 ### Installation
 

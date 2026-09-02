@@ -23,6 +23,8 @@ import {
   FileText,
   FileQuestion,
   Brain,
+  RotateCw,
+  Boxes,
 } from 'lucide-react';
 
 function Navbar() {
@@ -154,6 +156,18 @@ function Navbar() {
         return (
           <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-500 border border-cyan-500/20 flex items-center justify-center shrink-0">
             <Atom className="w-4 h-4" />
+          </div>
+        );
+      case 'visualizer':
+        return (
+          <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-500 border border-purple-500/20 flex items-center justify-center shrink-0">
+            <RotateCw className="w-4 h-4" />
+          </div>
+        );
+      case 'context':
+        return (
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0">
+            <Boxes className="w-4 h-4" />
           </div>
         );
       default:

@@ -18,6 +18,7 @@ import {
   Tag as TagIcon,
   FolderOpen,
   Eye,
+  RotateCw,
 } from 'lucide-react';
 
 function ProjectTable({
@@ -361,6 +362,29 @@ function ProjectTable({
                               >
                                 <Eye className="w-4 h-4" />
                               </button>
+                            )}
+
+                            {/* Visualize in JS Visualizer */}
+                            {val.language === 'js' && (
+                              <Link
+                                to="/visualizer"
+                                state={{ code: val.code }}
+                                onClick={() => {
+                                  try {
+                                    sessionStorage.setItem(
+                                      'runjs_visualizer_code',
+                                      val.code || ''
+                                    );
+                                  } catch {
+                                    // ignore
+                                  }
+                                }}
+                                title="Visualize in JS Visualizer"
+                                aria-label="Visualize in JS Visualizer"
+                                className="p-1.5 rounded-md text-[var(--text-secondary)] hover:text-purple-500 hover:bg-purple-500/10 transition-colors cursor-pointer"
+                              >
+                                <RotateCw className="w-4 h-4" />
+                              </Link>
                             )}
 
                             {/* Run Link */}

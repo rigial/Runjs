@@ -39,6 +39,10 @@ const ProblemSolving = lazy(() => import('./page/ProblemSolving'));
 const LearnHomePage = lazy(() => import('./page/LearnHomePage'));
 const LearnLessonPage = lazy(() => import('./page/LearnLessonPage'));
 const OutputQuestions = lazy(() => import('./page/OutputQuestions'));
+const JSVisualizer = lazy(() => import('./page/JSVisualizer'));
+const JSExecutionContextVisualizer = lazy(
+  () => import('./page/JSExecutionContextVisualizer')
+);
 
 function AppRouter() {
   useEffect(() => {
@@ -67,6 +71,15 @@ function AppRouter() {
           <Route path="/learn" element={<LearnHomePage />} />
           <Route path="/learn/:slug" element={<LearnLessonPage />} />
           <Route path="/js" element={<JSPlayground />} />
+          <Route path="/visualizer" element={<JSVisualizer />} />
+          <Route
+            path="/execution-context"
+            element={<JSExecutionContextVisualizer />}
+          />
+          <Route
+            path="/context-visualizer"
+            element={<JSExecutionContextVisualizer />}
+          />
           <Route path="/react" element={<ReactPlayground />} />
           <Route path="/react/:id" element={<ReactPlayground />} />
           <Route path="/js/:id" element={<JSsaved />} />

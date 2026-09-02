@@ -25,6 +25,18 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://runjs.in/visualizer</loc>
+    <lastmod>2026-09-02T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://runjs.in/execution-context</loc>
+    <lastmod>2026-09-02T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://runjs.in/ts</loc>
     <lastmod>2026-09-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>

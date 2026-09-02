@@ -283,6 +283,12 @@
   border-bottom-color: #e2e8f0 !important;
 }
 
+/* Monaco active execution line highlight */
+.monaco-execution-line-highlight {
+  background: rgba(245, 158, 11, 0.22) !important;
+  border-left: 3px solid #f59e0b !important;
+}
+
 /* Animation utilities */
 @keyframes fade-in {
   from {

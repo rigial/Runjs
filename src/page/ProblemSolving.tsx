@@ -292,6 +292,7 @@ function ProblemSolving() {
           noIndex={true}
           noFollow={true}
         />
+
         <div className="text-3xl font-bold">Problem Not Found</div>
         <p className="text-sm text-[var(--text-secondary)]">
           The requested coding challenge was not found.
@@ -329,6 +330,14 @@ function ProblemSolving() {
           ]),
           {
             '@context': 'https://schema.org',
+            '@type': 'Question',
+            name: problem.title,
+            text: problem.description,
+            educationalLevel: problem.difficulty,
+            about: problem.topics.map((t) => ({ '@type': 'Thing', name: t })),
+          },
+          {
+            '@context': 'https://schema.org',
             '@type': 'TechArticle',
             headline: `${problem.title} - JavaScript Coding Challenge`,
             description: problem.description
@@ -345,6 +354,7 @@ function ProblemSolving() {
           },
         ]}
       />
+
       {/* Top Solved Screen Navigation */}
       <ProblemHeader
         problem={problem}

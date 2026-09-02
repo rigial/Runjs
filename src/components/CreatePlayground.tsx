@@ -17,7 +17,7 @@ import {
 } from '../ide/templates/defaultTemplates';
 
 interface LanguageOption {
-  id: 'js' | 'ts' | 'react';
+  id: 'js' | 'ts' | 'react' | 'html';
   label: string;
   description: string;
   textColorClass: string;
@@ -27,6 +27,15 @@ interface LanguageOption {
 }
 
 const LANGUAGE_OPTIONS: LanguageOption[] = [
+  {
+    id: 'html',
+    label: 'HTML/CSS/JS',
+    description: 'CodePen-style live browser sandbox',
+    textColorClass: 'text-orange-500',
+    activeBorderClass: 'border-orange-500',
+    activeBgClass: 'bg-orange-500/10',
+    activeRingClass: 'ring-orange-500',
+  },
   {
     id: 'js',
     label: 'JavaScript',
@@ -59,7 +68,7 @@ const LANGUAGE_OPTIONS: LanguageOption[] = [
 interface LanguageCardProps {
   option: LanguageOption;
   isSelected: boolean;
-  onSelect: (id: 'js' | 'ts' | 'react') => void;
+  onSelect: (id: 'js' | 'ts' | 'react' | 'html') => void;
 }
 
 function LanguageCard({ option, isSelected, onSelect }: LanguageCardProps) {
@@ -141,7 +150,13 @@ const CreatePlayground = ({
     const id = uuidv4();
     const cleanFileName =
       fileName.trim() ||
-      (lang === 'ts' ? 'main' : lang === 'react' ? 'react-app' : 'script');
+      (lang === 'ts'
+        ? 'main'
+        : lang === 'react'
+          ? 'react-app'
+          : lang === 'html'
+            ? 'web-playground'
+            : 'script');
 
     let newCode: UserCodeBase;
 
@@ -167,6 +182,22 @@ const CreatePlayground = ({
         files: selectedTemplate.files,
         activeFile: selectedTemplate.activeFile,
         openFiles: selectedTemplate.openFiles,
+      };
+    } else if (lang === 'html') {
+      newCode = {
+        id: id,
+        code: `console.log("Hello from RunJS HTML/CSS/JS Playground!");\n\nlet count = 0;\nconst button = document.getElementById("counter-btn");\n\nif (button) {\n  button.addEventListener("click", () => {\n    count++;\n    button.textContent = \`Clicks: \${count}\`;\n    console.log(\`Button clicked! New count: \${count}\`);\n  });\n}\n`,
+        htmlCode: `<div class="container">\n  <h1>Hello RunJS</h1>\n  <p>Start coding with HTML, CSS, and JavaScript...</p>\n  <button id="counter-btn">Clicks: 0</button>\n</div>`,
+        cssCode: `body {\n  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n  padding: 2rem;\n  background: #f8fafc;\n  color: #1e293b;\n  margin: 0;\n}\n\n.container {\n  max-width: 600px;\n  margin: 0 auto;\n  background: white;\n  padding: 2rem;\n  border-radius: 12px;\n  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);\n}\n\nh1 {\n  color: #ea580c;\n  margin-top: 0;\n}\n\np {\n  line-height: 1.6;\n  color: #64748b;\n}\n\nbutton {\n  background: #ea580c;\n  color: white;\n  border: none;\n  padding: 0.6rem 1.2rem;\n  border-radius: 8px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n\nbutton:hover {\n  background: #c2410c;\n}`,
+        jsCode: `console.log("Hello from RunJS HTML/CSS/JS Playground!");\n\nlet count = 0;\nconst button = document.getElementById("counter-btn");\n\nif (button) {\n  button.addEventListener("click", () => {\n    count++;\n    button.textContent = \`Clicks: \${count}\`;\n    console.log(\`Button clicked! New count: \${count}\`);\n  });\n}\n`,
+        createdAt: new Date(),
+        fileName: cleanFileName,
+        isDelete: false,
+        language: 'html',
+        lastModifiedAt: new Date(),
+        star: 0,
+        tag: tagName.trim() || 'html',
+        dbUpload: false,
       };
     } else {
       newCode = {
@@ -334,7 +365,7 @@ const CreatePlayground = ({
                 <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Language
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-2 gap-2.5">
                   {LANGUAGE_OPTIONS.map((option) => (
                     <LanguageCard
                       key={option.id}

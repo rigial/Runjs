@@ -137,6 +137,7 @@ function JSPlayground() {
           getWebApplicationSchema(),
         ]}
       />
+
       <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
         {/* Top IDE Navigation */}
         <nav className="h-12 w-full flex items-center justify-between px-3 bg-[var(--bg-surface)] border-b border-[var(--border-default)] z-30 shrink-0 select-none">

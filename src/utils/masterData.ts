@@ -1,7 +1,93 @@
+export interface NavItem {
+  title: string;
+  link: string;
+  badge?: string;
+}
+
+export interface PlaygroundItem {
+  title: string;
+  link: string;
+  description: string;
+  badge?: string;
+  iconName: 'js' | 'ts' | 'html' | 'react';
+}
+
+export interface MoreNavItem {
+  title: string;
+  link: string;
+  description: string;
+  iconName: 'about' | 'bin' | 'github';
+  isExternal?: boolean;
+}
+
+export const playgroundLinks: PlaygroundItem[] = [
+  {
+    title: 'JavaScript',
+    link: '/js',
+    description: 'Instant JS execution with interactive console',
+    badge: 'ES2024',
+    iconName: 'js',
+  },
+  {
+    title: 'TypeScript',
+    link: '/ts',
+    description: 'Static typing with live compiler diagnostics',
+    badge: 'v5.8',
+    iconName: 'ts',
+  },
+  {
+    title: 'HTML / CSS / JS',
+    link: '/html',
+    description: 'Frontend web playground with live preview & multi-tabs',
+    badge: 'Live',
+    iconName: 'html',
+  },
+  {
+    title: 'React + Vite',
+    link: '/react',
+    description: 'Full-featured component sandbox with file tree & terminal',
+    badge: 'IDE',
+    iconName: 'react',
+  },
+];
+
+export const primaryNavLinks: NavItem[] = [
+  { title: 'Learn JS', link: '/learn', badge: '0→Hero' },
+  { title: 'Problems', link: '/problems', badge: 'DSA' },
+  { title: 'Interview Q&A', link: '/interview' },
+  { title: 'Dashboard', link: '/dashboard' },
+];
+
+export const moreNavLinks: MoreNavItem[] = [
+  {
+    title: 'About RunJS',
+    link: '/about',
+    description: 'App architecture, packages, and technical credits',
+    iconName: 'about',
+  },
+  {
+    title: 'Recycle Bin',
+    link: '/bin',
+    description: 'Review and permanently remove deleted playgrounds',
+    iconName: 'bin',
+  },
+  {
+    title: 'GitHub Repository',
+    link: 'https://github.com/rigial/Runjs',
+    description: 'View source code, star the project, and report issues',
+    iconName: 'github',
+    isExternal: true,
+  },
+];
+
 const navigation = [
   {
     title: 'Home',
     link: '/',
+  },
+  {
+    title: 'Learn JS',
+    link: '/learn',
   },
   {
     title: 'Problems',
@@ -20,11 +106,15 @@ const navigation = [
     link: '/react',
   },
   {
-    title: 'Javascript',
+    title: 'HTML/CSS/JS',
+    link: '/html',
+  },
+  {
+    title: 'JavaScript',
     link: '/js',
   },
   {
-    title: 'Typscript',
+    title: 'TypeScript',
     link: '/ts',
   },
   {

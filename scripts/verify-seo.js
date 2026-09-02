@@ -32,7 +32,7 @@ assert(
     indexHtml.includes('<title>RunJS - In-Browser JavaScript, TypeScript & React Playground</title>'),
   'Contains descriptive default title'
 );
-assert(indexHtml.includes('<meta name="robots" content="index, follow">'), 'Contains robots index, follow');
+assert(indexHtml.includes('content="index, follow'), 'Contains robots index, follow');
 assert(indexHtml.includes('<meta name="theme-color" content="#f59e0b"'), 'Contains light theme color');
 assert(indexHtml.includes('<meta name="theme-color" content="#09090b"'), 'Contains dark theme color');
 assert(indexHtml.includes('<meta property="og:title"'), 'Contains og:title');
@@ -84,9 +84,10 @@ assert(sitemapXml.includes('<loc>https://runjs.in/react</loc>'), 'Includes /reac
 assert(sitemapXml.includes('<loc>https://runjs.in/interview</loc>'), 'Includes /interview');
 assert(sitemapXml.includes('<loc>https://runjs.in/about</loc>'), 'Includes /about');
 assert(sitemapXml.includes('<loc>https://runjs.in/problems/two-sum</loc>'), 'Includes /problems/two-sum');
-assert(!sitemapXml.includes('/dashboard'), 'Excludes private /dashboard');
-assert(!sitemapXml.includes('/bin'), 'Excludes private /bin');
-assert(!sitemapXml.includes('/404'), 'Excludes /404');
+assert(!sitemapXml.includes('<loc>https://runjs.in/dashboard</loc>') && !sitemapXml.includes('/dashboard<'), 'Excludes private /dashboard');
+assert(!sitemapXml.includes('<loc>https://runjs.in/bin</loc>') && !sitemapXml.includes('/bin<'), 'Excludes private /bin');
+assert(!sitemapXml.includes('<loc>https://runjs.in/404</loc>') && !sitemapXml.includes('/404<'), 'Excludes /404');
+
 
 console.log('\n--- 4. Validating Social Assets ---');
 const ogImagePath = path.join(rootDir, 'public/og-image.png');

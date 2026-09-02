@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { SubmissionResult } from '../../problem-engine/types';
+import CodeSnippet from '../CodeSnippet';
 import {
   CheckCircle2,
   XCircle,
@@ -7,8 +8,6 @@ import {
   Clock,
   Code2,
   History,
-  Copy,
-  Check,
 } from 'lucide-react';
 
 interface SubmissionHistoryProps {
@@ -23,7 +22,6 @@ function SubmissionHistory({
   const [selectedSubId, setSelectedSubId] = useState<string | null>(
     submissions[0]?.id || null
   );
-  const [copied, setCopied] = useState(false);
 
   const selectedSubmission =
     submissions.find((s) => s.id === selectedSubId) || submissions[0];
@@ -59,12 +57,6 @@ function SubmissionHistory({
           </span>
         );
     }
-  }
-
-  function handleCopy(code: string) {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   }
 
   function formatDate(iso: string) {
@@ -169,35 +161,19 @@ function SubmissionHistory({
                 <button
                   type="button"
                   onClick={() => onLoadCodeIntoEditor(selectedSubmission.code)}
-                  className="px-2.5 py-1 rounded-md bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-black text-[11px] font-semibold transition-colors"
+                  className="px-2.5 py-1 rounded-md bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-black text-[11px] font-semibold transition-colors cursor-pointer"
                 >
                   Restore to Editor
                 </button>
               )}
-
-              <button
-                type="button"
-                onClick={() => handleCopy(selectedSubmission.code)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[11px] text-[var(--text-secondary)] transition-colors"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-3 h-3 text-emerald-500" />
-                    <span>Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3 h-3" />
-                    <span>Copy</span>
-                  </>
-                )}
-              </button>
             </div>
           </div>
 
-          <pre className="p-3.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] font-mono text-xs text-[var(--text-primary)] overflow-x-auto shadow-2xs">
-            <code>{selectedSubmission.code}</code>
-          </pre>
+          <CodeSnippet
+            code={selectedSubmission.code}
+            language={selectedSubmission.language || 'javascript'}
+            title={`Submitted Code (${selectedSubmission.language || 'javascript'})`}
+          />
         </div>
       )}
     </div>

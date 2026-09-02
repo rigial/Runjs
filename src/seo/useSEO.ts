@@ -97,7 +97,8 @@ export function useSEO({
     document.title = formattedTitle;
 
     // 2. Canonical URL & Image URL
-    const canonicalUrl = getCanonicalUrl(canonical);
+    const canonicalUrl =
+      canonical === undefined ? undefined : getCanonicalUrl(canonical);
     const absoluteImageUrl = getAbsoluteImageUrl(image);
 
     // 3. Standard Meta Directives
@@ -119,7 +120,11 @@ export function useSEO({
     // 5. Open Graph Meta Tags
     setMetaTag('property', 'og:title', formattedTitle);
     setMetaTag('property', 'og:description', description);
-    setMetaTag('property', 'og:url', canonicalUrl);
+    if (canonicalUrl) {
+      setMetaTag('property', 'og:url', canonicalUrl);
+    } else {
+      setMetaTag('property', 'og:url', undefined);
+    }
     setMetaTag('property', 'og:image', absoluteImageUrl);
     setMetaTag('property', 'og:type', type);
     setMetaTag('property', 'og:site_name', SEO_CONFIG.siteName);

@@ -10,8 +10,9 @@
   "scripts": {
     "dev": "vite --host",
     "generate:sitemap": "node scripts/generate-sitemap.js",
+    "prerender:routes": "node scripts/prerender-routes.js",
     "verify:seo": "node scripts/verify-seo.js",
-    "build": "node scripts/generate-sitemap.js && tsc -b && vite build",
+    "build": "node scripts/generate-sitemap.js && tsc -b && vite build && node scripts/prerender-routes.js",
     "lint": "eslint ./src",
     "pretty": "prettier --write ./src",
     "preview": "vite preview",

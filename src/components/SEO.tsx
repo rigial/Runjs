@@ -40,10 +40,15 @@ function updateMetaTag(
 }
 
 function updateLinkTag(rel: string, href: string | undefined) {
-  if (!href) return;
   let element = document.querySelector(
     `link[rel="${rel}"]`
   ) as HTMLLinkElement | null;
+  if (!href) {
+    if (element) {
+      element.remove();
+    }
+    return;
+  }
   if (!element) {
     element = document.createElement('link');
     element.setAttribute('rel', rel);
@@ -79,9 +84,7 @@ export default function SEO({
     ? canonical.startsWith('http')
       ? canonical
       : `${BASE_URL}${canonical.startsWith('/') ? '' : '/'}${canonical}`
-    : typeof window !== 'undefined'
-      ? `${BASE_URL}${window.location.pathname}`
-      : BASE_URL;
+    : undefined;
 
   const keywordsString = Array.isArray(keywords)
     ? keywords.join(', ')
@@ -107,7 +110,11 @@ export default function SEO({
     // 3. OpenGraph Tags
     updateMetaTag('property', 'og:title', fullTitle);
     updateMetaTag('property', 'og:description', description);
-    updateMetaTag('property', 'og:url', fullCanonical);
+    if (fullCanonical) {
+      updateMetaTag('property', 'og:url', fullCanonical);
+    } else {
+      updateMetaTag('property', 'og:url', undefined);
+    }
     updateMetaTag('property', 'og:type', resolvedType);
     updateMetaTag('property', 'og:image', resolvedImage);
     updateMetaTag('property', 'og:site_name', 'RunJS');

@@ -51,8 +51,9 @@ if (jsonLdMatch) {
     const parsed = JSON.parse(jsonLdMatch[1]);
     assert(parsed['@context'] === 'https://schema.org', 'JSON-LD context is https://schema.org');
     assert(Array.isArray(parsed['@graph']), 'JSON-LD has @graph array');
-    const webApp = parsed['@graph'].find(item => item['@type'] === 'WebApplication');
-    const webSite = parsed['@graph'].find(item => item['@type'] === 'WebSite');
+    const graph = Array.isArray(parsed['@graph']) ? parsed['@graph'] : [];
+    const webApp = graph.find(item => item['@type'] === 'WebApplication');
+    const webSite = graph.find(item => item['@type'] === 'WebSite');
     assert(Boolean(webApp), 'JSON-LD includes WebApplication schema');
     assert(Boolean(webSite), 'JSON-LD includes WebSite schema');
   } catch (e) {

@@ -29,7 +29,19 @@ function Footer({ className = '', hasMarginTop }: FooterProps) {
           <span>In-browser JavaScript, TypeScript & React Playground</span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Link
+            to="/privacy"
+            className="hover:text-[var(--text-primary)] transition-colors hover:underline"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            to="/terms"
+            className="hover:text-[var(--text-primary)] transition-colors hover:underline"
+          >
+            Terms & Conditions
+          </Link>
           <Link
             to="/about"
             className="hover:text-[var(--text-primary)] transition-colors hover:underline"

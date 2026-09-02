@@ -18,6 +18,8 @@ import {
   Trash2,
   ExternalLink,
   Sparkles,
+  Shield,
+  FileText,
 } from 'lucide-react';
 
 function Navbar() {
@@ -138,6 +140,18 @@ function Navbar() {
         return (
           <div className="w-7 h-7 rounded-md bg-purple-500/10 text-purple-500 border border-purple-500/20 flex items-center justify-center shrink-0">
             <Info className="w-3.5 h-3.5" />
+          </div>
+        );
+      case 'privacy':
+        return (
+          <div className="w-7 h-7 rounded-md bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0">
+            <Shield className="w-3.5 h-3.5" />
+          </div>
+        );
+      case 'terms':
+        return (
+          <div className="w-7 h-7 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
+            <FileText className="w-3.5 h-3.5" />
           </div>
         );
       case 'bin':

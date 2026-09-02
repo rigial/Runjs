@@ -48,6 +48,8 @@ const coreRoutes = [
   { path: '/html', changefreq: 'weekly', priority: '0.85' },
   { path: '/interview', changefreq: 'weekly', priority: '0.8' },
   { path: '/about', changefreq: 'monthly', priority: '0.7' },
+  { path: '/privacy', changefreq: 'monthly', priority: '0.5' },
+  { path: '/terms', changefreq: 'monthly', priority: '0.5' },
 ];
 
 let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';

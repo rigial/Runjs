@@ -16,7 +16,7 @@ export interface MoreNavItem {
   title: string;
   link: string;
   description: string;
-  iconName: 'about' | 'bin' | 'github';
+  iconName: 'about' | 'bin' | 'github' | 'privacy' | 'terms';
   isExternal?: boolean;
 }
 
@@ -64,6 +64,18 @@ export const moreNavLinks: MoreNavItem[] = [
     link: '/about',
     description: 'App architecture, packages, and technical credits',
     iconName: 'about',
+  },
+  {
+    title: 'Privacy Policy',
+    link: '/privacy',
+    description: 'Client-side privacy and local data handling guarantees',
+    iconName: 'privacy',
+  },
+  {
+    title: 'Terms and Conditions',
+    link: '/terms',
+    description: 'Terms of use, code ownership, and MIT licensing',
+    iconName: 'terms',
   },
   {
     title: 'Recycle Bin',
@@ -124,6 +136,14 @@ const navigation = [
   {
     title: 'About',
     link: '/about',
+  },
+  {
+    title: 'Privacy Policy',
+    link: '/privacy',
+  },
+  {
+    title: 'Terms and Conditions',
+    link: '/terms',
   },
 ];
 

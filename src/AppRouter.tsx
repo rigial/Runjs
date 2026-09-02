@@ -17,6 +17,8 @@ function ScrollToTop() {
 
 const HomePage = lazy(() => import('./page/HomePage'));
 const AboutPage = lazy(() => import('./page/AboutPage'));
+const PrivacyPolicyPage = lazy(() => import('./page/PrivacyPolicyPage'));
+const TermsConditionsPage = lazy(() => import('./page/TermsConditionsPage'));
 const JSPlayground = lazy(() => import('./page/JSPlayground'));
 const ReactPlayground = lazy(() => import('./page/ReactPlayground'));
 const TSPlayground = lazy(() => import('./page/TSPlayground'));
@@ -52,6 +54,13 @@ function AppRouter() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms" element={<TermsConditionsPage />} />
+          <Route
+            path="/terms-and-conditions"
+            element={<TermsConditionsPage />}
+          />
           <Route path="/problems" element={<Problemset />} />
           <Route path="/problems/:slug" element={<ProblemSolving />} />
           <Route path="/learn" element={<LearnHomePage />} />

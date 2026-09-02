@@ -7,6 +7,7 @@ import ProjectTable from '../components/ProjectTable';
 import CreatePlayground from '../components/CreatePlayground';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../seo/SEO';
 import { Star, FolderCode, Tag as TagIcon } from 'lucide-react';
 
 function Dashboard() {
@@ -88,6 +89,12 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <SEO
+        title="Workspace Dashboard"
+        description="Manage your local RunJS projects, code snippets, and interview solutions."
+        noIndex={true}
+        noFollow={true}
+      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

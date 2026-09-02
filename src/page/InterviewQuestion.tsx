@@ -5,6 +5,8 @@ import InterViewQuestion from '../asset/interview_questions.json';
 import { JSInterviewQuestionList } from '../utils/interface';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import Footer from '../components/Footer';
+import SEO from '../seo/SEO';
+import { getBreadcrumbSchema } from '../seo/seoConfig';
 import { Search, Sparkles, X } from 'lucide-react';
 
 export default function InterviewQuestion() {
@@ -36,8 +38,48 @@ export default function InterviewQuestion() {
     }
   }
 
+  // Generate FAQPage schema from the first 10 questions
+  const faqSchema = useMemo(() => {
+    const questionsSample = allQuestions.slice(0, 10);
+    return {
+      '@context': 'https://schema.org' as const,
+      '@type': 'FAQPage',
+      mainEntity: questionsSample.map((q) => ({
+        '@type': 'Question',
+        name: q.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: q.answer
+            .map((ans) => ans.data.join(' '))
+            .join(' ')
+            .slice(0, 300),
+        },
+      })),
+    };
+  }, [allQuestions]);
+
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
+      <SEO
+        title="JavaScript Technical Interview Questions & Answers"
+        description="Master JavaScript technical interviews with curated questions and detailed solutions covering closures, event loop, promises, prototypes, and async/await."
+        canonical="/interview"
+        keywords={[
+          'JavaScript interview questions',
+          'frontend interview questions',
+          'JavaScript event loop',
+          'closures interview questions',
+          'JavaScript promises interview',
+          'technical interview prep',
+        ]}
+        structuredData={[
+          getBreadcrumbSchema([
+            { name: 'Home', item: '/' },
+            { name: 'Interview Questions', item: '/interview' },
+          ]),
+          faqSchema,
+        ]}
+      />
       <Navbar />
 
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

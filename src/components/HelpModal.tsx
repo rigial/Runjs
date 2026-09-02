@@ -48,14 +48,14 @@ const HelpModal = ({ ref }: HelpModalProps) => {
   return (
     <dialog
       ref={dialogRef}
-      className="rounded-xl w-full max-w-lg p-0 shadow-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-default)] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/60 backdrop:backdrop-blur-xs text-[var(--text-primary)]"
+      className="rounded-xl w-[calc(100%-2rem)] max-w-lg p-0 shadow-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-default)] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/60 backdrop:backdrop-blur-xs text-[var(--text-primary)]"
       onClick={(e) => {
         if (e.target === dialogRef.current) {
           handleClose();
         }
       }}
     >
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2.5">

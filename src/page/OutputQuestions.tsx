@@ -832,7 +832,7 @@ export default function OutputQuestions() {
 
       {/* Sticky Bottom Navigation Bar for Mobile (only shown in quiz mode) */}
       {viewMode === 'quiz' && (
-        <div className="lg:hidden sticky bottom-0 z-20 w-full border-t border-[var(--border-default)] bg-[var(--bg-surface)]/95 backdrop-blur-md px-4 py-2.5 flex items-center justify-between gap-2">
+        <div className="sm:hidden sticky bottom-0 z-20 w-full border-t border-[var(--border-default)] bg-[var(--bg-surface)]/95 backdrop-blur-md px-3 py-2 flex items-center justify-between gap-2 shadow-lg">
           <button
             type="button"
             onClick={handlePrev}

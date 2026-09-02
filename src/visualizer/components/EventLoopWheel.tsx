@@ -84,15 +84,15 @@ function EventLoopWheel({
           </span>
         </div>
         <div
-          className={`px-2.5 py-0.5 text-[10px] font-semibold rounded-full border ${phaseBg} ${phaseColor} transition-all duration-300`}
+          className={`px-2 py-0.5 sm:px-2.5 sm:py-0.5 text-[9px] sm:text-[10px] font-semibold rounded-full border ${phaseBg} ${phaseColor} transition-all duration-300 truncate max-w-[160px] sm:max-w-none`}
         >
           {phaseTitle}
         </div>
       </div>
 
       {/* Interactive Visualizer Canvas / Wheel Area */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4 relative bg-[var(--bg-app)]/30 min-h-[220px] select-none">
-        <div className="relative w-48 h-48 flex items-center justify-center">
+      <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-4 relative bg-[var(--bg-app)]/30 min-h-[230px] select-none">
+        <div className="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center scale-95 sm:scale-100">
           {/* Outer Orbital Ring with dashed track */}
           <div className="absolute inset-0 rounded-full border-2 border-dashed border-[var(--border-default)] animate-spin [animation-duration:40s]" />
 

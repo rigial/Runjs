@@ -45,71 +45,97 @@ function VisualizerControls({
   const isAtEnd = totalSteps === 0 || currentStepIndex >= totalSteps - 1;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-2.5 bg-[var(--bg-surface)] border-b border-[var(--border-default)] select-none">
-      {/* Left: Step Playback Controls */}
-      <div className="flex items-center gap-1.5 shrink-0">
-        {/* Reset / Restart */}
-        <button
-          type="button"
-          onClick={onReset}
-          disabled={totalSteps === 0 || isAtBeginning}
-          title="Restart from beginning (R)"
-          className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <RotateCcw className="w-4 h-4" />
-        </button>
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 px-3 sm:px-4 py-2 sm:py-2.5 bg-[var(--bg-surface)] border-b border-[var(--border-default)] select-none">
+      {/* Top Row on mobile (Playback + Speed), Left/Right on desktop */}
+      <div className="flex items-center justify-between w-full sm:w-auto gap-2 shrink-0">
+        {/* Step Playback Controls */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {/* Reset / Restart */}
+          <button
+            type="button"
+            onClick={onReset}
+            disabled={totalSteps === 0 || isAtBeginning}
+            title="Restart from beginning (R)"
+            className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
 
-        {/* Step Backward (Prev) */}
-        <button
-          type="button"
-          onClick={onStepBackward}
-          disabled={totalSteps === 0 || isAtBeginning || isPlaying}
-          title="Step Backward (Left Arrow)"
-          className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <SkipBack className="w-4 h-4" />
-        </button>
+          {/* Step Backward (Prev) */}
+          <button
+            type="button"
+            onClick={onStepBackward}
+            disabled={totalSteps === 0 || isAtBeginning || isPlaying}
+            title="Step Backward (Left Arrow)"
+            className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <SkipBack className="w-4 h-4" />
+          </button>
 
-        {/* Play / Pause Toggle Button */}
-        <button
-          type="button"
-          onClick={onPlayToggle}
-          disabled={totalSteps === 0}
-          title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
-            isPlaying
-              ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/40 hover:bg-amber-500/30'
-              : 'bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black hover:scale-[1.02] active:scale-[0.98]'
-          }`}
-        >
-          {isPlaying ? (
-            <>
-              <Pause className="w-4 h-4 fill-current" />
-              <span>Pause</span>
-            </>
-          ) : (
-            <>
-              <Play className="w-4 h-4 fill-black" />
-              <span>{isAtEnd ? 'Replay' : 'Play'}</span>
-            </>
-          )}
-        </button>
+          {/* Play / Pause Toggle Button */}
+          <button
+            type="button"
+            onClick={onPlayToggle}
+            disabled={totalSteps === 0}
+            title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+              isPlaying
+                ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/40 hover:bg-amber-500/30'
+                : 'bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black hover:scale-[1.02] active:scale-[0.98]'
+            }`}
+          >
+            {isPlaying ? (
+              <>
+                <Pause className="w-4 h-4 fill-current" />
+                <span>Pause</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-4 h-4 fill-black" />
+                <span>{isAtEnd ? 'Replay' : 'Play'}</span>
+              </>
+            )}
+          </button>
 
-        {/* Step Forward (Next) */}
-        <button
-          type="button"
-          onClick={onStepForward}
-          disabled={totalSteps === 0 || isAtEnd || isPlaying}
-          title="Step Forward (Right Arrow)"
-          className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <SkipForward className="w-4 h-4" />
-        </button>
+          {/* Step Forward (Next) */}
+          <button
+            type="button"
+            onClick={onStepForward}
+            disabled={totalSteps === 0 || isAtEnd || isPlaying}
+            title="Step Forward (Right Arrow)"
+            className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <SkipForward className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Speed Controls (Mobile position) */}
+        <div className="flex sm:hidden items-center gap-1 shrink-0">
+          <div className="flex items-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] p-0.5">
+            {SPEED_OPTIONS.map((opt) => {
+              const isActive = speed === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => onSpeedChange(opt.value)}
+                  className={`px-1.5 py-0.5 text-[10px] font-semibold rounded transition-colors cursor-pointer ${
+                    isActive
+                      ? 'bg-amber-500 text-black shadow-xs'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Center: Timeline Scrubber Slider */}
-      <div className="flex-1 w-full max-w-md flex items-center gap-3 px-2">
-        <span className="text-[11px] font-mono font-semibold text-[var(--text-secondary)] shrink-0 min-w-[70px]">
+      {/* Timeline Scrubber Slider */}
+      <div className="flex-1 w-full max-w-md flex items-center gap-2.5 px-1 sm:px-2">
+        <span className="text-[11px] font-mono font-semibold text-[var(--text-secondary)] shrink-0 min-w-[65px] sm:min-w-[70px]">
           Step {totalSteps > 0 ? currentStepIndex + 1 : 0} / {totalSteps}
         </span>
 
@@ -125,8 +151,8 @@ function VisualizerControls({
         />
       </div>
 
-      {/* Right: Speed Controls */}
-      <div className="flex items-center gap-1.5 shrink-0">
+      {/* Speed Controls (Desktop position) */}
+      <div className="hidden sm:flex items-center gap-1.5 shrink-0">
         <div className="flex items-center gap-1 text-[11px] text-[var(--text-muted)] mr-1">
           <Gauge className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Speed:</span>

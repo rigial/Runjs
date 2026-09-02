@@ -524,3 +524,6 @@ export function getPreviousLessonSlug(currentSlug: string): string | null {
   if (index <= 0) return null;
   return allSlugs[index - 1];
 }
+
+/** Precomputed total count of coding exercises across all lessons */
+export const TOTAL_EXERCISE_COUNT = 28;

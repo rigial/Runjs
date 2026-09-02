@@ -1,4 +1,11 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  Suspense,
+} from 'react';
 import Split from 'react-split';
 import { Link, useNavigate, useParams } from 'react-router';
 import {
@@ -25,7 +32,10 @@ import {
   Minus,
   Plus,
 } from 'lucide-react';
-import CodeEditor from '../components/CodeEditor';
+import CodeEditorSkeleton from '../components/skeletons/CodeEditorSkeleton';
+import { lazyWithRetry } from '../utils/lazyWithRetry';
+
+const CodeEditor = lazyWithRetry(() => import('../components/CodeEditor'));
 import {
   HTMLPreview,
   HTMLPreviewRef,
@@ -616,14 +626,16 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
         </div>
       </div>
       <div className="flex-1 min-h-0 overflow-hidden">
-        <CodeEditor
-          language="html"
-          path="index.html"
-          code={html}
-          editorRef={htmlEditorRef}
-          currentFontSize={numericFontSize}
-          onChange={(val) => setHtml(val ?? '')}
-        />
+        <Suspense fallback={<CodeEditorSkeleton />}>
+          <CodeEditor
+            language="html"
+            path="index.html"
+            code={html}
+            editorRef={htmlEditorRef}
+            currentFontSize={numericFontSize}
+            onChange={(val) => setHtml(val ?? '')}
+          />
+        </Suspense>
       </div>
     </div>
   );
@@ -694,14 +706,16 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
         </div>
       </div>
       <div className="flex-1 min-h-0 overflow-hidden">
-        <CodeEditor
-          language="css"
-          path="style.css"
-          code={css}
-          editorRef={cssEditorRef}
-          currentFontSize={numericFontSize}
-          onChange={(val) => setCss(val ?? '')}
-        />
+        <Suspense fallback={<CodeEditorSkeleton />}>
+          <CodeEditor
+            language="css"
+            path="style.css"
+            code={css}
+            editorRef={cssEditorRef}
+            currentFontSize={numericFontSize}
+            onChange={(val) => setCss(val ?? '')}
+          />
+        </Suspense>
       </div>
     </div>
   );
@@ -772,14 +786,16 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
         </div>
       </div>
       <div className="flex-1 min-h-0 overflow-hidden">
-        <CodeEditor
-          language="javascript"
-          path="script.js"
-          code={javascript}
-          editorRef={jsEditorRef}
-          currentFontSize={numericFontSize}
-          onChange={(val) => setJavascript(val ?? '')}
-        />
+        <Suspense fallback={<CodeEditorSkeleton />}>
+          <CodeEditor
+            language="javascript"
+            path="script.js"
+            code={javascript}
+            editorRef={jsEditorRef}
+            currentFontSize={numericFontSize}
+            onChange={(val) => setJavascript(val ?? '')}
+          />
+        </Suspense>
       </div>
     </div>
   );
@@ -1408,14 +1424,16 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
                   activeMobileTab === 'html' ? '' : 'hidden'
                 }`}
               >
-                <CodeEditor
-                  language="html"
-                  path="index.html"
-                  code={html}
-                  editorRef={htmlEditorRef}
-                  currentFontSize={numericFontSize}
-                  onChange={(val) => setHtml(val ?? '')}
-                />
+                <Suspense fallback={<CodeEditorSkeleton />}>
+                  <CodeEditor
+                    language="html"
+                    path="index.html"
+                    code={html}
+                    editorRef={htmlEditorRef}
+                    currentFontSize={numericFontSize}
+                    onChange={(val) => setHtml(val ?? '')}
+                  />
+                </Suspense>
               </div>
 
               {/* CSS Tab */}
@@ -1424,14 +1442,16 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
                   activeMobileTab === 'css' ? '' : 'hidden'
                 }`}
               >
-                <CodeEditor
-                  language="css"
-                  path="style.css"
-                  code={css}
-                  editorRef={cssEditorRef}
-                  currentFontSize={numericFontSize}
-                  onChange={(val) => setCss(val ?? '')}
-                />
+                <Suspense fallback={<CodeEditorSkeleton />}>
+                  <CodeEditor
+                    language="css"
+                    path="style.css"
+                    code={css}
+                    editorRef={cssEditorRef}
+                    currentFontSize={numericFontSize}
+                    onChange={(val) => setCss(val ?? '')}
+                  />
+                </Suspense>
               </div>
 
               {/* JavaScript Tab */}
@@ -1440,14 +1460,16 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
                   activeMobileTab === 'js' ? '' : 'hidden'
                 }`}
               >
-                <CodeEditor
-                  language="javascript"
-                  path="script.js"
-                  code={javascript}
-                  editorRef={jsEditorRef}
-                  currentFontSize={numericFontSize}
-                  onChange={(val) => setJavascript(val ?? '')}
-                />
+                <Suspense fallback={<CodeEditorSkeleton />}>
+                  <CodeEditor
+                    language="javascript"
+                    path="script.js"
+                    code={javascript}
+                    editorRef={jsEditorRef}
+                    currentFontSize={numericFontSize}
+                    onChange={(val) => setJavascript(val ?? '')}
+                  />
+                </Suspense>
               </div>
 
               {/* Live Preview & Console Tab */}

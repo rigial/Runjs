@@ -1,5 +1,3 @@
-import { initialize, version } from 'esbuild-wasm';
-
 /**
  * Triggers a browser download for JavaScript or TypeScript source code.
  *
@@ -34,6 +32,7 @@ export async function loadTypscript(): Promise<void> {
   if (!initPromise) {
     initPromise = (async () => {
       try {
+        const { initialize, version } = await import('esbuild-wasm');
         await initialize({
           worker: true,
           wasmURL: `https://unpkg.com/esbuild-wasm@${version}/esbuild.wasm`,

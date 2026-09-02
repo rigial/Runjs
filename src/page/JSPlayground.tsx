@@ -1,6 +1,7 @@
 import { Fragment, useRef, useState } from 'react';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
+import '../utils/lunaStyles';
 import useDebounceLocalStorageState from '../hook/useDebounceLocalStorageState';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
@@ -20,6 +21,7 @@ import useTheme from '../hook/useTheme';
 import { saveJSTSFile } from '../utils/commonFunction';
 import SEO from '../seo/SEO';
 import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
+import { usePwaInstall } from '../hook/usePwaInstall';
 import {
   Play,
   HelpCircle,
@@ -33,6 +35,7 @@ import {
 } from 'lucide-react';
 
 function JSPlayground() {
+  const { isInstallable, isInstalled, openInstallModal } = usePwaInstall();
   const [code, setCode] = useDebounceLocalStorageState(
     'jscode',
     '// Welcome to RunJS - In-browser JavaScript Playground\n\nfunction calculateStats(numbers) {\n  const sum = numbers.reduce((acc, curr) => acc + curr, 0);\n  const avg = sum / numbers.length;\n  const max = Math.max(...numbers);\n  return { sum, avg, max };\n}\n\nconst scores = [88, 92, 79, 95, 100];\nconsole.log("Calculated Statistics:", calculateStats(scores));\n',
@@ -281,6 +284,19 @@ function JSPlayground() {
                 Console
               </button>
             </div>
+
+            {/* Install App Button */}
+            {isInstallable && !isInstalled && (
+              <button
+                type="button"
+                onClick={openInstallModal}
+                title="Install RunJS as Desktop App"
+                className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-semibold transition-all cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span>Install</span>
+              </button>
+            )}
 
             {/* Theme Selector */}
             <ThemeSelector compact={true} />

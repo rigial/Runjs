@@ -6,6 +6,7 @@ import {
   forwardRef,
 } from 'react';
 import LunaConsole from 'luna-console';
+import '../../../utils/lunaStyles';
 import useTheme from '../../../hook/useTheme';
 import { Terminal as ConsoleIcon, Trash2, Search } from 'lucide-react';
 

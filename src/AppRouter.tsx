@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
-import { lazy, memo, Suspense, useEffect } from 'react';
-import AppLoading from './components/AppLoading';
-import { loadTypscript } from './utils/commonFunction';
+import { memo, Suspense, useEffect } from 'react';
+import PageSkeleton from './components/skeletons/PageSkeleton';
+import RouteErrorBoundary from './components/RouteErrorBoundary';
+import { lazyWithRetry } from './utils/lazyWithRetry';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -15,87 +16,86 @@ function ScrollToTop() {
   return null;
 }
 
-const HomePage = lazy(() => import('./page/HomePage'));
-const AboutPage = lazy(() => import('./page/AboutPage'));
-const PrivacyPolicyPage = lazy(() => import('./page/PrivacyPolicyPage'));
-const TermsConditionsPage = lazy(() => import('./page/TermsConditionsPage'));
-const JSPlayground = lazy(() => import('./page/JSPlayground'));
-const ReactPlayground = lazy(() => import('./page/ReactPlayground'));
-const TSPlayground = lazy(() => import('./page/TSPlayground'));
-const Dashboard = lazy(() => import('./page/Dashboard'));
-const Interview = lazy(() => import('./page/InterviewQuestion'));
-const Bin = lazy(() => import('./page/Bin'));
-const PageNotFound = lazy(() => import('./page/PageNotFound'));
-const JSsaved = lazy(() => import('./page/JSsaved'));
-const TSsaved = lazy(() => import('./page/TSsaved'));
-const HTMLPlayground = lazy(() => import('./page/HTMLPlayground'));
-const HTMLStandalonePreview = lazy(
+const HomePage = lazyWithRetry(() => import('./page/HomePage'));
+const AboutPage = lazyWithRetry(() => import('./page/AboutPage'));
+const PrivacyPolicyPage = lazyWithRetry(
+  () => import('./page/PrivacyPolicyPage')
+);
+const TermsConditionsPage = lazyWithRetry(
+  () => import('./page/TermsConditionsPage')
+);
+const JSPlayground = lazyWithRetry(() => import('./page/JSPlayground'));
+const ReactPlayground = lazyWithRetry(() => import('./page/ReactPlayground'));
+const TSPlayground = lazyWithRetry(() => import('./page/TSPlayground'));
+const Dashboard = lazyWithRetry(() => import('./page/Dashboard'));
+const Interview = lazyWithRetry(() => import('./page/InterviewQuestion'));
+const Bin = lazyWithRetry(() => import('./page/Bin'));
+const PageNotFound = lazyWithRetry(() => import('./page/PageNotFound'));
+const JSsaved = lazyWithRetry(() => import('./page/JSsaved'));
+const TSsaved = lazyWithRetry(() => import('./page/TSsaved'));
+const HTMLPlayground = lazyWithRetry(() => import('./page/HTMLPlayground'));
+const HTMLStandalonePreview = lazyWithRetry(
   () => import('./page/HTMLStandalonePreview')
 );
 
-const Problemset = lazy(() => import('./page/Problemset'));
-const ProblemSolving = lazy(() => import('./page/ProblemSolving'));
+const Problemset = lazyWithRetry(() => import('./page/Problemset'));
+const ProblemSolving = lazyWithRetry(() => import('./page/ProblemSolving'));
 
-const LearnHomePage = lazy(() => import('./page/LearnHomePage'));
-const LearnLessonPage = lazy(() => import('./page/LearnLessonPage'));
-const OutputQuestions = lazy(() => import('./page/OutputQuestions'));
-const JSVisualizer = lazy(() => import('./page/JSVisualizer'));
-const JSExecutionContextVisualizer = lazy(
+const LearnHomePage = lazyWithRetry(() => import('./page/LearnHomePage'));
+const LearnLessonPage = lazyWithRetry(() => import('./page/LearnLessonPage'));
+const OutputQuestions = lazyWithRetry(() => import('./page/OutputQuestions'));
+const JSVisualizer = lazyWithRetry(() => import('./page/JSVisualizer'));
+const JSExecutionContextVisualizer = lazyWithRetry(
   () => import('./page/JSExecutionContextVisualizer')
 );
 
 function AppRouter() {
-  useEffect(() => {
-    async function asyncFunctionCall() {
-      await loadTypscript();
-    }
-    asyncFunctionCall();
-  }, []);
-
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Suspense fallback={<AppLoading />}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/privacy" element={<PrivacyPolicyPage />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms" element={<TermsConditionsPage />} />
-          <Route
-            path="/terms-and-conditions"
-            element={<TermsConditionsPage />}
-          />
-          <Route path="/problems" element={<Problemset />} />
-          <Route path="/problems/:slug" element={<ProblemSolving />} />
-          <Route path="/learn" element={<LearnHomePage />} />
-          <Route path="/learn/:slug" element={<LearnLessonPage />} />
-          <Route path="/js" element={<JSPlayground />} />
-          <Route path="/visualizer" element={<JSVisualizer />} />
-          <Route
-            path="/execution-context"
-            element={<JSExecutionContextVisualizer />}
-          />
-          <Route
-            path="/context-visualizer"
-            element={<JSExecutionContextVisualizer />}
-          />
-          <Route path="/react" element={<ReactPlayground />} />
-          <Route path="/react/:id" element={<ReactPlayground />} />
-          <Route path="/js/:id" element={<JSsaved />} />
-          <Route path="/ts" element={<TSPlayground />} />
-          <Route path="/ts/:id" element={<TSsaved />} />
-          <Route path="/html" element={<HTMLPlayground />} />
-          <Route path="/html/:id" element={<HTMLPlayground />} />
-          <Route path="/html-preview" element={<HTMLStandalonePreview />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/interview" element={<Interview />} />
-          <Route path="/output-questions" element={<OutputQuestions />} />
-          <Route path="/bin" element={<Bin />} />
-          <Route path="/404" element={<PageNotFound />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Suspense>
+      <RouteErrorBoundary>
+        <Suspense fallback={<PageSkeleton />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms" element={<TermsConditionsPage />} />
+            <Route
+              path="/terms-and-conditions"
+              element={<TermsConditionsPage />}
+            />
+            <Route path="/problems" element={<Problemset />} />
+            <Route path="/problems/:slug" element={<ProblemSolving />} />
+            <Route path="/learn" element={<LearnHomePage />} />
+            <Route path="/learn/:slug" element={<LearnLessonPage />} />
+            <Route path="/js" element={<JSPlayground />} />
+            <Route path="/visualizer" element={<JSVisualizer />} />
+            <Route
+              path="/execution-context"
+              element={<JSExecutionContextVisualizer />}
+            />
+            <Route
+              path="/context-visualizer"
+              element={<JSExecutionContextVisualizer />}
+            />
+            <Route path="/react" element={<ReactPlayground />} />
+            <Route path="/react/:id" element={<ReactPlayground />} />
+            <Route path="/js/:id" element={<JSsaved />} />
+            <Route path="/ts" element={<TSPlayground />} />
+            <Route path="/ts/:id" element={<TSsaved />} />
+            <Route path="/html" element={<HTMLPlayground />} />
+            <Route path="/html/:id" element={<HTMLPlayground />} />
+            <Route path="/html-preview" element={<HTMLStandalonePreview />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/interview" element={<Interview />} />
+            <Route path="/output-questions" element={<OutputQuestions />} />
+            <Route path="/bin" element={<Bin />} />
+            <Route path="/404" element={<PageNotFound />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Suspense>
+      </RouteErrorBoundary>
     </BrowserRouter>
   );
 }

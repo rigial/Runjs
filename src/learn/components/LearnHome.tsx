@@ -4,8 +4,8 @@ import {
   curriculum,
   getTotalLessonCount,
   getAllLessonSlugs,
+  TOTAL_EXERCISE_COUNT,
 } from '../data/curriculum';
-import { getTotalExerciseCount } from '../data/lessonRegistry';
 import { useLearnProgress } from '../hooks/useLearnProgress';
 import {
   BookOpen,
@@ -73,7 +73,7 @@ function LearnHome() {
   const { getStats, progress } = useLearnProgress();
 
   const totalLessons = useMemo(() => getTotalLessonCount(), []);
-  const totalExercises = useMemo(() => getTotalExerciseCount(), []);
+  const totalExercises = TOTAL_EXERCISE_COUNT;
   const stats = useMemo(
     () => getStats(totalLessons, totalExercises),
     [getStats, totalLessons, totalExercises]

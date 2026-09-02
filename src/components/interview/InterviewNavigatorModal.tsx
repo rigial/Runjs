@@ -1,5 +1,9 @@
 import { memo, useEffect, useRef, useState, useMemo } from 'react';
-import type { JSInterviewQuestion } from '../../utils/interface';
+import type {
+  JSInterviewQuestion,
+  InterviewMasteryMap,
+  InterviewBookmarkMap,
+} from '../../utils/interface';
 import {
   X,
   CheckCircle2,
@@ -16,8 +20,8 @@ interface InterviewNavigatorModalProps {
   questions: JSInterviewQuestion[];
   currentIndex: number;
   onSelectQuestion: (index: number) => void;
-  mastery: Record<number, 'mastered' | 'review'>;
-  bookmarks: Record<number, boolean>;
+  mastery: InterviewMasteryMap;
+  bookmarks: InterviewBookmarkMap;
   activeCategory: string;
   onCategoryChange: (cat: string) => void;
 }
@@ -37,24 +41,56 @@ function InterviewNavigatorModal({
 }: InterviewNavigatorModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const onCloseRef = useRef(onClose);
   const [modalSearch, setModalSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
     if (isOpen) {
-      setTimeout(() => {
+      previousFocusRef.current = document.activeElement as HTMLElement | null;
+      const timer = setTimeout(() => {
         searchInputRef.current?.focus();
       }, 50);
 
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
-          onClose();
+          e.preventDefault();
+          onCloseRef.current();
+          return;
+        }
+
+        if (e.key === 'Tab' && modalRef.current) {
+          const focusables = modalRef.current.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+          if (focusables.length === 0) return;
+
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       };
+
       window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('keydown', handleKeyDown);
+        previousFocusRef.current?.focus();
+      };
     }
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   const categories = useMemo(() => {
     const set = new Set<string>();

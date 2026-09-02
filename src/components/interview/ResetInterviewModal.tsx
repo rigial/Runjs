@@ -17,18 +17,23 @@ function ResetInterviewModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement | null;
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         cancelButtonRef.current?.focus();
       }, 50);
 
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           e.preventDefault();
-          onClose();
+          onCloseRef.current();
           return;
         }
 
@@ -53,11 +58,12 @@ function ResetInterviewModal({
 
       window.addEventListener('keydown', handleKeyDown);
       return () => {
+        clearTimeout(timer);
         window.removeEventListener('keydown', handleKeyDown);
         previousFocusRef.current?.focus();
       };
     }
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

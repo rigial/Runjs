@@ -52,14 +52,18 @@ function QuestionAccordion({
     }, 50);
   };
 
-  const handleCopy = (e: React.MouseEvent) => {
+  const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    const fullText = `${data.question}\n\n${data.answer
-      .map((a) => a.data.join('\n'))
-      .join('\n\n')}`;
-    navigator.clipboard.writeText(fullText);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
+    try {
+      const fullText = `${data.question}\n\n${data.answer
+        .map((a) => a.data.join('\n'))
+        .join('\n\n')}`;
+      await navigator.clipboard.writeText(fullText);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err);
+    }
   };
 
   const difficultyClass =

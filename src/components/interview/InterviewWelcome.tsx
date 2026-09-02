@@ -1,5 +1,9 @@
 import { memo, useMemo } from 'react';
-import type { JSInterviewQuestion } from '../../utils/interface';
+import type {
+  JSInterviewQuestion,
+  InterviewMasteryMap,
+  InterviewBookmarkMap,
+} from '../../utils/interface';
 import {
   Play,
   CheckCircle2,
@@ -20,8 +24,8 @@ import {
 interface InterviewWelcomeProps {
   totalQuestions: number;
   questions: JSInterviewQuestion[];
-  mastery: Record<number, 'mastered' | 'review'>;
-  bookmarks: Record<number, boolean>;
+  mastery: InterviewMasteryMap;
+  bookmarks: InterviewBookmarkMap;
   onStartPractice: (startId?: number, category?: string) => void;
   onOpenListMode: () => void;
   onResetProgress: () => void;

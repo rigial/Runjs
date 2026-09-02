@@ -11,6 +11,8 @@ import InterViewQuestion from '../asset/interview_questions.json';
 import type {
   JSInterviewQuestion,
   JSInterviewQuestionList,
+  InterviewMasteryMap,
+  InterviewBookmarkMap,
 } from '../utils/interface';
 import InterviewWelcome from '../components/interview/InterviewWelcome';
 import InterviewNavigatorModal from '../components/interview/InterviewNavigatorModal';
@@ -93,7 +95,7 @@ export default function InterviewQuestion() {
     '{}'
   );
 
-  const mastery: Record<number, 'mastered' | 'review'> = useMemo(() => {
+  const mastery: InterviewMasteryMap = useMemo(() => {
     if (typeof masteryRaw === 'string') {
       try {
         return JSON.parse(masteryRaw);
@@ -104,7 +106,7 @@ export default function InterviewQuestion() {
     return masteryRaw ?? {};
   }, [masteryRaw]);
 
-  const bookmarks: Record<number, boolean> = useMemo(() => {
+  const bookmarks: InterviewBookmarkMap = useMemo(() => {
     if (typeof bookmarksRaw === 'string') {
       try {
         return JSON.parse(bookmarksRaw);
@@ -265,38 +267,52 @@ export default function InterviewQuestion() {
       const targetQ = allQuestions[indexInAll];
       if (!targetQ) return;
 
-      if (activeCategory !== 'All' && targetQ.category !== activeCategory) {
-        setActiveCategory('All');
-      }
-      if (
-        activeDifficulty !== 'all' &&
-        targetQ.difficulty !== activeDifficulty
-      ) {
-        setActiveDifficulty('all');
-      }
+      const needsFilterReset =
+        (activeCategory !== 'All' && targetQ.category !== activeCategory) ||
+        (activeDifficulty !== 'all' &&
+          targetQ.difficulty !== activeDifficulty) ||
+        searchQuery.trim() !== '';
 
-      const idxInFiltered = filteredQuestions.findIndex(
-        (q) =>
-          (q.id ?? allQuestions.indexOf(q) + 1) ===
-          (targetQ.id ?? indexInAll + 1)
-      );
-      if (idxInFiltered !== -1) {
-        setCurrentIndex(idxInFiltered);
-      } else {
+      if (needsFilterReset) {
+        setActiveCategory('All');
+        setActiveDifficulty('all');
+        setSearchQuery('');
         setCurrentIndex(indexInAll);
+      } else {
+        const idxInFiltered = filteredQuestions.findIndex(
+          (q) =>
+            (q.id ?? allQuestions.indexOf(q) + 1) ===
+            (targetQ.id ?? indexInAll + 1)
+        );
+        if (idxInFiltered !== -1) {
+          setCurrentIndex(idxInFiltered);
+        } else {
+          setActiveCategory('All');
+          setActiveDifficulty('all');
+          setSearchQuery('');
+          setCurrentIndex(indexInAll);
+        }
       }
       setViewMode('practice');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    [activeCategory, activeDifficulty, filteredQuestions]
+    [activeCategory, activeDifficulty, searchQuery, filteredQuestions]
   );
 
   const handleStartPractice = useCallback(
     (startId?: number, category?: string) => {
-      if (category) {
+      setSearchQuery('');
+      setActiveDifficulty('all');
+
+      if (category && category !== 'All') {
         setActiveCategory(category);
         const subset = allQuestions.filter((q) => q.category === category);
-        const targetIdx = subset.findIndex((q) => (q.id ?? 1) === startId);
+        const targetQ = startId
+          ? subset.find((q) => q.id === startId)
+          : subset.find((q) => mastery[q.id ?? 0] === undefined) || subset[0];
+        const targetIdx = subset.findIndex(
+          (q) => (q.id ?? 1) === (targetQ ? targetQ.id : startId)
+        );
         setCurrentIndex(targetIdx !== -1 ? targetIdx : 0);
       } else if (startId) {
         setActiveCategory('All');
@@ -309,7 +325,7 @@ export default function InterviewQuestion() {
       setViewMode('practice');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    []
+    [mastery]
   );
 
   const handleOpenListMode = useCallback(() => {
@@ -335,14 +351,18 @@ export default function InterviewQuestion() {
   }, [setMasteryRaw, setBookmarksRaw, setSearchParams]);
 
   // Copy current question & answer
-  const handleCopyCurrent = useCallback(() => {
+  const handleCopyCurrent = useCallback(async () => {
     if (!currentQuestion) return;
-    const fullText = `${currentQuestion.question}\n\n${currentQuestion.answer
-      .map((a) => a.data.join('\n'))
-      .join('\n\n')}`;
-    navigator.clipboard.writeText(fullText);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
+    try {
+      const fullText = `${currentQuestion.question}\n\n${currentQuestion.answer
+        .map((a) => a.data.join('\n'))
+        .join('\n\n')}`;
+      await navigator.clipboard.writeText(fullText);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err);
+    }
   }, [currentQuestion]);
 
   // Keyboard shortcut listener (only active in practice arena)
@@ -559,7 +579,7 @@ export default function InterviewQuestion() {
             <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 justify-end">
               {/* Category Filter Pills (Practice mode) */}
               <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 max-w-[140px] sm:max-w-none">
-                {categories.slice(0, 5).map((cat) => (
+                {categories.map((cat) => (
                   <button
                     key={cat}
                     type="button"

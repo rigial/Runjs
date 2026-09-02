@@ -141,8 +141,24 @@ export interface AnswerBlock {
   data: string[];
 }
 
+export type InterviewCategory =
+  | 'All'
+  | 'JavaScript'
+  | 'React'
+  | 'TypeScript'
+  | 'Node.js'
+  | 'Architecture';
+
+export type InterviewDifficulty = 'easy' | 'medium' | 'hard';
+export type InterviewMasteryStatus = 'unreviewed' | 'review' | 'mastered';
+
 export interface JSInterviewQuestion {
+  id?: number;
   question: string;
+  category?: string;
+  difficulty?: InterviewDifficulty;
+  tags?: string[];
+  tip?: string;
   answer: AnswerBlock[];
 }
 
@@ -153,4 +169,8 @@ export interface IQuestionAccordion {
   questionNumber: number;
   isOpened: boolean;
   changeActiveQuestion: () => void;
+  isMastered?: boolean;
+  isBookmarked?: boolean;
+  onToggleMastered?: () => void;
+  onToggleBookmark?: () => void;
 }

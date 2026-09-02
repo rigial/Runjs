@@ -577,8 +577,8 @@ export default function InterviewQuestion() {
           {/* Right Area: Filters, Progress & Actions */}
           {viewMode !== 'welcome' ? (
             <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 justify-end">
-              {/* Category Filter Pills (Practice mode) */}
-              <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 max-w-[140px] sm:max-w-none">
+              {/* Category Filter Pills (Practice mode - Desktop) */}
+              <div className="hidden sm:flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
                 {categories.map((cat) => (
                   <button
                     key={cat}
@@ -650,6 +650,29 @@ export default function InterviewQuestion() {
             </div>
           )}
         </div>
+
+        {/* Mobile Horizontal Category Filter Strip (Practice mode on mobile) */}
+        {viewMode === 'practice' && (
+          <div className="sm:hidden w-full px-3 pb-2 pt-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar border-t border-[var(--border-subtle)]/60">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => {
+                  setActiveCategory(cat);
+                  setCurrentIndex(0);
+                }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold capitalize transition-all shrink-0 cursor-pointer ${
+                  activeCategory === cat
+                    ? 'bg-amber-500/15 border border-amber-500/40 text-amber-600 dark:text-amber-400 shadow-2xs'
+                    : 'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Main Viewport: Welcome Screen OR Interactive Arena OR List View */}
@@ -744,9 +767,9 @@ export default function InterviewQuestion() {
 
                 {/* Active Recall Challenge Card */}
                 <div className="p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-muted)] space-y-2">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                     <div className="flex items-center gap-2 text-xs font-bold text-amber-500 uppercase tracking-wider">
-                      <Brain className="w-4 h-4" />
+                      <Brain className="w-4 h-4 shrink-0" />
                       <span>Active Recall Challenge</span>
                     </div>
 
@@ -754,7 +777,7 @@ export default function InterviewQuestion() {
                     <button
                       type="button"
                       onClick={() => setIsAnswerRevealed((prev) => !prev)}
-                      className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-black text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                      className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-black text-xs font-bold shadow-2xs transition-all cursor-pointer shrink-0"
                     >
                       {isAnswerRevealed ? (
                         <>
@@ -871,7 +894,10 @@ export default function InterviewQuestion() {
                         className="mt-2 flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-black text-xs font-bold shadow-xs transition-transform hover:scale-[1.02] cursor-pointer"
                       >
                         <Eye className="w-4 h-4" />
-                        <span>Reveal Answer (Press Space)</span>
+                        <span className="hidden sm:inline">
+                          Reveal Answer (Press Space)
+                        </span>
+                        <span className="sm:hidden">Reveal Answer</span>
                       </button>
                     </div>
                   ) : (
@@ -952,7 +978,7 @@ export default function InterviewQuestion() {
                     </div>
                   </div>
 
-                  {/* Navigation Controls (Desktop) */}
+                  {/* Navigation Controls (Desktop & Tablet) */}
                   <div className="hidden sm:flex items-center justify-between pt-2">
                     <button
                       type="button"
@@ -964,7 +990,7 @@ export default function InterviewQuestion() {
                           : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
                       }`}
                     >
-                      <ChevronLeft className="w-4 h-4" />
+                      <ChevronLeft className="w-4 h-4 shrink-0" />
                       <span>Previous</span>
                     </button>
 
@@ -1002,7 +1028,7 @@ export default function InterviewQuestion() {
                       }`}
                     >
                       <span>Next</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 shrink-0" />
                     </button>
                   </div>
                 </div>
@@ -1175,37 +1201,52 @@ export default function InterviewQuestion() {
 
       {/* Sticky Bottom Navigation Bar for Mobile (in practice mode) */}
       {viewMode === 'practice' && (
-        <div className="lg:hidden sticky bottom-0 z-20 w-full border-t border-[var(--border-default)] bg-[var(--bg-surface)]/95 backdrop-blur-md px-4 py-2.5 flex items-center justify-between gap-2">
+        <div className="sm:hidden sticky bottom-0 z-20 w-full border-t border-[var(--border-default)] bg-[var(--bg-surface)]/95 backdrop-blur-md px-3 py-2 flex items-center justify-between gap-2 shadow-lg">
           <button
             type="button"
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-xs font-semibold ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg border text-xs font-semibold ${
               currentIndex === 0
-                ? 'border-[var(--border-default)] text-[var(--text-muted)] opacity-40'
-                : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)]'
+                ? 'border-[var(--border-default)] text-[var(--text-muted)] opacity-40 cursor-not-allowed'
+                : 'border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] active:bg-[var(--bg-surface-hover)]'
             }`}
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Prev</span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => setIsNavigatorOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[var(--bg-surface-muted)] border border-[var(--border-default)] text-xs font-bold text-[var(--text-primary)]"
-          >
-            <LayoutGrid className="w-3.5 h-3.5 text-amber-500" />
-            <span>
-              #{currentQId} / {allQuestions.length}
-            </span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleRandomQuestion}
+              className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-primary)] active:bg-[var(--bg-surface-hover)]"
+              title="Random question"
+            >
+              <Shuffle className="w-3.5 h-3.5" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsNavigatorOpen(true)}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[var(--bg-surface-muted)] border border-[var(--border-default)] text-xs font-bold text-[var(--text-primary)] active:bg-[var(--bg-surface-hover)]"
+            >
+              <LayoutGrid className="w-3.5 h-3.5 text-amber-500" />
+              <span>
+                #{currentQId} / {allQuestions.length}
+              </span>
+            </button>
+          </div>
 
           <button
             type="button"
             onClick={handleNext}
             disabled={currentIndex === filteredQuestions.length - 1}
-            className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-bold bg-amber-500 text-black shadow-xs"
+            className={`flex items-center gap-1 px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-xs ${
+              currentIndex === filteredQuestions.length - 1
+                ? 'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-muted)] opacity-40 cursor-not-allowed'
+                : 'bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black'
+            }`}
           >
             <span>Next</span>
             <ChevronRight className="w-4 h-4" />

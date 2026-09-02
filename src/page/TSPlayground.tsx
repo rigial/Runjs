@@ -2,6 +2,7 @@ import { transform } from 'esbuild-wasm';
 import { Fragment, memo, useCallback, useRef, useState } from 'react';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
+import '../utils/lunaStyles';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import useAdjustFontSize from '../hook/useAdjustFontSize';
 import useComplieCode from '../hook/useComplieCode';

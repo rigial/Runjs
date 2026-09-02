@@ -25,10 +25,13 @@ import {
   Brain,
   RotateCw,
   Boxes,
+  Download,
 } from 'lucide-react';
+import { usePwaInstall } from '../hook/usePwaInstall';
 
 function Navbar() {
   const location = useLocation();
+  const { isInstallable, isInstalled, openInstallModal } = usePwaInstall();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<
     'playgrounds' | 'interview' | 'more' | null
@@ -566,6 +569,19 @@ function Navbar() {
             </Link>
           )}
 
+          {/* Install App Button (Desktop) */}
+          {isInstallable && !isInstalled && (
+            <button
+              type="button"
+              onClick={openInstallModal}
+              title="Install RunJS as Desktop App"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 active:bg-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-semibold shadow-2xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <span>Install App</span>
+            </button>
+          )}
+
           {/* Theme Selector Component */}
           <ThemeSelector />
 
@@ -755,6 +771,28 @@ function Navbar() {
                 })}
               </div>
             </div>
+
+            {/* Mobile Install App Button */}
+            {isInstallable && !isInstalled && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openInstallModal();
+                  }}
+                  className="flex items-center justify-between w-full py-2.5 px-3 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <Download className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>Install RunJS App</span>
+                  </div>
+                  <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                    PWA
+                  </span>
+                </button>
+              </div>
+            )}
 
             {/* Mobile Start Coding Action */}
             <div className="pt-2">

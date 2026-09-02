@@ -16,6 +16,9 @@ import {
   GraduationCap,
   FileQuestion,
   Brain,
+  RotateCw,
+  Boxes,
+  ArrowRight,
 } from 'lucide-react';
 
 function HomePage() {
@@ -42,9 +45,14 @@ function HomePage() {
         {/* Hero Section */}
         <section className="flex flex-col items-center text-center max-w-3xl mx-auto">
           {/* Top Announcement Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold mb-6 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>RunJS 2.0 • Modern In-Browser Developer Playground</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold mb-6 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300 max-w-full">
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
+            <span className="hidden sm:inline">
+              RunJS 2.0 • Modern In-Browser Developer Playground
+            </span>
+            <span className="sm:hidden truncate">
+              RunJS 2.0 • Developer Playground
+            </span>
           </div>
 
           {/* Main Headline */}
@@ -63,38 +71,101 @@ function HomePage() {
             components, and prepare for technical coding interviews.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+          {/* CTA Buttons - Creative Responsive Layout */}
+          <div className="mt-8 w-full max-w-sm sm:max-w-none mx-auto flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-3">
+            {/* Primary Hero CTA Button */}
             <Link
               to="/learn"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-sm font-semibold shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-sm font-bold shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <GraduationCap className="w-4 h-4" />
+              <GraduationCap className="w-4 h-4 shrink-0" />
               <span>Learn JavaScript 0 → Hero</span>
             </Link>
 
-            <Link
-              to="/problems"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
-            >
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Explore Coding Challenges</span>
-            </Link>
+            {/* Secondary Action Buttons Grid on mobile, inline on desktop */}
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+              <Link
+                to="/problems"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-xs sm:text-sm font-medium transition-all duration-150"
+              >
+                <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>Challenges</span>
+              </Link>
 
-            <Link
-              to="/interview"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
-            >
-              <FileQuestion className="w-4 h-4 text-amber-500" />
-              <span>Interview Prep</span>
-            </Link>
+              <Link
+                to="/interview"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-xs sm:text-sm font-medium transition-all duration-150"
+              >
+                <FileQuestion className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>Interview Prep</span>
+              </Link>
+            </div>
 
             <Link
               to="/js"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-xs sm:text-sm font-medium transition-all duration-150"
             >
-              <Play className="w-4 h-4 text-amber-500 fill-amber-500" />
+              <Play className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0" />
               <span>Open Playground</span>
+            </Link>
+          </div>
+
+          {/* Featured Interactive Visualizers Showcase under CTA Buttons */}
+          <div className="mt-8 sm:mt-10 w-full max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-left">
+            {/* Event Loop Visualizer Card */}
+            <Link
+              to="/visualizer"
+              className="group p-4 rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent hover:border-amber-500/60 hover:from-amber-500/15 transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500/20 text-amber-500 border border-amber-500/30">
+                    <RotateCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    Visual Tool
+                  </span>
+                </div>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
+                  Event Loop Visualizer
+                </h3>
+                <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-relaxed">
+                  Step through Call Stack, Microtasks & Tasks live with the
+                  interactive rotating wheel.
+                </p>
+              </div>
+              <div className="mt-3 flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 group-hover:underline">
+                <span>Launch Visualizer</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Execution Context Visualizer Card */}
+            <Link
+              to="/execution-context"
+              className="group p-4 rounded-xl border border-blue-500/30 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent hover:border-blue-500/60 hover:from-blue-500/15 transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-500/20 text-blue-500 border border-blue-500/30">
+                    <Boxes className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                    Deep Dive
+                  </span>
+                </div>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">
+                  Execution Context Visualizer
+                </h3>
+                <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-relaxed">
+                  Inspect Memory Creation vs Code Execution phases, variable
+                  environments & call stack frames.
+                </p>
+              </div>
+              <div className="mt-3 flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400 group-hover:underline">
+                <span>Explore Contexts</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </div>
             </Link>
           </div>
         </section>

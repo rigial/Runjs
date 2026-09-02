@@ -1,4 +1,12 @@
-import { memo, useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  memo,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  Suspense,
+} from 'react';
 import { useParams, Link } from 'react-router';
 import { SandpackProvider } from '@codesandbox/sandpack-react';
 import Split from 'react-split';
@@ -6,8 +14,15 @@ import { WorkspaceProvider } from '../ide/state/workspaceContext';
 import { useWorkspace } from '../ide/state/useWorkspace';
 import { FileExplorer } from '../ide/components/FileExplorer/FileExplorer';
 import { MultiTabEditor } from '../ide/components/Editor/MultiTabEditor';
-import { XtermTerminal } from '../ide/components/Terminal/XtermTerminal';
 import { LivePreview } from '../ide/components/Preview/LivePreview';
+import TerminalSkeleton from '../components/skeletons/TerminalSkeleton';
+import { lazyWithRetry } from '../utils/lazyWithRetry';
+
+const XtermTerminal = lazyWithRetry(() =>
+  import('../ide/components/Terminal/XtermTerminal').then((m) => ({
+    default: m.XtermTerminal,
+  }))
+);
 import {
   IdeConsole,
   IdeConsoleRef,
@@ -469,11 +484,13 @@ function ReactWorkspace() {
                         />
                       </div>
                       <div className="h-full overflow-hidden">
-                        <XtermTerminal
-                          vfs={vfs}
-                          onDevServerRestart={handleDevServerRestart}
-                          onOpenFile={openFile}
-                        />
+                        <Suspense fallback={<TerminalSkeleton />}>
+                          <XtermTerminal
+                            vfs={vfs}
+                            onDevServerRestart={handleDevServerRestart}
+                            onOpenFile={openFile}
+                          />
+                        </Suspense>
                       </div>
                     </Split>
                   ) : (
@@ -581,14 +598,16 @@ function ReactWorkspace() {
                     activeMobileTab === 'terminal' ? 'block' : 'hidden'
                   }`}
                 >
-                  <XtermTerminal
-                    vfs={vfs}
-                    onDevServerRestart={handleDevServerRestart}
-                    onOpenFile={(p) => {
-                      openFile(p);
-                      setActiveMobileTab('code');
-                    }}
-                  />
+                  <Suspense fallback={<TerminalSkeleton />}>
+                    <XtermTerminal
+                      vfs={vfs}
+                      onDevServerRestart={handleDevServerRestart}
+                      onOpenFile={(p) => {
+                        openFile(p);
+                        setActiveMobileTab('code');
+                      }}
+                    />
+                  </Suspense>
                 </div>
 
                 <div

@@ -71,11 +71,13 @@ function Terminal({
               }`}
             >
               <AlertCircle
-                className={`w-3.5 h-3.5 ${
+                className={`w-3.5 h-3.5 shrink-0 ${
                   errorCount > 0 ? 'text-red-500' : 'text-emerald-500'
                 }`}
               />
-              <span>TypeScript Errors</span>
+              <span>
+                <span className="hidden sm:inline">TypeScript </span>Errors
+              </span>
               <span
                 className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-semibold border ${
                   errorCount > 0

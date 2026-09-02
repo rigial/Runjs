@@ -1,7 +1,15 @@
-import { memo, useState, useRef, useEffect, useCallback } from 'react';
+import {
+  memo,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  Suspense,
+} from 'react';
 import { useParams, useNavigate } from 'react-router';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
+import '../utils/lunaStyles';
 import { PROBLEMS } from '../problem-engine/data/problems';
 import {
   TestCase,
@@ -31,7 +39,10 @@ import ProblemDescription from '../components/problems/ProblemDescription';
 import TestCasePanel from '../components/problems/TestCasePanel';
 import TestResultsPanel from '../components/problems/TestResultsPanel';
 import ResetCodeModal from '../components/problems/ResetCodeModal';
-import CodeEditor from '../components/CodeEditor';
+import CodeEditorSkeleton from '../components/skeletons/CodeEditorSkeleton';
+import { lazyWithRetry } from '../utils/lazyWithRetry';
+
+const CodeEditor = lazyWithRetry(() => import('../components/CodeEditor'));
 import Terminal from '../components/Terminal';
 import SEO from '../seo/SEO';
 import { getBreadcrumbSchema } from '../seo/seoConfig';
@@ -470,14 +481,16 @@ function ProblemSolving() {
                   </div>
 
                   <div className="flex-1 overflow-hidden">
-                    <CodeEditor
-                      language={language}
-                      code={code}
-                      editorRef={editorRef}
-                      currentFontSize={Number(currentFontSize)}
-                      onChange={(val) => setCode(val ?? '')}
-                      disableAutoSuggestion={true}
-                    />
+                    <Suspense fallback={<CodeEditorSkeleton />}>
+                      <CodeEditor
+                        language={language}
+                        code={code}
+                        editorRef={editorRef}
+                        currentFontSize={Number(currentFontSize)}
+                        onChange={(val) => setCode(val ?? '')}
+                        disableAutoSuggestion={true}
+                      />
+                    </Suspense>
                   </div>
                 </div>
 
@@ -582,14 +595,16 @@ function ProblemSolving() {
             <div
               className={`h-full flex flex-col ${mobileTab === 'editor' ? '' : 'hidden'}`}
             >
-              <CodeEditor
-                language={language}
-                code={code}
-                editorRef={editorRef}
-                currentFontSize={Number(currentFontSize)}
-                onChange={(val) => setCode(val ?? '')}
-                disableAutoSuggestion={true}
-              />
+              <Suspense fallback={<CodeEditorSkeleton />}>
+                <CodeEditor
+                  language={language}
+                  code={code}
+                  editorRef={editorRef}
+                  currentFontSize={Number(currentFontSize)}
+                  onChange={(val) => setCode(val ?? '')}
+                  disableAutoSuggestion={true}
+                />
+              </Suspense>
             </div>
 
             <div

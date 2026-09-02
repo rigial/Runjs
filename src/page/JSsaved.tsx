@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import LunaConsole from 'luna-console';
+import '../utils/lunaStyles';
 import Split from 'react-split';
 import { Link, useNavigate, useParams } from 'react-router';
 import useLocalStorageState from '../hook/useLocalStorageState';

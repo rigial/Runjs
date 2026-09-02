@@ -2,12 +2,11 @@ import LearnLayout from '../learn/components/LearnLayout';
 import LearnHome from '../learn/components/LearnHome';
 import SEO from '../components/SEO';
 import { generateCurriculumJsonLd } from '../learn/seo/lessonJsonLd';
-import { allLessons } from '../learn/data/lessonRegistry';
-import { curriculum } from '../learn/data/curriculum';
+import { curriculum, getTotalLessonCount } from '../learn/data/curriculum';
 
 export default function LearnHomePage() {
   const totalTopics = curriculum.reduce((acc, p) => acc + p.topics.length, 0);
-  const jsonLd = generateCurriculumJsonLd(allLessons.length, totalTopics);
+  const jsonLd = generateCurriculumJsonLd(getTotalLessonCount(), totalTopics);
 
   return (
     <LearnLayout showSidebar={false}>

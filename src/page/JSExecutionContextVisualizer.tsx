@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  Suspense,
 } from 'react';
 import { Link, useLocation } from 'react-router';
 import Split from 'react-split';
@@ -18,7 +19,10 @@ import {
   AlertCircle,
   HelpCircle,
 } from 'lucide-react';
-import CodeEditor from '../components/CodeEditor';
+import CodeEditorSkeleton from '../components/skeletons/CodeEditorSkeleton';
+import { lazyWithRetry } from '../utils/lazyWithRetry';
+
+const CodeEditor = lazyWithRetry(() => import('../components/CodeEditor'));
 import ThemeSelector from '../components/ThemeSelector';
 import SEO from '../seo/SEO';
 import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
@@ -548,56 +552,8 @@ function JSExecutionContextVisualizer() {
             </div>
           </div>
 
-          {/* Right: Theme & Mobile Switcher */}
-          <div className="flex items-center gap-2">
-            {/* Mobile View Toggle */}
-            <div className="flex lg:hidden rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-muted)] p-0.5">
-              <button
-                type="button"
-                onClick={() => setActiveMobileTab('editor')}
-                className={`px-2 py-1 text-[11px] font-medium rounded ${
-                  activeMobileTab === 'editor'
-                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xs font-semibold'
-                    : 'text-[var(--text-secondary)]'
-                }`}
-              >
-                Code
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveMobileTab('context')}
-                className={`px-2 py-1 text-[11px] font-medium rounded ${
-                  activeMobileTab === 'context'
-                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xs font-semibold'
-                    : 'text-[var(--text-secondary)]'
-                }`}
-              >
-                Context
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveMobileTab('stack')}
-                className={`px-2 py-1 text-[11px] font-medium rounded ${
-                  activeMobileTab === 'stack'
-                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xs font-semibold'
-                    : 'text-[var(--text-secondary)]'
-                }`}
-              >
-                Stack
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveMobileTab('console')}
-                className={`px-2 py-1 text-[11px] font-medium rounded ${
-                  activeMobileTab === 'console'
-                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xs font-semibold'
-                    : 'text-[var(--text-secondary)]'
-                }`}
-              >
-                Console
-              </button>
-            </div>
-
+          {/* Right: Theme & Help Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Theme Selector */}
             <ThemeSelector compact={true} />
 
@@ -607,12 +563,60 @@ function JSExecutionContextVisualizer() {
               onClick={() => dialogRef?.current?.open()}
               title="Keyboard Shortcuts & Visualizer Guide"
               aria-label="Help"
-              className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer shrink-0"
             >
               <HelpCircle className="w-4 h-4" />
             </button>
           </div>
         </nav>
+
+        {/* Mobile View Toggle Bar (visible only on mobile/tablet <lg) */}
+        <div className="lg:hidden flex border-b border-[var(--border-default)] bg-[var(--bg-surface)] px-2 py-1.5 gap-1 shrink-0">
+          <button
+            type="button"
+            onClick={() => setActiveMobileTab('editor')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer text-center ${
+              activeMobileTab === 'editor'
+                ? 'bg-amber-500 text-black shadow-xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+            }`}
+          >
+            Code
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveMobileTab('context')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer text-center ${
+              activeMobileTab === 'context'
+                ? 'bg-amber-500 text-black shadow-xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+            }`}
+          >
+            Context
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveMobileTab('stack')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer text-center ${
+              activeMobileTab === 'stack'
+                ? 'bg-amber-500 text-black shadow-xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+            }`}
+          >
+            Stack
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveMobileTab('console')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer text-center ${
+              activeMobileTab === 'console'
+                ? 'bg-amber-500 text-black shadow-xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+            }`}
+          >
+            Console
+          </button>
+        </div>
 
         {/* Syntax Error Alert Banner */}
         {syntaxError && (
@@ -666,13 +670,15 @@ function JSExecutionContextVisualizer() {
                 </div>
 
                 <div className="flex-1 overflow-hidden">
-                  <CodeEditor
-                    language="javascript"
-                    code={code}
-                    editorRef={editorRef}
-                    currentFontSize={Number(currentFontSize)}
-                    onChange={(value) => handleCodeChange(value ?? '')}
-                  />
+                  <Suspense fallback={<CodeEditorSkeleton />}>
+                    <CodeEditor
+                      language="javascript"
+                      code={code}
+                      editorRef={editorRef}
+                      currentFontSize={Number(currentFontSize)}
+                      onChange={(value) => handleCodeChange(value ?? '')}
+                    />
+                  </Suspense>
                 </div>
               </div>
 
@@ -735,13 +741,15 @@ function JSExecutionContextVisualizer() {
                 }`}
               >
                 <div className="flex-1 overflow-hidden">
-                  <CodeEditor
-                    language="javascript"
-                    code={code}
-                    editorRef={editorRef}
-                    currentFontSize={Number(currentFontSize)}
-                    onChange={(value) => handleCodeChange(value ?? '')}
-                  />
+                  <Suspense fallback={<CodeEditorSkeleton />}>
+                    <CodeEditor
+                      language="javascript"
+                      code={code}
+                      editorRef={editorRef}
+                      currentFontSize={Number(currentFontSize)}
+                      onChange={(value) => handleCodeChange(value ?? '')}
+                    />
+                  </Suspense>
                 </div>
               </div>
 

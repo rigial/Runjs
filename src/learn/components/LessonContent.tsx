@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, Suspense } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { getLessonBySlug } from '../data/lessonRegistry';
 import { getNextLessonSlug, getPreviousLessonSlug } from '../data/curriculum';
@@ -7,8 +7,11 @@ import SEO from '../../components/SEO';
 import { generateLessonJsonLd } from '../seo/lessonJsonLd';
 import CodeBlock from './CodeBlock';
 import QuizComponent from './QuizComponent';
-import ExerciseComponent from './ExerciseComponent';
 import DynamicBreadcrumb from './DynamicBreadcrumb';
+import CodeEditorSkeleton from '../../components/skeletons/CodeEditorSkeleton';
+import { lazyWithRetry } from '../../utils/lazyWithRetry';
+
+const ExerciseComponent = lazyWithRetry(() => import('./ExerciseComponent'));
 import {
   Clock,
   CheckCircle2,
@@ -279,16 +282,24 @@ function LessonContent() {
           <h2 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] mb-4">
             Practice Exercises
           </h2>
-          {lesson.exercises.map((exercise, eIdx) => (
-            <ExerciseComponent
-              key={`${slug}-exercise-${eIdx}`}
-              exercise={exercise}
-              exerciseNumber={eIdx + 1}
-              onComplete={() =>
-                markExerciseCompleted(slug, lesson.exercises.length)
-              }
-            />
-          ))}
+          <Suspense
+            fallback={
+              <div className="h-96 w-full rounded-xl border border-[var(--border-default)] overflow-hidden mb-6">
+                <CodeEditorSkeleton />
+              </div>
+            }
+          >
+            {lesson.exercises.map((exercise, eIdx) => (
+              <ExerciseComponent
+                key={`${slug}-exercise-${eIdx}`}
+                exercise={exercise}
+                exerciseNumber={eIdx + 1}
+                onComplete={() =>
+                  markExerciseCompleted(slug, lesson.exercises.length)
+                }
+              />
+            ))}
+          </Suspense>
         </section>
       )}
 

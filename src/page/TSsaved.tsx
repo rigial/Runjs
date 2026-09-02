@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import LunaConsole from 'luna-console';
+import '../utils/lunaStyles';
 import { Link, useNavigate, useParams } from 'react-router';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import useAdjustFontSize from '../hook/useAdjustFontSize';

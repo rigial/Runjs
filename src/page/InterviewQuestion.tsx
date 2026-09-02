@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import QuestionAccordion from '../components/QuestionAccordion';
 import InterViewQuestion from '../asset/interview_questions.json';
@@ -7,7 +8,7 @@ import useLocalStorageState from '../hook/useLocalStorageState';
 import Footer from '../components/Footer';
 import SEO from '../seo/SEO';
 import { getBreadcrumbSchema } from '../seo/seoConfig';
-import { Search, Sparkles, X } from 'lucide-react';
+import { Search, Sparkles, X, Brain, FileQuestion } from 'lucide-react';
 
 export default function InterviewQuestion() {
   const [activeQuestion, setActiveQuestion] = useLocalStorageState(
@@ -100,6 +101,31 @@ export default function InterviewQuestion() {
             prototypes, event loops, async/await, and real-world coding problems
             with executable code samples.
           </p>
+
+          {/* Interview Section Switcher */}
+          <div className="mt-5 flex items-center gap-1.5 p-1 rounded-xl bg-[var(--bg-surface-muted)] border border-[var(--border-default)] w-fit">
+            <Link
+              to="/interview"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs border border-[var(--border-default)]"
+            >
+              <FileQuestion className="w-3.5 h-3.5 text-amber-500" />
+              <span>Technical Q&A</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/20">
+                Theory
+              </span>
+            </Link>
+
+            <Link
+              to="/output-questions"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <Brain className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+              <span>Output Quiz</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">
+                100 MCQs
+              </span>
+            </Link>
+          </div>
 
           {/* Search & Stats Bar */}
           <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">

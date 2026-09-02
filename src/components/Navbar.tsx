@@ -2,6 +2,7 @@ import { memo, useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router';
 import {
   playgroundLinks,
+  interviewLinks,
   primaryNavLinks,
   moreNavLinks,
 } from '../utils/masterData';
@@ -20,13 +21,15 @@ import {
   Sparkles,
   Shield,
   FileText,
+  FileQuestion,
+  Brain,
 } from 'lucide-react';
 
 function Navbar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<
-    'playgrounds' | 'more' | null
+    'playgrounds' | 'interview' | 'more' | null
   >(null);
 
   const navRef = useRef<HTMLDivElement>(null);
@@ -64,13 +67,16 @@ function Navbar() {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const handleMouseEnter = useCallback((menu: 'playgrounds' | 'more') => {
-    if (dropdownCloseTimeoutRef.current) {
-      clearTimeout(dropdownCloseTimeoutRef.current);
-      dropdownCloseTimeoutRef.current = null;
-    }
-    setOpenDropdown(menu);
-  }, []);
+  const handleMouseEnter = useCallback(
+    (menu: 'playgrounds' | 'interview' | 'more') => {
+      if (dropdownCloseTimeoutRef.current) {
+        clearTimeout(dropdownCloseTimeoutRef.current);
+        dropdownCloseTimeoutRef.current = null;
+      }
+      setOpenDropdown(menu);
+    },
+    []
+  );
 
   const handleMouseLeave = useCallback(() => {
     dropdownCloseTimeoutRef.current = setTimeout(() => {
@@ -78,7 +84,7 @@ function Navbar() {
     }, 150);
   }, []);
 
-  const toggleDropdown = (menu: 'playgrounds' | 'more') => {
+  const toggleDropdown = (menu: 'playgrounds' | 'interview' | 'more') => {
     if (dropdownCloseTimeoutRef.current) {
       clearTimeout(dropdownCloseTimeoutRef.current);
       dropdownCloseTimeoutRef.current = null;
@@ -93,9 +99,35 @@ function Navbar() {
       location.pathname.startsWith(`${item.link}/`)
   );
 
+  const isInterviewActive =
+    location.pathname === '/interview' ||
+    location.pathname.startsWith('/interview/') ||
+    location.pathname === '/output-questions' ||
+    location.pathname.startsWith('/output-questions/');
+
   const isMoreActive = moreNavLinks.some(
     (item) => !item.isExternal && location.pathname === item.link
   );
+
+  // Helper to render interview custom icon badges
+  const renderInterviewIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'qa':
+        return (
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shrink-0">
+            <FileQuestion className="w-4 h-4" />
+          </div>
+        );
+      case 'quiz':
+        return (
+          <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
+            <Brain className="w-4 h-4" />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   // Helper to render playground custom icon badges
   const renderPlaygroundIcon = (iconName: string) => {
@@ -178,7 +210,7 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left Side: Brand Logo */}
-        <div className="flex items-center justify-start flex-1 min-w-0">
+        <div className="flex items-center justify-start shrink-0">
           <Link
             to="/"
             className="flex items-center gap-2.5 group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
@@ -199,7 +231,7 @@ function Navbar() {
 
         {/* Center: Desktop Nav Items */}
         <nav
-          className="hidden md:flex items-center justify-center gap-1.5"
+          className="hidden lg:flex items-center justify-center gap-1 xl:gap-1.5"
           aria-label="Main navigation"
         >
           {/* 1. Playgrounds Dropdown */}
@@ -213,7 +245,7 @@ function Navbar() {
               onClick={() => toggleDropdown('playgrounds')}
               aria-expanded={openDropdown === 'playgrounds'}
               aria-haspopup="true"
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 cursor-pointer ${
                 isPlaygroundActive || openDropdown === 'playgrounds'
                   ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold shadow-xs'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
@@ -282,8 +314,8 @@ function Navbar() {
             )}
           </div>
 
-          {/* 2. Primary Direct Nav Links (Problems, Interview, Dashboard) */}
-          {primaryNavLinks.map((item) => {
+          {/* 2. Primary Direct Nav Links: Learn JS & Problems */}
+          {primaryNavLinks.slice(0, 2).map((item) => {
             const isActive =
               item.link === '/'
                 ? location.pathname === '/'
@@ -294,7 +326,7 @@ function Navbar() {
               <Link
                 key={item.link}
                 to={item.link}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 ${
+                className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 ${
                   isActive
                     ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold shadow-xs'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
@@ -310,7 +342,108 @@ function Navbar() {
             );
           })}
 
-          {/* 3. More Dropdown (About, Bin, GitHub) */}
+          {/* 3. Interview Dropdown (Technical Q&A, Output Quiz) */}
+          <div
+            className="relative"
+            onMouseEnter={() => handleMouseEnter('interview')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              type="button"
+              onClick={() => toggleDropdown('interview')}
+              aria-expanded={openDropdown === 'interview'}
+              aria-haspopup="true"
+              className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 cursor-pointer ${
+                isInterviewActive || openDropdown === 'interview'
+                  ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold shadow-xs'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+              }`}
+            >
+              <span>Interview</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform duration-200 ${
+                  openDropdown === 'interview'
+                    ? 'rotate-180 text-amber-500'
+                    : ''
+                }`}
+              />
+            </button>
+
+            {/* Interview Menu Panel */}
+            {openDropdown === 'interview' && (
+              <div
+                className="absolute left-0 top-full pt-1.5 w-80 z-50 animate-in fade-in zoom-in-95 duration-150"
+                onMouseEnter={() => handleMouseEnter('interview')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface-elevated)] p-2 shadow-xl ring-1 ring-black/5">
+                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
+                    Interview Preparation
+                  </div>
+
+                  <div className="space-y-1">
+                    {interviewLinks.map((item) => {
+                      const isActive =
+                        location.pathname === item.link ||
+                        location.pathname.startsWith(`${item.link}/`);
+                      return (
+                        <Link
+                          key={item.link}
+                          to={item.link}
+                          onClick={() => setOpenDropdown(null)}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl transition-all ${
+                            isActive
+                              ? 'bg-amber-500/10 border border-amber-500/20 text-[var(--text-primary)]'
+                              : 'hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                          }`}
+                        >
+                          {renderInterviewIcon(item.iconName)}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-semibold text-[var(--text-primary)]">
+                                {item.title}
+                              </span>
+                              {item.badge && (
+                                <span className="px-1.5 py-0.2 text-[9px] font-bold uppercase rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                  {item.badge}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-[11px] text-[var(--text-secondary)] leading-snug mt-0.5 line-clamp-1">
+                              {item.description}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 4. Primary Direct Nav Link: Dashboard */}
+          {primaryNavLinks.slice(2).map((item) => {
+            const isActive =
+              location.pathname === item.link ||
+              location.pathname.startsWith(`${item.link}/`);
+
+            return (
+              <Link
+                key={item.link}
+                to={item.link}
+                className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 ${
+                  isActive
+                    ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold shadow-xs'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+                }`}
+              >
+                <span>{item.title}</span>
+              </Link>
+            );
+          })}
+
+          {/* 5. More Dropdown (About, Bin, GitHub) */}
           <div
             className="relative"
             onMouseEnter={() => handleMouseEnter('more')}
@@ -321,7 +454,7 @@ function Navbar() {
               onClick={() => toggleDropdown('more')}
               aria-expanded={openDropdown === 'more'}
               aria-haspopup="true"
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 cursor-pointer ${
                 isMoreActive || openDropdown === 'more'
                   ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold shadow-xs'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
@@ -407,12 +540,12 @@ function Navbar() {
         </nav>
 
         {/* Right Side: Quick Action + Theme Selector + Mobile Menu Trigger */}
-        <div className="flex items-center justify-end gap-2.5 flex-1">
+        <div className="flex items-center justify-end gap-2 shrink-0">
           {/* Start Coding CTA (hidden on active playground pages) */}
           {!isPlaygroundActive && (
             <Link
               to="/js"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
             >
               <Play className="w-3.5 h-3.5 fill-black" />
               <span>Start Coding</span>
@@ -427,7 +560,7 @@ function Navbar() {
             type="button"
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 rounded-lg border border-[var(--border-default)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--border-focus)]/40"
+            className="lg:hidden p-1.5 rounded-lg border border-[var(--border-default)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--border-focus)]/40"
           >
             {mobileMenuOpen ? (
               <X className="w-5 h-5" />
@@ -440,7 +573,7 @@ function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[var(--border-default)] bg-[var(--bg-surface-elevated)] px-4 py-4 shadow-xl animate-in slide-in-from-top-2 duration-150 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+        <div className="lg:hidden border-t border-[var(--border-default)] bg-[var(--bg-surface-elevated)] px-4 py-4 shadow-xl animate-in slide-in-from-top-2 duration-150 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
           <div className="space-y-4">
             {/* Section 1: Playgrounds */}
             <div>
@@ -479,13 +612,14 @@ function Navbar() {
               </div>
             </div>
 
-            {/* Section 2: Learning & Workspace */}
+            {/* Section 2: Learning & Interview Prep */}
             <div>
               <div className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
                 Navigation
               </div>
               <div className="space-y-1">
-                {primaryNavLinks.map((item) => {
+                {/* Learn JS & Problems */}
+                {primaryNavLinks.slice(0, 2).map((item) => {
                   const isActive =
                     item.link === '/'
                       ? location.pathname === '/'
@@ -508,6 +642,56 @@ function Navbar() {
                           {item.badge}
                         </span>
                       )}
+                    </Link>
+                  );
+                })}
+
+                {/* Interview Links (Q&A and Output Quiz) */}
+                {interviewLinks.map((item) => {
+                  const isActive =
+                    location.pathname === item.link ||
+                    location.pathname.startsWith(`${item.link}/`);
+                  return (
+                    <Link
+                      key={item.link}
+                      to={item.link}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-medium transition-colors ${
+                        isActive
+                          ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold'
+                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        {renderInterviewIcon(item.iconName)}
+                        <span>{item.title}</span>
+                      </div>
+                      {item.badge && (
+                        <span className="px-1.5 py-0.2 text-[9px] font-bold uppercase rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  );
+                })}
+
+                {/* Dashboard */}
+                {primaryNavLinks.slice(2).map((item) => {
+                  const isActive =
+                    location.pathname === item.link ||
+                    location.pathname.startsWith(`${item.link}/`);
+                  return (
+                    <Link
+                      key={item.link}
+                      to={item.link}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-medium transition-colors ${
+                        isActive
+                          ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold'
+                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+                      }`}
+                    >
+                      <span>{item.title}</span>
                     </Link>
                   );
                 })}

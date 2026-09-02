@@ -60,6 +60,12 @@ const routes = [
       'Master JavaScript technical interviews with curated questions and detailed solutions covering closures, event loop, promises, prototypes, and async/await.',
   },
   {
+    path: '/output-questions',
+    title: 'JavaScript Output Questions — Predict the Output Quiz | RunJS',
+    description:
+      'Test your JavaScript knowledge with 100 output-based MCQ questions covering closures, hoisting, promises, async/await, prototypes, type coercion, and more.',
+  },
+  {
     path: '/about',
     title: 'About RunJS - Open Source In-Browser IDE Story | RunJS',
     description:

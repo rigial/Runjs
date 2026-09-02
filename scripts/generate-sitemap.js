@@ -47,6 +47,7 @@ const coreRoutes = [
   { path: '/react', changefreq: 'weekly', priority: '0.85' },
   { path: '/html', changefreq: 'weekly', priority: '0.85' },
   { path: '/interview', changefreq: 'weekly', priority: '0.8' },
+  { path: '/output-questions', changefreq: 'weekly', priority: '0.8' },
   { path: '/about', changefreq: 'monthly', priority: '0.7' },
   { path: '/privacy', changefreq: 'monthly', priority: '0.5' },
   { path: '/terms', changefreq: 'monthly', priority: '0.5' },

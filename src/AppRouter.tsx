@@ -38,6 +38,7 @@ const ProblemSolving = lazy(() => import('./page/ProblemSolving'));
 
 const LearnHomePage = lazy(() => import('./page/LearnHomePage'));
 const LearnLessonPage = lazy(() => import('./page/LearnLessonPage'));
+const OutputQuestions = lazy(() => import('./page/OutputQuestions'));
 
 function AppRouter() {
   useEffect(() => {
@@ -76,6 +77,7 @@ function AppRouter() {
           <Route path="/html-preview" element={<HTMLStandalonePreview />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/interview" element={<Interview />} />
+          <Route path="/output-questions" element={<OutputQuestions />} />
           <Route path="/bin" element={<Bin />} />
           <Route path="/404" element={<PageNotFound />} />
           <Route path="*" element={<PageNotFound />} />

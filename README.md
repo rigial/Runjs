@@ -150,6 +150,5 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more informa
 Created and maintained by **M R Kishore Kumar**:
 
 - **GitHub**: [@mrkishorekumar](https://github.com/mrkishorekumar)
-- **LinkedIn**: [M R Kishore Kumar](https://www.linkedin.com/in/mrkishorekumar/)
-- **YouTube**: [@mrkishorekumar](https://youtube.com/mrkishorekumar)
+- **LinkedIn**: [RunJS](https://www.linkedin.com/company/runjs/)
 - **Website**: [runjs.in](https://runjs.in)

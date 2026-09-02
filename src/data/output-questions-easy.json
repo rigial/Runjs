@@ -1,0 +1,367 @@
+[
+  {
+    "id": 1,
+    "difficulty": "easy",
+    "topic": "typeof Operator Quirks",
+    "question": "What is the output of the following code?",
+    "code": "console.log(typeof null);",
+    "options": ["\"null\"", "\"undefined\"", "\"object\"", "\"string\""],
+    "correctIndex": 2,
+    "explanation": "typeof null returns 'object' due to a historical bug in JavaScript."
+  },
+  {
+    "id": 2,
+    "difficulty": "easy",
+    "topic": "Basic Type Coercion",
+    "question": "What is the output of the following code?",
+    "code": "console.log(1 + 2 + \"3\");",
+    "options": ["\"123\"", "\"33\"", "6", "NaN"],
+    "correctIndex": 1,
+    "explanation": "Evaluation happens from left to right. 1 + 2 evaluates to 3, and then 3 + '3' results in the string '33'."
+  },
+  {
+    "id": 3,
+    "difficulty": "easy",
+    "topic": "var vs let vs const basics",
+    "question": "What is the output of the following code?",
+    "code": "var x = 10;\nlet x = 20;\nconsole.log(x);",
+    "options": ["10", "20", "SyntaxError", "undefined"],
+    "correctIndex": 2,
+    "explanation": "Variables declared with let cannot be redeclared in the same scope, throwing a SyntaxError."
+  },
+  {
+    "id": 4,
+    "difficulty": "easy",
+    "topic": "Basic Hoisting with var",
+    "question": "What is the output of the following code?",
+    "code": "console.log(a);\nvar a = 5;",
+    "options": ["5", "undefined", "ReferenceError", "null"],
+    "correctIndex": 1,
+    "explanation": "Variable declarations using var are hoisted to the top of their scope, but not their assignments. Thus, a is undefined when logged."
+  },
+  {
+    "id": 5,
+    "difficulty": "easy",
+    "topic": "Simple String Methods",
+    "question": "What is the output of the following code?",
+    "code": "let str = \"Hello\";\nstr[0] = \"Y\";\nconsole.log(str);",
+    "options": ["\"Yello\"", "\"Hello\"", "TypeError", "undefined"],
+    "correctIndex": 1,
+    "explanation": "Strings in JavaScript are immutable. Modifying a character at a specific index does nothing in non-strict mode, leaving the string unchanged."
+  },
+  {
+    "id": 6,
+    "difficulty": "easy",
+    "topic": "Array Methods (length)",
+    "question": "What is the output of the following code?",
+    "code": "let arr = [1, 2, 3];\narr.length = 0;\nconsole.log(arr[0]);",
+    "options": ["1", "undefined", "null", "0"],
+    "correctIndex": 1,
+    "explanation": "Setting the length of an array to 0 clears all of its elements. Accessing the first element then returns undefined."
+  },
+  {
+    "id": 7,
+    "difficulty": "easy",
+    "topic": "Boolean Coercion (truthy/falsy)",
+    "question": "What is the output of the following code?",
+    "code": "console.log(!!\"false\" == !!\"true\");",
+    "options": ["true", "false", "TypeError", "SyntaxError"],
+    "correctIndex": 0,
+    "explanation": "Non-empty strings are truthy. !!\"false\" is true, and !!\"true\" is true, so they evaluate to true == true."
+  },
+  {
+    "id": 8,
+    "difficulty": "easy",
+    "topic": "Comparison Operators (== vs ===)",
+    "question": "What is the output of the following code?",
+    "code": "console.log(0 == false, 0 === false);",
+    "options": ["true false", "false true", "true true", "false false"],
+    "correctIndex": 0,
+    "explanation": "The == operator performs type coercion, so 0 equals false. The === operator checks both value and type, and a number is not a boolean."
+  },
+  {
+    "id": 9,
+    "difficulty": "easy",
+    "topic": "Basic Object Property Access",
+    "question": "What is the output of the following code?",
+    "code": "const obj = { 1: \"a\", 2: \"b\" };\nconsole.log(obj[\"1\"], obj[1]);",
+    "options": [
+      "\"a\" \"a\"",
+      "\"a\" undefined",
+      "undefined \"a\"",
+      "undefined undefined"
+    ],
+    "correctIndex": 0,
+    "explanation": "Object keys are automatically coerced to strings. Therefore, obj[\"1\"] and obj[1] reference the same property."
+  },
+  {
+    "id": 10,
+    "difficulty": "easy",
+    "topic": "Simple Template Literals",
+    "question": "What is the output of the following code?",
+    "code": "let a = 5;\nconsole.log(`Value is ${a + a}`);",
+    "options": [
+      "\"Value is 55\"",
+      "\"Value is 10\"",
+      "\"Value is a + a\"",
+      "SyntaxError"
+    ],
+    "correctIndex": 1,
+    "explanation": "Expressions inside template literal placeholders (${}) are evaluated and injected into the string."
+  },
+  {
+    "id": 11,
+    "difficulty": "easy",
+    "topic": "Basic Destructuring",
+    "question": "What is the output of the following code?",
+    "code": "const { a } = { b: 1, c: 2 };\nconsole.log(a);",
+    "options": ["1", "2", "undefined", "ReferenceError"],
+    "correctIndex": 2,
+    "explanation": "When destructuring an object, if the requested property does not exist in the object, it evaluates to undefined."
+  },
+  {
+    "id": 12,
+    "difficulty": "easy",
+    "topic": "Spread Operator Basics",
+    "question": "What is the output of the following code?",
+    "code": "let arr1 = [1, 2];\nlet arr2 = [...arr1, 3, 4];\nconsole.log(arr2.length);",
+    "options": ["2", "3", "4", "5"],
+    "correctIndex": 2,
+    "explanation": "The spread operator unpacks arr1 into [1, 2]. Combined with 3 and 4, arr2 becomes [1, 2, 3, 4], giving a length of 4."
+  },
+  {
+    "id": 13,
+    "difficulty": "easy",
+    "topic": "null vs undefined",
+    "question": "What is the output of the following code?",
+    "code": "console.log(null == undefined, null === undefined);",
+    "options": ["true true", "false false", "true false", "false true"],
+    "correctIndex": 2,
+    "explanation": "null and undefined are loosely equal (==) as they both denote 'no value', but they are not strictly equal (===) as their types differ."
+  },
+  {
+    "id": 14,
+    "difficulty": "easy",
+    "topic": "Basic for loop behavior",
+    "question": "What is the output of the following code?",
+    "code": "for (let i = 0; i < 3; i++) {\n  // empty\n}\nconsole.log(typeof i);",
+    "options": ["\"number\"", "\"undefined\"", "\"string\"", "ReferenceError"],
+    "correctIndex": 1,
+    "explanation": "Because 'i' is declared with 'let', its scope is block-bound to the loop. typeof an undeclared variable evaluates to 'undefined'."
+  },
+  {
+    "id": 15,
+    "difficulty": "easy",
+    "topic": "Simple Function Returns",
+    "question": "What is the output of the following code?",
+    "code": "function foo() {\n  return\n  { bar: 1 };\n}\nconsole.log(foo());",
+    "options": ["{ bar: 1 }", "undefined", "null", "SyntaxError"],
+    "correctIndex": 1,
+    "explanation": "Automatic semicolon insertion causes the function to return 'undefined' before evaluating the object on the next line."
+  },
+  {
+    "id": 16,
+    "difficulty": "easy",
+    "topic": "Default Parameters",
+    "question": "What is the output of the following code?",
+    "code": "function greet(name = \"Guest\") {\n  return name;\n}\nconsole.log(greet(undefined), greet(null));",
+    "options": [
+      "\"Guest\" \"Guest\"",
+      "\"Guest\" null",
+      "undefined null",
+      "undefined \"Guest\""
+    ],
+    "correctIndex": 1,
+    "explanation": "Default parameters are triggered by undefined, but null is passed as a valid value and will not trigger the default."
+  },
+  {
+    "id": 17,
+    "difficulty": "easy",
+    "topic": "Arrow Function Basics",
+    "question": "What is the output of the following code?",
+    "code": "const add = (a, b) => a + b;\nconsole.log(add(2, 3));",
+    "options": ["undefined", "NaN", "5", "TypeError"],
+    "correctIndex": 2,
+    "explanation": "Arrow functions without curly braces have an implicit return, directly returning the result of a + b."
+  },
+  {
+    "id": 18,
+    "difficulty": "easy",
+    "topic": "String Concatenation vs Addition",
+    "question": "What is the output of the following code?",
+    "code": "console.log(\"5\" - 3);",
+    "options": ["2", "\"2\"", "\"53\"", "NaN"],
+    "correctIndex": 0,
+    "explanation": "The minus operator converts the string '5' to a number and subtracts 3, resulting in 2. Unlike the + operator, minus is not used for concatenation."
+  },
+  {
+    "id": 19,
+    "difficulty": "easy",
+    "topic": "Array.isArray",
+    "question": "What is the output of the following code?",
+    "code": "console.log(Array.isArray(typeof []));",
+    "options": ["true", "false", "TypeError", "undefined"],
+    "correctIndex": 1,
+    "explanation": "typeof [] evaluates to the string 'object'. Array.isArray('object') evaluates to false."
+  },
+  {
+    "id": 20,
+    "difficulty": "easy",
+    "topic": "Object.keys basics",
+    "question": "What is the output of the following code?",
+    "code": "const person = { name: \"John\", age: 30 };\nconsole.log(Object.keys(person).length);",
+    "options": ["1", "2", "3", "0"],
+    "correctIndex": 1,
+    "explanation": "Object.keys returns an array of the object's enumerable string-keyed property names. The length of ['name', 'age'] is 2."
+  },
+  {
+    "id": 21,
+    "difficulty": "easy",
+    "topic": "NaN Behavior",
+    "question": "What is the output of the following code?",
+    "code": "console.log(NaN === NaN);",
+    "options": ["true", "false", "TypeError", "undefined"],
+    "correctIndex": 1,
+    "explanation": "In JavaScript, NaN is the only value not equal to itself, even using strict equality."
+  },
+  {
+    "id": 22,
+    "difficulty": "easy",
+    "topic": "parseInt Quirks",
+    "question": "What is the output of the following code?",
+    "code": "console.log(parseInt(\"10.5\"));",
+    "options": ["10", "10.5", "NaN", "undefined"],
+    "correctIndex": 0,
+    "explanation": "parseInt parses strings until it encounters a character that is not a valid digit for integers (like the decimal point), returning 10."
+  },
+  {
+    "id": 23,
+    "difficulty": "easy",
+    "topic": "Basic Switch Statement",
+    "question": "What is the output of the following code?",
+    "code": "let x = 1;\nlet res = \"\";\nswitch (x) {\n  case 1:\n    res += \"One\";\n  case 2:\n    res += \"Two\";\n}\nconsole.log(res);",
+    "options": ["\"One\"", "\"Two\"", "\"OneTwo\"", "undefined"],
+    "correctIndex": 2,
+    "explanation": "Since there is no break statement after the first case, execution falls through to the second case, appending both strings."
+  },
+  {
+    "id": 24,
+    "difficulty": "easy",
+    "topic": "Simple Ternary Operator",
+    "question": "What is the output of the following code?",
+    "code": "let age = 15;\nconsole.log(age >= 18 ? \"Adult\" : \"Minor\");",
+    "options": ["\"Adult\"", "\"Minor\"", "true", "false"],
+    "correctIndex": 1,
+    "explanation": "The condition 15 >= 18 evaluates to false, so the ternary operator evaluates and returns the second expression ('Minor')."
+  },
+  {
+    "id": 25,
+    "difficulty": "easy",
+    "topic": "Short-Circuit Evaluation (&&, ||)",
+    "question": "What is the output of the following code?",
+    "code": "console.log(0 || 5 && 10);",
+    "options": ["0", "5", "10", "false"],
+    "correctIndex": 2,
+    "explanation": "The && operator has higher precedence. 5 && 10 evaluates to 10. Then, 0 || 10 evaluates to 10 because 0 is falsy."
+  },
+  {
+    "id": 26,
+    "difficulty": "easy",
+    "topic": "Basic Rest Parameters",
+    "question": "What is the output of the following code?",
+    "code": "function sum(...args) {\n  return args.length;\n}\nconsole.log(sum(1, 2, 3));",
+    "options": ["1", "2", "3", "undefined"],
+    "correctIndex": 2,
+    "explanation": "The rest parameter collects all remaining arguments into an array. Since 3 arguments were passed, args.length is 3."
+  },
+  {
+    "id": 27,
+    "difficulty": "easy",
+    "topic": "typeof undefined",
+    "question": "What is the output of the following code?",
+    "code": "console.log(typeof typeof 1);",
+    "options": ["\"number\"", "\"string\"", "\"undefined\"", "\"object\""],
+    "correctIndex": 1,
+    "explanation": "typeof 1 returns 'number'. Then typeof 'number' evaluates to 'string' because the previous result is a string."
+  },
+  {
+    "id": 28,
+    "difficulty": "easy",
+    "topic": "delete operator basics",
+    "question": "What is the output of the following code?",
+    "code": "let obj = { a: 1, b: 2 };\ndelete obj.a;\nconsole.log(obj.a);",
+    "options": ["1", "2", "undefined", "null"],
+    "correctIndex": 2,
+    "explanation": "The delete operator removes the 'a' property from the object entirely. Accessing a non-existent property returns undefined."
+  },
+  {
+    "id": 29,
+    "difficulty": "easy",
+    "topic": "Simple map/filter",
+    "question": "What is the output of the following code?",
+    "code": "let nums = [1, 2, 3];\nlet doubled = nums.map(n => n * 2);\nconsole.log(nums[0]);",
+    "options": ["1", "2", "undefined", "3"],
+    "correctIndex": 0,
+    "explanation": "The map method returns a new array containing the results and does not mutate the original 'nums' array."
+  },
+  {
+    "id": 30,
+    "difficulty": "easy",
+    "topic": "Basic Set Usage",
+    "question": "What is the output of the following code?",
+    "code": "let mySet = new Set([1, 1, 2, 3]);\nconsole.log(mySet.size);",
+    "options": ["4", "3", "2", "1"],
+    "correctIndex": 1,
+    "explanation": "A Set only stores unique values, so the duplicate 1 is ignored when initialized, resulting in a Set of size 3."
+  },
+  {
+    "id": 31,
+    "difficulty": "easy",
+    "topic": "String Comparison",
+    "question": "What is the output of the following code?",
+    "code": "console.log(\"apple\" > \"banana\");",
+    "options": ["true", "false", "undefined", "TypeError"],
+    "correctIndex": 1,
+    "explanation": "String comparison uses lexicographical (alphabetical) order. 'a' comes before 'b', so 'apple' is considered less than 'banana'."
+  },
+  {
+    "id": 32,
+    "difficulty": "easy",
+    "topic": "Number Precision (0.1 + 0.2)",
+    "question": "What is the output of the following code?",
+    "code": "console.log(0.1 + 0.2 === 0.3);",
+    "options": ["true", "false", "undefined", "NaN"],
+    "correctIndex": 1,
+    "explanation": "Floating-point math in JavaScript is governed by IEEE 754. 0.1 + 0.2 evaluates to 0.30000000000000004, not exactly 0.3."
+  },
+  {
+    "id": 33,
+    "difficulty": "easy",
+    "topic": "Basic try-catch",
+    "question": "What is the output of the following code?",
+    "code": "try {\n  throw new Error(\"Oops\");\n} catch (e) {\n  console.log(e.message);\n}",
+    "options": ["\"Oops\"", "\"Error\"", "undefined", "null"],
+    "correctIndex": 0,
+    "explanation": "The catch block receives the thrown Error object. Accessing e.message extracts the string 'Oops' that was passed."
+  },
+  {
+    "id": 34,
+    "difficulty": "easy",
+    "topic": "Object Spread",
+    "question": "What is the output of the following code?",
+    "code": "const obj1 = { a: 1, b: 2 };\nconst obj2 = { ...obj1, b: 3 };\nconsole.log(obj2.b);",
+    "options": ["1", "2", "3", "undefined"],
+    "correctIndex": 2,
+    "explanation": "When using object spread syntax, later properties overwrite earlier ones with the same key. The second 'b: 3' overrides the 'b: 2'."
+  },
+  {
+    "id": 35,
+    "difficulty": "easy",
+    "topic": "Array Destructuring with Defaults",
+    "question": "What is the output of the following code?",
+    "code": "const [a, b = 2] = [1];\nconsole.log(b);",
+    "options": ["1", "2", "undefined", "null"],
+    "correctIndex": 1,
+    "explanation": "Since there is no second element provided in the source array, the default value of 2 is assigned to b."
+  }
+]

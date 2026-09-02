@@ -49,7 +49,7 @@ function Footer({ className = '', hasMarginTop }: FooterProps) {
             About & Credits
           </Link>
           <Link
-            to="https://www.linkedin.com/in/mrkishorekumar/"
+            to="https://www.linkedin.com/company/runjs/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-[var(--text-primary)] transition-colors hover:underline"

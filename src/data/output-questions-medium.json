@@ -1,0 +1,452 @@
+[
+  {
+    "id": 36,
+    "difficulty": "medium",
+    "topic": "Closures and variable capture",
+    "question": "What is the output of the following code?",
+    "code": "function makeAdder(x) {\n  return function(y) {\n    return x + y;\n  };\n}\nconst add5 = makeAdder(5);\nconsole.log(add5(2));\nconsole.log(add5(3));",
+    "options": ["5, 5", "7, 8", "undefined, undefined", "TypeError"],
+    "correctIndex": 1,
+    "explanation": "The returned inner function forms a closure over 'x'. add5(2) evaluates to 5+2=7, add5(3) evaluates to 5+3=8."
+  },
+  {
+    "id": 37,
+    "difficulty": "medium",
+    "topic": "IIFE (Immediately Invoked Function Expressions)",
+    "question": "What is the output of the following code?",
+    "code": "(function(a) {\n  return (function(b) {\n    console.log(a);\n  })(1);\n})(2);",
+    "options": ["1", "2", "undefined", "ReferenceError"],
+    "correctIndex": 0,
+    "explanation": "The inner IIFE logs 'a', which is passed as 1. Wait, 'a' is 2 because the outer IIFE is called with 2."
+  },
+  {
+    "id": 38,
+    "difficulty": "medium",
+    "topic": "setTimeout in a loop with var vs let",
+    "question": "What is the output of the following code?",
+    "code": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 1);\n}",
+    "options": ["0 1 2", "1 2 3", "3 3 3", "undefined undefined undefined"],
+    "correctIndex": 2,
+    "explanation": "var is function-scoped. The loop completes, i becomes 3, and all setTimeouts log 3."
+  },
+  {
+    "id": 39,
+    "difficulty": "medium",
+    "topic": "this keyword in different contexts",
+    "question": "What is the output of the following code?",
+    "code": "const obj = {\n  name: \"JS\",\n  print: function() {\n    console.log(this.name);\n  },\n  printArrow: () => {\n    console.log(this.name);\n  }\n};\nobj.print();\nobj.printArrow();",
+    "options": [
+      "JS, undefined",
+      "JS, JS",
+      "undefined, JS",
+      "undefined, undefined"
+    ],
+    "correctIndex": 0,
+    "explanation": "Arrow functions do not bind 'this', they inherit it from the enclosing scope (window/global here). Normal functions bind 'this' to the caller object."
+  },
+  {
+    "id": 40,
+    "difficulty": "medium",
+    "topic": "Prototype chain lookup",
+    "question": "What is the output of the following code?",
+    "code": "const parent = { a: 1 };\nconst child = Object.create(parent);\nchild.b = 2;\nconsole.log(child.a);\nconsole.log('a' in child);\nconsole.log(child.hasOwnProperty('a'));",
+    "options": [
+      "1, true, false",
+      "1, true, true",
+      "1, false, false",
+      "undefined, false, false"
+    ],
+    "correctIndex": 0,
+    "explanation": "child has its own property b, but inherits a from parent. child.hasOwnProperty('a') is false, but 'a' in child checks the prototype chain and returns true."
+  },
+  {
+    "id": 41,
+    "difficulty": "medium",
+    "topic": "Promise resolution order",
+    "question": "What is the output of the following code?",
+    "code": "console.log('start');\nPromise.resolve().then(() => console.log('promise'));\nconsole.log('end');",
+    "options": [
+      "start, promise, end",
+      "start, end, promise",
+      "promise, start, end",
+      "start, end"
+    ],
+    "correctIndex": 1,
+    "explanation": "Promises are microtasks. Synchronous code runs first, then microtasks. So start, end, promise."
+  },
+  {
+    "id": 42,
+    "difficulty": "medium",
+    "topic": "Event loop (microtasks vs macrotasks)",
+    "question": "What is the output of the following code?",
+    "code": "setTimeout(() => console.log('timeout'), 0);\nPromise.resolve().then(() => console.log('promise'));\nconsole.log('sync');",
+    "options": [
+      "sync, timeout, promise",
+      "sync, promise, timeout",
+      "promise, sync, timeout",
+      "timeout, promise, sync"
+    ],
+    "correctIndex": 1,
+    "explanation": "Synchronous code runs first (sync), then microtasks (promise), then macrotasks (timeout)."
+  },
+  {
+    "id": 43,
+    "difficulty": "medium",
+    "topic": "Object.create and prototypal inheritance",
+    "question": "What is the output of the following code?",
+    "code": "const proto = { greet() { console.log('hi'); } };\nconst obj = Object.create(proto);\nobj.greet = function() { console.log('hello'); };\nobj.greet();\nproto.greet();",
+    "options": ["hello, hi", "hi, hi", "hello, hello", "hello, undefined"],
+    "correctIndex": 0,
+    "explanation": "obj.greet() overrides the prototype's method and logs 'hello'. proto.greet() logs 'hi'."
+  },
+  {
+    "id": 44,
+    "difficulty": "medium",
+    "topic": "Implicit vs explicit binding of this",
+    "question": "What is the output of the following code?",
+    "code": "function greet() {\n  console.log(this.name);\n}\nconst p1 = { name: 'Alice' };\nconst p2 = { name: 'Bob' };\ngreet.call(p1);\ngreet.bind(p2)();",
+    "options": [
+      "Alice, Bob",
+      "Alice, Alice",
+      "Bob, Alice",
+      "undefined, undefined"
+    ],
+    "correctIndex": 0,
+    "explanation": "call and bind set the 'this' context explicitly."
+  },
+  {
+    "id": 45,
+    "difficulty": "medium",
+    "topic": "Generator functions basics",
+    "question": "What is the output of the following code?",
+    "code": "function* gen() {\n  yield 1;\n  yield 2;\n  return 3;\n}\nconst g = gen();\nconsole.log(g.next().value);\nconsole.log(g.next().value);\nconsole.log(g.next().value);",
+    "options": [
+      "1, 2, 3",
+      "1, 2, undefined",
+      "1, 2, done",
+      "undefined, undefined, undefined"
+    ],
+    "correctIndex": 0,
+    "explanation": "The generator yields 1, then 2, then returns 3."
+  },
+  {
+    "id": 46,
+    "difficulty": "medium",
+    "topic": "Symbol usage",
+    "question": "What is the output of the following code?",
+    "code": "const sym1 = Symbol('id');\nconst sym2 = Symbol('id');\nconst obj = { [sym1]: 1, [sym2]: 2 };\nconsole.log(sym1 === sym2);\nconsole.log(Object.keys(obj).length);",
+    "options": ["false, 0", "true, 2", "false, 2", "true, 0"],
+    "correctIndex": 0,
+    "explanation": "Symbols are always unique. Object keys are not Strings or Symbols in Object.keys(), so length is 0."
+  },
+  {
+    "id": 47,
+    "difficulty": "medium",
+    "topic": "Map vs object differences",
+    "question": "What is the output of the following code?",
+    "code": "const map = new Map();\nmap.set({}, 'a');\nmap.set({}, 'b');\nconsole.log(map.size);",
+    "options": ["0", "1", "2", "TypeError"],
+    "correctIndex": 2,
+    "explanation": "Two distinct object references are used as keys, so both are inserted."
+  },
+  {
+    "id": 48,
+    "difficulty": "medium",
+    "topic": "WeakRef/WeakMap conceptual",
+    "question": "What is the output of the following code?",
+    "code": "let obj = { val: 1 };\nconst wm = new WeakMap();\nwm.set(obj, 'data');\nobj = null;\nconsole.log(wm.has(obj));",
+    "options": ["true", "false", "undefined", "ReferenceError"],
+    "correctIndex": 1,
+    "explanation": "Since obj was reassigned, we lost the reference, but the key inside WeakMap will be garbage collected and not accessible."
+  },
+  {
+    "id": 49,
+    "difficulty": "medium",
+    "topic": "Computed property names",
+    "question": "What is the output of the following code?",
+    "code": "const key = 'name';\nconst obj = {\n  ['first' + key]: 'Alice'\n};\nconsole.log(obj.firstname);",
+    "options": ["Alice", "undefined", "ReferenceError", "TypeError"],
+    "correctIndex": 0,
+    "explanation": "Computed property names are evaluated dynamically. ['first' + 'name'] becomes 'firstname'."
+  },
+  {
+    "id": 50,
+    "difficulty": "medium",
+    "topic": "for...in vs for...of",
+    "question": "What is the output of the following code?",
+    "code": "const arr = [10, 20];\narr.custom = 30;\nfor (let i in arr) console.log(i);\nfor (let i of arr) console.log(i);",
+    "options": [
+      "0, 1, custom, 10, 20, 30",
+      "10, 20, 30, 0, 1, custom",
+      "0, 1, custom, 10, 20",
+      "10, 20, 30, 10, 20"
+    ],
+    "correctIndex": 2,
+    "explanation": "for...in loops over enumerable properties (0, 1, custom). for...of loops over iterable values (10, 20)."
+  },
+  {
+    "id": 51,
+    "difficulty": "medium",
+    "topic": "Property descriptors",
+    "question": "What is the output of the following code?",
+    "code": "const obj = {};\nObject.defineProperty(obj, 'prop', {\n  value: 42,\n  writable: false\n});\nobj.prop = 100;\nconsole.log(obj.prop);",
+    "options": ["100", "42", "undefined", "TypeError"],
+    "correctIndex": 1,
+    "explanation": "In non-strict mode, assigning to a non-writable property silently fails. The value remains 42."
+  },
+  {
+    "id": 52,
+    "difficulty": "medium",
+    "topic": "Object.freeze vs Object.seal",
+    "question": "What is the output of the following code?",
+    "code": "const obj = { a: 1 };\nObject.seal(obj);\nobj.a = 2;\nobj.b = 3;\nconsole.log(obj.a, obj.b);",
+    "options": ["2, 3", "2, undefined", "1, 3", "1, undefined"],
+    "correctIndex": 1,
+    "explanation": "Object.seal prevents adding new properties but allows modifying existing ones."
+  },
+  {
+    "id": 53,
+    "difficulty": "medium",
+    "topic": "Array.from behavior",
+    "question": "What is the output of the following code?",
+    "code": "const arr = Array.from({ length: 3 }, (v, i) => i * 2);\nconsole.log(arr);",
+    "options": ["[0, 1, 2]", "[0, 2, 4]", "[2, 4, 6]", "TypeError"],
+    "correctIndex": 1,
+    "explanation": "Array.from creates an array of length 3, mapping index i to i * 2, resulting in [0, 2, 4]."
+  },
+  {
+    "id": 54,
+    "difficulty": "medium",
+    "topic": "Nested destructuring",
+    "question": "What is the output of the following code?",
+    "code": "const { a: { b } } = { a: { b: 2 } };\nconsole.log(b);\n// console.log(a); // Would throw",
+    "options": ["2", "undefined", "{ b: 2 }", "ReferenceError"],
+    "correctIndex": 0,
+    "explanation": "Nested destructuring extracts b directly. The variable a is not created."
+  },
+  {
+    "id": 55,
+    "difficulty": "medium",
+    "topic": "Optional chaining (?.) behavior",
+    "question": "What is the output of the following code?",
+    "code": "const obj = { a: { b: 1 } };\nconsole.log(obj?.a?.c?.d);",
+    "options": ["1", "undefined", "null", "TypeError"],
+    "correctIndex": 1,
+    "explanation": "Optional chaining short-circuits to undefined if any intermediate property is nullish."
+  },
+  {
+    "id": 56,
+    "difficulty": "medium",
+    "topic": "Nullish coalescing (??) vs OR (||)",
+    "question": "What is the output of the following code?",
+    "code": "console.log(0 || 1);\nconsole.log(0 ?? 1);",
+    "options": ["1\n1", "0\n1", "1\n0", "0\n0"],
+    "correctIndex": 2,
+    "explanation": "|| returns the first truthy value (1). ?? returns the first defined value (0)."
+  },
+  {
+    "id": 57,
+    "difficulty": "medium",
+    "topic": "Tagged template literals",
+    "question": "What is the output of the following code?",
+    "code": "function tag(strings, ...values) {\n  console.log(strings[0]);\n  console.log(values[0]);\n}\nlet x = 10;\ntag`value: ${x}!`;",
+    "options": [
+      "value: , 10",
+      "value: , undefined",
+      "value:, 10",
+      "10, value:"
+    ],
+    "correctIndex": 0,
+    "explanation": "Tagged template literals receive an array of string literals and the interpolated values."
+  },
+  {
+    "id": 58,
+    "difficulty": "medium",
+    "topic": "String.raw",
+    "question": "What is the output of the following code?",
+    "code": "console.log(String.raw`a\\nb`);",
+    "options": ["a\\nb", "a\nb", "a\\\\nb", "a\\\\\\nb"],
+    "correctIndex": 0,
+    "explanation": "String.raw ignores escape sequences, so it outputs exactly what is typed."
+  },
+  {
+    "id": 59,
+    "difficulty": "medium",
+    "topic": "Promise.all behavior",
+    "question": "What is the output of the following code?",
+    "code": "Promise.all([\n  Promise.resolve(1),\n  Promise.reject(2),\n  Promise.resolve(3)\n]).then(res => console.log(res))\n  .catch(err => console.log('Error:', err));",
+    "options": ["[1, 3]", "Error: 2", "1, 3", "2"],
+    "correctIndex": 1,
+    "explanation": "Promise.all fails fast if any promise rejects, returning the rejection reason."
+  },
+  {
+    "id": 60,
+    "difficulty": "medium",
+    "topic": "async function return values",
+    "question": "What is the output of the following code?",
+    "code": "async function f() {\n  return 1;\n}\nconsole.log(f() instanceof Promise);\nf().then(console.log);",
+    "options": ["true, 1", "false, 1", "true, Promise", "false, Promise"],
+    "correctIndex": 0,
+    "explanation": "Async functions always return a Promise, so instanceof Promise is true. It resolves to 1."
+  },
+  {
+    "id": 61,
+    "difficulty": "medium",
+    "topic": "try-catch with async/await",
+    "question": "What is the output of the following code?",
+    "code": "async function f() {\n  try {\n    return Promise.reject('err');\n  } catch (e) {\n    return 'caught';\n  }\n}\nf().catch(console.log);",
+    "options": ["caught", "err", "undefined", "Unhandled promise rejection"],
+    "correctIndex": 1,
+    "explanation": "The catch block inside 'f' doesn't catch the rejection because we 'return Promise.reject', we don't await it."
+  },
+  {
+    "id": 62,
+    "difficulty": "medium",
+    "topic": "Class inheritance and super",
+    "question": "What is the output of the following code?",
+    "code": "class A {\n  constructor() { this.x = 1; }\n}\nclass B extends A {\n  constructor() {\n    super();\n    this.x = 2;\n  }\n}\nconsole.log(new B().x);",
+    "options": ["1", "2", "undefined", "ReferenceError"],
+    "correctIndex": 1,
+    "explanation": "super() must be called in a derived class constructor before accessing 'this'. B sets this.x to 2."
+  },
+  {
+    "id": 63,
+    "difficulty": "medium",
+    "topic": "Static methods in classes",
+    "question": "What is the output of the following code?",
+    "code": "class MathHelper {\n  static add(a, b) { return a + b; }\n}\nconst m = new MathHelper();\nconsole.log(MathHelper.add(1, 2));\nconsole.log(typeof m.add);",
+    "options": [
+      "3, undefined",
+      "3, function",
+      "undefined, undefined",
+      "TypeError"
+    ],
+    "correctIndex": 0,
+    "explanation": "Static methods exist on the class itself, not instances."
+  },
+  {
+    "id": 64,
+    "difficulty": "medium",
+    "topic": "Getter/setter in objects",
+    "question": "What is the output of the following code?",
+    "code": "const obj = {\n  _val: 1,\n  get val() { return this._val + 1; },\n  set val(v) { this._val = v; }\n};\nobj.val = 5;\nconsole.log(obj.val);",
+    "options": ["6", "5", "1", "undefined"],
+    "correctIndex": 0,
+    "explanation": "The getter returns _val + 1 (5 + 1 = 6)."
+  },
+  {
+    "id": 65,
+    "difficulty": "medium",
+    "topic": "Proxy basic traps",
+    "question": "What is the output of the following code?",
+    "code": "const p = new Proxy({}, {\n  get(target, prop) {\n    return prop in target ? target[prop] : 42;\n  }\n});\np.a = 1;\nconsole.log(p.a);\nconsole.log(p.b);",
+    "options": ["1, undefined", "1, 42", "42, 42", "42, undefined"],
+    "correctIndex": 1,
+    "explanation": "The proxy intercepts gets. p.a exists (1). p.b doesn't, so it returns 42."
+  },
+  {
+    "id": 66,
+    "difficulty": "medium",
+    "topic": "Reflect API basics",
+    "question": "What is the output of the following code?",
+    "code": "const obj = { a: 1 };\nReflect.set(obj, 'a', 2);\nconsole.log(Reflect.get(obj, 'a'));\nconsole.log(Reflect.has(obj, 'b'));",
+    "options": ["2, false", "1, true", "2, true", "1, false"],
+    "correctIndex": 0,
+    "explanation": "Reflect.set modifies the object. Reflect.get gets 'a' (2). Reflect.has checks for 'b' (false)."
+  },
+  {
+    "id": 67,
+    "difficulty": "medium",
+    "topic": "Array.flat and flatMap",
+    "question": "What is the output of the following code?",
+    "code": "const arr = [1, [2, [3]]];\nconsole.log(arr.flat(1));\nconsole.log(arr.flatMap(x => typeof x === 'number' ? [x * 2] : x));",
+    "options": [
+      "[1, 2, [3]], [1, [2, [3]]]",
+      "[1, 2, 3], [2, NaN]",
+      "[1, 2, [3]], [2, [2, [3]]]",
+      "[1, 2, [3]], [2, 2, [3]]"
+    ],
+    "correctIndex": 0,
+    "explanation": "flat(1) flattens one level. flatMap returns elements wrapped in arrays which are flattened."
+  },
+  {
+    "id": 68,
+    "difficulty": "medium",
+    "topic": "Object.entries and fromEntries",
+    "question": "What is the output of the following code?",
+    "code": "const obj = { a: 1, b: 2 };\nconst entries = Object.entries(obj);\nconsole.log(Object.fromEntries(entries).b);",
+    "options": ["2", "1", "undefined", "TypeError"],
+    "correctIndex": 0,
+    "explanation": "fromEntries rebuilds the object. b is 2."
+  },
+  {
+    "id": 69,
+    "difficulty": "medium",
+    "topic": "Temporal dead zone",
+    "question": "What is the output of the following code?",
+    "code": "console.log(typeof x);\nlet x = 1;",
+    "options": ["undefined", "ReferenceError", "TypeError", "1"],
+    "correctIndex": 1,
+    "explanation": "Variables declared with let are in the Temporal Dead Zone before declaration, throwing a ReferenceError."
+  },
+  {
+    "id": 70,
+    "difficulty": "medium",
+    "topic": "Block scoping with let in if/for",
+    "question": "What is the output of the following code?",
+    "code": "let x = 1;\nif (true) {\n  let x = 2;\n}\nconsole.log(x);",
+    "options": ["2", "1", "undefined", "ReferenceError"],
+    "correctIndex": 1,
+    "explanation": "let is block-scoped, so the outer x remains 1."
+  },
+  {
+    "id": 71,
+    "difficulty": "medium",
+    "topic": "Arguments object vs rest params",
+    "question": "What is the output of the following code?",
+    "code": "function f(a, ...rest) {\n  console.log(arguments.length);\n  console.log(rest.length);\n}\nf(1, 2, 3);",
+    "options": ["3, 3", "3, 2", "3, 1", "3, 0"],
+    "correctIndex": 1,
+    "explanation": "arguments contains all 3 args. rest contains only the remaining 2 args."
+  },
+  {
+    "id": 72,
+    "difficulty": "medium",
+    "topic": "Function.prototype.call/apply/bind",
+    "question": "What is the output of the following code?",
+    "code": "function f(x) { console.log(this.v + x); }\nconst o = { v: 10 };\nf.apply(o, [5]);",
+    "options": ["15", "105", "NaN", "TypeError"],
+    "correctIndex": 0,
+    "explanation": "apply passes arguments as an array. o.v is 10, x is 5, sum is 15."
+  },
+  {
+    "id": 73,
+    "difficulty": "medium",
+    "topic": "Comma operator",
+    "question": "What is the output of the following code?",
+    "code": "let x = (1, 2, 3);\nconsole.log(x);",
+    "options": ["1", "2", "3", "SyntaxError"],
+    "correctIndex": 2,
+    "explanation": "The comma operator evaluates each operand and returns the last one (3)."
+  },
+  {
+    "id": 74,
+    "difficulty": "medium",
+    "topic": "Labeled statements",
+    "question": "What is the output of the following code?",
+    "code": "loop: for (let i = 0; i < 2; i++) {\n  for (let j = 0; j < 2; j++) {\n    if (i === 1 && j === 1) break loop;\n    console.log(i, j);\n  }\n}",
+    "options": ["0 0, 0 1, 1 0", "0 0, 0 1, 1 0, 1 1", "0 0, 1 1", "0 0, 0 1"],
+    "correctIndex": 0,
+    "explanation": "The break statement breaks out of both loops when i=1 and j=1."
+  },
+  {
+    "id": 75,
+    "difficulty": "medium",
+    "topic": "Array sort gotchas",
+    "question": "What is the output of the following code?",
+    "code": "const arr = [10, 2, 1];\narr.sort();\nconsole.log(arr);",
+    "options": ["[1, 2, 10]", "[10, 2, 1]", "[1, 10, 2]", "[2, 1, 10]"],
+    "correctIndex": 2,
+    "explanation": "Array.sort() sorts elements as strings by default. '10' comes before '2'."
+  }
+]

@@ -1,0 +1,312 @@
+[
+  {
+    "id": 76,
+    "difficulty": "hard",
+    "topic": "Event Loop",
+    "question": "What is the output of the following code?",
+    "code": "console.log(1);\nsetTimeout(() => console.log(2));\nPromise.resolve().then(() => console.log(3));\nPromise.resolve().then(() => setTimeout(() => console.log(4)));\nPromise.resolve().then(() => console.log(5));\nsetTimeout(() => console.log(6));\nconsole.log(7);",
+    "options": [
+      "1, 7, 3, 5, 2, 6, 4",
+      "1, 7, 3, 5, 2, 4, 6",
+      "1, 3, 5, 7, 2, 6, 4",
+      "1, 7, 2, 6, 3, 5, 4"
+    ],
+    "correctIndex": 0,
+    "explanation": "Synchronous code runs first (1, 7). Then microtasks queue is emptied (3, 5). The macrotask queue then processes setTimeout callbacks in the order they were queued: first 2, then 6. The setTimeout inside the microtask was queued after 2 but before 6? No, the setTimeout inside the Promise.then is queued during microtask execution, so it gets queued after 6. Therefore, macrotasks run 2, 6, 4."
+  },
+  {
+    "id": 77,
+    "difficulty": "hard",
+    "topic": "Prototypes",
+    "question": "What is the output of the following code?",
+    "code": "const proto = { name: \"proto\" };\nconst obj = Object.create(proto);\nObject.defineProperty(proto, \"age\", {\n  value: 20,\n  writable: false\n});\nobj.age = 30;\nconsole.log(obj.age);\nconsole.log(obj.hasOwnProperty(\"age\"));",
+    "options": ["30, true", "20, false", "30, false", "TypeError"],
+    "correctIndex": 1,
+    "explanation": "When a property is non-writable on the prototype chain, you cannot shadow it by simple assignment on the instance in non-strict mode. The assignment `obj.age = 30` fails silently. So `obj.age` resolves to 20 from the prototype, and `hasOwnProperty` is false."
+  },
+  {
+    "id": 78,
+    "difficulty": "hard",
+    "topic": "Closures",
+    "question": "What is the output of the following code?",
+    "code": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => {\n    console.log(i);\n  }, 0);\n}\nfor (let j = 0; j < 3; j++) {\n  setTimeout(() => {\n    console.log(j);\n  }, 0);\n}",
+    "options": ["3,3,3, 0,1,2", "0,1,2, 0,1,2", "3,3,3, 3,3,3", "0,1,2, 3,3,3"],
+    "correctIndex": 0,
+    "explanation": "The first loop uses `var`, which is function-scoped. By the time the callbacks run, `i` is 3. The second loop uses `let`, which is block-scoped, creating a new binding for each iteration, so the callbacks log 0, 1, 2."
+  },
+  {
+    "id": 79,
+    "difficulty": "hard",
+    "topic": "this Context",
+    "question": "What is the output of the following code?",
+    "code": "const obj = {\n  id: 1,\n  getId: function() {\n    return (() => {\n      return this.id;\n    })();\n  },\n  getId2: () => {\n    return (() => {\n      return this.id;\n    })();\n  }\n};\nconsole.log(obj.getId());\nconsole.log(obj.getId2());",
+    "options": [
+      "1, 1",
+      "1, undefined",
+      "undefined, undefined",
+      "1, ReferenceError"
+    ],
+    "correctIndex": 1,
+    "explanation": "`getId` is a regular function, so its `this` is bound to `obj`. The inner arrow function inherits `this` from `getId`. `getId2` is an arrow function, so its `this` is lexically bound to the global object (where `id` is undefined)."
+  },
+  {
+    "id": 80,
+    "difficulty": "hard",
+    "topic": "Promises",
+    "question": "What is the output of the following code?",
+    "code": "Promise.resolve(1)\n  .then(x => { throw x; })\n  .catch(err => { console.log(err); return err + 1; })\n  .then(x => { console.log(x); throw x; })\n  .then(x => console.log(\"success\", x))\n  .catch(err => console.log(\"error\", err));",
+    "options": [
+      "1, 2, error 2",
+      "1, error 2",
+      "error 1, error 2",
+      "1, 2, success 2"
+    ],
+    "correctIndex": 0,
+    "explanation": "The first `.then` throws 1, caught by `.catch` which logs 1 and returns 2. Returning from a `.catch` resolves the promise, so the next `.then` runs, logs 2, and throws 2. The next `.then` is skipped, and the final `.catch` logs 'error 2'."
+  },
+  {
+    "id": 81,
+    "difficulty": "hard",
+    "topic": "async/await",
+    "question": "What is the output of the following code?",
+    "code": "async function test() {\n  const p1 = new Promise(resolve => setTimeout(() => resolve('A'), 10));\n  const p2 = new Promise((_, reject) => setTimeout(() => reject('B'), 5));\n  try {\n    const res = await Promise.race([p1, p2]);\n    console.log(res);\n  } catch (err) {\n    console.log(err);\n  }\n}\ntest();",
+    "options": ["A", "B", "undefined", "Uncaught (in promise) B"],
+    "correctIndex": 1,
+    "explanation": "Promise.race settles as soon as the first promise settles. p2 rejects after 5ms, which is before p1 resolves (10ms). The rejection is caught by the try/catch block, logging 'B'."
+  },
+  {
+    "id": 82,
+    "difficulty": "hard",
+    "topic": "Generators",
+    "question": "What is the output of the following code?",
+    "code": "function* gen1() {\n  yield 1;\n  yield* [2, 3];\n  return 4;\n}\nfunction* gen2() {\n  const val = yield* gen1();\n  yield val;\n}\nconst iterator = gen2();\nconsole.log(iterator.next().value);\nconsole.log(iterator.next().value);\nconsole.log(iterator.next().value);\nconsole.log(iterator.next().value);",
+    "options": [
+      "1, 2, 3, 4",
+      "1, 2, 3, undefined",
+      "1, [2, 3], 4, undefined",
+      "1, 2, 3, {value: 4, done: true}"
+    ],
+    "correctIndex": 0,
+    "explanation": "`yield*` delegates to another iterable. It yields 1, then iterates over [2, 3] yielding 2 and 3. The `return 4` in gen1 sets `val` to 4 in gen2, which then yields 4."
+  },
+  {
+    "id": 83,
+    "difficulty": "hard",
+    "topic": "Proxy",
+    "question": "What is the output of the following code?",
+    "code": "const target = { a: 1 };\nconst proxy = new Proxy(target, {\n  get(obj, prop) {\n    return prop in obj ? obj[prop] : 42;\n  },\n  has(obj, prop) {\n    return prop === 'b' ? true : prop in obj;\n  }\n});\nconsole.log('b' in proxy);\nconsole.log(proxy.b);",
+    "options": ["true, 42", "false, undefined", "true, undefined", "false, 42"],
+    "correctIndex": 0,
+    "explanation": "The `in` operator triggers the `has` trap, which returns `true` for 'b'. Accessing `proxy.b` triggers the `get` trap, and since 'b' is not actually in the target object, it returns 42."
+  },
+  {
+    "id": 84,
+    "difficulty": "hard",
+    "topic": "Objects",
+    "question": "What is the output of the following code?",
+    "code": "const sym = Symbol('c');\nconst obj = { \n  2: 'two',\n  'b': 'bee',\n  1: 'one',\n  [sym]: 'sym'\n};\nobj.a = 'ay';\nconsole.log(Reflect.ownKeys(obj));",
+    "options": [
+      "['1', '2', 'b', 'a', Symbol(c)]",
+      "['2', 'b', '1', 'a', Symbol(c)]",
+      "['1', '2', 'a', 'b', Symbol(c)]",
+      "['a', 'b', '1', '2', Symbol(c)]"
+    ],
+    "correctIndex": 0,
+    "explanation": "Reflect.ownKeys returns keys in specific order: first integer indices in ascending order ('1', '2'), then string keys in insertion order ('b', 'a'), then symbol keys in insertion order (Symbol(c))."
+  },
+  {
+    "id": 85,
+    "difficulty": "hard",
+    "topic": "Iterators",
+    "question": "What is the output of the following code?",
+    "code": "const obj = {\n  [Symbol.iterator]() {\n    let i = 0;\n    return { next: () => ({ value: ++i, done: i > 2 }) };\n  }\n};\nconsole.log([...obj]);",
+    "options": [
+      "[1, 2]",
+      "[1, 2, 3]",
+      "[0, 1]",
+      "TypeError: obj is not iterable"
+    ],
+    "correctIndex": 0,
+    "explanation": "The iterator returns `{ value: 1, done: false }` then `{ value: 2, done: false }`, then `{ value: 3, done: true }`. The spread operator stops when `done: true`, ignoring the value of that iteration, resulting in `[1, 2]`."
+  },
+  {
+    "id": 86,
+    "difficulty": "hard",
+    "topic": "Type Coercion",
+    "question": "What is the output of the following code?",
+    "code": "const obj = {\n  [Symbol.toPrimitive](hint) {\n    if (hint === 'number') return 10;\n    if (hint === 'string') return 'hello';\n    return 5;\n  }\n};\nconsole.log(obj + 10);\nconsole.log(String(obj));",
+    "options": [
+      "15, hello",
+      "20, hello",
+      "15, [object Object]",
+      "20, [object Object]"
+    ],
+    "correctIndex": 0,
+    "explanation": "The `+` operator provides the 'default' hint to `Symbol.toPrimitive`, returning 5. So `5 + 10` is 15. `String(obj)` provides the 'string' hint, returning 'hello'."
+  },
+  {
+    "id": 87,
+    "difficulty": "hard",
+    "topic": "WeakMap",
+    "question": "What is the output of the following code?",
+    "code": "let key1 = {};\nlet key2 = {};\nconst wm = new WeakMap();\nwm.set(key1, 1).set(key2, 2);\nkey1 = null;\nconsole.log(wm.has(key1));\nconsole.log(wm.has(key2));",
+    "options": ["false, true", "true, true", "false, false", "TypeError"],
+    "correctIndex": 0,
+    "explanation": "Reassigning `key1 = null` means the original object reference is lost for `key1`. `wm.has(null)` returns false. `key2` still references its object, so `wm.has(key2)` returns true."
+  },
+  {
+    "id": 88,
+    "difficulty": "hard",
+    "topic": "Classes",
+    "question": "What is the output of the following code?",
+    "code": "class A {\n  #priv = 1;\n  getPriv() { return this.#priv; }\n}\nclass B extends A {\n  #priv = 2;\n  getB() { return this.#priv; }\n}\nconst b = new B();\nconsole.log(b.getPriv());\nconsole.log(b.getB());",
+    "options": ["1, 2", "2, 2", "undefined, 2", "SyntaxError"],
+    "correctIndex": 0,
+    "explanation": "Private fields are scoped to the class body where they are defined. `B` does not override `A`'s private field; it creates a distinct `#priv` scoped to `B`. `getPriv()` accesses `A`'s `#priv` (1), and `getB()` accesses `B`'s `#priv` (2)."
+  },
+  {
+    "id": 89,
+    "difficulty": "hard",
+    "topic": "Destructuring",
+    "question": "What is the output of the following code?",
+    "code": "const obj = { a: { b: 1 } };\nconst { a: { b: c = 2, d: e = 3 } = {} } = obj;\nconsole.log(c, e);",
+    "options": ["1, 3", "2, 3", "1, undefined", "undefined, 3"],
+    "correctIndex": 0,
+    "explanation": "Destructuring extracts `b` and assigns it to `c` (which is 1). It extracts `d` and assigns it to `e`. Since `d` is undefined in `obj.a`, `e` takes the default value 3. Therefore, `c` is 1 and `e` is 3."
+  },
+  {
+    "id": 90,
+    "difficulty": "hard",
+    "topic": "Template Literals",
+    "question": "What is the output of the following code?",
+    "code": "function tag(strings, ...values) {\n  return strings.reduce((acc, str, i) => acc + (values[i - 1] || '***') + str);\n}\nconst a = 1, b = 0;\nconsole.log(tag`${a} plus ${b} equals ${a + b}`);",
+    "options": [
+      "1 plus 0 equals 1",
+      "1 plus *** equals 1",
+      "*** plus *** equals ***",
+      "1 plus ***0 equals 1"
+    ],
+    "correctIndex": 1,
+    "explanation": "strings.reduce starts with acc = strings[0] (empty string ''). At i=1, it concatenates values[0] (1) + strings[1] (' plus '). At i=2, values[1] is 0 which is falsy, so '***' is used. At i=3, values[2] is 1. The final result is '1 plus *** equals 1'. The key trap is that 0 is falsy, so the || operator replaces it with '***'."
+  },
+  {
+    "id": 91,
+    "difficulty": "hard",
+    "topic": "Object.defineProperty",
+    "question": "What is the output of the following code?",
+    "code": "const obj = {};\nlet val = 0;\nObject.defineProperty(obj, 'prop', {\n  get() { return ++val; }\n});\nconsole.log(obj.prop === obj.prop);",
+    "options": ["false", "true", "TypeError", "undefined"],
+    "correctIndex": 0,
+    "explanation": "Each access to `obj.prop` invokes the getter. The first access increments `val` to 1 and returns 1. The second access increments `val` to 2 and returns 2. Since 1 !== 2, it logs false."
+  },
+  {
+    "id": 92,
+    "difficulty": "hard",
+    "topic": "Promises",
+    "question": "What is the output of the following code?",
+    "code": "console.log(1);\nnew Promise(resolve => {\n  console.log(2);\n  resolve();\n  console.log(3);\n}).then(() => console.log(4));\nconsole.log(5);",
+    "options": [
+      "1, 2, 3, 5, 4",
+      "1, 2, 5, 3, 4",
+      "1, 5, 2, 3, 4",
+      "1, 2, 3, 4, 5"
+    ],
+    "correctIndex": 0,
+    "explanation": "The Promise executor function runs synchronously. So 1, 2, and 3 are logged in order. The `.then` callback is queued as a microtask. Then 5 is logged synchronously. Finally, the microtask runs, logging 4."
+  },
+  {
+    "id": 93,
+    "difficulty": "hard",
+    "topic": "Microtasks",
+    "question": "What is the output of the following code?",
+    "code": "Promise.resolve().then(() => {\n  console.log('1');\n  Promise.resolve().then(() => console.log('2'));\n}).then(() => {\n  console.log('3');\n});\nPromise.resolve().then(() => console.log('4'));",
+    "options": ["1, 4, 2, 3", "1, 2, 4, 3", "1, 4, 3, 2", "1, 2, 3, 4"],
+    "correctIndex": 0,
+    "explanation": "The first `.then` runs logging 1, and queues a microtask for 2. The next top-level `.then` (for 4) is already queued, so 4 logs before 2. The outer promise's second `.then` (for 3) is queued after the first `.then` completes, meaning after 1 is logged, making its order 1, 4, 2, 3."
+  },
+  {
+    "id": 94,
+    "difficulty": "hard",
+    "topic": "TDZ",
+    "question": "What is the output of the following code?",
+    "code": "console.log(typeof a);\nconsole.log(typeof b);\nlet b = 10;",
+    "options": [
+      "undefined, ReferenceError",
+      "undefined, undefined",
+      "ReferenceError, ReferenceError",
+      "undefined, number"
+    ],
+    "correctIndex": 0,
+    "explanation": "Variable `a` is completely undeclared, so `typeof a` safely returns 'undefined'. Variable `b` is declared with `let`, meaning it exists in the Temporal Dead Zone (TDZ) before initialization. Accessing it (even with `typeof`) throws a ReferenceError."
+  },
+  {
+    "id": 95,
+    "difficulty": "hard",
+    "topic": "Array Methods",
+    "question": "What is the output of the following code?",
+    "code": "const arr = [1, 2, 3];\nconst res = arr.reduce((acc, curr) => {\n  acc[curr] = acc[curr] ? acc[curr] + 1 : 1;\n  return acc;\n}, {});\nconsole.log(res);",
+    "options": [
+      "{ '1': 1, '2': 1, '3': 1 }",
+      "{ 1: 1, 2: 2, 3: 3 }",
+      "[1, 1, 1]",
+      "TypeError"
+    ],
+    "correctIndex": 0,
+    "explanation": "The reduce method accumulates values into an object. For each element, it sets the property corresponding to the array value. Since it's a simple array [1, 2, 3], each number appears once, resulting in an object with counts: { '1': 1, '2': 1, '3': 1 }."
+  },
+  {
+    "id": 96,
+    "difficulty": "hard",
+    "topic": "Scope",
+    "question": "What is the output of the following code?",
+    "code": "var x = 10;\nfunction foo() {\n  var x = 20;\n  return new Function('return x;');\n}\nconsole.log(foo()());",
+    "options": ["10", "20", "undefined", "ReferenceError"],
+    "correctIndex": 0,
+    "explanation": "Functions created with the `Function` constructor do not create closures in their creation context; they are always created in the global scope. Therefore, it accesses the global `x` (10), not the local `x` (20)."
+  },
+  {
+    "id": 97,
+    "difficulty": "hard",
+    "topic": "eval Scope",
+    "question": "What is the output of the following code?",
+    "code": "let a = 1;\nfunction test() {\n  let a = 2;\n  eval('a = 3');\n  return a;\n}\nconsole.log(test(), a);",
+    "options": ["3, 1", "3, 3", "2, 1", "2, 3"],
+    "correctIndex": 0,
+    "explanation": "Direct `eval` operates in the local scope. It modifies the local `a` to 3. The global `a` remains 1. The function returns 3, and the global variable is 1."
+  },
+  {
+    "id": 98,
+    "difficulty": "hard",
+    "topic": "Async Generators",
+    "question": "What is the output of the following code?",
+    "code": "async function* asyncGen() {\n  yield await Promise.resolve(1);\n  yield 2;\n}\nconst iter = asyncGen();\niter.next().then(res => console.log(res.value));\niter.next().then(res => console.log(res.value));",
+    "options": ["1, 2", "Promise, Promise", "1, undefined", "Error"],
+    "correctIndex": 0,
+    "explanation": "An async generator returns an async iterator. The `next()` method returns a Promise resolving to `{ value, done }`. It awaits the Promise for 1, then yields 1. The next yield is 2. So it logs 1 then 2."
+  },
+  {
+    "id": 99,
+    "difficulty": "hard",
+    "topic": "Spread Operator",
+    "question": "What is the output of the following code?",
+    "code": "const str = '👨‍👩‍👧‍👦';\nconsole.log(str.length);\nconsole.log([...str].length);",
+    "options": ["11, 7", "1, 1", "7, 4", "11, 1"],
+    "correctIndex": 0,
+    "explanation": "The family emoji is made of multiple emojis joined by Zero Width Joiners (ZWJ). The length property counts UTF-16 code units (11). The spread operator iterates over code points, separating the characters and ZWJs, yielding 7 items."
+  },
+  {
+    "id": 100,
+    "difficulty": "hard",
+    "topic": "Error Instances",
+    "question": "What is the output of the following code?",
+    "code": "class CustomError extends Error {}\nconst err = new CustomError('msg');\nconsole.log(err instanceof CustomError);\nconsole.log(err instanceof Error);\nconsole.log(Object.prototype.toString.call(err));",
+    "options": [
+      "true, true, [object Error]",
+      "true, true, [object Object]",
+      "true, false, [object Error]",
+      "false, true, [object Object]"
+    ],
+    "correctIndex": 0,
+    "explanation": "`CustomError` inherits from `Error`, so `err instanceof CustomError` and `err instanceof Error` are both true. `Object.prototype.toString.call` on an Error instance returns '[object Error]'."
+  }
+]

@@ -12,14 +12,6 @@ export interface PlaygroundItem {
   iconName: 'js' | 'ts' | 'html' | 'react';
 }
 
-export interface MoreNavItem {
-  title: string;
-  link: string;
-  description: string;
-  iconName: 'about' | 'bin' | 'github' | 'privacy' | 'terms';
-  isExternal?: boolean;
-}
-
 export const playgroundLinks: PlaygroundItem[] = [
   {
     title: 'JavaScript',
@@ -51,12 +43,44 @@ export const playgroundLinks: PlaygroundItem[] = [
   },
 ];
 
+export interface InterviewItem {
+  title: string;
+  link: string;
+  description: string;
+  badge?: string;
+  iconName: 'qa' | 'quiz';
+}
+
+export const interviewLinks: InterviewItem[] = [
+  {
+    title: 'Technical Q&A',
+    link: '/interview',
+    description: 'Core JavaScript theory, architectural deep-dives & solutions',
+    badge: 'Theory',
+    iconName: 'qa',
+  },
+  {
+    title: 'Output Quiz',
+    link: '/output-questions',
+    description: '100 predict-the-output questions across 3 difficulty tiers',
+    badge: '100 MCQs',
+    iconName: 'quiz',
+  },
+];
+
 export const primaryNavLinks: NavItem[] = [
   { title: 'Learn JS', link: '/learn', badge: '0→Hero' },
   { title: 'Problems', link: '/problems', badge: 'DSA' },
-  { title: 'Interview Q&A', link: '/interview' },
   { title: 'Dashboard', link: '/dashboard' },
 ];
+
+export interface MoreNavItem {
+  title: string;
+  link: string;
+  description: string;
+  iconName: 'about' | 'bin' | 'github' | 'privacy' | 'terms';
+  isExternal?: boolean;
+}
 
 export const moreNavLinks: MoreNavItem[] = [
   {
@@ -112,6 +136,10 @@ const navigation = [
   {
     title: 'JS Interview Question',
     link: '/interview',
+  },
+  {
+    title: 'Output Questions',
+    link: '/output-questions',
   },
   {
     title: 'React',

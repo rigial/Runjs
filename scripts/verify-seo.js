@@ -80,6 +80,8 @@ assert(sitemapXml.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitem
 assert(sitemapXml.includes('<loc>https://runjs.in/</loc>'), 'Includes homepage');
 assert(sitemapXml.includes('<loc>https://runjs.in/problems</loc>'), 'Includes /problems');
 assert(sitemapXml.includes('<loc>https://runjs.in/js</loc>'), 'Includes /js');
+assert(sitemapXml.includes('<loc>https://runjs.in/visualizer</loc>'), 'Includes /visualizer');
+assert(sitemapXml.includes('<loc>https://runjs.in/execution-context</loc>'), 'Includes /execution-context');
 assert(sitemapXml.includes('<loc>https://runjs.in/ts</loc>'), 'Includes /ts');
 assert(sitemapXml.includes('<loc>https://runjs.in/react</loc>'), 'Includes /react');
 assert(sitemapXml.includes('<loc>https://runjs.in/interview</loc>'), 'Includes /interview');

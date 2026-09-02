@@ -36,6 +36,19 @@ const routes = [
       'Interactive in-browser JavaScript sandbox with Monaco editor, infinite loop protection, custom font controls, and interactive Luna console.',
   },
   {
+    path: '/visualizer',
+    title: 'JavaScript Visualizer - Event Loop, Call Stack & Queues | RunJS',
+    description:
+      'Interactive visualizer for JavaScript execution. Step through Call Stack frames, Event Loop phases, Microtask Queue (Promises), and Task Queue (setTimeout) in real time.',
+  },
+  {
+    path: '/execution-context',
+    title:
+      'JavaScript Execution Context Visualizer - Memory Allocation, Hoisting & Call Stack | RunJS',
+    description:
+      'Interactive visualizer for JavaScript Execution Context. Step through Memory Allocation Phase (hoisting & TDZ), Code Execution Phase line by line, Global and Function Execution Contexts, and Call Stack operations in real time.',
+  },
+  {
     path: '/ts',
     title: 'Online TypeScript Playground with esbuild Wasm | RunJS',
     description:

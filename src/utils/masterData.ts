@@ -9,7 +9,7 @@ export interface PlaygroundItem {
   link: string;
   description: string;
   badge?: string;
-  iconName: 'js' | 'ts' | 'html' | 'react';
+  iconName: 'js' | 'ts' | 'html' | 'react' | 'visualizer' | 'context';
 }
 
 export const playgroundLinks: PlaygroundItem[] = [
@@ -19,6 +19,20 @@ export const playgroundLinks: PlaygroundItem[] = [
     description: 'Instant JS execution with interactive console',
     badge: 'ES2024',
     iconName: 'js',
+  },
+  {
+    title: 'JS Visualizer',
+    link: '/visualizer',
+    description: 'Interactive Call Stack, Event Loop & Queue visualizer',
+    badge: 'Event Loop',
+    iconName: 'visualizer',
+  },
+  {
+    title: 'Context Visualizer',
+    link: '/execution-context',
+    description: 'Interactive Memory Allocation, Execution Phase & Call Stack',
+    badge: 'New',
+    iconName: 'context',
   },
   {
     title: 'TypeScript',
@@ -152,6 +166,10 @@ const navigation = [
   {
     title: 'JavaScript',
     link: '/js',
+  },
+  {
+    title: 'JS Visualizer',
+    link: '/visualizer',
   },
   {
     title: 'TypeScript',

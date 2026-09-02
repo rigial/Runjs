@@ -7,17 +7,22 @@ export interface SEOProps {
   keywords?: string | string[];
   canonical?: string;
   ogType?: 'website' | 'article';
+  type?: 'website' | 'article';
   ogImage?: string;
+  image?: string;
   jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
   noindex?: boolean;
+  noIndex?: boolean;
+  noFollow?: boolean;
 }
 
 const DEFAULT_TITLE =
-  'RunJS | Online JavaScript, TypeScript & React Playground';
+  'RunJS.in | Online JavaScript, TypeScript & React Playground';
 const DEFAULT_DESCRIPTION =
   'RunJS is an interactive developer playground and full JavaScript learning platform. Write, test, and master JavaScript with 175+ structured lessons and real-time execution.';
-const DEFAULT_OG_IMAGE = 'https://runjs.rigial.com/runjs.in.webp';
-const BASE_URL = 'https://runjs.rigial.com';
+const DEFAULT_OG_IMAGE = 'https://runjs.in/og-image.png';
+const BASE_URL = import.meta.env.VITE_SITE_URL || 'https://runjs.in';
 
 function updateMetaTag(
   attrName: 'name' | 'property',
@@ -35,10 +40,15 @@ function updateMetaTag(
 }
 
 function updateLinkTag(rel: string, href: string | undefined) {
-  if (!href) return;
   let element = document.querySelector(
     `link[rel="${rel}"]`
   ) as HTMLLinkElement | null;
+  if (!href) {
+    if (element) {
+      element.remove();
+    }
+    return;
+  }
   if (!element) {
     element = document.createElement('link');
     element.setAttribute('rel', rel);
@@ -53,20 +63,28 @@ export default function SEO({
   description = DEFAULT_DESCRIPTION,
   keywords,
   canonical,
-  ogType = 'website',
-  ogImage = DEFAULT_OG_IMAGE,
+  ogType,
+  type,
+  ogImage,
+  image,
   jsonLd,
+  structuredData,
   noindex = false,
+  noIndex = false,
+  noFollow = false,
 }: SEOProps) {
+  const resolvedType = ogType || type || 'website';
+  const resolvedImage = ogImage || image || DEFAULT_OG_IMAGE;
+  const resolvedNoIndex = noindex || noIndex;
+  const resolvedData = structuredData || jsonLd;
+
   const fullTitle = title ? titleTemplate.replace('%s', title) : DEFAULT_TITLE;
 
   const fullCanonical = canonical
     ? canonical.startsWith('http')
       ? canonical
       : `${BASE_URL}${canonical.startsWith('/') ? '' : '/'}${canonical}`
-    : typeof window !== 'undefined'
-      ? `${BASE_URL}${window.location.pathname}`
-      : BASE_URL;
+    : undefined;
 
   const keywordsString = Array.isArray(keywords)
     ? keywords.join(', ')
@@ -83,8 +101,8 @@ export default function SEO({
     updateMetaTag(
       'name',
       'robots',
-      noindex
-        ? 'noindex, nofollow'
+      resolvedNoIndex || noFollow
+        ? `${resolvedNoIndex ? 'noindex' : 'index'}, ${noFollow ? 'nofollow' : 'follow'}`
         : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
     );
     updateLinkTag('canonical', fullCanonical);
@@ -92,26 +110,30 @@ export default function SEO({
     // 3. OpenGraph Tags
     updateMetaTag('property', 'og:title', fullTitle);
     updateMetaTag('property', 'og:description', description);
-    updateMetaTag('property', 'og:url', fullCanonical);
-    updateMetaTag('property', 'og:type', ogType);
-    updateMetaTag('property', 'og:image', ogImage);
+    if (fullCanonical) {
+      updateMetaTag('property', 'og:url', fullCanonical);
+    } else {
+      updateMetaTag('property', 'og:url', undefined);
+    }
+    updateMetaTag('property', 'og:type', resolvedType);
+    updateMetaTag('property', 'og:image', resolvedImage);
     updateMetaTag('property', 'og:site_name', 'RunJS');
 
     // 4. Twitter Card Tags
     updateMetaTag('name', 'twitter:card', 'summary_large_image');
     updateMetaTag('name', 'twitter:title', fullTitle);
     updateMetaTag('name', 'twitter:description', description);
-    updateMetaTag('name', 'twitter:image', ogImage);
+    updateMetaTag('name', 'twitter:image', resolvedImage);
 
     // 5. Schema.org JSON-LD structured data
     const existingScript = document.getElementById('seo-json-ld');
-    if (jsonLd) {
+    if (resolvedData) {
       const script =
         (existingScript as HTMLScriptElement) ||
         document.createElement('script');
       script.id = 'seo-json-ld';
       script.type = 'application/ld+json';
-      script.text = JSON.stringify(jsonLd);
+      script.text = JSON.stringify(resolvedData);
       if (!existingScript) {
         document.head.appendChild(script);
       }
@@ -123,10 +145,11 @@ export default function SEO({
     description,
     keywordsString,
     fullCanonical,
-    ogType,
-    ogImage,
-    jsonLd,
-    noindex,
+    resolvedType,
+    resolvedImage,
+    resolvedData,
+    resolvedNoIndex,
+    noFollow,
   ]);
 
   return null;

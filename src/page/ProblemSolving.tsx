@@ -33,6 +33,8 @@ import TestResultsPanel from '../components/problems/TestResultsPanel';
 import ResetCodeModal from '../components/problems/ResetCodeModal';
 import CodeEditor from '../components/CodeEditor';
 import Terminal from '../components/Terminal';
+import SEO from '../seo/SEO';
+import { getBreadcrumbSchema } from '../seo/seoConfig';
 import {
   FileText,
   Code2,
@@ -40,7 +42,6 @@ import {
   Terminal as TerminalIcon,
   Sparkles,
 } from 'lucide-react';
-import SEO from '../components/SEO';
 
 function ProblemSolving() {
   const { slug } = useParams<{ slug: string }>();
@@ -287,9 +288,11 @@ function ProblemSolving() {
       <div className="h-screen w-full flex flex-col items-center justify-center bg-[var(--bg-app)] text-[var(--text-primary)] p-6 space-y-4">
         <SEO
           title="Problem Not Found"
-          description="The requested JavaScript challenge could not be found."
-          noindex={true}
+          description="The requested coding challenge was not found on RunJS."
+          noIndex={true}
+          noFollow={true}
         />
+
         <div className="text-3xl font-bold">Problem Not Found</div>
         <p className="text-sm text-[var(--text-secondary)]">
           The requested coding challenge was not found.
@@ -305,31 +308,53 @@ function ProblemSolving() {
     );
   }
 
-  const problemJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Question',
-    name: problem.title,
-    text: problem.description,
-    educationalLevel: problem.difficulty,
-    about: problem.topics.map((t) => ({ '@type': 'Thing', name: t })),
-  };
-
   return (
     <div className="h-screen w-full flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] overflow-hidden">
       <SEO
-        title={`${problem.title} — JavaScript Challenge`}
-        description={problem.description.slice(0, 160)}
+        title={`${problem.title} - JavaScript Coding Challenge`}
+        description={`Solve "${problem.title}" (${problem.difficulty}) in JavaScript. ${problem.description.slice(0, 140).replace(/\s+/g, ' ').trim()}... Run tests and verify your solution on RunJS.`}
+        canonical={`/problems/${problem.slug}`}
+        type="article"
         keywords={[
           problem.title,
           ...problem.topics,
-          'javascript challenge',
-          'algorithm',
-          'runjs',
+          `${problem.difficulty} JavaScript problem`,
+          'JavaScript coding challenge',
+          'algorithm solution',
         ]}
-        canonical={`/problems/${problem.slug}`}
-        ogType="article"
-        jsonLd={problemJsonLd}
+        structuredData={[
+          getBreadcrumbSchema([
+            { name: 'Home', item: '/' },
+            { name: 'Problems', item: '/problems' },
+            { name: problem.title, item: `/problems/${problem.slug}` },
+          ]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Question',
+            name: problem.title,
+            text: problem.description,
+            educationalLevel: problem.difficulty,
+            about: problem.topics.map((t) => ({ '@type': 'Thing', name: t })),
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'TechArticle',
+            headline: `${problem.title} - JavaScript Coding Challenge`,
+            description: problem.description
+              .slice(0, 200)
+              .replace(/\s+/g, ' ')
+              .trim(),
+            proficiencyLevel: problem.difficulty,
+            articleSection: problem.topics.join(', '),
+            inLanguage: 'en',
+            author: {
+              '@type': 'Person',
+              name: 'M R Kishore Kumar',
+            },
+          },
+        ]}
       />
+
       {/* Top Solved Screen Navigation */}
       <ProblemHeader
         problem={problem}

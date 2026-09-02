@@ -2,8 +2,9 @@ import { Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { packageList } from '../utils/masterData';
+import SEO from '../seo/SEO';
+import { getBreadcrumbSchema, getCanonicalUrl } from '../seo/seoConfig';
 import { ExternalLink, Sparkles, Package, Calendar } from 'lucide-react';
-import SEO from '../components/SEO';
 
 function GithubIcon({ className = 'w-3.5 h-3.5' }: { className?: string }) {
   return (
@@ -61,9 +62,41 @@ function AboutPage() {
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-150">
       <SEO
-        title="About RunJS — Open Source Web Developer Playground"
-        description="Learn about RunJS, its mission, creator M R Kishore Kumar, and the open-source libraries that power the in-browser JavaScript learning platform."
+        title="About RunJS - Open Source In-Browser IDE Story"
+        description="The story, motivation, and open-source foundation behind the RunJS developer playground and creator M R Kishore Kumar."
         canonical="/about"
+        keywords={[
+          'About RunJS',
+          'M R Kishore Kumar',
+          'JavaScript playground story',
+          'browser IDE open source',
+          'WebDJ',
+        ]}
+        structuredData={[
+          getBreadcrumbSchema([
+            { name: 'Home', item: '/' },
+            { name: 'About', item: '/about' },
+          ]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'AboutPage',
+            name: 'About RunJS',
+            url: getCanonicalUrl('/about'),
+            description:
+              'The story, motivation, and open-source foundation behind the RunJS developer playground.',
+            mainEntity: {
+              '@type': 'Person',
+              name: 'M R Kishore Kumar',
+              jobTitle: 'Creator & Maintainer',
+              url: 'https://github.com/mrkishorekumar',
+              sameAs: [
+                'https://github.com/mrkishorekumar',
+                'https://www.linkedin.com/in/mrkishorekumar/',
+                'https://youtube.com/mrkishorekumar',
+              ],
+            },
+          },
+        ]}
       />
       <Navbar />
 

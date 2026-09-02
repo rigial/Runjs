@@ -3,20 +3,20 @@ import { findLessonLocation } from '../data/curriculum';
 
 export function generateLessonJsonLd(lesson: Lesson): Record<string, unknown> {
   const location = findLessonLocation(lesson.slug);
-  const canonicalUrl = `https://runjs.rigial.com/learn/${lesson.slug}`;
+  const canonicalUrl = `https://runjs.in/learn/${lesson.slug}`;
 
   const breadcrumbs = [
     {
       '@type': 'ListItem',
       position: 1,
       name: 'Home',
-      item: 'https://runjs.rigial.com/',
+      item: 'https://runjs.in/',
     },
     {
       '@type': 'ListItem',
       position: 2,
       name: 'Learn JavaScript',
-      item: 'https://runjs.rigial.com/learn',
+      item: 'https://runjs.in/learn',
     },
   ];
 
@@ -25,13 +25,13 @@ export function generateLessonJsonLd(lesson: Lesson): Record<string, unknown> {
       '@type': 'ListItem',
       position: 3,
       name: `Part ${location.part.partNumber}: ${location.part.title}`,
-      item: `https://runjs.rigial.com/learn#${location.part.slug}`,
+      item: `https://runjs.in/learn#${location.part.slug}`,
     });
     breadcrumbs.push({
       '@type': 'ListItem',
       position: 4,
       name: location.topic.title,
-      item: `https://runjs.rigial.com/learn#${location.topic.slug}`,
+      item: `https://runjs.in/learn#${location.topic.slug}`,
     });
   }
 
@@ -64,15 +64,15 @@ export function generateLessonJsonLd(lesson: Lesson): Record<string, unknown> {
         author: {
           '@type': 'Organization',
           name: 'RunJS',
-          url: 'https://runjs.rigial.com',
+          url: 'https://runjs.in',
         },
         publisher: {
           '@type': 'Organization',
           name: 'RunJS',
-          url: 'https://runjs.rigial.com',
+          url: 'https://runjs.in',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://runjs.rigial.com/runjs.in.webp',
+            url: 'https://runjs.in/runjs.in.webp',
           },
         },
       },
@@ -90,7 +90,7 @@ export function generateLessonJsonLd(lesson: Lesson): Record<string, unknown> {
         provider: {
           '@type': 'Organization',
           name: 'RunJS',
-          sameAs: 'https://runjs.rigial.com',
+          sameAs: 'https://runjs.in',
         },
         hasCourseInstance: {
           '@type': 'CourseInstance',
@@ -115,8 +115,8 @@ export function generateCurriculumJsonLd(
     provider: {
       '@type': 'Organization',
       name: 'RunJS',
-      url: 'https://runjs.rigial.com',
-      logo: 'https://runjs.rigial.com/runjs.in.webp',
+      url: 'https://runjs.in',
+      logo: 'https://runjs.in/runjs.in.webp',
     },
     educationalCredentialAwarded: 'JavaScript Full Stack Competency',
     hasCourseInstance: {

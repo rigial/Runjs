@@ -18,8 +18,9 @@ import { ModalRef } from '../utils/interface';
 import useTheme from '../hook/useTheme';
 import useMediaQuery from '../hook/useMediaQuery';
 import useWarnOnClose from '../hook/useWarnOnClose ';
-import SEO from '../components/SEO';
 import { TEMPLATES } from '../ide/templates/defaultTemplates';
+import SEO from '../seo/SEO';
+import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
 import {
   ChevronLeft,
   Atom,
@@ -614,17 +615,44 @@ function ReactPlayground() {
   return (
     <WorkspaceProvider initialProjectId={id}>
       <SEO
-        title="Online React Playground & In-Browser IDE"
-        description="Build and preview React applications in real time with multi-tab editor, terminal, file explorer, package manager, and live iframe preview."
-        keywords={[
-          'react playground',
-          'online react editor',
-          'react sandbox',
-          'sandpack react',
-          'runjs react',
-        ]}
-        canonical={id ? `/react/${id}` : '/react'}
+        title={
+          id
+            ? 'Saved React Playground'
+            : 'Online React & Vite Playground (Sandpack)'
+        }
+        description={
+          id
+            ? 'Saved React workspace in RunJS'
+            : 'In-browser React development environment with multi-file explorer, Sandpack live bundler, interactive preview, and xterm terminal.'
+        }
+        canonical={id ? undefined : '/react'}
+        noIndex={Boolean(id)}
+        noFollow={Boolean(id)}
+        keywords={
+          id
+            ? undefined
+            : [
+                'React playground',
+                'online React sandbox',
+                'Sandpack React IDE',
+                'React in browser',
+                'Vite playground online',
+                'browser React compiler',
+              ]
+        }
+        structuredData={
+          id
+            ? undefined
+            : [
+                getBreadcrumbSchema([
+                  { name: 'Home', item: '/' },
+                  { name: 'React Playground', item: '/react' },
+                ]),
+                getWebApplicationSchema(),
+              ]
+        }
       />
+
       <ReactWorkspace />
     </WorkspaceProvider>
   );

@@ -9,7 +9,10 @@
   "packageManager": "pnpm@11.21.0",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc -b && vite build",
+    "generate:sitemap": "node scripts/generate-sitemap.js",
+    "prerender:routes": "node scripts/prerender-routes.js",
+    "verify:seo": "node scripts/verify-seo.js",
+    "build": "node scripts/generate-sitemap.js && tsc -b && vite build && node scripts/prerender-routes.js",
     "lint": "eslint ./src",
     "pretty": "prettier --write ./src",
     "preview": "vite preview",

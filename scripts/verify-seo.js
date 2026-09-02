@@ -84,6 +84,8 @@ assert(sitemapXml.includes('<loc>https://runjs.in/ts</loc>'), 'Includes /ts');
 assert(sitemapXml.includes('<loc>https://runjs.in/react</loc>'), 'Includes /react');
 assert(sitemapXml.includes('<loc>https://runjs.in/interview</loc>'), 'Includes /interview');
 assert(sitemapXml.includes('<loc>https://runjs.in/about</loc>'), 'Includes /about');
+assert(sitemapXml.includes('<loc>https://runjs.in/privacy</loc>'), 'Includes /privacy');
+assert(sitemapXml.includes('<loc>https://runjs.in/terms</loc>'), 'Includes /terms');
 assert(sitemapXml.includes('<loc>https://runjs.in/problems/two-sum</loc>'), 'Includes /problems/two-sum');
 assert(!sitemapXml.includes('<loc>https://runjs.in/dashboard</loc>') && !sitemapXml.includes('/dashboard<'), 'Excludes private /dashboard');
 assert(!sitemapXml.includes('<loc>https://runjs.in/bin</loc>') && !sitemapXml.includes('/bin<'), 'Excludes private /bin');

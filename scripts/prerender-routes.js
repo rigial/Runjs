@@ -65,6 +65,18 @@ const routes = [
     description:
       'The story, motivation, and open-source foundation behind the RunJS developer playground and creator M R Kishore Kumar.',
   },
+  {
+    path: '/privacy',
+    title: 'Privacy Policy - RunJS Developer Playground | RunJS',
+    description:
+      'Privacy Policy for RunJS. Understand how our client-side, zero-server-tracking architecture keeps your code and data private in your browser.',
+  },
+  {
+    path: '/terms',
+    title: 'Terms and Conditions - RunJS Developer Playground | RunJS',
+    description:
+      'Terms and Conditions for RunJS. Review user guidelines, code ownership guarantees, open-source licensing, and acceptable use policy.',
+  },
 ];
 
 // Extract problem challenges

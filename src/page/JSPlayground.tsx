@@ -5,7 +5,8 @@ import '../utils/lunaStyles';
 import useDebounceLocalStorageState from '../hook/useDebounceLocalStorageState';
 import useLocalStorageState from '../hook/useLocalStorageState';
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
-import { ConsoleMethods, ModalRef } from '../utils/interface';
+import { runInSandbox } from '../utils/sandboxRunner';
+import { ModalRef } from '../utils/interface';
 import useAdjustFontSize from '../hook/useAdjustFontSize';
 import useComplieCode from '../hook/useComplieCode';
 import { Link } from 'react-router';
@@ -63,7 +64,7 @@ function JSPlayground() {
     setFontSize(fontSize.toString());
   }
 
-  function handleRunClick() {
+  async function handleRunClick() {
     setIsRunning(true);
     if (!isDesktop) {
       setActiveMobileTab('console');
@@ -78,25 +79,28 @@ function JSPlayground() {
         theme: resolvedTheme === 'dark' ? 'dark' : 'light',
       });
 
-      const customConsole: Record<
-        ConsoleMethods,
-        (...args: unknown[]) => void
-      > = {
-        log: (...args: unknown[]) => lunaConsole.log(...args),
-        info: (...args: unknown[]) => lunaConsole.info(...args),
-        warn: (...args: unknown[]) => lunaConsole.warn(...args),
-        error: (...args: unknown[]) => lunaConsole.error(...args),
-      };
-
       try {
         const final = addInfiniteLoopProtection(code);
-        const executeCode = new Function('console', final);
-        executeCode(customConsole);
+        const result = await runInSandbox(final, {
+          timeoutMs: 5000,
+          onLog: (type, args) => {
+            if (type === 'error') {
+              lunaConsole.error(...args);
+            } else if (type === 'warn') {
+              lunaConsole.warn(...args);
+            } else if (type === 'info') {
+              lunaConsole.info(...args);
+            } else {
+              lunaConsole.log(...args);
+            }
+          },
+        });
+        if (result.error) lunaConsole.error(result.error);
       } catch (error) {
-        customConsole.error(error);
+        lunaConsole.error(error);
       }
     }
-    setTimeout(() => setIsRunning(false), 200);
+    setIsRunning(false);
   }
 
   function clearTerminal() {

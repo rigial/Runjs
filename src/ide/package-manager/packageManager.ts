@@ -180,6 +180,16 @@ export class PackageManager {
         if (parts[1]) version = parts[1];
       }
 
+      // Disallow prototype-polluting package names
+      if (
+        name === '__proto__' ||
+        name === 'constructor' ||
+        name === 'prototype'
+      ) {
+        failed.push(name);
+        continue;
+      }
+
       const resolvedVersion = await this.resolvePackageVersion(name, version);
       if (resolvedVersion === null) {
         failed.push(name);
@@ -245,11 +255,24 @@ export class PackageManager {
 
     for (const name of packageNames) {
       const cleanName = name.trim();
-      if (pkg.dependencies && pkg.dependencies[cleanName]) {
+      if (
+        cleanName === '__proto__' ||
+        cleanName === 'constructor' ||
+        cleanName === 'prototype'
+      ) {
+        continue;
+      }
+      if (
+        pkg.dependencies &&
+        Object.prototype.hasOwnProperty.call(pkg.dependencies, cleanName)
+      ) {
         delete pkg.dependencies[cleanName];
         removed.push(cleanName);
       }
-      if (pkg.devDependencies && pkg.devDependencies[cleanName]) {
+      if (
+        pkg.devDependencies &&
+        Object.prototype.hasOwnProperty.call(pkg.devDependencies, cleanName)
+      ) {
         delete pkg.devDependencies[cleanName];
         if (!removed.includes(cleanName)) removed.push(cleanName);
       }

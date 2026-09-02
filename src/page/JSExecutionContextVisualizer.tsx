@@ -199,7 +199,7 @@ function JSExecutionContextVisualizer() {
     if (codeToLoad) {
       setCode(codeToLoad);
       setCurrentPresetId(null);
-      runSimulation(codeToLoad, true);
+      runSimulation(codeToLoad, false);
     } else {
       runSimulation(defaultPreset.code, false);
     }

@@ -14,6 +14,7 @@ import useLocalStorageState from '../hook/useLocalStorageState';
 import useAdjustFontSize from '../hook/useAdjustFontSize';
 import useComplieCode from '../hook/useComplieCode';
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
+import { runInSandbox } from '../utils/sandboxRunner';
 import useIndexDBState from '../hook/useIndexDBState';
 import { getCode } from '../db/operations';
 import { ITypeScriptError, ModalRef, UserCodeBase } from '../utils/interface';
@@ -142,17 +143,6 @@ function TSsaved() {
         theme: resolvedTheme === 'dark' ? 'dark' : 'light',
       });
 
-      type ConsoleMethods = 'log' | 'info' | 'warn' | 'error';
-      const customConsole: Record<
-        ConsoleMethods,
-        (...args: unknown[]) => void
-      > = {
-        log: (...args: unknown[]) => lunaConsole.log(...args),
-        info: (...args: unknown[]) => lunaConsole.info(...args),
-        warn: (...args: unknown[]) => lunaConsole.warn(...args),
-        error: (...args: unknown[]) => lunaConsole.error(...args),
-      };
-
       try {
         await loadTypscript();
         const parseJavascriptCode = await transform(code?.code ?? '', {
@@ -160,13 +150,26 @@ function TSsaved() {
         });
         let final = parseJavascriptCode.code;
         final = addInfiniteLoopProtection(final);
-        const executeCode = new Function('console', final);
-        executeCode(customConsole);
+        const result = await runInSandbox(final, {
+          timeoutMs: 5000,
+          onLog: (type, args) => {
+            if (type === 'error') {
+              lunaConsole.error(...args);
+            } else if (type === 'warn') {
+              lunaConsole.warn(...args);
+            } else if (type === 'info') {
+              lunaConsole.info(...args);
+            } else {
+              lunaConsole.log(...args);
+            }
+          },
+        });
+        if (result.error) lunaConsole.error(result.error);
       } catch (error) {
-        customConsole.error(error);
+        lunaConsole.error(error);
       }
     }
-    setTimeout(() => setIsRunning(false), 200);
+    setIsRunning(false);
   }
 
   function handleTextChange(txt: string) {

@@ -33,10 +33,25 @@ export async function loadTypscript(): Promise<void> {
     initPromise = (async () => {
       try {
         const { initialize, version } = await import('esbuild-wasm');
-        await initialize({
-          worker: true,
-          wasmURL: `https://unpkg.com/esbuild-wasm@${version}/esbuild.wasm`,
-        });
+        // Prefer local bundled wasm for offline support and zero-CDN exposure
+        try {
+          await initialize({
+            worker: true,
+            wasmURL: '/esbuild.wasm',
+          });
+        } catch (localErr) {
+          if (
+            localErr instanceof Error &&
+            localErr.message.includes('Cannot call "initialize" more than once')
+          ) {
+            return;
+          }
+          // Fallback to unpkg if static asset cannot be resolved
+          await initialize({
+            worker: true,
+            wasmURL: `https://unpkg.com/esbuild-wasm@${version}/esbuild.wasm`,
+          });
+        }
       } catch (error) {
         if (
           error instanceof Error &&

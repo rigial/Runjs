@@ -1,6 +1,7 @@
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Editor, Monaco, type OnMount } from '@monaco-editor/react';
 import type { Exercise } from '../types';
+import { runInSandbox } from '../../utils/sandboxRunner';
 import useTheme from '../../hook/useTheme';
 import {
   getMonacoThemeName,
@@ -57,46 +58,39 @@ function ExerciseComponent({
     setCompleted(false);
   }, [exercise]);
 
-  const handleRun = useCallback(() => {
+  const handleRun = useCallback(async () => {
     const logs: string[] = [];
-    const originalLog = console.log;
-    const originalWarn = console.warn;
-    const originalError = console.error;
-
-    console.log = (...args: unknown[]) => {
-      logs.push(
-        args
-          .map((a) => {
-            if (typeof a === 'object') {
-              try {
-                return JSON.stringify(a, null, 2);
-              } catch {
-                return String(a);
-              }
-            }
-            return String(a);
-          })
-          .join(' ')
-      );
-    };
-    console.warn = console.log;
-    console.error = (...args: unknown[]) => {
-      logs.push('Error: ' + args.map(String).join(' '));
-    };
-
     const codeToRun = editorRef.current?.getValue() ?? code;
 
     try {
-      const result = (0, eval)(codeToRun);
-      if (result !== undefined && logs.length === 0) {
-        logs.push(String(result));
+      const result = await runInSandbox(codeToRun, {
+        timeoutMs: 3000,
+        onLog: (type, args) => {
+          const prefix = type === 'error' ? 'Error: ' : '';
+          logs.push(
+            prefix +
+              args
+                .map((a) => {
+                  if (typeof a === 'object' && a !== null) {
+                    try {
+                      return JSON.stringify(a, null, 2);
+                    } catch {
+                      return String(a);
+                    }
+                  }
+                  return String(a);
+                })
+                .join(' ')
+          );
+        },
+      });
+
+      if (result.error && logs.length === 0) {
+        logs.push(`Error: ${result.error}`);
       }
     } catch (err) {
       logs.push(`Error: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
-      console.log = originalLog;
-      console.warn = originalWarn;
-      console.error = originalError;
       setOutput(logs.join('\n') || 'No output');
     }
   }, [code]);

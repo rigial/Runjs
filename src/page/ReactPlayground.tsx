@@ -112,10 +112,17 @@ function ReactWorkspace() {
   // Intercept window postMessage logs from Sandpack preview iframe to Luna console
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      // Sandpack preview runs in a sandboxed iframe with a distinct/null origin or same origin
-      if (event.origin !== 'null' && event.origin !== window.location.origin) {
+      // Strictly ensure message came from an iframe embedded in this page
+      const isIframeSource =
+        event.source &&
+        event.source !== window &&
+        Array.from(document.querySelectorAll('iframe')).some(
+          (frame) => frame.contentWindow === event.source
+        );
+      if (!isIframeSource) {
         return;
       }
+
       const data = event.data;
       if (data && typeof data === 'object') {
         if (data.type === 'console' && data.log) {

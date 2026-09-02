@@ -14,6 +14,12 @@ import {
 const MAX_STEPS = 500;
 const MAX_LOOP_ITERATIONS = 200;
 const MAX_STACK_DEPTH = 50;
+const restrictedBuiltinObjects = new WeakSet<object>();
+
+function createRestrictedBuiltin<T extends object>(value: T): T {
+  restrictedBuiltinObjects.add(value);
+  return Object.freeze(value);
+}
 
 interface Scope {
   parent: Scope | null;
@@ -40,13 +46,25 @@ function getVariable(scope: Scope, name: string): unknown {
   if (name === 'null') return null;
   if (name === 'NaN') return NaN;
   if (name === 'Infinity') return Infinity;
-  if (name === 'Math') return Math;
-  if (name === 'JSON') return JSON;
-  if (name === 'Array') return Array;
-  if (name === 'Object') return Object;
-  if (name === 'String') return String;
-  if (name === 'Number') return Number;
-  if (name === 'Boolean') return Boolean;
+  if (name === 'Math') {
+    return createRestrictedBuiltin({
+      max: Math.max,
+      min: Math.min,
+      floor: Math.floor,
+      ceil: Math.ceil,
+      round: Math.round,
+      abs: Math.abs,
+      sqrt: Math.sqrt,
+      random: Math.random,
+      PI: Math.PI,
+    });
+  }
+  if (name === 'JSON') {
+    return createRestrictedBuiltin({
+      stringify: (val: unknown) => JSON.stringify(val),
+      parse: (str: string) => JSON.parse(str),
+    });
+  }
   return undefined;
 }
 
@@ -135,6 +153,8 @@ export class Simulator {
   private activeLine: number | null = null;
   private activePanel: ExecutionStep['activePanel'] = null;
   private globalScope: Scope = createScope();
+  private safeFunctions: Set<unknown> = new Set();
+  private promiseConstructorRef: unknown = null;
 
   private generateId(prefix: string = 'item'): string {
     return `${prefix}_${this.idCounter++}`;
@@ -304,45 +324,75 @@ export class Simulator {
   }
 
   private initGlobalBuiltins(): void {
+    this.safeFunctions.clear();
+
     // console
+    const consoleLog = (...args: unknown[]) => this.handleConsole('log', args);
+    const consoleInfo = (...args: unknown[]) =>
+      this.handleConsole('info', args);
+    const consoleWarn = (...args: unknown[]) =>
+      this.handleConsole('warn', args);
+    const consoleError = (...args: unknown[]) =>
+      this.handleConsole('error', args);
+    this.safeFunctions.add(consoleLog);
+    this.safeFunctions.add(consoleInfo);
+    this.safeFunctions.add(consoleWarn);
+    this.safeFunctions.add(consoleError);
+
     this.globalScope.bindings.set('console', {
-      log: (...args: unknown[]) => this.handleConsole('log', args),
-      info: (...args: unknown[]) => this.handleConsole('info', args),
-      warn: (...args: unknown[]) => this.handleConsole('warn', args),
-      error: (...args: unknown[]) => this.handleConsole('error', args),
+      __isConsole: true,
+      log: consoleLog,
+      info: consoleInfo,
+      warn: consoleWarn,
+      error: consoleError,
     });
 
     // setTimeout
-    this.globalScope.bindings.set(
-      'setTimeout',
-      (cb: unknown, delay: unknown = 0, ...args: unknown[]) => {
-        return this.handleSetTimeout(cb, delay, args);
-      }
-    );
+    const setTimeoutFn = (
+      cb: unknown,
+      delay: unknown = 0,
+      ...args: unknown[]
+    ) => {
+      return this.handleSetTimeout(cb, delay, args);
+    };
+    this.safeFunctions.add(setTimeoutFn);
+    this.globalScope.bindings.set('setTimeout', setTimeoutFn);
 
     // setInterval (simulated for initial ticks)
-    this.globalScope.bindings.set(
-      'setInterval',
-      (cb: unknown, delay: unknown = 0, ...args: unknown[]) => {
-        return this.handleSetTimeout(cb, delay, args);
-      }
-    );
+    const setIntervalFn = (
+      cb: unknown,
+      delay: unknown = 0,
+      ...args: unknown[]
+    ) => {
+      return this.handleSetTimeout(cb, delay, args);
+    };
+    this.safeFunctions.add(setIntervalFn);
+    this.globalScope.bindings.set('setInterval', setIntervalFn);
 
     // clearTimeout / clearInterval
-    this.globalScope.bindings.set('clearTimeout', (id: unknown) => {
+    const clearTimeoutFn = (id: unknown) => {
       this.handleClearTimeout(id);
-    });
-    this.globalScope.bindings.set('clearInterval', (id: unknown) => {
+    };
+    this.safeFunctions.add(clearTimeoutFn);
+    this.globalScope.bindings.set('clearTimeout', clearTimeoutFn);
+
+    const clearIntervalFn = (id: unknown) => {
       this.handleClearTimeout(id);
-    });
+    };
+    this.safeFunctions.add(clearIntervalFn);
+    this.globalScope.bindings.set('clearInterval', clearIntervalFn);
 
     // queueMicrotask
-    this.globalScope.bindings.set('queueMicrotask', (cb: unknown) => {
+    const queueMicrotaskFn = (cb: unknown) => {
       this.handleQueueMicrotask(cb);
-    });
+    };
+    this.safeFunctions.add(queueMicrotaskFn);
+    this.globalScope.bindings.set('queueMicrotask', queueMicrotaskFn);
 
     // Promise constructor
     const PromiseConstructor = this.createPromiseConstructor();
+    this.promiseConstructorRef = PromiseConstructor;
+    this.safeFunctions.add(PromiseConstructor);
     this.globalScope.bindings.set('Promise', PromiseConstructor);
   }
 
@@ -516,6 +566,7 @@ export class Simulator {
         }
         this.thenCallbacks = [];
       };
+      self.safeFunctions.add(resolve);
 
       const reject = (reason: unknown) => {
         if (this.status !== 'pending') return;
@@ -536,6 +587,7 @@ export class Simulator {
         }
         this.thenCallbacks = [];
       };
+      self.safeFunctions.add(reject);
 
       if (typeof executor === 'function') {
         const execFrameId = self.generateId('frame');
@@ -593,6 +645,7 @@ export class Simulator {
           );
         }
       };
+      self.safeFunctions.add(resolveNext);
 
       const rejectNext = (rejReason: unknown) => {
         nextPromise.status = 'rejected';
@@ -610,6 +663,7 @@ export class Simulator {
           }
         }
       };
+      self.safeFunctions.add(rejectNext);
 
       if (this.status === 'resolved') {
         self.schedulePromiseMicrotask(
@@ -665,27 +719,35 @@ export class Simulator {
       );
     };
 
-    // Promise.resolve
-    (SimulatedPromiseClass as unknown as Record<string, unknown>).resolve =
-      function (val: unknown) {
-        const p = new (SimulatedPromiseClass as unknown as {
-          new (): SimulatedPromise;
-        })();
-        p.status = 'resolved';
-        p.value = val;
-        return p;
-      };
+    const resolveStatic = function (val: unknown) {
+      const p = new (SimulatedPromiseClass as unknown as {
+        new (): SimulatedPromise;
+      })();
+      p.status = 'resolved';
+      p.value = val;
+      return p;
+    };
 
-    // Promise.reject
+    const rejectStatic = function (reason: unknown) {
+      const p = new (SimulatedPromiseClass as unknown as {
+        new (): SimulatedPromise;
+      })();
+      p.status = 'rejected';
+      p.reason = reason;
+      return p;
+    };
+
+    (SimulatedPromiseClass as unknown as Record<string, unknown>).resolve =
+      resolveStatic;
     (SimulatedPromiseClass as unknown as Record<string, unknown>).reject =
-      function (reason: unknown) {
-        const p = new (SimulatedPromiseClass as unknown as {
-          new (): SimulatedPromise;
-        })();
-        p.status = 'rejected';
-        p.reason = reason;
-        return p;
-      };
+      rejectStatic;
+
+    self.safeFunctions.add(SimulatedPromiseClass);
+    self.safeFunctions.add(resolveStatic);
+    self.safeFunctions.add(rejectStatic);
+    self.safeFunctions.add(SimulatedPromiseClass.prototype.then);
+    self.safeFunctions.add(SimulatedPromiseClass.prototype.catch);
+    self.safeFunctions.add(SimulatedPromiseClass.prototype.finally);
 
     return SimulatedPromiseClass;
   }
@@ -1240,10 +1302,17 @@ export class Simulator {
 
       case 'ObjectExpression': {
         const properties = anyNode.properties as Array<Record<string, unknown>>;
-        const obj: Record<string, unknown> = {};
+        const obj: Record<string, unknown> = Object.create(null);
         for (const prop of properties) {
           const keyNode = prop.key as Record<string, unknown>;
           const key = String(keyNode.name || keyNode.value);
+          if (
+            key === '__proto__' ||
+            key === 'constructor' ||
+            key === 'prototype'
+          ) {
+            continue;
+          }
           const val = this.evaluateExpression(prop.value as acorn.Node, scope);
           obj[key] = val;
         }
@@ -1263,10 +1332,32 @@ export class Simulator {
             )
           : String(propNode.name);
 
+        if (
+          propName === '__proto__' ||
+          propName === 'constructor' ||
+          propName === 'prototype'
+        ) {
+          return undefined;
+        }
+
         if (obj === null || obj === undefined) return undefined;
         const val = obj[propName];
         if (typeof val === 'function') {
-          return val.bind(obj);
+          if (
+            Array.isArray(obj) ||
+            typeof obj === 'string' ||
+            (typeof obj === 'object' &&
+              obj !== null &&
+              restrictedBuiltinObjects.has(obj)) ||
+            obj === this.promiseConstructorRef ||
+            Boolean((obj as Record<string, unknown>)?.__isSimulatedPromise) ||
+            Boolean((obj as Record<string, unknown>)?.__isConsole)
+          ) {
+            const bound = val.bind(obj);
+            this.safeFunctions.add(bound);
+            return bound;
+          }
+          return undefined;
         }
         return val;
       }
@@ -1312,7 +1403,11 @@ export class Simulator {
           return this.evaluateExpression(arg, scope);
         });
 
-        if (typeof callee === 'function') {
+        // Only allow instantiating explicitly permitted constructors (e.g. simulated Promise)
+        if (
+          typeof callee === 'function' &&
+          callee === this.promiseConstructorRef
+        ) {
           return new (callee as { new (...a: unknown[]): unknown })(
             ...evalArgs
           );
@@ -1354,8 +1449,8 @@ export class Simulator {
           return this.callSimulatedFunction(simFunc, evalArgs);
         }
 
-        // Native/host function invocation (e.g. console.log, setTimeout, queueMicrotask)
-        if (typeof callee === 'function') {
+        // Native/simulation function invocation (must be explicitly registered in safeFunctions)
+        if (typeof callee === 'function' && this.safeFunctions.has(callee)) {
           return callee(...evalArgs);
         }
 

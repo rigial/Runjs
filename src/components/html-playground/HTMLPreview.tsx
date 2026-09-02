@@ -109,6 +109,13 @@ export const HTMLPreview = forwardRef<HTMLPreviewRef, HTMLPreviewProps>(
     // Listen for postMessage from the sandboxed iframe
     useEffect(() => {
       const handleMessage = (event: MessageEvent) => {
+        if (
+          !iframeRef.current ||
+          event.source !== iframeRef.current.contentWindow
+        ) {
+          return;
+        }
+
         const data = event.data;
         if (!data || typeof data !== 'object' || data.source !== SENDER_KEY) {
           return;

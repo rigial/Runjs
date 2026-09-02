@@ -1,22 +1,75 @@
-export function addInfiniteLoopProtection(code: string): string {
-  const MAX_ITERATIONS = 1500;
-  const loopProtectionCode = `
-        let __iterations = 0;
-        const __checkIterations = () => {
-          if (++__iterations > ${MAX_ITERATIONS}) {
-            throw new RangeError('Potential infinite loop: exceeded ${MAX_ITERATIONS} iterations.');
-          }
-        };
-      `;
+import * as acorn from 'acorn';
 
-  // Inject the protection code at the beginning
-  let protectedCode = loopProtectionCode + code;
+/** Injects a private, monotonic iteration budget into every JavaScript loop. */
+export function addInfiniteLoopProtection(
+  code: string,
+  maxIterations = 10000
+): string {
+  if (!code || !code.trim()) return code;
 
-  // Add iteration checks for 'for', 'while', and 'do-while' loops
-  protectedCode = protectedCode
-    .replace(/for\s*\((.*?)\)\s*{/g, `for ($1) { __checkIterations();`)
-    .replace(/while\s*\((.*?)\)\s*{/g, `while ($1) { __checkIterations();`)
-    .replace(/do\s*{/g, `do { __checkIterations();`);
+  const helper = `
+const __runjs_check_loop = (() => {
+  const counts = new Map();
+  return (id, max = ${maxIterations}) => {
+    const count = (counts.get(id) || 0) + 1;
+    counts.set(id, count);
+    if (count > max) {
+      throw new RangeError('Potential infinite loop detected: exceeded ' + max + ' iterations.');
+    }
+  };
+})();
+`;
 
-  return protectedCode;
+  try {
+    const program = acorn.parse(code, {
+      ecmaVersion: 'latest',
+      sourceType: 'script',
+    }) as unknown as { body: unknown[] };
+    const insertions = new Map<number, string[]>();
+    let loopId = 0;
+    const add = (position: number, text: string) => {
+      insertions.set(position, [...(insertions.get(position) || []), text]);
+    };
+    const visit = (value: unknown) => {
+      if (!value || typeof value !== 'object') return;
+      const node = value as Record<string, unknown>;
+      const type = node.type;
+      if (
+        type === 'ForStatement' ||
+        type === 'ForInStatement' ||
+        type === 'ForOfStatement' ||
+        type === 'WhileStatement' ||
+        type === 'DoWhileStatement'
+      ) {
+        const body = node.body as Record<string, unknown>;
+        const id = loopId++;
+        const check = `__runjs_check_loop(${id}, ${maxIterations});`;
+        if (body.type === 'BlockStatement') {
+          add((body.start as number) + 1, check);
+        } else {
+          add(body.start as number, `{${check}`);
+          add(body.end as number, `}`);
+        }
+      }
+      for (const child of Object.values(node)) {
+        if (Array.isArray(child)) child.forEach(visit);
+        else visit(child);
+      }
+    };
+    program.body.forEach(visit);
+
+    const points = [...insertions.keys()].sort((a, b) => b - a);
+    let transformed = code;
+    for (const point of points) {
+      transformed =
+        transformed.slice(0, point) +
+        (insertions.get(point) || []).join('') +
+        transformed.slice(point);
+    }
+    return loopId > 0 ? `${helper}\n${transformed}` : code;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Invalid JavaScript';
+    return `${helper}\nthrow new SyntaxError(${JSON.stringify(message)});`;
+  }
 }

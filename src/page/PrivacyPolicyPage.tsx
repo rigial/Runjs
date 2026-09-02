@@ -94,8 +94,12 @@ function PrivacyPolicyPage() {
               At no point is your code uploaded to, processed by, or stored on
               our servers.
             </strong>{' '}
-            If you disconnect from the internet, code execution in the
-            playgrounds continues to function offline.
+            Core editor runtimes and previously cached assets continue to
+            execute locally even if your device is disconnected from the
+            internet. However, features that depend on uncached external
+            resources (such as on-demand Monaco language workers or Sandpack
+            container packages fetched from public CDNs) require active internet
+            connectivity until they are retrieved and cached by your browser.
           </p>
         </>
       ),

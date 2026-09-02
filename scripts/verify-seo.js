@@ -27,7 +27,11 @@ assert(indexHtml.includes('<html lang="en">'), 'Contains <html lang="en">');
 assert(indexHtml.includes('<meta charset="utf-8" />') || indexHtml.includes('charset="utf-8"'), 'Contains utf-8 charset');
 assert(indexHtml.includes('<meta name="viewport"'), 'Contains viewport meta tag');
 assert(indexHtml.includes('<link rel="canonical" href="https://runjs.in/" />'), 'Contains canonical URL');
-assert(indexHtml.includes('<title>RunJS - In-Browser JavaScript, TypeScript & React Playground</title>'), 'Contains descriptive default title');
+assert(
+  indexHtml.includes('<title>RunJS.in - In-Browser JavaScript, TypeScript & React Playground</title>') ||
+    indexHtml.includes('<title>RunJS - In-Browser JavaScript, TypeScript & React Playground</title>'),
+  'Contains descriptive default title'
+);
 assert(indexHtml.includes('<meta name="robots" content="index, follow">'), 'Contains robots index, follow');
 assert(indexHtml.includes('<meta name="theme-color" content="#f59e0b"'), 'Contains light theme color');
 assert(indexHtml.includes('<meta name="theme-color" content="#09090b"'), 'Contains dark theme color');

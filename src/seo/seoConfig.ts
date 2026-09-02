@@ -133,8 +133,8 @@ export function getWebSiteSchema(): SchemaOrgData {
     description: SEO_CONFIG.defaultDescription,
     publisher: {
       '@type': 'Organization',
-      name: 'Rigial',
-      url: 'https://rigial.com/',
+      name: 'RunJS',
+      url: 'https://runjs.in/',
       logo: {
         '@type': 'ImageObject',
         url: getAbsoluteImageUrl('/RunJS-512.png'),

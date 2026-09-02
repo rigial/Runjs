@@ -23,20 +23,12 @@ function Footer() {
             About & Credits
           </Link>
           <Link
-            to="https://github.com/mrkishorekumar"
+            to="https://www.linkedin.com/in/mrkishorekumar/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-[var(--text-primary)] transition-colors hover:underline"
           >
-            GitHub
-          </Link>
-          <Link
-            to="https://rigial.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[var(--text-primary)] transition-colors hover:underline"
-          >
-            Rigial.com
+            LinkedIn
           </Link>
           <span>© {new Date().getFullYear()}</span>
         </div>

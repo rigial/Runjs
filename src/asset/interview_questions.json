@@ -1,6 +1,11 @@
 [
   {
+    "id": 1,
     "question": "What are the data types present in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Data Types", "Primitives", "Symbols"],
+    "tip": "Remember that null is primitive even though typeof null returns \"object\" due to historical legacy in JavaScript.",
     "answer": [
       {
         "type": "para",
@@ -48,7 +53,12 @@
     ]
   },
   {
+    "id": 2,
     "question": "What is the difference between null and undefined?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["null", "undefined", "Types"],
+    "tip": "undefined means declared but not assigned; null is an intentional assignment representing no value.",
     "answer": [
       {
         "type": "para",
@@ -184,7 +194,12 @@
     ]
   },
   {
+    "id": 3,
     "question": "How does JavaScript handle type coercion?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Coercion", "Type Conversion", "Operators"],
+    "tip": "Double equals (==) invokes Abstract Equality Comparison with type coercion; triple equals (===) compares without coercion.",
     "answer": [
       {
         "type": "para",
@@ -256,7 +271,12 @@
     ]
   },
   {
+    "id": 4,
     "question": "Explain the concept of hoisting in JavaScript.",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Hoisting", "Execution Context", "Scope"],
+    "tip": "Function declarations are hoisted with their body, var is hoisted as undefined, and let/const are in the Temporal Dead Zone (TDZ).",
     "answer": [
       {
         "type": "para",
@@ -420,7 +440,12 @@
     ]
   },
   {
+    "id": 5,
     "question": "What is the scope in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Scope", "Lexical Scope", "Block Scope"],
+    "tip": "JavaScript uses lexical (static) scoping where variable accessibility is determined by its physical location in the source code.",
     "answer": [
       {
         "type": "para",
@@ -526,7 +551,12 @@
     ]
   },
   {
+    "id": 6,
     "question": "What is the difference between `==` and `===`?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Equality", "Operators", "Comparison"],
+    "tip": "Always default to === in production code to avoid subtle bugs from implicit type conversion.",
     "answer": [
       {
         "type": "para",
@@ -597,7 +627,12 @@
     ]
   },
   {
+    "id": 7,
     "question": "Describe closure in JavaScript. Can you give an example?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Closures", "Scope", "Memory"],
+    "tip": "A closure is the combination of a function bundled with references to its surrounding lexical state (lexical environment).",
     "answer": [
       {
         "type": "para",
@@ -705,7 +740,12 @@
     ]
   },
   {
+    "id": 8,
     "question": "What is the 'this keyword' and how does its context change?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["this", "Context", "Binding"],
+    "tip": "The value of \"this\" depends on how a function is called (invoked), not where it was declared, except for arrow functions.",
     "answer": [
       {
         "type": "para",
@@ -786,7 +826,12 @@
     ]
   },
   {
+    "id": 9,
     "question": "What are arrow functions and how do they differ from regular functions?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Arrow Functions", "ES6", "Functions"],
+    "tip": "Arrow functions do not have their own \"this\", \"arguments\", \"super\", or \"new.target\" bindings.",
     "answer": [
       {
         "type": "para",
@@ -879,7 +924,12 @@
     ]
   },
   {
+    "id": 10,
     "question": "What are template literals in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Template Literals", "ES6", "Strings"],
+    "tip": "Template literals also support tagged templates, which power styling libraries like styled-components.",
     "answer": [
       {
         "type": "para",
@@ -966,7 +1016,12 @@
     ]
   },
   {
+    "id": 11,
     "question": "What is a higher-order function in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Higher-Order Functions", "Functional Programming"],
+    "tip": "A higher-order function is any function that accepts another function as an argument or returns a function.",
     "answer": [
       {
         "type": "para",
@@ -1030,7 +1085,12 @@
     ]
   },
   {
+    "id": 12,
     "question": "Can functions be assigned as values to variables in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["First-Class Functions", "Functions"],
+    "tip": "First-class citizens mean functions can be stored in variables, passed as arguments, and returned from other functions.",
     "answer": [
       {
         "type": "para",
@@ -1086,7 +1146,12 @@
     ]
   },
   {
+    "id": 13,
     "question": "How do functional programming concepts apply in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Functional Programming", "Immutability", "Pure Functions"],
+    "tip": "Core functional tenets in JS: pure functions (no side effects), immutability, and function composition.",
     "answer": [
       {
         "type": "para",
@@ -1128,7 +1193,12 @@
     ]
   },
   {
+    "id": 14,
     "question": "What are IIFEs (Immediately Invoked Function Expressions)?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["IIFE", "Scope", "Modularity"],
+    "tip": "IIFEs were the primary way to create private scope before ES6 block scoping and ES modules.",
     "answer": [
       {
         "type": "para",
@@ -1245,7 +1315,12 @@
     ]
   },
   {
+    "id": 15,
     "question": "How do you create private variables in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Private Variables", "Encapsulation", "ES2022"],
+    "tip": "Modern JS supports private class fields prefixed with \"#\" as well as traditional closure encapsulation.",
     "answer": [
       {
         "type": "para",
@@ -1391,6 +1466,3021 @@
           "<img src=\"https://firebasestorage.googleapis.com/v0/b/dev-stack-app.appspot.com/o/github-blog-img%2Fweb-and-mobile-development-github-img.jpg?alt=media&token=1b5eeecc-c9fb-49f5-9e03-50cf2e309555\" alt=\"web-and-mobile-development\" width=\"100%\">",
           "</a>",
           "</p>"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "question": "What is the difference between call(), apply(), and bind() in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["this", "Functions", "Methods"],
+    "tip": "Mnemonic: 'A' for Array with apply(), 'C' for Comma-separated with call(), 'B' for Bind returns a Brand-new function.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "call(), apply(), and bind() are built-in methods on Function.prototype used to explicitly set the `this` context when executing a function."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Differences"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "call(): Invokes the function immediately with a specified `this` context and arguments passed individually separated by commas.",
+          "apply(): Invokes the function immediately with a specified `this` context, but arguments are passed as a single array or array-like object.",
+          "bind(): Does NOT invoke the function immediately. Instead, it returns a new bound function with the `this` context permanently locked and optional pre-set arguments (partial application/currying)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "const person = { name: 'Kishore' };",
+          "",
+          "function greet(greeting, punctuation) {",
+          "  return `${greeting}, ${this.name}${punctuation}`;",
+          "}",
+          "",
+          "// 1. call — pass args individually",
+          "console.log(greet.call(person, 'Hello', '!')); // 'Hello, Kishore!'",
+          "",
+          "// 2. apply — pass args in an array",
+          "console.log(greet.apply(person, ['Hi', '?'])); // 'Hi, Kishore?'",
+          "",
+          "// 3. bind — returns a new reusable function",
+          "const greetKishore = greet.bind(person, 'Welcome');",
+          "console.log(greetKishore('.')); // 'Welcome, Kishore.'"
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Common Interview Scenarios"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Borrowing methods: Math.max.apply(null, [1, 5, 2]) before spread syntax was available.",
+          "Event handlers in React Class components: this.handleClick = this.handleClick.bind(this) in the constructor.",
+          "Currying / partial application: Creating specialized functions by pre-filling initial arguments with bind()."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "question": "What is the difference between Deep Copy and Shallow Copy in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Objects", "Memory", "Immutability"],
+    "tip": "Use structuredClone() for native deep copying in modern browsers and Node 17+. Fall back to JSON.parse(JSON.stringify()) only for plain objects without methods, Dates, or circular references.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "When copying reference types (objects and arrays), shallow copy duplicates only the top-level properties. Nested objects still share the same memory reference. A deep copy recursively duplicates every nested object, ensuring complete independence from the original."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Shallow Copy Methods"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Spread syntax: `{ ...obj }` or `[ ...arr ]`",
+          "Object.assign(): `Object.assign({}, obj)`",
+          "Array methods: `arr.slice()` or `Array.from(arr)`",
+          "Pitfall: Mutating nested properties in a shallow copy will unintentionally mutate the original object."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Deep Copy Methods"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "structuredClone(obj): Modern browser and Node.js built-in standard. Handles circular references, Dates, RegExps, Maps, Sets, and TypedArrays.",
+          "JSON.parse(JSON.stringify(obj)): Quick and widely supported, but drops functions, undefined, Symbols, and converts Dates to ISO strings; throws on circular references.",
+          "Lodash cloneDeep(): Robust third-party utility for complex legacy enterprise environments."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Demonstration"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "const original = {",
+          "  name: 'RunJS',",
+          "  details: { version: '2.0', tags: ['fast', 'modern'] }",
+          "};",
+          "",
+          "// Shallow Copy",
+          "const shallow = { ...original };",
+          "shallow.details.version = '3.0'; // ⚠️ MUTATES original.details.version!",
+          "console.log(original.details.version); // '3.0'",
+          "",
+          "// Deep Copy via structuredClone",
+          "const deep = structuredClone(original);",
+          "deep.details.version = '4.0';",
+          "console.log(original.details.version); // Still '3.0' (safe!)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "question": "Explain the JavaScript Event Loop (Call Stack, Web APIs, Callback Queue, and Microtask Queue).",
+    "category": "JavaScript",
+    "difficulty": "hard",
+    "tags": ["Event Loop", "Asynchronous", "Microtasks", "V8"],
+    "tip": "Always remember: Microtasks (Promises, queueMicrotask) run IMMEDIATELY after the current synchronous script finishes and BEFORE any Macrotask (setTimeout, setInterval, I/O).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "JavaScript is a single-threaded runtime with a single Call Stack. To handle asynchronous operations without freezing the UI, it relies on the browser's Web APIs (or libuv in Node.js) and the Event Loop."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Core Components"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Call Stack: LIFO (Last In, First Out) stack where synchronous JavaScript functions are pushed and popped as they execute.",
+          "Web APIs / C++ Background Threads: Handles asynchronous tasks (timers, fetch requests, DOM events) off the main thread.",
+          "Microtask Queue: High priority queue for Promise callbacks (.then, .catch, .finally), queueMicrotask(), and MutationObserver. Processed entirely until empty before the next rendering or macrotask.",
+          "Macrotask (Task) Queue: Lower priority queue for setTimeout, setInterval, setImmediate, and I/O callbacks.",
+          "Event Loop: Continuously checks if the Call Stack is empty. When empty, it empties the ENTIRE Microtask Queue, executes rendering if needed, then dequeues ONE macrotask from the Task Queue and repeats."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Execution Order Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "console.log('1: Sync start');",
+          "",
+          "setTimeout(() => {",
+          "  console.log('4: Macrotask (setTimeout)');",
+          "}, 0);",
+          "",
+          "Promise.resolve().then(() => {",
+          "  console.log('3: Microtask (Promise)');",
+          "});",
+          "",
+          "console.log('2: Sync end');",
+          "",
+          "// Output Order:",
+          "// 1: Sync start",
+          "// 2: Sync end",
+          "// 3: Microtask (Promise)",
+          "// 4: Macrotask (setTimeout)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "question": "What are Microtasks and Macrotasks, and how do their execution priorities differ?",
+    "category": "JavaScript",
+    "difficulty": "hard",
+    "tags": ["Event Loop", "Microtasks", "Macrotasks", "Async"],
+    "tip": "A microtask that schedules another microtask will delay the next macrotask and UI rendering until all microtasks are drained, potentially causing starvation.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "In the JavaScript event loop, asynchronous tasks are categorized into Microtasks and Macrotasks, each managed by separate queues with strictly defined priorities."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Microtasks vs Macrotasks Comparison"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Microtasks include: Promise reactions (.then/.catch/.finally), async/await continuations, queueMicrotask(), MutationObserver, and process.nextTick() (in Node.js).",
+          "Macrotasks include: setTimeout, setInterval, setImmediate, requestAnimationFrame, and I/O callbacks.",
+          "Execution rule: The browser executes one macrotask, then drains the ENTIRE microtask queue before updating the DOM or picking the next macrotask.",
+          "Starvation hazard: Infinite recursive microtasks (e.g. queueMicrotask loop) will freeze the browser tab and prevent rendering, whereas recursive setTimeout calls allow the browser to breathe between turns."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Walkthrough"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "setTimeout(() => console.log('Timeout 1'), 0);",
+          "",
+          "Promise.resolve().then(() => {",
+          "  console.log('Promise 1');",
+          "  queueMicrotask(() => console.log('Nested Microtask'));",
+          "});",
+          "",
+          "setTimeout(() => console.log('Timeout 2'), 0);",
+          "",
+          "// Output:",
+          "// Promise 1",
+          "// Nested Microtask  (runs before any Timeout!)",
+          "// Timeout 1",
+          "// Timeout 2"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "question": "Explain async/await vs Promises. How does the Event Loop handle them?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Async", "Promises", "ES8", "Event Loop"],
+    "tip": "Under the hood, async/await is syntactic sugar built over native Promises and Generators. Code after 'await' runs as a microtask.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "async/await was introduced in ES2017 (ES8) as syntactic sugar on top of Promises to allow asynchronous code to be written and read like synchronous code with linear control flow."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Comparisons"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Syntax: Promises use .then() and .catch() chains, which can lead to nested callbacks or verbose chaining. async/await uses standard try/catch blocks and imperative control flow.",
+          "Return value: An async function ALWAYS returns a Promise, automatically wrapping non-promise return values in Promise.resolve().",
+          "Event Loop behavior: When the JavaScript engine encounters `await expr`, it suspends execution of the async function, evaluates the expression, and schedules the resumption as a Microtask on the Promise resolution.",
+          "Error handling: With Promises, errors are caught in .catch() chains. With async/await, errors are caught with standard try...catch blocks, enabling uniform error handling for both synchronous and asynchronous operations."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Promise Syntax",
+          "function getUserData(id) {",
+          "  return fetch(`/api/users/${id}`)",
+          "    .then(res => res.json())",
+          "    .catch(err => console.error(err));",
+          "}",
+          "",
+          "// async/await Syntax",
+          "async function getUserDataAsync(id) {",
+          "  try {",
+          "    const res = await fetch(`/api/users/${id}`);",
+          "    return await res.json();",
+          "  } catch (err) {",
+          "    console.error(err);",
+          "  }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "question": "What is prototype inheritance and how does the prototype chain work?",
+    "category": "JavaScript",
+    "difficulty": "hard",
+    "tags": ["Prototypes", "Inheritance", "OOP"],
+    "tip": "In JavaScript, objects inherit directly from other objects via their [[Prototype]] link (__proto__). Classes in ES6 are syntactic sugar over this prototype-based delegation.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Unlike class-based languages (like Java or C++), JavaScript uses prototype-based delegation. Every JavaScript object has an internal link to another object called its prototype (accessible via Object.getPrototypeOf() or __proto__)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["How the Prototype Chain Works"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Property lookup: When reading a property on an object (e.g. `obj.prop`), JS checks the object itself. If not found, it traverses up to `obj.__proto__`, then `obj.__proto__.__proto__`, until it finds it or hits `null`.",
+          "Top of the chain: `Object.prototype.__proto__ === null`. If a property is not found anywhere up to `null`, JavaScript returns `undefined`.",
+          "Memory efficiency: Methods defined on the prototype are shared among all instances, avoiding recreating the same function closure for every object.",
+          "Shadowing: Defining a property with the same name on the instance shadows (overrides) the property on the prototype without modifying the prototype itself."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function Animal(name) {",
+          "  this.name = name;",
+          "}",
+          "Animal.prototype.speak = function() {",
+          "  return `${this.name} makes a sound.`;",
+          "};",
+          "",
+          "function Dog(name, breed) {",
+          "  Animal.call(this, name); // Call super constructor",
+          "  this.breed = breed;",
+          "}",
+          "// Set up prototype chain",
+          "Dog.prototype = Object.create(Animal.prototype);",
+          "Dog.prototype.constructor = Dog;",
+          "",
+          "const d = new Dog('Buddy', 'Golden');",
+          "console.log(d.speak()); // 'Buddy makes a sound.'",
+          "console.log(d instanceof Animal); // true"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "question": "Difference between let, const, and var. Explain hoisting and the Temporal Dead Zone (TDZ).",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Variables", "Scope", "TDZ", "ES6"],
+    "tip": "Always prefer 'const' by default; use 'let' when re-assignment is needed; avoid 'var' in modern JavaScript.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "JavaScript provides three variable declaration keywords: `var` (ES5 and earlier) and `let`/`const` (introduced in ES6). They differ in scope, re-assignment, and hoisting behavior."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Comparison Table"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Scope: `var` is function-scoped (or globally scoped if declared outside a function). `let` and `const` are block-scoped (scoped to the nearest `{ }` pair).",
+          "Re-assignment: `var` and `let` can be re-assigned. `const` cannot be re-assigned once initialized (though object properties inside a const object can still be mutated).",
+          "Re-declaration: `var` allows re-declaration within the same scope. `let` and `const` throw a SyntaxError if re-declared.",
+          "Global Object Property: Global `var` declarations attach to `window` (in browsers). `let` and `const` do not attach to `window`.",
+          "Temporal Dead Zone (TDZ): `var` is hoisted and initialized to `undefined`. `let` and `const` are hoisted to the top of their block, but remain uninitialized until their declaration is evaluated. Accessing them before that point throws a `ReferenceError`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["TDZ Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// var hoisting",
+          "console.log(a); // undefined",
+          "var a = 10;",
+          "",
+          "// let TDZ",
+          "console.log(b); // ReferenceError: Cannot access 'b' before initialization",
+          "let b = 20;"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "question": "What are generator functions in JavaScript and when should you use them?",
+    "category": "JavaScript",
+    "difficulty": "hard",
+    "tags": ["Generators", "Iterators", "ES6", "Control Flow"],
+    "tip": "Generators are ideal for lazy evaluation (generating large or infinite sequences on demand without consuming memory) and building state machines.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "A generator function is a special function defined with `function*` that can be paused mid-execution using the `yield` keyword and resumed later by calling its iterator's `.next()` method."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Concepts"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Execution pausing: When invoked, a generator does not run immediately. It returns an IterableIterator object.",
+          "yield: Pauses execution and returns `{ value: result, done: false }`.",
+          "Two-way communication: Arguments passed to `.next(arg)` replace the value of the yield expression where the generator was suspended.",
+          "Lazy evaluation: Generates values on-the-fly, allowing infinite data streams (e.g. unique ID generator, Fibonacci sequence) without running out of memory."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function* idGenerator() {",
+          "  let id = 1;",
+          "  while (true) {",
+          "    yield id++;",
+          "  }",
+          "}",
+          "",
+          "const gen = idGenerator();",
+          "console.log(gen.next().value); // 1",
+          "console.log(gen.next().value); // 2",
+          "console.log(gen.next().value); // 3"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "question": "How does event delegation work in JavaScript and why is it efficient?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["DOM", "Events", "Performance"],
+    "tip": "Event delegation leverages Event Bubbling: attaching a single listener to a parent container instead of hundreds of listeners to child elements.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Event Delegation is a design pattern where instead of attaching event listeners to individual child elements, you attach a single event listener to their common parent container."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["How It Works"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Event Bubbling: When an event occurs on an element (e.g. a button click), it first runs on that element, then bubbles up through its parents to the document root.",
+          "event.target: References the actual child element that was clicked or triggered the event.",
+          "event.currentTarget: References the parent element where the listener was attached.",
+          "Element.matches() or closest(): Used inside the parent handler to verify if the clicked target matches the desired selector."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Why It Is Efficient"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Memory footprint: 1 event listener on a `<ul>` instead of 10,000 listeners on `<li>` tags saves substantial browser memory.",
+          "Dynamic elements: Automatically handles newly added or deleted child elements without re-binding listeners."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "const list = document.querySelector('#item-list');",
+          "",
+          "list.addEventListener('click', (e) => {",
+          "  const button = e.target.closest('.delete-btn');",
+          "  if (button && list.contains(button)) {",
+          "    const itemId = button.dataset.id;",
+          "    console.log('Deleted item:', itemId);",
+          "  }",
+          "});"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "question": "Explain debouncing and throttling with real-world use cases.",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Performance", "Debounce", "Throttle", "Optimization"],
+    "tip": "Debounce = 'Wait until the user stops typing for X ms'. Throttle = 'Execute at most once every X ms during continuous action'.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Debouncing and Throttling are two rate-limiting techniques used to control how frequently an expensive function is executed during high-frequency events (scroll, resize, keystrokes)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Debouncing"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Concept: Postpones function execution until a specified delay has elapsed since the LAST time the event was triggered.",
+          "Use case: Search input autocomplete / typeahead, form input validation, window resize recalculations."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Throttling"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Concept: Guarantees that the function will execute at a regular interval of at most once every X milliseconds, regardless of how many times the event fires.",
+          "Use case: Infinite scroll position tracking, games/animations (60fps limit), mousemove drawing tools."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Implementation Code"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Debounce implementation",
+          "function debounce(fn, delay) {",
+          "  let timer;",
+          "  return function (...args) {",
+          "    clearTimeout(timer);",
+          "    timer = setTimeout(() => fn.apply(this, args), delay);",
+          "  };",
+          "}",
+          "",
+          "// Throttle implementation",
+          "function throttle(fn, limit) {",
+          "  let inThrottle = false;",
+          "  return function (...args) {",
+          "    if (!inThrottle) {",
+          "      fn.apply(this, args);",
+          "      inThrottle = true;",
+          "      setTimeout(() => (inThrottle = false), limit);",
+          "    }",
+          "  };",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "question": "Difference between map(), filter(), reduce(), forEach(), and find() in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Arrays", "Functional Programming", "ES6"],
+    "tip": "forEach() returns undefined and is for side-effects; map() returns a new transformed array; reduce() accumulates into any single value.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "JavaScript Array.prototype provides expressive functional methods to iterate over, transform, filter, and accumulate array elements without mutating the original array."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Method Breakdown"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "forEach(): Iterates over each element and executes a callback. Always returns undefined. Used exclusively for side-effects (e.g. logging, DOM manipulation).",
+          "map(): Transforms every element in the array using a callback and returns a NEW array of the exact same length.",
+          "filter(): Tests each element with a predicate function and returns a NEW array containing only elements that return truthy.",
+          "find(): Returns the FIRST element that satisfies the testing function, or undefined if no elements match.",
+          "reduce(): Applies an accumulator callback over each element from left to right to reduce the array down to a single value (number, object, or array)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Examples"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "const nums = [1, 2, 3, 4, 5];",
+          "",
+          "const doubled = nums.map(n => n * 2); // [2, 4, 6, 8, 10]",
+          "const evens = nums.filter(n => n % 2 === 0); // [2, 4]",
+          "const firstEven = nums.find(n => n % 2 === 0); // 2",
+          "const sum = nums.reduce((acc, curr) => acc + curr, 0); // 15"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "question": "What is currying in JavaScript and what problems does it solve?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Functional Programming", "Currying", "Closures"],
+    "tip": "Currying transforms f(a, b, c) into f(a)(b)(c), enabling partial application and function composition.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Currying is a functional programming technique where a function with multiple arguments is transformed into a sequence of functions, each taking a single argument."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Benefits & Real-World Use Cases"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Partial application: Pre-configure a function with common arguments and reuse it across multiple calls.",
+          "Code reusability: Avoid repeating arguments (e.g., logging levels, API baseUrl configurations).",
+          "Function composition: Easier to compose smaller single-argument functions together into pipelines."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Non-curried function",
+          "const log = (level, message) => `[${level.toUpperCase()}] ${message}`;",
+          "",
+          "// Curried version",
+          "const curriedLog = (level) => (message) => `[${level.toUpperCase()}] ${message}`;",
+          "",
+          "const infoLog = curriedLog('info');",
+          "const errorLog = curriedLog('error');",
+          "",
+          "console.log(infoLog('Server started on port 3000'));",
+          "console.log(errorLog('Database connection failed'));"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "question": "Difference between nullish coalescing (??) and logical OR (||)?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Operators", "ES2020", "Falsy"],
+    "tip": "Use ?? when 0, false, or '' are valid intentional values, and you only want fallback on null or undefined.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Both operators provide a fallback value when the left operand meets certain conditions, but they differ fundamentally in what they consider 'absent'."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Comparison"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Logical OR (`||`): Returns the right-hand operand if the left operand is ANY falsy value (`false`, `0`, `''`, `NaN`, `null`, `undefined`).",
+          "Nullish Coalescing (`??`): Returns the right-hand operand ONLY if the left operand is nullish (`null` or `undefined`). Falsy values like `0`, `false`, and `''` are retained."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "const userCount = 0;",
+          "const fallbackOr = userCount || 10; // 10 (Incorrect! 0 was replaced)",
+          "const fallbackNullish = userCount ?? 10; // 0 (Correct!)",
+          "",
+          "const emptyText = '';",
+          "console.log(emptyText || 'Default'); // 'Default'",
+          "console.log(emptyText ?? 'Default'); // ''"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "question": "How does Garbage Collection work in JavaScript, and how do you prevent memory leaks?",
+    "category": "JavaScript",
+    "difficulty": "hard",
+    "tags": ["Memory", "Garbage Collection", "Performance", "Optimization"],
+    "tip": "JavaScript engines use the 'Mark-and-Sweep' algorithm. Anything not reachable from the GC roots (global object, execution stack) is collected.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "JavaScript manages memory automatically through automatic garbage collection (GC), primarily utilizing the Mark-and-Sweep algorithm."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["How Mark-and-Sweep Works"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Roots: The garbage collector starts from 'roots' (the global window object, currently executing function scopes and local variables).",
+          "Mark phase: Traverses all references recursively and marks every reachable object as 'alive'.",
+          "Sweep phase: Unmarked objects (unreachable from roots) have their memory reclaimed.",
+          "Cycles: Unlike old reference counting, Mark-and-Sweep cleanly collects circular references if the entire cycle is disconnected from the root."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Common Causes of Memory Leaks"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Accidental global variables: `function foo() { bar = 'leak'; }` without let/const attaches to `window`.",
+          "Forgotten timers & intervals: `setInterval` running forever while referencing closed-over variables.",
+          "Uncleared DOM event listeners: Not removing listeners when removing DOM elements.",
+          "Detached DOM tree references: Keeping a JavaScript variable pointing to an element deleted from the DOM.",
+          "Unbounded caches and Maps: Use `WeakMap` or `WeakSet` so keys can be garbage collected when other references disappear."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["How to Find Memory Leaks"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Open Chrome DevTools → Memory panel.",
+          "Take a Heap Snapshot before and after performing an action (e.g. opening and closing a modal).",
+          "Compare snapshots using the 'Comparison' view and look for detached DOM trees or growing arrays."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "question": "Difference between setTimeout and setInterval, and why does setInterval drift?",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "tags": ["Timers", "Event Loop", "Drift"],
+    "tip": "Prefer recursive setTimeout over setInterval for consistent delay between asynchronous executions.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Both setTimeout and setInterval are timer functions provided by the host environment (browser / Node.js), but they schedule execution differently."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Core Difference"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "setTimeout(fn, delay): Executes the callback once after at least `delay` milliseconds.",
+          "setInterval(fn, delay): Repeatedly queues the callback every `delay` milliseconds until cleared with `clearInterval()`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Why setInterval Drifts and Stacks"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Interval timer measures time between QUEUING, not execution finish time. If an API call or heavy computation takes 300ms on a 200ms interval, tasks bunch up or drift over time.",
+          "Recursive setTimeout solution: Guarantees exact delay between the completion of one run and the start of the next."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Recursive setTimeout Pattern"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Precise, non-drifting interval loop:",
+          "function pollServer() {",
+          "  fetch('/api/status')",
+          "    .then(res => res.json())",
+          "    .then(data => console.log('Data:', data))",
+          "    .catch(err => console.error('Error:', err))",
+          "    .finally(() => {",
+          "      // Next poll starts 3000ms AFTER this request finishes",
+          "      setTimeout(pollServer, 3000);",
+          "    });",
+          "}",
+          "setTimeout(pollServer, 3000);"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "question": "What is React and why is it efficient?",
+    "category": "React",
+    "difficulty": "easy",
+    "tags": ["React", "Virtual DOM", "Declarative"],
+    "tip": "Highlight React's declarative nature, component reusability, Virtual DOM reconciliation, and unidirectional data flow.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "React is an open-source JavaScript library developed by Facebook for building fast, interactive user interfaces based on composable, reusable components."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Why React is Efficient"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Virtual DOM: Instead of manipulating the heavy real browser DOM directly, React keeps a lightweight JavaScript representation of the UI in memory.",
+          "Reconciliation (Diffing): When state changes, React compares the new Virtual DOM with the previous snapshot using an O(n) heuristic diffing algorithm and batches only the minimum necessary real DOM updates.",
+          "Fiber Architecture: React 16+ breaks rendering work into incremental units (fibers), allowing work to be paused, prioritized, or aborted without blocking the browser main thread.",
+          "Declarative UI: You declare how the UI should look for a given state, and React handles the low-level DOM mutations automatically."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "question": "How does React work internally (Virtual DOM, Fiber architecture, and Reconciliation)?",
+    "category": "React",
+    "difficulty": "hard",
+    "tags": ["Virtual DOM", "Fiber", "Reconciliation", "Internals"],
+    "tip": "React rendering has two main phases: Render phase (pure, async, interruptible fiber tree calculation) and Commit phase (synchronous DOM mutation).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "React's internal engine reconciles UI state changes into browser DOM operations through three core systems: the Virtual DOM, the Reconciliation Diffing algorithm, and the Fiber reconciler."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["1. The Virtual DOM Tree"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "When JSX is compiled, it transforms into `React.createElement()` calls that return plain JavaScript objects describing type, props, and children.",
+          "Manipulating JavaScript objects is orders of magnitude faster than triggering browser layout reflows and repaints."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["2. Fiber Reconciler & The Two Phases"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Render Phase (Asynchronous / Interruptible): React traverses the fiber work-in-progress tree, determines what changed, and marks fibers with effect tags (Placement, Update, Deletion). High priority user interactions (like typing) can interrupt lower priority rendering.",
+          "Commit Phase (Synchronous): React applies all queued DOM mutations to the real browser DOM in one batch, then runs layout effects and effect hooks."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["3. Diffing Assumptions (O(n) Heuristics)"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Different element types produce completely different trees (e.g., replacing `<div>` with `<span>` unmounts the old subtree).",
+          "Keys identify which child elements remain stable across renders in dynamic lists, preventing unnecessary node re-creations."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "question": "What is the difference between state, props, and context in React?",
+    "category": "React",
+    "difficulty": "easy",
+    "tags": ["State", "Props", "Context", "Data Flow"],
+    "tip": "Props are external & read-only; State is internal & mutable; Context is global broadcast across a subtree.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "React manages data flow across components using three foundational constructs: Props, Local State, and Context."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Comparison Breakdown"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Props (Properties): Passed from parent to child component. Strictly read-only (immutable from the child's perspective). Used to configure components or pass callbacks.",
+          "State: Managed internally by a component using `useState` or `useReducer`. When state updates, the component and its children re-render.",
+          "Context: Provides a way to share data globally across an entire component subtree without having to manually pass props at every level ('prop drilling'). Best for theme, user auth, or language settings."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Summary Table"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Scope: Props (Parent-to-child) | State (Component local) | Context (Subtree broadcast)",
+          "Mutability: Props (Read-only) | State (Mutable via setter) | Context (Mutable via Provider value)",
+          "Initiator: Props (Parent) | State (Component itself) | Context (Context Provider)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "question": "How do you prevent unnecessary re-renders in React?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Optimization", "Re-renders", "Performance"],
+    "tip": "Remember: Re-rendering in React is fast by default. Don't prematurely optimize with memo unless profiling reveals actual performance bottlenecks.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "In React, a component re-renders whenever its state changes, its parent re-renders, or context it subscribes to changes. Unnecessary re-renders of heavy components can be mitigated using established patterns."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Strategies"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "React.memo(): Wraps a component to perform a shallow comparison of its props. Skips re-rendering if props have not changed.",
+          "useCallback(): Caches function definitions between renders to prevent breaking reference equality on callback props passed to memoized children.",
+          "useMemo(): Caches the result of an expensive calculation or stable object reference.",
+          "Component Composition (Push State Down / Lift Content Up): Move fast-changing state into isolated leaf components, or pass children as props so the parent doesn't re-render children.",
+          "Context Splitting: Separate state context from dispatch context so components that only dispatch actions don't re-render when state changes."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Composition Optimization Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Instead of re-rendering HeavyChild on every scroll:",
+          "function ScrollContainer({ children }) {",
+          "  const [scrollPos, setScrollPos] = useState(0);",
+          "  return (",
+          "    <div onScroll={(e) => setScrollPos(e.currentTarget.scrollTop)}>",
+          "      <span>Position: {scrollPos}</span>",
+          "      {/* children does NOT re-render because its props didn't change! */}",
+          "      {children}",
+          "    </div>",
+          "  );",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "question": "When would you use useMemo() vs useCallback() in real production projects?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Hooks", "useMemo", "useCallback", "Optimization"],
+    "tip": "useMemo caches a computed VALUE; useCallback caches a FUNCTION instance. useCallback(fn, deps) is equivalent to useMemo(() => fn, deps).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "`useMemo` and `useCallback` are React optimization hooks designed to preserve referential identity and avoid redundant computations between renders."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["When to use useMemo()"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Expensive computations: Filtering, sorting, or mapping over large datasets (e.g. 5,000+ items in a table).",
+          "Referential equality for dependency arrays: When passing an object/array as a dependency to `useEffect` or as a prop to a `React.memo` child."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["When to use useCallback()"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Passing callbacks to memoized child components: Prevents `React.memo` components from re-rendering due to new function references.",
+          "Custom hooks: Exposing stable helper functions to consumers.",
+          "Dependencies of other hooks: Passing a function into `useEffect`'s dependency array."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function UserList({ users, filterTerm, onDelete }) {",
+          "  // 1. useMemo for expensive filter/sort calculation",
+          "  const filteredUsers = useMemo(() => {",
+          "    return users.filter(u => u.name.toLowerCase().includes(filterTerm.toLowerCase()));",
+          "  }, [users, filterTerm]);",
+          "",
+          "  // 2. useCallback to keep handleDelete reference stable for memoized Item",
+          "  const handleDelete = useCallback((id) => {",
+          "    onDelete(id);",
+          "  }, [onDelete]);",
+          "",
+          "  return (",
+          "    <ul>",
+          "      {filteredUsers.map(user => (",
+          "        <MemoizedUserRow key={user.id} user={user} onDelete={handleDelete} />",
+          "      ))}",
+          "    </ul>",
+          "  );",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "question": "What is the difference between useEffect() and useLayoutEffect()?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Hooks", "useEffect", "useLayoutEffect", "DOM"],
+    "tip": "Use useEffect 99% of the time. Use useLayoutEffect only to read DOM measurements and mutate the DOM before the browser paints to prevent visual flicker.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Both hooks have identical signatures `(callback, deps)`, but they run at different points during the browser render pipeline."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Differences"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "useEffect (Asynchronous): Runs AFTER the browser has updated the screen (post-paint). It does not block painting, making it ideal for data fetching, event listeners, analytics, and subscriptions.",
+          "useLayoutEffect (Synchronous): Runs BEFORE the browser paints the screen, immediately after React mutates the DOM. It blocks browser painting until the callback completes.",
+          "Flicker Prevention: If you need to measure an element (e.g. `getBoundingClientRect()`) and adjust tooltip or modal positions based on that measurement, `useLayoutEffect` prevents a noticeable visual glitch or flash of misplaced content."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function Tooltip({ targetRect }) {",
+          "  const [top, setTop] = useState(0);",
+          "  const ref = useRef(null);",
+          "",
+          "  // Synchronously adjust position before screen is painted",
+          "  useLayoutEffect(() => {",
+          "    if (ref.current) {",
+          "      const tooltipHeight = ref.current.offsetHeight;",
+          "      setTop(targetRect.top - tooltipHeight - 8);",
+          "    }",
+          "  }, [targetRect]);",
+          "",
+          "  return <div ref={ref} style={{ position: 'fixed', top }} className='tooltip'>Info</div>;",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "question": "What is the role of the dependency array in useEffect and what are common pitfalls?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Hooks", "useEffect", "Dependencies"],
+    "tip": "Never lie to the dependency array. If you use a variable inside the effect, include it or refactor to use functional state updates or refs.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "The dependency array in `useEffect(fn, deps)` instructs React when to re-execute the effect by checking if any value has changed (using `Object.is` shallow comparison) since the previous render."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Three Execution Modes"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "No dependency array: `useEffect(fn)` runs on EVERY single render.",
+          "Empty array `[]`: Runs once after the initial mount, and cleanup runs on unmount (equivalent to componentDidMount).",
+          "Array with dependencies `[depA, depB]`: Runs on mount and whenever `depA` or `depB` changes between renders."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Common Pitfalls & Fixes"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Infinite loops: Modifying a state variable inside the effect that is also in the dependency array without a guard condition.",
+          "Stale closures: Omitting a dependency (e.g. `count`) leads to closures reading old state values. Fix: Use functional updater `setCount(prev => prev + 1)`.",
+          "Object / Function references: Declaring objects or functions inside component body and passing them as dependencies triggers effects on every render because references differ. Fix: Move outside, use `useCallback`/`useMemo`, or extract primitive values."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "question": "Why should we avoid using the array index as a React key?",
+    "category": "React",
+    "difficulty": "easy",
+    "tags": ["React", "Keys", "Reconciliation", "Lists"],
+    "tip": "Using array indices as keys can cause silent state corruption in form inputs, checkboxes, and animations when items are reordered, inserted, or removed.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "In React, `key` is a special attribute used during reconciliation to identify which items in a list have changed, been added, or been removed."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Why Array Index Causes Bugs"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Identity mismatch: When items are prepended, filtered, or reordered, their index changes. React pairs DOM nodes by key, so it assumes Item 0 is still the old Item 0, retaining old uncontrolled input state or animation styles.",
+          "Performance penalty: If you prepend an item to a list with 1,000 items, all 1,000 indices shift by 1, forcing React to unnecessarily re-render every single row instead of inserting just one new DOM node."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["When is Index Acceptable?"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "1. The list and its items are strictly static (never filtered, sorted, or mutated).",
+          "2. Items have no internal state (no inputs, checkboxes, or local states).",
+          "3. The list is never reordered."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "question": "Explain the React component lifecycle (Class Lifecycle vs Hook equivalents).",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Lifecycle", "Hooks", "Class Components"],
+    "tip": "useEffect is not a 1:1 lifecycle replacement; it synchronizes component state with external systems. But conceptually it handles Mount, Update, and Unmount.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Every React component undergoes three distinct phases: Mounting (creation), Updating (re-rendering), and Unmounting (removal from DOM)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Class Methods vs Hooks Mapping"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Mounting (componentDidMount): `useEffect(() => { ... }, [])` runs once after the component mounts to the DOM.",
+          "Updating (componentDidUpdate): `useEffect(() => { ... }, [dep])` runs whenever specified dependencies change.",
+          "Unmounting (componentWillUnmount): The cleanup function returned from useEffect `return () => { ... }` runs when the component unmounts.",
+          "Error Boundary: Still requires class components with `componentDidCatch` or `static getDerivedStateFromError`, or libraries like `react-error-boundary`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Complete Hook Lifecycle Pattern"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "useEffect(() => {",
+          "  // 1. Mount / Update logic",
+          "  const handleResize = () => setWidth(window.innerWidth);",
+          "  window.addEventListener('resize', handleResize);",
+          "",
+          "  // 2. Unmount / Pre-update cleanup",
+          "  return () => {",
+          "    window.removeEventListener('resize', handleResize);",
+          "  };",
+          "}, []); // empty deps = mount/unmount only"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "question": "How do you handle API calls with loading, success, empty, and error states in React?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["API", "State Machine", "Best Practices"],
+    "tip": "Always account for the 'Empty' state (e.g. search returned 0 items) and don't just rely on boolean isLoading and isError.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Robust production applications must handle all four primary UI states for network requests: Loading, Error, Empty, and Success."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Architecture Pattern"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Loading state: Render skeleton screens or subtle spinners to indicate background progress.",
+          "Error state: Provide user-friendly messaging with actionable retry buttons instead of cryptic error codes.",
+          "Empty state: Explicitly inform users when data exists but the query returned 0 items, with a clear call-to-action (e.g. 'Clear filter' or 'Create item').",
+          "Success state: Render the data list or dashboard once validation passes."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Component Implementation"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function ProductList() {",
+          "  const { data, status, error, refetch } = useFetchProducts();",
+          "",
+          "  if (status === 'loading') return <SkeletonLoader count={5} />;",
+          "",
+          "  if (status === 'error') {",
+          "    return (",
+          "      <div className='error-banner'>",
+          "        <p>Failed to load products: {error.message}</p>",
+          "        <button onClick={refetch}>Try Again</button>",
+          "      </div>",
+          "    );",
+          "  }",
+          "",
+          "  if (data.length === 0) {",
+          "    return <p className='empty-state'>No products found matching your search.</p>;",
+          "  }",
+          "",
+          "  return (",
+          "    <div className='product-grid'>",
+          "      {data.map(p => <ProductCard key={p.id} item={p} />)}",
+          "    </div>",
+          "  );",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "question": "How do you cancel an API request when a component unmounts to prevent memory leaks and race conditions?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["AbortController", "useEffect", "Memory", "API"],
+    "tip": "Use the native Web API AbortController passed to fetch({ signal: controller.signal }) in useEffect cleanup.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "If a user navigates away before an asynchronous fetch request completes, updating component state afterwards causes warnings or renders stale data. Modern applications use `AbortController` to cancel in-flight HTTP requests."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Implementation with AbortController"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "useEffect(() => {",
+          "  const controller = new AbortController();",
+          "",
+          "  async function fetchUser() {",
+          "    try {",
+          "      const res = await fetch(`/api/user/${id}`, {",
+          "        signal: controller.signal,",
+          "      });",
+          "      const data = await res.json();",
+          "      setUser(data);",
+          "    } catch (err) {",
+          "      // AbortError is intentional, ignore it",
+          "      if (err.name !== 'AbortError') {",
+          "        setError(err);",
+          "      }",
+          "    }",
+          "  }",
+          "",
+          "  fetchUser();",
+          "",
+          "  // Cleanup: Aborts in-flight request when component unmounts or id changes",
+          "  return () => controller.abort();",
+          "}, [id]);"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "question": "Two API requests are fired: Request A (slow) and Request B (fast), but A returns after B. How do you prevent stale data from overwriting the latest result?",
+    "category": "React",
+    "difficulty": "hard",
+    "tags": ["Race Condition", "API", "Async", "Architecture"],
+    "tip": "This classic UI race condition is solved with either AbortController, an active flag token, or React Query / RTK Query.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "When a user triggers multiple asynchronous actions in quick succession (e.g. clicking tab 'Users' then tab 'Orders'), the first request may resolve after the second due to network latency, overwriting fresh data with stale results."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Three Solutions"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "1. AbortController (Recommended): Cancel the previous pending request before dispatching the new one. The browser terminates the stale socket response.",
+          "2. Active Flag / Request ID Token: Track an `isCurrent` boolean in useEffect cleanup or compare an incremental sequence ID.",
+          "3. TanStack Query (React Query): Out-of-the-box request deduplication and cancellation for query keys."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Active Flag Code Pattern"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "useEffect(() => {",
+          "  let isCurrent = true;",
+          "",
+          "  fetchData(tabId).then(data => {",
+          "    if (isCurrent) {",
+          "      // Only updates state if this is still the active tab request",
+          "      setData(data);",
+          "    }",
+          "  });",
+          "",
+          "  return () => {",
+          "    isCurrent = false;",
+          "  };",
+          "}, [tabId]);"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "question": "Your React page makes the same API call 3 times. How would you investigate and fix it?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Debugging", "API", "StrictMode", "Performance"],
+    "tip": "In development, React.StrictMode deliberately mounts, unmounts, and re-mounts components to catch side-effect bugs. In production, check parent re-renders and unmemoized callbacks.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Multiple duplicate API requests are one of the most common issues in React applications. Here is the step-by-step diagnostic process."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Common Causes & Remedies"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "React 18 Strict Mode (Dev only): Component mounts twice in development to verify idempotency of effects. Does not happen in production builds.",
+          "Missing or unstable useEffect dependencies: If an object or function defined inside the component body is in the dependency array, it creates a new reference every render and re-triggers the effect.",
+          "Multiple sibling components fetching same data: Three child components each independently fetching `/api/user`. Fix: Lift state up to parent, use Context, or use TanStack Query with a shared query key.",
+          "Parent component re-mounting: Parent triggers unmount/remount due to changed key prop or conditional routing."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "question": "A component is re-rendering 50 times unexpectedly. How would you debug and fix it?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Debugging", "Profiler", "Re-renders", "React DevTools"],
+    "tip": "Use the React DevTools Profiler with 'Record why each component rendered while profiling' enabled.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Uncontrolled re-render cascading can degrade UI responsiveness and cause browser freezes."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Debugging Protocol"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Step 1: Open Chrome DevTools → React DevTools → Profiler tab.",
+          "Step 2: Check Settings (gear icon) → 'Record why each component rendered while profiling'.",
+          "Step 3: Record the action and inspect the flamegraph to see which prop or state hook changed.",
+          "Step 4: Use console.log or `useWhyDidYouUpdate` custom hook to compare previous vs current props.",
+          "Step 5: Check for state updates inside render phase or un-guarded `useEffect` state loops."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Common Culprits"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Updating state unconditionally inside component body (immediate render loop).",
+          "Inline object / array literals passed as props (`style={{ color: 'red' }}` or `filters={['all']}`).",
+          "Unmemoized callback functions passed to memoized children."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "question": "You have a search input that calls an API on every keystroke. How would you optimize it?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Debounce", "Search", "Optimization", "Custom Hooks"],
+    "tip": "Use a custom useDebounce hook with a 300ms delay combined with AbortController to cancel previous queries.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Typing 'javascript' triggers 10 rapid keystrokes. Dispatching 10 network requests overloads servers and causes race conditions. Optimization requires debouncing the query."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Custom useDebounce Hook"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function useDebounce(value, delay = 300) {",
+          "  const [debouncedValue, setDebouncedValue] = useState(value);",
+          "",
+          "  useEffect(() => {",
+          "    const timer = setTimeout(() => setDebouncedValue(value), delay);",
+          "    return () => clearTimeout(timer);",
+          "  }, [value, delay]);",
+          "",
+          "  return debouncedValue;",
+          "}",
+          "",
+          "// Usage in Search Component:",
+          "function SearchBox() {",
+          "  const [query, setQuery] = useState('');",
+          "  const debouncedQuery = useDebounce(query, 300);",
+          "",
+          "  useEffect(() => {",
+          "    if (debouncedQuery.trim()) {",
+          "      fetchResults(debouncedQuery);",
+          "    }",
+          "  }, [debouncedQuery]);",
+          "",
+          "  return <input value={query} onChange={e => setQuery(e.target.value)} />;",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "question": "How do you prevent duplicate API submissions when a user repeatedly clicks a button?",
+    "category": "React",
+    "difficulty": "easy",
+    "tags": ["Forms", "Buttons", "Idempotency", "UX"],
+    "tip": "Disable the submit button while isSubmitting is true, and optionally send a unique Idempotency-Key header for financial transactions.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Double-clicking submit buttons can cause duplicate orders, double payments, or duplicate database records."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Techniques"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Frontend Loading State: Track `isSubmitting` in state and disable the button: `<button disabled={isSubmitting}>`.",
+          "Ref Guard: Use a `useRef` flag to synchronously block subsequent executions before the state setter triggers re-render.",
+          "Idempotency Key (Backend Collaboration): Generate a unique UUID per form session (`X-Idempotency-Key`). The backend will reject duplicate executions of the same transaction UUID."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function CheckoutButton({ onCheckout }) {",
+          "  const [isSubmitting, setIsSubmitting] = useState(false);",
+          "",
+          "  async function handleSubmit() {",
+          "    if (isSubmitting) return; // Prevent double click",
+          "    setIsSubmitting(true);",
+          "    try {",
+          "      await onCheckout();",
+          "    } finally {",
+          "      setIsSubmitting(false);",
+          "    }",
+          "  }",
+          "",
+          "  return (",
+          "    <button onClick={handleSubmit} disabled={isSubmitting}>",
+          "      {isSubmitting ? 'Processing...' : 'Pay Now'}",
+          "    </button>",
+          "  );",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "question": "How would you handle rendering a very large list containing 10,000 to 100,000 records?",
+    "category": "React",
+    "difficulty": "hard",
+    "tags": ["Virtualization", "Performance", "Windowing", "react-window"],
+    "tip": "Never render 100,000 real DOM nodes at once. Use Virtualization (Windowing) to render only the visible items in the viewport (e.g. 20-30 items).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Creating 100,000 DOM nodes consumes hundreds of megabytes of memory and locks the browser thread for seconds. The industry standard solution is List Virtualization (Windowing)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["How Virtualization Works"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Only render what is visible: A scroll container calculates the viewport height and items that fit inside (e.g. 20 items + 5 item overscan buffer).",
+          "Dynamic recycling: As the user scrolls down, items leaving the top are removed from the DOM, and newly visible items at the bottom are mounted.",
+          "Total scroll height is preserved using a phantom spacer div with `height: totalCount * itemHeight`.",
+          "Popular libraries: `@tanstack/react-virtual` or `react-window`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Pagination Alternative"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Server-side pagination: Fetch 50 items per page with cursor-based pagination.",
+          "Infinite scrolling: Fetch the next 50 items as the user scrolls near the bottom."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "question": "When would you choose Context API vs Redux vs TanStack Query (React Query)?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["State Management", "Redux", "React Query", "Context"],
+    "tip": "Distinguish between Server State (caching, deduplication, revalidation → TanStack Query) and Client State (theme, UI modals, complex workflows → Redux / Context).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Modern React state management distinguishes between Server State (remote data fetched via APIs) and Client/UI State (local component data)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Technology Selection Guide"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Context API: Built into React. Best for low-frequency global UI state (theming, current authenticated user, language locale). Not optimized for high-frequency state updates because all consumers re-render.",
+          "Redux Toolkit (RTK): Best for complex client-side state with intricate business logic, multiple dependent workflows, undo/redo capabilities, or strict enterprise action tracing.",
+          "TanStack Query (React Query): Best for Server State. Automatically manages API caching, background revalidation, stale-while-revalidate, request deduplication, pagination, and retry logic, replacing 80% of legacy Redux boilerplate."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "question": "Explain the Redux data flow: Component → Action → Reducer → Store → Component.",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Redux", "Architecture", "Data Flow"],
+    "tip": "Redux enforces unidirectional data flow. State is read-only and can only be modified by dispatching actions to pure reducers.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Redux is a predictable state container for JavaScript apps based on three core principles: Single source of truth, State is read-only, and Changes are made with pure functions."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["The 5-Step Redux Cycle"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "1. Component: The UI triggers an event (e.g. user clicks 'Add to Cart').",
+          "2. Action: An action object `{ type: 'cart/addItem', payload: product }` is created via an action creator and dispatched.",
+          "3. Middleware (optional): Intercepts dispatched actions for logging, async side effects (Redux Thunk / RTK Query).",
+          "4. Reducer: A pure function `(state, action) => newState` calculates the next state immutably based on action type and payload.",
+          "5. Store: The centralized store updates its root state and notifies subscribed components via `useSelector`, triggering targeted re-renders."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "question": "How would you implement JWT authentication, token storage (localStorage vs cookies), and protected routes in React?",
+    "category": "Architecture",
+    "difficulty": "hard",
+    "tags": ["Security", "Auth", "JWT", "Cookies"],
+    "tip": "Best practice: Store access tokens in memory or httpOnly, Secure, SameSite=Strict cookies to protect against XSS attacks. Avoid localStorage for sensitive tokens.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Securing a production React single-page application requires a multi-layered authentication architecture."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Token Storage Security: Cookies vs LocalStorage"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "localStorage: Vulnerable to Cross-Site Scripting (XSS). Any compromised third-party npm package or malicious script can steal tokens via `localStorage.getItem()`.",
+          "httpOnly Cookies (Recommended): Inaccessible to client-side JavaScript (`document.cookie`), completely preventing XSS token theft. Requires `SameSite=Strict` or `Lax` + CSRF tokens to defend against CSRF.",
+          "In-Memory + Refresh Cookie pattern: Keep the short-lived access token in React state/memory and a long-lived refresh token in an httpOnly cookie."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Protected Route Component Pattern"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function ProtectedRoute({ children, requiredRole }) {",
+          "  const { user, isAuthenticated, isLoading } = useAuth();",
+          "  const location = useLocation();",
+          "",
+          "  if (isLoading) return <LoadingSpinner />;",
+          "",
+          "  if (!isAuthenticated) {",
+          "    // Redirect to login while preserving target return URL",
+          "    return <Navigate to='/login' state={{ from: location }} replace />;",
+          "  }",
+          "",
+          "  if (requiredRole && !user.roles.includes(requiredRole)) {",
+          "    return <Navigate to='/unauthorized' replace />;",
+          "  }",
+          "",
+          "  return children;",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "question": "Suppose your backend returns 401 Unauthorized. How would you automatically refresh the JWT token?",
+    "category": "Architecture",
+    "difficulty": "hard",
+    "tags": ["JWT", "Axios", "Interceptors", "Security"],
+    "tip": "Use Axios Response Interceptors to capture 401 errors, refresh the token once, queue concurrent requests, and replay them.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "When an access token expires, client requests receive HTTP 401. Instead of immediately logging the user out, the client should silently use a refresh token to obtain a fresh access token and replay the failed request."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Axios Interceptor with Request Queue"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "let isRefreshing = false;",
+          "let failedQueue = [];",
+          "",
+          "const processQueue = (error, token = null) => {",
+          "  failedQueue.forEach(prom => {",
+          "    if (error) prom.reject(error);",
+          "    else prom.resolve(token);",
+          "  });",
+          "  failedQueue = [];",
+          "};",
+          "",
+          "api.interceptors.response.use(",
+          "  response => response,",
+          "  async error => {",
+          "    const originalRequest = error.config;",
+          "",
+          "    if (error.response?.status === 401 && !originalRequest._retry) {",
+          "      if (isRefreshing) {",
+          "        // Queue subsequent requests while refresh is in flight",
+          "        return new Promise((resolve, reject) => {",
+          "          failedQueue.push({ resolve, reject });",
+          "        }).then(token => {",
+          "          originalRequest.headers['Authorization'] = `Bearer ${token}`;",
+          "          return api(originalRequest);",
+          "        });",
+          "      }",
+          "",
+          "      originalRequest._retry = true;",
+          "      isRefreshing = true;",
+          "",
+          "      try {",
+          "        const { data } = await api.post('/auth/refresh-token');",
+          "        processQueue(null, data.accessToken);",
+          "        originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;",
+          "        return api(originalRequest);",
+          "      } catch (refreshErr) {",
+          "        processQueue(refreshErr, null);",
+          "        authService.logout();",
+          "        return Promise.reject(refreshErr);",
+          "      } finally {",
+          "        isRefreshing = false;",
+          "      }",
+          "    }",
+          "    return Promise.reject(error);",
+          "  }",
+          ");"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "question": "Your React application takes 5 seconds to load. How would you investigate and optimize initial load time?",
+    "category": "Architecture",
+    "difficulty": "hard",
+    "tags": ["Performance", "Lighthouse", "Code Splitting", "Web Vitals"],
+    "tip": "Measure Core Web Vitals (LCP, INP, CLS). Optimize LCP using dynamic imports (React.lazy), gzip/brotli compression, and image optimization.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "A 5-second initial load usually stems from oversized JavaScript bundles, uncompressed assets, blocking network waterfalls, or missing code splitting."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Audit & Diagnostic Phase"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Lighthouse & Chrome Performance Panel: Measure Largest Contentful Paint (LCP), Total Blocking Time (TBT), and First Contentful Paint (FCP).",
+          "Bundle Analyzer (`rollup-plugin-visualizer` or `webpack-bundle-analyzer`): Identify bloated libraries (e.g. importing full `lodash` or `moment.js`).",
+          "Network Waterfall: Inspect TTFB (Time to First Byte) and identify render-blocking CSS/JS files."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Optimization Playbook"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Route-based Code Splitting: Use `React.lazy()` and `Suspense` so users only download code for the page they visit.",
+          "Tree Shaking & Modern Imports: Replace moment with dayjs/date-fns; import specific submodules `import debounce from 'lodash/debounce'`.",
+          "CDN & Compression: Enable Brotli or Gzip compression on Cloudflare/Fastly; cache static assets with immutable cache-control headers.",
+          "Prerendering / SSG: Pre-generate static HTML shells so the browser paints content immediately before JS hydration completes."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "question": "Why do we use TypeScript in modern web development?",
+    "category": "TypeScript",
+    "difficulty": "easy",
+    "tags": ["TypeScript", "Types", "Tooling"],
+    "tip": "TypeScript catches type mismatch errors at compile-time rather than at runtime in production.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "TypeScript is a strongly typed superset of JavaScript developed by Microsoft that compiles down to standard JavaScript."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Core Benefits"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Static Type Checking: Detects typos, null/undefined bugs, and wrong argument counts during compilation before code ever runs.",
+          "Enhanced Developer Experience (DX): Autocompletion, intelligent IntelliSense, inline documentation, and reliable automated refactoring.",
+          "Self-Documenting Code: Interfaces and type definitions clarify function contracts and API payloads across large teams.",
+          "Safer Large-Scale Codebases: Enables seamless collaboration across enterprise projects with dozens of developers."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "question": "What is the difference between type and interface in TypeScript, and how does extends work?",
+    "category": "TypeScript",
+    "difficulty": "medium",
+    "tags": ["TypeScript", "Interface", "Type Alias", "OOP"],
+    "tip": "Use interface for object shapes and public library APIs because they support declaration merging. Use type for unions, primitives, tuples, and complex mapped types.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Both `type` aliases and `interface` can describe the shape of an object in TypeScript, but they have distinct capabilities."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Differences"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Declaration Merging: Multiple interfaces with the same name automatically merge their declarations. Type aliases throw an error if re-declared.",
+          "Extending syntax: Interfaces extend other interfaces using `interface B extends A { }`. Type aliases combine using intersection operators `type B = A & { }`.",
+          "Union & Primitive types: `type` can define unions (`type Status = 'open' | 'closed'`), tuples, and primitives. Interfaces can only define object/function shapes.",
+          "Extends keyword: Allows a child interface to inherit all fields from a parent interface and add or narrow specific fields."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Interface extension",
+          "interface User {",
+          "  id: string;",
+          "  name: string;",
+          "}",
+          "",
+          "interface AdminUser extends User {",
+          "  permissions: string[];",
+          "}",
+          "",
+          "// Type intersection",
+          "type Role = 'admin' | 'editor' | 'viewer';",
+          "type Employee = User & { role: Role };"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "question": "What are Union Types and Intersection Types in TypeScript?",
+    "category": "TypeScript",
+    "difficulty": "easy",
+    "tags": ["TypeScript", "Types", "Unions"],
+    "tip": "Union (|) means 'either A OR B'. Intersection (&) means 'both A AND B'.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "TypeScript's type algebra allows composing existing types into more precise models using Union (`|`) and Intersection (`&`) operators."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Union Types (|)"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Represents a value that can be one of several types (logical OR).",
+          "Discriminant Unions: Adding a common literal property (e.g. `type: 'success' | 'error'`) allows TypeScript to narrow types inside switch/if statements."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Intersection Types (&)"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Combines multiple types into one that contains all members of all types (logical AND).",
+          "Commonly used to combine configuration objects or add timestamps/audit metadata to models."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Discriminated Union",
+          "type ApiResponse =",
+          "  | { status: 'success'; data: string[] }",
+          "  | { status: 'error'; error: string };",
+          "",
+          "function handleResponse(res: ApiResponse) {",
+          "  if (res.status === 'success') {",
+          "    console.log(res.data); // TS knows res has 'data'",
+          "  } else {",
+          "    console.error(res.error); // TS knows res has 'error'",
+          "  }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "question": "Explain the Node.js Event Loop phases (Timers, Pending I/O, Poll, Check, Close).",
+    "category": "Node.js",
+    "difficulty": "hard",
+    "tags": ["Node.js", "Event Loop", "libuv", "Backend"],
+    "tip": "Node's event loop is implemented in C by libuv. Each phase has a FIFO queue of callbacks to execute.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "The Node.js event loop coordinates non-blocking I/O operations through libuv across 6 distinct phases executed in a cyclic loop."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["The 6 Phases in Order"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "1. Timers: Executes callbacks scheduled by `setTimeout()` and `setInterval()` whose threshold has elapsed.",
+          "2. Pending Callbacks: Executes I/O callbacks deferred to the next loop iteration (e.g. some system errors like TCP ECONNREFUSED).",
+          "3. Idle / Prepare: Used internally by Node.js for engine house-keeping.",
+          "4. Poll: Retrieves new I/O events and executes almost all I/O-related callbacks (files, network, databases). Node blocks here when no other tasks are pending.",
+          "5. Check: Executes callbacks registered via `setImmediate()` immediately after the poll phase.",
+          "6. Close Callbacks: Executes close event handlers (e.g. `socket.on('close', ...)`)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Intermediate Microtasks"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "process.nextTick() queue and Promise microtask queue are executed between phases whenever the C++ boundary transitions back to JavaScript."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "question": "What is the difference between process.nextTick() and setImmediate() in Node.js?",
+    "category": "Node.js",
+    "difficulty": "medium",
+    "tags": ["Node.js", "nextTick", "setImmediate", "Event Loop"],
+    "tip": "process.nextTick fires BEFORE the event loop continues. setImmediate fires in the 'Check' phase of the event loop.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Despite their names, `process.nextTick()` runs much sooner than `setImmediate()`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Comparison"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "process.nextTick(): Not part of the libuv event loop. Callbacks are queued on the `nextTickQueue` and run immediately after the current operation finishes, before the event loop advances to the next phase.",
+          "setImmediate(): Designed to execute once in the 'Check' phase of the event loop, after the 'Poll' phase has handled I/O.",
+          "Hazard: Recursive calls to `process.nextTick()` will starve the event loop, preventing all I/O and timers from ever running."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Order Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "setImmediate(() => console.log('1: setImmediate'));",
+          "process.nextTick(() => console.log('2: nextTick'));",
+          "console.log('3: Synchronous');",
+          "",
+          "// Output:",
+          "// 3: Synchronous",
+          "// 2: nextTick",
+          "// 1: setImmediate"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "question": "What are Buffers in Node.js and why are they important?",
+    "category": "Node.js",
+    "difficulty": "medium",
+    "tags": ["Node.js", "Buffers", "Binary", "Streams"],
+    "tip": "Buffers represent raw binary data allocated outside the V8 heap in chunks of fixed memory.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "JavaScript historically had no mechanism for manipulating streams of binary data. Node.js introduced the global `Buffer` class to handle raw memory buffers."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Characteristics"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Raw Memory: Allocated outside the V8 garbage-collected heap using C++ memory allocation.",
+          "Fixed Size: Once created, the size of a Buffer cannot be dynamically resized.",
+          "Use Cases: Reading files from the filesystem (`fs.readFile`), TCP sockets, streaming multimedia, and cryptography.",
+          "Creation methods: `Buffer.from('hello', 'utf-8')` or `Buffer.alloc(1024)`."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "question": "What is EventEmitter in Node.js and how do you implement custom events?",
+    "category": "Node.js",
+    "difficulty": "medium",
+    "tags": ["Node.js", "EventEmitter", "PubSub", "Architecture"],
+    "tip": "EventEmitter implements the Observer (Publish/Subscribe) pattern in Node.js core.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "The `EventEmitter` class from Node's built-in `'events'` module provides an event-driven architecture where objects emit named events that call registered listener functions."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Core Methods"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "on(eventName, listener): Registers a permanent listener.",
+          "once(eventName, listener): Registers a one-time listener that automatically removes itself after firing.",
+          "emit(eventName, ...args): Synchronously calls each listener registered for that event.",
+          "removeListener(eventName, listener): Removes a previously attached listener to prevent memory leaks."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "const EventEmitter = require('events');",
+          "class OrderService extends EventEmitter {",
+          "  placeOrder(orderId) {",
+          "    console.log(`Order ${orderId} placed.`);",
+          "    this.emit('orderCreated', { orderId, timestamp: Date.now() });",
+          "  }",
+          "}",
+          "",
+          "const orderService = new OrderService();",
+          "orderService.on('orderCreated', (data) => {",
+          "  console.log('Sending confirmation email for order:', data.orderId);",
+          "});",
+          "orderService.placeOrder('ORD-1234');"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "question": "How does Dependency Injection (DI) work in Angular?",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["Angular", "DI", "Architecture", "IoC"],
+    "tip": "Angular uses a Hierarchical Dependency Injection system with an Injector Tree that resolves dependencies from child to root.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Dependency Injection (DI) is an Inversion of Control (IoC) design pattern where a class requests external dependencies from an injector rather than instantiating them itself with `new`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["How Angular's DI Works"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "@Injectable({ providedIn: 'root' }): Registers a service with the root application injector as a singleton available app-wide.",
+          "Constructor Injection: In modern Angular, declare dependencies in constructor params: `constructor(private http: HttpClient) {}` or use the `inject(HttpClient)` function.",
+          "Hierarchical Injectors: If a component declares a service in its `providers: [MyService]`, that component and its children receive their own private instance, isolated from the rest of the application."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 61,
+    "question": "What is the difference between Standalone Components and NgModules in Angular?",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["Angular", "Standalone", "Modules"],
+    "tip": "Standalone components (Angular 14+) simplify Angular by eliminating the boilerplate requirement of declaring components in NgModules.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Standalone components are the modern, recommended way to build Angular applications without requiring NgModule wrapper classes."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Comparison"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "NgModules (Legacy/Traditional): Components had to be declared in a module `declarations: [...]` and exported to be shared, creating verbose boilerplate.",
+          "Standalone Components (`standalone: true`): Directly import their dependencies (CommonModule, RouterModule, other components) inside their own `@Component({ imports: [...] })` decorator.",
+          "Tree-Shaking: Standalone components are significantly easier for bundlers to tree-shake and lazy-load at the route level."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "question": "What is the difference between Subject, BehaviorSubject, and ReplaySubject in RxJS?",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["RxJS", "Observables", "Streams", "Reactive"],
+    "tip": "Subject has no initial value; BehaviorSubject requires an initial value and emits the latest value to new subscribers; ReplaySubject replays a specified buffer of past values.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "In RxJS, a `Subject` is a special type of Observable that acts as both an Observable (can be subscribed to) and an Observer (can emit values via `.next()`)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Type Comparison"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Subject: Does not store any value. Late subscribers will only receive values emitted AFTER their subscription.",
+          "BehaviorSubject: Requires an initial value upon instantiation. It always stores the current value, immediately delivering it to any new subscriber, accessible via `.value`.",
+          "ReplaySubject: Buffers a configured number of past emissions (e.g. last 3 values) and replays them immediately to any new subscriber."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// BehaviorSubject stores current state",
+          "const currentUser$ = new BehaviorSubject<User | null>(null);",
+          "",
+          "// Update state",
+          "currentUser$.next({ name: 'Kishore' });",
+          "",
+          "// New subscriber immediately receives { name: 'Kishore' }",
+          "currentUser$.subscribe(user => console.log('Current User:', user));"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "question": "What is the difference between switchMap, mergeMap, concatMap, and exhaustMap in RxJS?",
+    "category": "Architecture",
+    "difficulty": "hard",
+    "tags": ["RxJS", "Higher-Order Observables", "Flattening"],
+    "tip": "switchMap = cancel previous; mergeMap = parallel concurrent; concatMap = sequential queue; exhaustMap = ignore while active.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "These four higher-order mapping operators flatten nested inner Observables into a single stream, each handling concurrency differently."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Operator Rules"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "switchMap: Cancels the previous inner Observable when a new outer value arrives. Best for: Search autocomplete / typeahead where old results should be discarded.",
+          "mergeMap: Runs all inner Observables concurrently without cancelling. Best for: Independent parallel downloads or operations.",
+          "concatMap: Queues inner Observables sequentially in order. Best for: Strict sequential operations where order matters (e.g. financial transactions).",
+          "exhaustMap: Ignores new incoming values until the current inner Observable finishes. Best for: Preventing double-clicks on submit buttons."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "question": "What is the Async Pipe in Angular and why is it recommended?",
+    "category": "Architecture",
+    "difficulty": "easy",
+    "tags": ["Angular", "AsyncPipe", "Observables", "Memory"],
+    "tip": "The async pipe automatically subscribes to an Observable in templates and automatically unsubscribes on component destroy, preventing memory leaks.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "The `async` pipe in Angular templates subscribes to an Observable or Promise and returns the latest value it has emitted."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Why it is Best Practice"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Automatic Unsubscription: Unsubscribes automatically when the component is destroyed, eliminating common manual unsubscribe boilerplate and memory leaks.",
+          "Change Detection: Marks the component to be checked whenever the Observable emits a new value, working seamlessly with `ChangeDetectionStrategy.OnPush`.",
+          "Cleaner TypeScript: Component code doesn't need to manually maintain local state variables or subscription arrays."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 65,
+    "question": "How would you implement Role-Based Access Control (RBAC) in a React application?",
+    "category": "Architecture",
+    "difficulty": "hard",
+    "tags": ["RBAC", "Security", "Architecture", "Auth"],
+    "tip": "Implement RBAC at both the Route level (guarding URLs) and Component level (PermissionGate component) while remembering that true security must be enforced by the backend API.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Role-Based Access Control (RBAC) restricts system access to authorized users based on their assigned roles (e.g. Admin, Editor, Viewer)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Architecture Layers"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "1. Route Guard: Wrap restricted routes in a `<ProtectedRoute allowedRoles={['admin']} />`.",
+          "2. In-Page UI Elements: Use a `<Can perform='delete:user'>` or `<PermissionGate>` component to conditionally render edit/delete buttons.",
+          "3. Custom Hook: `const { can } = usePermissions(); if (can('export:report')) ...`",
+          "4. Backend Enforcement: Frontend RBAC is exclusively for User Experience (hiding unreachable UI). The backend API MUST independently validate user JWT roles on every incoming request."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["PermissionGate Component Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function Can({ role, perform, children, fallback = null }) {",
+          "  const { user } = useAuth();",
+          "",
+          "  const hasRole = role ? user?.roles.includes(role) : true;",
+          "  const hasPermission = perform ? user?.permissions.includes(perform) : true;",
+          "",
+          "  return hasRole && hasPermission ? children : fallback;",
+          "}",
+          "",
+          "// Usage:",
+          "<Can perform='delete:post' fallback={<span className='text-muted'>Read only</span>}>",
+          "  <button onClick={deletePost}>Delete Post</button>",
+          "</Can>"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 66,
+    "question": "How would you design a React application for a large-scale enterprise project (50+ screens)?",
+    "category": "Architecture",
+    "difficulty": "hard",
+    "tags": ["Architecture", "Enterprise", "Folder Structure", "Scalability"],
+    "tip": "Organize by Feature Modules (domain-driven) rather than by technical file type (all components in one folder, all actions in another).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Designing enterprise React architectures requires structuring code for team scalability, maintainability, isolated testing, and optimal bundle size."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Core Architectural Pillars"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Feature-Based Architecture: Group code by domain features (`src/features/billing/`, `src/features/auth/`, `src/features/analytics/`) containing their own components, hooks, API services, and types.",
+          "Design System & Shared UI: Keep domain-agnostic UI primitives (`Button`, `Modal`, `Table`, `Input`) in `src/components/ui/` with Storybook documentation.",
+          "State Layering: Server state in TanStack Query; global app state in Redux Toolkit or Zustand; local UI state in useState/useReducer.",
+          "Route-Based Code Splitting: Lazy-load feature modules via `React.lazy()` so users only download the bundle for their current view.",
+          "Strict Type Contracts: Shared API DTO interfaces between frontend and backend."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 67,
+    "question": "How do you download a CSV or PDF file returned by an API in React?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["Blob", "Download", "Files", "API"],
+    "tip": "Request the API response as a Blob (responseType: 'blob'), create an object URL using window.URL.createObjectURL, and trigger a hidden anchor click.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Downloading files from authenticated REST endpoints requires fetching the binary data as a Blob and creating an in-memory URL."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Implementation Code"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "async function downloadReport(reportId, fileName = 'report.pdf') {",
+          "  try {",
+          "    const response = await fetch(`/api/reports/${reportId}/download`, {",
+          "      headers: { Authorization: `Bearer ${token}` },",
+          "    });",
+          "",
+          "    const blob = await response.blob();",
+          "    const downloadUrl = window.URL.createObjectURL(blob);",
+          "",
+          "    // Create temporary invisible link",
+          "    const link = document.createElement('a');",
+          "    link.href = downloadUrl;",
+          "    link.download = fileName;",
+          "    document.body.appendChild(link);",
+          "    link.click();",
+          "",
+          "    // Cleanup",
+          "    link.remove();",
+          "    window.URL.revokeObjectURL(downloadUrl);",
+          "  } catch (err) {",
+          "    console.error('File download failed:', err);",
+          "  }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 68,
+    "question": "How would you implement file upload with a real-time progress percentage in React?",
+    "category": "React",
+    "difficulty": "medium",
+    "tags": ["FileUpload", "Axios", "Progress", "Forms"],
+    "tip": "Use Axios onUploadProgress or XMLHttpRequest upload.onprogress to calculate (loaded / total) * 100.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Native `fetch()` does not easily expose upload progress. The standard approach uses Axios or `XMLHttpRequest` upload listeners with `FormData`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Axios Implementation with Progress State"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function FileUploader() {",
+          "  const [progress, setProgress] = useState(0);",
+          "  const [isUploading, setIsUploading] = useState(false);",
+          "",
+          "  async function handleUpload(file) {",
+          "    const formData = new FormData();",
+          "    formData.append('file', file);",
+          "    setIsUploading(true);",
+          "",
+          "    try {",
+          "      await axios.post('/api/upload', formData, {",
+          "        headers: { 'Content-Type': 'multipart/form-data' },",
+          "        onUploadProgress: (progressEvent) => {",
+          "          if (progressEvent.total) {",
+          "            const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);",
+          "            setProgress(percent);",
+          "          }",
+          "        },",
+          "      });",
+          "    } finally {",
+          "      setIsUploading(false);",
+          "    }",
+          "  }",
+          "",
+          "  return (",
+          "    <div>",
+          "      <input type='file' onChange={e => handleUpload(e.target.files[0])} />",
+          "      {isUploading && <progress value={progress} max='100'>{progress}%</progress>}",
+          "    </div>",
+          "  );",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 69,
+    "question": "What is a Constructor Function in JavaScript and how does the new keyword work?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Constructor", "new keyword", "OOP", "Prototypes"],
+    "tip": "When you call a function with 'new', it creates a new empty object, binds 'this' to it, sets up the prototype chain, and returns it.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "A Constructor Function in JavaScript is a regular function used with the `new` keyword to create and initialize multiple instances of an object."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["What the new Keyword Does Under the Hood"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "1. Creates a brand new empty plain JavaScript object: `{}`.",
+          "2. Sets the newly created object's `__proto__` to the constructor function's `prototype` property.",
+          "3. Binds the `this` context inside the constructor function to the newly created object.",
+          "4. Executes the constructor function body.",
+          "5. Automatically returns the new object (unless the constructor explicitly returns another object)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "function Car(make, model) {",
+          "  this.make = make;",
+          "  this.model = model;",
+          "}",
+          "",
+          "Car.prototype.start = function() {",
+          "  return `${this.make} ${this.model} is running.`;",
+          "};",
+          "",
+          "const myCar = new Car('Tesla', 'Model 3');",
+          "console.log(myCar.start()); // 'Tesla Model 3 is running.'"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "question": "What is a Recursive Function, and what are base cases and stack overflows?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Recursion", "Algorithms", "Call Stack"],
+    "tip": "Every recursive function MUST have at least one base case that stops execution; otherwise, the call stack exceeds max depth, causing a Stack Overflow.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "A recursive function is a function that calls itself during its execution to break down a problem into smaller, self-similar sub-problems."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Essential Components"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Base Case: The terminating condition that stops recursion and begins unwinding the call stack.",
+          "Recursive Step: The reduction of the input and the subsequent recursive call toward the base case.",
+          "Stack Overflow: If the base case is missing or unreachable, recursive frames accumulate on the Call Stack until the browser or Node engine throws `RangeError: Maximum call stack size exceeded`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Deep flatten nested array using recursion",
+          "function flatten(arr) {",
+          "  let result = [];",
+          "  for (const item of arr) {",
+          "    if (Array.isArray(item)) {",
+          "      result.push(...flatten(item)); // Recursive step",
+          "    } else {",
+          "      result.push(item); // Base case",
+          "    }",
+          "  }",
+          "  return result;",
+          "}",
+          "",
+          "console.log(flatten([1, [2, [3, 4], 5]])); // [1, 2, 3, 4, 5]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 71,
+    "question": "What are JavaScript Primitives vs Objects, and how are they passed in memory?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Primitives", "Objects", "Memory", "Call by Value"],
+    "tip": "Primitives are immutable and passed by value; Objects are mutable and passed by reference of value (reference identity).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "JavaScript data types are divided into Primitives and Reference Types (Objects)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Primitives (7 Types)"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "String, Number, BigInt, Boolean, Undefined, Null, and Symbol.",
+          "Stored directly in call stack memory. They are strictly immutable (their value cannot be altered in place).",
+          "Passed by value: Assigning or passing a primitive creates an independent copy of that value."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Objects (Reference Types)"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Plain Objects, Arrays, Functions, Dates, Maps, Sets.",
+          "Stored in heap memory, with stack memory holding a reference (pointer) to that heap location.",
+          "Passed by reference: Passing an object to a function passes the reference pointer. Mutating object properties inside the function mutates the original object outside."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "question": "What is the Spread Operator vs Rest Operator in JavaScript?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["ES6", "Spread", "Rest", "Operators"],
+    "tip": "Both use three dots (...), but Spread EXPANDS elements, while Rest CONDENSES multiple elements into a single array.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Introduced in ES6, the three-dots syntax `...` acts as either Spread or Rest depending on where and how it is used."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Spread Operator (Expands)"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Unpacks or expands elements of an array or properties of an object into individual components.",
+          "Used in array literals `[...arr1, ...arr2]`, object cloning `{ ...obj }`, or function calls `Math.max(...numbers)`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Rest Parameter (Collects)"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Gathers remaining individual arguments into a single array.",
+          "Used in function parameter declarations `function sum(...nums)` or array destructuring `const [first, ...rest] = arr`."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Rest parameter collects multiple arguments into an array",
+          "function multiply(multiplier, ...numbers) {",
+          "  return numbers.map(n => n * multiplier);",
+          "}",
+          "",
+          "// Spread operator expands an array into arguments",
+          "const factors = [10, 20, 30];",
+          "console.log(multiply(2, ...factors)); // [20, 40, 60]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "question": "What is a React Fragment and why is it preferred over extra wrapper divs?",
+    "category": "React",
+    "difficulty": "easy",
+    "tags": ["React", "Fragment", "DOM", "Clean Code"],
+    "tip": "Fragments let you group children without adding unnecessary nodes to the DOM: <React.Fragment key={id}> or short syntax <>...</>.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "In React, a component must return a single root JSX element. A React Fragment (`<React.Fragment>` or `<>...</>`) groups multiple child elements without creating an extra real DOM node."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Why Use Fragments?"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Preserves CSS Layouts: Extra wrapper `<div>` tags break CSS Grid and Flexbox parent-child relationships and table structures (e.g. `<tr>` expecting direct `<td>` children).",
+          "Cleaner DOM Tree: Reduces HTML document bloat, improving browser rendering performance and memory efficiency.",
+          "Keys Support: The explicit `<React.Fragment key={item.id}>` syntax supports the `key` prop when mapping over lists."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 74,
+    "question": "Class Components vs Functional Components: What are the key differences?",
+    "category": "React",
+    "difficulty": "easy",
+    "tags": ["Class Components", "Functional Components", "Hooks"],
+    "tip": "Functional components with Hooks are the modern React standard. Class components are legacy but still required for Error Boundaries.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "React originally used ES6 classes to manage state and lifecycle, but functional components with React Hooks (React 16.8+) have become the dominant, modern paradigm."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Core Differences"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Syntax: Functional components are plain JS functions returning JSX. Class components extend `React.Component` and implement a `render()` method.",
+          "State & Lifecycle: Functional components use `useState`, `useEffect`, etc. Class components use `this.state`, `this.setState`, and lifecycle methods (`componentDidMount`, `componentDidUpdate`).",
+          "this Keyword: Class components require managing `this` binding in constructors or arrow methods. Functional components avoid `this` entirely.",
+          "Logic Reuse: Functional components reuse logic elegantly via custom hooks. Class components required complex HOCs or render props.",
+          "Error Boundaries: As of React 19, Error Boundaries still require class components (`componentDidCatch`)."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 75,
+    "question": "What is the difference between useNavigate() and <Navigate /> in React Router?",
+    "category": "React",
+    "difficulty": "easy",
+    "tags": ["React Router", "Navigation", "Routing"],
+    "tip": "useNavigate() is an imperative hook used in callbacks/handlers; <Navigate /> is a declarative component used during JSX rendering.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "React Router v6 provides two ways to transition between routes: the imperative `useNavigate()` hook and the declarative `<Navigate />` component."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["When to Use Which"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "useNavigate(): Used imperatively inside event handlers, callbacks, or effects (e.g. after form submission or button click): `const navigate = useNavigate(); navigate('/dashboard');`.",
+          "<Navigate />: Used declaratively directly in JSX rendering, particularly inside protected route guards: `if (!auth) return <Navigate to='/login' replace />;`.",
+          "Replace option: Both support `replace: true` to overwrite the current history entry rather than pushing a new one, preventing user back-button traps."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 76,
+    "question": "How would you handle the interview question: 'What is the most challenging task you handled in your project?'",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["Behavioral", "STAR Method", "Performance", "Problem Solving"],
+    "tip": "Structure your answer using the STAR method: Situation, Task, Action, Result. Quantify your outcome with concrete metrics (e.g. 'reduced bundle size by 45%').",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "This question tests your technical depth, problem-solving mindset, ownership, and ability to navigate ambiguity. Structure your response using the proven STAR framework."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["The STAR Framework Structure"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Situation: Set the context. (e.g. 'Our enterprise financial analytics dashboard was experiencing 6-second initial loads and freezing when rendering tables with 50,000 transaction records.').",
+          "Task: Define your specific responsibility. (e.g. 'I was tasked with diagnosing the performance bottlenecks and optimizing both initial load and table scrolling without losing data integrity.').",
+          "Action: Explain the technical steps you took. (e.g. 'I profiled the app with Chrome DevTools, identified an uncompressed 8MB bundle and 50,000 real DOM nodes. I implemented route-based code splitting with React.lazy, introduced @tanstack/react-virtual to window the table to only 25 DOM elements, and debounced filter inputs.').",
+          "Result: Quantify your business impact. (e.g. 'Initial page load dropped from 6s to 1.1s (82% reduction), memory usage decreased by 70%, and customer satisfaction scores increased significantly.')."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 77,
+    "question": "How does React communicate with Spring Boot / REST microservices efficiently?",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["Spring Boot", "Microservices", "CORS", "REST", "API"],
+    "tip": "Use an API Gateway pattern or Reverse Proxy (Nginx/Vite proxy) to avoid CORS issues, and configure Axios interceptors for JWT token injection and error handling.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "In modern enterprise architectures, a React Single Page Application (SPA) frequently serves as the frontend client consuming Spring Boot REST microservices."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Key Architecture Considerations"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "API Gateway: Frontend communicates with a single API Gateway (e.g. Spring Cloud Gateway), which routes requests to downstream microservices (Auth, Catalog, Billing) and handles centralized rate-limiting.",
+          "CORS Management: In development, configure Vite dev server proxy (`server.proxy`). In production, configure Spring `@CrossOrigin` or API Gateway CORS headers.",
+          "Unified HTTP Client: Create a centralized Axios or fetch client that automatically attaches JWT `Authorization: Bearer <token>` headers.",
+          "Error Contract: Agree on a standard error payload format (e.g. RFC 7807 Problem Details: `{ type, title, status, detail, timestamp }`)."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 78,
+    "question": "How would you manage a shopping cart in React with optimistic updates and persistence?",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["Cart", "State Management", "Optimistic UI", "Persistence"],
+    "tip": "Update local UI state immediately for instant feedback (Optimistic Update), dispatch backend API call in background, and roll back state if the API fails.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "A robust shopping cart requires seamless UI responsiveness, background backend sync, and client-side persistence so items survive page reloads."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Architecture Pattern"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "State Store: Cart state managed in Context or Redux Toolkit with actions: `addItem`, `removeItem`, `updateQuantity`.",
+          "Persistence: Sync cart state with `localStorage` or IndexedDB on every modification.",
+          "Optimistic UI: When user clicks 'Add to Cart', immediately update the cart count badge and dropdown. If the network sync to `/api/cart` fails, roll back to the previous snapshot and display a toast alert.",
+          "Guest to Authenticated Merge: When a guest user logs in, merge their local cart items with their server-side account cart."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 79,
+    "question": "Is JavaScript tightly coupled or loosely coupled?",
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "tags": ["Language Design", "Coupling", "Architecture"],
+    "tip": "JavaScript by nature promotes loose coupling through dynamic typing, first-class functions, event-driven patterns, and modular imports.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "JavaScript is fundamentally designed to support loose coupling, although developers can write tightly coupled code if architectural best practices are not followed."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Why JavaScript Favors Loose Coupling"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Dynamic Typing & Duck Typing: Objects do not need to inherit from a rigid class hierarchy; if an object implements the required method or property, it can be consumed ('if it walks like a duck, it is a duck').",
+          "First-Class & Higher-Order Functions: Functions can be passed as callbacks, delegates, or dependency-injected arguments, decoupling the caller from the implementation.",
+          "Event-Driven Architecture: Event listeners, CustomEvent, and Pub/Sub emitters allow independent modules to communicate without direct references to each other.",
+          "ES Modules: Clear explicit export/import boundaries prevent global state entanglement."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Tight Coupling Pitfalls in JavaScript"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Relying on global variables (`window.state = ...`).",
+          "Hardcoding concrete class instantiations (`new PaymentGateway()`) inside business logic rather than injecting dependencies.",
+          "Directly accessing child or parent DOM hierarchies without abstractions."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 80,
+    "question": "Why does Angular use Observables instead of Promises?",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["Angular", "RxJS", "Observables", "Promises"],
+    "tip": "Promises emit a single value and are not cancellable; Observables emit multiple values over time, are cancellable, and have rich pipeline operators (map, filter, switchMap).",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Angular chose RxJS Observables as its core reactive primitive over standard ES6 Promises because enterprise UI requirements demand stream manipulation, cancellation, and continuous events."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Observables vs Promises Comparison"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Emission Count: A Promise resolves once with a single value. An Observable is a stream that can emit 0, 1, or multiple values over time (e.g. WebSocket messages, keystrokes).",
+          "Cancellability: Promises cannot be cancelled natively once triggered. Observables are easily cancelled by unsubscribing (`subscription.unsubscribe()`), aborting pending HTTP requests automatically when components unmount.",
+          "Eager vs Lazy: A Promise executes immediately upon creation (eager). An Observable only executes when a consumer subscribes to it (lazy).",
+          "Operator Ecosystem: RxJS offers 100+ composable operators (`debounceTime`, `distinctUntilChanged`, `switchMap`, `retry`) that make asynchronous workflows declarative."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 81,
+    "question": "What is HttpClient in Angular and how do HTTP Interceptors work?",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "tags": ["Angular", "HttpClient", "Interceptors", "HTTP"],
+    "tip": "HTTP Interceptors sit between the client application and the backend API, intercepting and transforming outgoing requests and incoming responses.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Angular's `HttpClient` module provides a simplified API for HTTP requests built on RxJS Observables, complete with strongly typed response objects, testing utilities, and request/response interception."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["How HTTP Interceptors Work"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "Middleware Pipeline: Interceptors implement `HttpInterceptor` with an `intercept(req: HttpRequest<any>, next: HttpHandler)` method.",
+          "Request Cloning: Requests are immutable; interceptors clone the request and attach headers like `Authorization: Bearer <token>` or API keys.",
+          "Response Handling: Using RxJS operators like `catchError` to handle global 401/500 errors, log execution time, or trigger token refreshes.",
+          "Caching: Interceptors can intercept a request, check an in-memory cache, and return an Observable immediately without hitting the network."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Interceptor Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "@Injectable()",
+          "export class AuthInterceptor implements HttpInterceptor {",
+          "  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {",
+          "    const authToken = localStorage.getItem('token');",
+          "    const authReq = authToken",
+          "      ? req.clone({ headers: req.headers.set('Authorization', `Bearer ${authToken}`) })",
+          "      : req;",
+          "    return next.handle(authReq);",
+          "  }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 82,
+    "question": "What are the different types of interfaces and index signatures in TypeScript?",
+    "category": "TypeScript",
+    "difficulty": "medium",
+    "tags": ["TypeScript", "Interface", "Index Signatures", "OOP"],
+    "tip": "TypeScript interfaces can model object shapes, callable functions, constructable classes, indexable dictionaries, and hybrid objects.",
+    "answer": [
+      {
+        "type": "para",
+        "data": [
+          "Interfaces in TypeScript can describe multiple categories of contracts beyond simple object properties."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Different Types of Interfaces"]
+      },
+      {
+        "type": "points",
+        "data": [
+          "1. Property Interfaces: Standard key-value contracts with optional (`?`) and `readonly` properties.",
+          "2. Function (Callable) Interfaces: Defines a function signature: `interface SearchFn { (source: string, subString: string): boolean; }`.",
+          "3. Indexable Interfaces (Index Signatures): Describes objects used as key-value dictionaries: `interface StringDictionary { [key: string]: string; }`.",
+          "4. Class / Constructor Interfaces: Enforces `implements` requirements on classes or defines `new` signatures for factory functions.",
+          "5. Hybrid Interfaces: Models objects that behave both as a function and have properties attached (e.g. jQuery `$()` or Axios instances)."
+        ]
+      },
+      {
+        "type": "heading",
+        "data": ["Code Example"]
+      },
+      {
+        "type": "code",
+        "data": [
+          "// Index Signature",
+          "interface ErrorMap {",
+          "  [fieldName: string]: string[];",
+          "}",
+          "",
+          "// Hybrid Interface (callable function + properties)",
+          "interface Counter {",
+          "  (start: number): string;",
+          "  interval: number;",
+          "  reset(): void;",
+          "}"
         ]
       }
     ]

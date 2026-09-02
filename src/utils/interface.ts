@@ -141,8 +141,31 @@ export interface AnswerBlock {
   data: string[];
 }
 
+export type InterviewCategory =
+  | 'All'
+  | 'JavaScript'
+  | 'React'
+  | 'TypeScript'
+  | 'Node.js'
+  | 'Architecture';
+
+export type QuestionCategory = Exclude<InterviewCategory, 'All'>;
+
+export type InterviewDifficulty = 'easy' | 'medium' | 'hard';
+export type InterviewMasteryStatus = 'unreviewed' | 'review' | 'mastered';
+export type InterviewMasteryMap = Record<
+  number,
+  Exclude<InterviewMasteryStatus, 'unreviewed'>
+>;
+export type InterviewBookmarkMap = Record<number, boolean>;
+
 export interface JSInterviewQuestion {
+  id?: number;
   question: string;
+  category?: QuestionCategory;
+  difficulty?: InterviewDifficulty;
+  tags?: string[];
+  tip?: string;
   answer: AnswerBlock[];
 }
 
@@ -153,4 +176,8 @@ export interface IQuestionAccordion {
   questionNumber: number;
   isOpened: boolean;
   changeActiveQuestion: () => void;
+  isMastered?: boolean;
+  isBookmarked?: boolean;
+  onToggleMastered?: () => void;
+  onToggleBookmark?: () => void;
 }

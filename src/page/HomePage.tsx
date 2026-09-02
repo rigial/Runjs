@@ -14,6 +14,8 @@ import {
   BookOpen,
   Cpu,
   GraduationCap,
+  FileQuestion,
+  Brain,
 } from 'lucide-react';
 
 function HomePage() {
@@ -80,6 +82,14 @@ function HomePage() {
             </Link>
 
             <Link
+              to="/interview"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
+            >
+              <FileQuestion className="w-4 h-4 text-amber-500" />
+              <span>Interview Prep</span>
+            </Link>
+
+            <Link
               to="/js"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] text-sm font-medium transition-all duration-150"
             >
@@ -91,7 +101,7 @@ function HomePage() {
 
         {/* Language & Problem Cards Quick Links */}
         <section className="mt-14 max-w-6xl mx-auto w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full text-left">
             {/* Learn JS Card */}
             <Link
               to="/learn"
@@ -103,7 +113,7 @@ function HomePage() {
                     <GraduationCap className="w-5 h-5" />
                   </div>
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400">
-                    New
+                    Course
                   </span>
                 </div>
                 <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
@@ -140,7 +150,55 @@ function HomePage() {
               </div>
             </Link>
 
-            {/* JavaScript Card */}
+            {/* Technical Interview Q&A Card */}
+            <Link
+              to="/interview"
+              className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-amber-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-sm">
+                    <FileQuestion className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                    80+ Q&A
+                  </span>
+                </div>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-amber-500 transition-colors">
+                  Interview Questions
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  Curated technical interview Q&A with active recall, detailed
+                  solutions, and live sandboxes.
+                </p>
+              </div>
+            </Link>
+
+            {/* JavaScript Output Questions Card */}
+            <Link
+              to="/output-questions"
+              className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-emerald-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-bold text-sm">
+                    <Brain className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                    100 MCQs
+                  </span>
+                </div>
+                <h2 className="text-base font-bold text-[var(--text-primary)] group-hover:text-emerald-500 transition-colors">
+                  Output Questions
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+                  Predict the output quiz covering closures, event loop,
+                  hoisting, coercion, and async quirks.
+                </p>
+              </div>
+            </Link>
+
+            {/* JavaScript Sandbox Card */}
             <Link
               to="/js"
               className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-amber-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
@@ -164,7 +222,7 @@ function HomePage() {
               </div>
             </Link>
 
-            {/* TypeScript Card */}
+            {/* TypeScript Sandbox Card */}
             <Link
               to="/ts"
               className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-blue-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
@@ -188,7 +246,7 @@ function HomePage() {
               </div>
             </Link>
 
-            {/* React Card */}
+            {/* React Sandpack Card */}
             <Link
               to="/react"
               className="group p-6 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-cyan-500/50 hover:bg-[var(--bg-surface-hover)] transition-all duration-150 shadow-xs hover:shadow-md flex flex-col justify-between"
@@ -308,18 +366,21 @@ function HomePage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)]">
-              <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center mb-3">
-                <BookOpen className="w-4 h-4" />
+            <Link
+              to="/interview"
+              className="p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:border-rose-500/50 hover:bg-[var(--bg-surface-hover)] transition-all block group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                <FileQuestion className="w-4 h-4" />
               </div>
-              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
-                Interview Prep Questions
+              <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-rose-500 transition-colors">
+                Interview Prep & Output Quiz
               </h3>
               <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed">
-                Curated JavaScript and TypeScript interview questions with
-                syntax-highlighted explanations.
+                80+ technical interview questions with active recall and 100
+                predict-the-output MCQs with instant explanations.
               </p>
-            </div>
+            </Link>
 
             <div className="p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)]">
               <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-500 flex items-center justify-center mb-3">

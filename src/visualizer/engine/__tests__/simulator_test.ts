@@ -108,11 +108,15 @@ assert(
 // Test 5: Security - Prototype Pollution via ObjectExpression
 const protoPollutionCode = `
 const obj = { "__proto__": { "polluted": true } };
+console.log(obj.polluted);
 `;
-simulateCode(protoPollutionCode);
+const resProtoPollution = simulateCode(protoPollutionCode);
+const protoPollutionLogs = resProtoPollution.steps[
+  resProtoPollution.steps.length - 1
+].logs.map((l) => l.args.join(' '));
 assert(
-  !(Object.prototype as Record<string, unknown>).polluted,
-  'Object.prototype must NOT be polluted'
+  protoPollutionLogs.includes('undefined'),
+  'Object literals must not adopt a prototype from __proto__'
 );
 
 console.log('\nAll simulator tests passed successfully!');

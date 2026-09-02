@@ -1,69 +1,75 @@
-/**
- * Injects infinite loop protection into user code.
- * Masks literals, normalizes unbraced loops, and tracks iterations per loop ID.
- */
+import * as acorn from 'acorn';
+
+/** Injects a private, monotonic iteration budget into every JavaScript loop. */
 export function addInfiniteLoopProtection(
   code: string,
   maxIterations = 10000
 ): string {
   if (!code || !code.trim()) return code;
 
-  try {
-    const tokens: string[] = [];
-    const placeholder = (idx: number) => `___RUNJS_LITERAL_${idx}___`;
-    const literalRegex =
-      /(\/\*[\s\S]*?\*\/|\/\/[^\r\n]*|(?<![\w$])\/(?:\\.|[^/\\\r\n])+\/[gimsuy]*|`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g;
-
-    const masked = code.replace(literalRegex, (match) => {
-      const idx = tokens.length;
-      tokens.push(match);
-      return placeholder(idx);
-    });
-
-    // Normalize empty loops with immediate semicolons: while(true); -> while(true) {}
-    let normalized = masked
-      .replace(/\b(while\s*\([^{};]*\))\s*;/g, '$1 {}')
-      .replace(/\b(for\s*\([^)]*\))\s*;/g, '$1 {}');
-
-    // Normalize single-statement loops without braces: while(x) y(); -> while(x) { y(); }
-    normalized = normalized
-      .replace(/\b(while\s*\([^{};]*\))\s*([^{};]+;)/g, '$1 { $2 }')
-      .replace(/\b(for\s*\([^)]*\))\s*([^{};]+;)/g, '$1 { $2 }');
-
-    let loopId = 0;
-    const transformed = normalized.replace(
-      /\b(for\s*\([^{}]*\)|while\s*\([^{}]*\)|do)\s*\{/g,
-      (match) => {
-        const id = loopId++;
-        return `${match} __runjs_check_loop(${id}, ${maxIterations});`;
-      }
-    );
-
-    if (loopId === 0) return code;
-
-    const helper = `
-const __runjs_loop_data = new Map();
-function __runjs_check_loop(id, max = ${maxIterations}) {
-  let rec = __runjs_loop_data.get(id);
-  const now = Date.now();
-  if (!rec || now - rec.lastTime > 500) {
-    rec = { count: 0, lastTime: now };
-    __runjs_loop_data.set(id, rec);
-  }
-  rec.lastTime = now;
-  if (++rec.count > max) {
-    throw new RangeError('Potential infinite loop detected: exceeded ' + max + ' iterations.');
-  }
-}
+  const helper = `
+const __runjs_check_loop = (() => {
+  const counts = new Map();
+  return (id, max = ${maxIterations}) => {
+    const count = (counts.get(id) || 0) + 1;
+    counts.set(id, count);
+    if (count > max) {
+      throw new RangeError('Potential infinite loop detected: exceeded ' + max + ' iterations.');
+    }
+  };
+})();
 `;
 
-    const unmasked = transformed.replace(
-      /___RUNJS_LITERAL_(\d+)___/g,
-      (_, idxStr) => tokens[Number(idxStr)] ?? ''
-    );
+  try {
+    const program = acorn.parse(code, {
+      ecmaVersion: 'latest',
+      sourceType: 'script',
+    }) as unknown as { body: unknown[] };
+    const insertions = new Map<number, string[]>();
+    let loopId = 0;
+    const add = (position: number, text: string) => {
+      insertions.set(position, [...(insertions.get(position) || []), text]);
+    };
+    const visit = (value: unknown) => {
+      if (!value || typeof value !== 'object') return;
+      const node = value as Record<string, unknown>;
+      const type = node.type;
+      if (
+        type === 'ForStatement' ||
+        type === 'ForInStatement' ||
+        type === 'ForOfStatement' ||
+        type === 'WhileStatement' ||
+        type === 'DoWhileStatement'
+      ) {
+        const body = node.body as Record<string, unknown>;
+        const id = loopId++;
+        const check = `__runjs_check_loop(${id}, ${maxIterations});`;
+        if (body.type === 'BlockStatement') {
+          add((body.start as number) + 1, check);
+        } else {
+          add(body.start as number, `{${check}`);
+          add(body.end as number, `}`);
+        }
+      }
+      for (const child of Object.values(node)) {
+        if (Array.isArray(child)) child.forEach(visit);
+        else visit(child);
+      }
+    };
+    program.body.forEach(visit);
 
-    return `${helper}\n${unmasked}`;
-  } catch {
-    return code;
+    const points = [...insertions.keys()].sort((a, b) => b - a);
+    let transformed = code;
+    for (const point of points) {
+      transformed =
+        transformed.slice(0, point) +
+        (insertions.get(point) || []).join('') +
+        transformed.slice(point);
+    }
+    return loopId > 0 ? `${helper}\n${transformed}` : code;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Invalid JavaScript';
+    return `${helper}\nthrow new SyntaxError(${JSON.stringify(message)});`;
   }
 }

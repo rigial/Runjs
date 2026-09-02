@@ -127,7 +127,7 @@ function TSPlayground() {
         });
         let final = parseJavascriptCode.code;
         final = addInfiniteLoopProtection(final);
-        await runInSandbox(final, {
+        const result = await runInSandbox(final, {
           timeoutMs: 5000,
           onLog: (type, args) => {
             if (type === 'error') {
@@ -141,6 +141,7 @@ function TSPlayground() {
             }
           },
         });
+        if (result.error) lunaConsole.error(result.error);
       } catch (error) {
         lunaConsole.error(error);
       }

@@ -81,7 +81,7 @@ function JSPlayground() {
 
       try {
         const final = addInfiniteLoopProtection(code);
-        await runInSandbox(final, {
+        const result = await runInSandbox(final, {
           timeoutMs: 5000,
           onLog: (type, args) => {
             if (type === 'error') {
@@ -95,6 +95,7 @@ function JSPlayground() {
             }
           },
         });
+        if (result.error) lunaConsole.error(result.error);
       } catch (error) {
         lunaConsole.error(error);
       }

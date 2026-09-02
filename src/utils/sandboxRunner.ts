@@ -22,7 +22,7 @@ const WORKER_BOOTSTRAP = `
   // Strip sensitive host storage and network capabilities from the worker
   try { delete self.indexedDB; } catch(e) {}
   try { delete self.caches; } catch(e) {}
-  try { delete self.fetch; } catch(e) {}
+  try { Object.defineProperty(self, 'fetch', { value: undefined, configurable: false, writable: false }); } catch(e) {}
   try { delete self.XMLHttpRequest; } catch(e) {}
   try { delete self.importScripts; } catch(e) {}
   try { delete self.WebSocket; } catch(e) {}
@@ -62,25 +62,25 @@ const WORKER_BOOTSTRAP = `
     if (type === 'object') {
       if (seen.has(val)) return '[Circular]';
       seen.add(val);
-
-      if (Array.isArray(val)) {
-        return val.slice(0, 50).map(function(item) {
-          return serializeArg(item, depth + 1, seen);
-        });
-      }
-
-      const copy = {};
-      const keys = Object.keys(val).slice(0, 50);
-      for (let i = 0; i < keys.length; i++) {
-        const k = keys[i];
-        if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
-        try {
-          copy[k] = serializeArg(val[k], depth + 1, seen);
-        } catch (err) {
-          copy[k] = '[Unserializable]';
+      try {
+        if (Array.isArray(val)) {
+          return val.slice(0, 50).map(function(item) {
+            return serializeArg(item, depth + 1, seen);
+          });
         }
+
+        const copy = {};
+        const keys = Object.keys(val).slice(0, 50);
+        for (let i = 0; i < keys.length; i++) {
+          const k = keys[i];
+          if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
+          try { copy[k] = serializeArg(val[k], depth + 1, seen); }
+          catch (err) { copy[k] = '[Unserializable]'; }
+        }
+        return copy;
+      } finally {
+        seen.delete(val);
       }
-      return copy;
     }
 
     return String(val);

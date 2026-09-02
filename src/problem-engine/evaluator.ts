@@ -4,7 +4,10 @@ import { loadTypscript } from '../utils/commonFunction';
 import { Problem, TestCase, TestResult, SubmissionResult } from './types';
 import { transform } from 'esbuild-wasm';
 
-export function deepClone<T>(value: T): T {
+export function deepClone<T>(
+  value: T,
+  seen = new WeakMap<object, unknown>()
+): T {
   if (value === null || typeof value !== 'object') {
     return value;
   }
@@ -29,21 +32,31 @@ export function deepClone<T>(value: T): T {
     return new RegExp(value.source, value.flags) as unknown as T;
   }
   if (Array.isArray(value)) {
-    return value.map((item) => deepClone(item)) as unknown as T;
+    if (seen.has(value)) return seen.get(value) as T;
+    const copy: unknown[] = [];
+    seen.set(value, copy);
+    value.forEach((item, index) => (copy[index] = deepClone(item, seen)));
+    return copy as T;
   }
   if (value instanceof Set) {
     const cloneSet = new Set();
-    value.forEach((v) => cloneSet.add(deepClone(v)));
+    seen.set(value, cloneSet);
+    value.forEach((v) => cloneSet.add(deepClone(v, seen)));
     return cloneSet as unknown as T;
   }
   if (value instanceof Map) {
     const cloneMap = new Map();
-    value.forEach((v, k) => cloneMap.set(deepClone(k), deepClone(v)));
+    seen.set(value, cloneMap);
+    value.forEach((v, k) =>
+      cloneMap.set(deepClone(k, seen), deepClone(v, seen))
+    );
     return cloneMap as unknown as T;
   }
   const copy = {} as Record<string, any>;
+  if (seen.has(value as object)) return seen.get(value as object) as T;
+  seen.set(value as object, copy);
   for (const key of Object.keys(value)) {
-    copy[key] = deepClone((value as Record<string, any>)[key]);
+    copy[key] = deepClone((value as Record<string, any>)[key], seen);
   }
   return copy as T;
 }
@@ -150,14 +163,59 @@ function isWorkerSupported(): boolean {
   );
 }
 
-function serializeWorkerInput(val: any, seen = new WeakSet()): any {
+function canUseWorkerInput(val: any, seen = new WeakSet<object>()): boolean {
+  if (val === null || val === undefined) return true;
+  if (typeof val === 'function' || typeof val === 'symbol') return false;
+  if (typeof val !== 'object') return true;
+  if (seen.has(val)) return true;
+  seen.add(val);
+  if (val instanceof Promise || typeof val.then === 'function') return false;
+  if (Array.isArray(val))
+    return val.every((item) => canUseWorkerInput(item, seen));
+  if (val instanceof Map)
+    return [...val].every(
+      ([key, value]) =>
+        canUseWorkerInput(key, seen) && canUseWorkerInput(value, seen)
+    );
+  if (val instanceof Set)
+    return [...val].every((item) => canUseWorkerInput(item, seen));
+  return Object.values(val).every((item) => canUseWorkerInput(item, seen));
+}
+
+function serializeWorkerInput(val: any, seen = new WeakSet<object>()): any {
   if (val === null || val === undefined) return val;
-  if (typeof val === 'function') {
-    return { __isSerializedFunction: true, code: val.toString() };
-  }
   if (typeof val !== 'object') return val;
   if (seen.has(val)) return '[Circular]';
   seen.add(val);
+  if (val instanceof Date) return { __runjsType: 'Date', value: val.getTime() };
+  if (val instanceof RegExp)
+    return { __runjsType: 'RegExp', source: val.source, flags: val.flags };
+  if (val instanceof Error)
+    return {
+      __runjsType: 'Error',
+      name: val.name,
+      message: val.message,
+      stack: val.stack,
+    };
+  if (ArrayBuffer.isView(val))
+    return {
+      __runjsType: 'TypedArray',
+      name: val.constructor.name,
+      values: Array.from(val as unknown as ArrayLike<number>),
+    };
+  if (val instanceof Map)
+    return {
+      __runjsType: 'Map',
+      entries: [...val].map(([key, value]) => [
+        serializeWorkerInput(key, seen),
+        serializeWorkerInput(value, seen),
+      ]),
+    };
+  if (val instanceof Set)
+    return {
+      __runjsType: 'Set',
+      values: [...val].map((item) => serializeWorkerInput(item, seen)),
+    };
   if (Array.isArray(val)) {
     return val.map((item) => serializeWorkerInput(item, seen));
   }
@@ -172,7 +230,8 @@ function serializeWorkerInput(val: any, seen = new WeakSet()): any {
 function runInWorker(
   runnerFunctionBody: string,
   input: any,
-  timeoutMs: number
+  timeoutMs: number,
+  allowPolyfill: boolean
 ): Promise<{ actual: any; logs: string[] }> {
   return new Promise((resolve, reject) => {
     const workerScript = `
@@ -186,21 +245,23 @@ function runInWorker(
       try { delete self.EventSource; } catch(e) {}
       try { delete self.BroadcastChannel; } catch(e) {}
       try { delete self.SharedWorker; } catch(e) {}
+      const trustedPostMessage = self.postMessage.bind(self);
       try {
-        Object.freeze(Object.prototype);
-        Object.freeze(Array.prototype);
+        if (!ALLOW_POLYFILL) {
+          Object.freeze(Object.prototype);
+          Object.freeze(Array.prototype);
+        }
       } catch(e) {}
 
       function reviveWorkerInput(val) {
         if (val === null || val === undefined) return val;
         if (typeof val === 'object') {
-          if (val.__isSerializedFunction && typeof val.code === 'string') {
-            try {
-              return new Function('return (' + val.code + ')')();
-            } catch(e) {
-              return function() {};
-            }
-          }
+          if (val.__runjsType === 'Date') return new Date(val.value);
+          if (val.__runjsType === 'RegExp') return new RegExp(val.source, val.flags);
+          if (val.__runjsType === 'Error') { const err = new Error(val.message); err.name = val.name; err.stack = val.stack; return err; }
+          if (val.__runjsType === 'Map') return new Map(val.entries.map(([key, value]) => [reviveWorkerInput(key), reviveWorkerInput(value)]));
+          if (val.__runjsType === 'Set') return new Set(val.values.map(reviveWorkerInput));
+          if (val.__runjsType === 'TypedArray') { const types = { Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array }; const Type = types[val.name]; return Type ? new Type(val.values) : val.values; }
           if (Array.isArray(val)) {
             return val.map(reviveWorkerInput);
           }
@@ -215,7 +276,7 @@ function runInWorker(
       }
 
       self.onmessage = async function(e) {
-        const { runnerCode, input } = e.data;
+        const { runnerCode, input, completionToken } = e.data;
         const logs = [];
         
         function formatVal(val) {
@@ -243,12 +304,12 @@ function runInWorker(
           const execute = factory(captureConsole);
           const revivedInput = reviveWorkerInput(input);
           const actual = await execute(revivedInput);
-          self.postMessage({ success: true, actual, logs });
+          trustedPostMessage({ completionToken, success: true, actual, logs });
         } catch (err) {
-          self.postMessage({ success: false, error: err?.message || String(err), logs });
+          trustedPostMessage({ completionToken, success: false, error: err?.message || String(err), logs });
         }
       };
-    `;
+    `.replace('ALLOW_POLYFILL', String(allowPolyfill));
 
     let blob: Blob | null = null;
     let url: string | null = null;
@@ -284,8 +345,10 @@ function runInWorker(
         );
       }, timeoutMs);
 
+      const completionToken = crypto.randomUUID();
       worker.onmessage = (event: MessageEvent) => {
         const data = event.data;
+        if (!data || data.completionToken !== completionToken) return;
         cleanup();
         if (data.success) {
           resolve({ actual: data.actual, logs: data.logs || [] });
@@ -300,7 +363,11 @@ function runInWorker(
         reject(new Error(errorMsg));
       };
 
-      worker.postMessage({ runnerCode: runnerFunctionBody, input });
+      worker.postMessage({
+        runnerCode: runnerFunctionBody,
+        input,
+        completionToken,
+      });
     } catch (err) {
       cleanup();
       reject(err);
@@ -405,15 +472,17 @@ export async function runSingleTestCase(
       `;
     }
 
+    const useWorker = isWorkerSupported() && canUseWorkerInput(testCase.input);
     const clonedInput = deepClone(testCase.input);
-    const workerInput = serializeWorkerInput(clonedInput);
+    const workerInput = useWorker ? serializeWorkerInput(testCase.input) : null;
 
     let actual: any;
-    if (isWorkerSupported()) {
+    if (useWorker) {
       const workerRes = await runInWorker(
         runnerFunctionBody,
         workerInput,
-        timeoutMs
+        timeoutMs,
+        Boolean(problem.isPolyfill)
       );
       actual = workerRes.actual;
       logs.push(...workerRes.logs);

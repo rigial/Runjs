@@ -14,6 +14,12 @@ import {
 const MAX_STEPS = 500;
 const MAX_LOOP_ITERATIONS = 200;
 const MAX_STACK_DEPTH = 50;
+const restrictedBuiltinObjects = new WeakSet<object>();
+
+function createRestrictedBuiltin<T extends object>(value: T): T {
+  restrictedBuiltinObjects.add(value);
+  return Object.freeze(value);
+}
 
 interface Scope {
   parent: Scope | null;
@@ -41,7 +47,7 @@ function getVariable(scope: Scope, name: string): unknown {
   if (name === 'NaN') return NaN;
   if (name === 'Infinity') return Infinity;
   if (name === 'Math') {
-    return Object.freeze({
+    return createRestrictedBuiltin({
       max: Math.max,
       min: Math.min,
       floor: Math.floor,
@@ -54,7 +60,7 @@ function getVariable(scope: Scope, name: string): unknown {
     });
   }
   if (name === 'JSON') {
-    return Object.freeze({
+    return createRestrictedBuiltin({
       stringify: (val: unknown) => JSON.stringify(val),
       parse: (str: string) => JSON.parse(str),
     });
@@ -1340,7 +1346,9 @@ export class Simulator {
           if (
             Array.isArray(obj) ||
             typeof obj === 'string' ||
-            (obj as unknown) === Math ||
+            (typeof obj === 'object' &&
+              obj !== null &&
+              restrictedBuiltinObjects.has(obj)) ||
             obj === this.promiseConstructorRef ||
             Boolean((obj as Record<string, unknown>)?.__isSimulatedPromise) ||
             Boolean((obj as Record<string, unknown>)?.__isConsole)

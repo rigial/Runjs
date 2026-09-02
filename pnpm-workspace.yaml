@@ -4,4 +4,4 @@ allowBuilds:
   workerd: true
 
 overrides:
-  dompurify: ">=3.4.13"
+  dompurify: ">=3.4.13 <4"

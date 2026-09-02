@@ -40,19 +40,19 @@
         {
             "src": "/RunJS-Home.jpeg",
             "type": "image/jpeg",
-            "sizes": "568x320",
+            "sizes": "1280x720",
             "form_factor": "wide"
         },
         {
             "src": "/RunJS-Dashboard.jpeg",
             "type": "image/jpeg",
-            "sizes": "568x320",
+            "sizes": "1280x720",
             "form_factor": "wide"
         },
         {
             "src": "/RunJS-Playground.jpeg",
             "type": "image/jpeg",
-            "sizes": "568x320",
+            "sizes": "1280x720",
             "form_factor": "wide"
         }
     ],

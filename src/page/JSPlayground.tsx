@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
 import '../utils/lunaStyles';
@@ -9,7 +9,7 @@ import { runInSandbox } from '../utils/sandboxRunner';
 import { ModalRef } from '../utils/interface';
 import useAdjustFontSize from '../hook/useAdjustFontSize';
 import useComplieCode from '../hook/useComplieCode';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import HelpModal from '../components/HelpModal';
 import useWarnOnClose from '../hook/useWarnOnClose ';
 import useFormatDocument from '../hook/useFormatDocument';
@@ -23,6 +23,9 @@ import { saveJSTSFile } from '../utils/commonFunction';
 import SEO from '../seo/SEO';
 import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
 import { usePwaInstall } from '../hook/usePwaInstall';
+import ToolInterlinkMenu from '../components/ToolInterlinkMenu';
+import ImportNotificationToast from '../components/ImportNotificationToast';
+import { consumeTransferredCode } from '../utils/crossToolTransfer';
 import {
   Play,
   HelpCircle,
@@ -32,16 +35,36 @@ import {
   ZoomOut,
   Code2,
   ChevronLeft,
-  RotateCw,
 } from 'lucide-react';
 
 function JSPlayground() {
   const { isInstallable, isInstalled, openInstallModal } = usePwaInstall();
+  const location = useLocation();
   const [code, setCode] = useDebounceLocalStorageState(
     'jscode',
     '// Welcome to RunJS - In-browser JavaScript Playground\n\nfunction calculateStats(numbers) {\n  const sum = numbers.reduce((acc, curr) => acc + curr, 0);\n  const avg = sum / numbers.length;\n  const max = Math.max(...numbers);\n  return { sum, avg, max };\n}\n\nconst scores = [88, 92, 79, 95, 100];\nconsole.log("Calculated Statistics:", calculateStats(scores));\n',
     1000
   );
+  const [importSource, setImportSource] = useState<string | null>(null);
+
+  // Consume any code transferred from another tool (Event Loop, Execution Context, TS)
+  useEffect(() => {
+    const transferred = consumeTransferredCode(
+      'js',
+      location.state as { code?: string; source?: string } | undefined,
+      location.search
+    );
+
+    if (transferred && transferred.code !== undefined) {
+      setCode(transferred.code);
+      if (transferred.source) {
+        setImportSource(transferred.source);
+      }
+      if (location.state && (location.state as { code?: string }).code) {
+        window.history.replaceState({}, document.title);
+      }
+    }
+  }, [location.state, location.search, setCode]);
   const [currentFontSize, setFontSize] = useLocalStorageState('fontSize', '14');
   const [activeMobileTab, setActiveMobileTab] = useState<'editor' | 'console'>(
     'editor'
@@ -191,23 +214,11 @@ function JSPlayground() {
               </kbd>
             </button>
 
-            {/* Visualize Button */}
-            <Link
-              to="/visualizer"
-              state={{ code }}
-              onClick={() => {
-                try {
-                  sessionStorage.setItem('runjs_visualizer_code', code || '');
-                } catch {
-                  // ignore
-                }
-              }}
-              title="Visualize Execution in JS Visualizer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <RotateCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Visualize</span>
-            </Link>
+            {/* Cross-Tool Interlink Menu */}
+            <ToolInterlinkMenu
+              currentTool="js"
+              getCode={() => code}
+            />
 
             {/* Format Document */}
             <button
@@ -394,6 +405,11 @@ function JSPlayground() {
           )}
         </section>
       </main>
+
+      <ImportNotificationToast
+        source={importSource}
+        onDismiss={() => setImportSource(null)}
+      />
 
       <HelpModal ref={dialogRef} />
     </Fragment>

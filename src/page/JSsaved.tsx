@@ -22,6 +22,7 @@ import ThemeSelector from '../components/ThemeSelector';
 import useTheme from '../hook/useTheme';
 import { saveJSTSFile } from '../utils/commonFunction';
 import SEO from '../seo/SEO';
+import ToolInterlinkMenu from '../components/ToolInterlinkMenu';
 import {
   Play,
   HelpCircle,
@@ -32,7 +33,6 @@ import {
   Code2,
   ChevronLeft,
   Tag as TagIcon,
-  RotateCw,
 } from 'lucide-react';
 
 function JSsaved() {
@@ -214,26 +214,11 @@ function JSsaved() {
               </kbd>
             </button>
 
-            {/* Visualize Button */}
-            <Link
-              to="/visualizer"
-              state={{ code: code?.code ?? '' }}
-              onClick={() => {
-                try {
-                  sessionStorage.setItem(
-                    'runjs_visualizer_code',
-                    code?.code ?? ''
-                  );
-                } catch {
-                  // ignore
-                }
-              }}
-              title="Visualize Execution in JS Visualizer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 text-xs font-semibold shadow-xs transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <RotateCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Visualize</span>
-            </Link>
+            {/* Cross-Tool Interlink Menu */}
+            <ToolInterlinkMenu
+              currentTool="js"
+              getCode={() => code?.code ?? ''}
+            />
 
             {/* Format Document */}
             <button

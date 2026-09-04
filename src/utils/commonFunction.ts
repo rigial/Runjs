@@ -33,7 +33,23 @@ export async function loadTypscript(): Promise<void> {
     initPromise = (async () => {
       try {
         const { initialize, version } = await import('esbuild-wasm');
-        // Prefer local bundled wasm for offline support and zero-CDN exposure
+        // Node.js environment (for automated tests and prerendering)
+        if (typeof window === 'undefined') {
+          try {
+            await initialize({});
+          } catch (nodeErr) {
+            if (
+              nodeErr instanceof Error &&
+              nodeErr.message.includes('Cannot call "initialize" more than once')
+            ) {
+              return;
+            }
+            throw nodeErr;
+          }
+          return;
+        }
+
+        // Browser environment: Prefer local bundled wasm for offline support and zero-CDN exposure
         try {
           await initialize({
             worker: true,

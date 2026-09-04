@@ -30,6 +30,7 @@ import ThemeSelector from '../components/ThemeSelector';
 import useTheme from '../hook/useTheme';
 import { loadTypscript, saveJSTSFile } from '../utils/commonFunction';
 import SEO from '../seo/SEO';
+import ToolInterlinkMenu from '../components/ToolInterlinkMenu';
 import {
   Play,
   HelpCircle,
@@ -262,6 +263,12 @@ function TSsaved() {
                 ⌘R
               </kbd>
             </button>
+
+            {/* Cross-Tool Interlink Menu */}
+            <ToolInterlinkMenu
+              currentTool="ts"
+              getCode={() => code?.code ?? ''}
+            />
 
             {/* Format Document */}
             <button

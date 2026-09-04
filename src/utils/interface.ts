@@ -114,6 +114,7 @@ export interface IProjectTable {
   createPlayground?: () => void;
   dbcall: () => Promise<void>;
   tagSuggestions: string[];
+  isLoading?: boolean;
 }
 
 export interface ISearchInput {

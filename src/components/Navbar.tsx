@@ -97,6 +97,12 @@ function Navbar() {
     setOpenDropdown((prev) => (prev === menu ? null : menu));
   };
 
+  const prefetchRoute = useCallback((link: string) => {
+    if (link === '/dashboard') {
+      import('../page/Dashboard');
+    }
+  }, []);
+
   // Determine active states for dropdown triggers
   const isPlaygroundActive = playgroundLinks.some(
     (item) =>
@@ -449,6 +455,9 @@ function Navbar() {
               <Link
                 key={item.link}
                 to={item.link}
+                onMouseEnter={() => prefetchRoute(item.link)}
+                onFocus={() => prefetchRoute(item.link)}
+                onTouchStart={() => prefetchRoute(item.link)}
                 className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 ${
                   isActive
                     ? 'bg-[var(--bg-surface-active)] text-[var(--text-primary)] font-semibold shadow-xs'
@@ -714,6 +723,9 @@ function Navbar() {
                     <Link
                       key={item.link}
                       to={item.link}
+                      onMouseEnter={() => prefetchRoute(item.link)}
+                      onFocus={() => prefetchRoute(item.link)}
+                      onTouchStart={() => prefetchRoute(item.link)}
                       onClick={() => setMobileMenuOpen(false)}
                       className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-medium transition-colors ${
                         isActive

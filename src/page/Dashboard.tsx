@@ -16,6 +16,7 @@ function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFavouriteSelected, setIsFavouriteSelected] = useState(false);
   const [tag, setTags] = useState<Tag>({});
+  const [isLoading, setIsLoading] = useState(true);
   const dialogRef = useRef<ModalRef>(null);
 
   async function dbcall() {
@@ -36,6 +37,8 @@ function Dashboard() {
       setTags(tagHashMap);
     } catch (error) {
       console.log('Error', error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -186,6 +189,7 @@ function Dashboard() {
           data={filterData}
           bin={false}
           createPlayground={() => dialogRef?.current?.open()}
+          isLoading={isLoading}
         />
       </main>
 

@@ -10,6 +10,7 @@ import { Trash2, AlertCircle, ArrowLeft } from 'lucide-react';
 
 function Bin() {
   const [userSavedCode, setUserSavedCode] = useState<UserCodeBase[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function dbcall() {
     try {
@@ -20,6 +21,8 @@ function Bin() {
       setUserSavedCode(filterIsnotDeleted);
     } catch (error) {
       console.log('Error', error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -89,6 +92,7 @@ function Bin() {
           dbcall={dbcall}
           data={userSavedCode}
           bin={true}
+          isLoading={isLoading}
         />
       </main>
 

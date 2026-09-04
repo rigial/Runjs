@@ -153,7 +153,7 @@ function AboutPage() {
               <Link
                 target="_blank"
                 rel="noopener noreferrer"
-                to="https://www.linkedin.com/company/runjs"
+                to="https://www.linkedin.com/in/mrkishorekumar/"
                 className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-medium text-[var(--text-secondary)] hover:text-[#0a66c2] transition-colors"
               >
                 <LinkedinIcon />

@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import { memo, Suspense, useEffect } from 'react';
 import PageSkeleton from './components/skeletons/PageSkeleton';
-import DashboardSkeleton from './components/skeletons/DashboardSkeleton';
+import DashboardLoading from './components/DashboardLoading';
 import RouteProgressBar from './components/RouteProgressBar';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import { lazyWithRetry } from './utils/lazyWithRetry';
@@ -93,7 +93,7 @@ function AppRouter() {
             <Route
               path="/dashboard"
               element={
-                <Suspense fallback={<DashboardSkeleton />}>
+                <Suspense fallback={<DashboardLoading />}>
                   <Dashboard />
                 </Suspense>
               }

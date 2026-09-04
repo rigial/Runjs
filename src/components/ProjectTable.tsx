@@ -6,6 +6,7 @@ import { deleteCode, updateCode } from '../db/operations';
 import CreatePlayground from './CreatePlayground';
 import HTMLDashboardPreviewModal from './html-playground/HTMLDashboardPreviewModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import IOSSpinner from './IOSSpinner';
 import {
   Star,
   Download,
@@ -191,61 +192,11 @@ function ProjectTable({
 
   if (isLoading) {
     return (
-      <div className="overflow-hidden rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] my-6 shadow-xs">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[var(--border-default)] text-left text-xs">
-            <thead className="bg-[var(--bg-surface-muted)] text-[var(--text-secondary)] uppercase tracking-wider font-semibold">
-              <tr>
-                <th scope="col" className="px-4 py-3">
-                  Playground
-                </th>
-                <th scope="col" className="px-4 py-3 hidden sm:table-cell">
-                  Language
-                </th>
-                <th scope="col" className="px-4 py-3 hidden md:table-cell">
-                  Tag
-                </th>
-                <th scope="col" className="px-4 py-3 hidden lg:table-cell">
-                  Modified
-                </th>
-                <th scope="col" className="px-4 py-3 text-right">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--border-default)] bg-[var(--bg-surface)]">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <tr key={item} className="animate-pulse">
-                  <td className="px-4 py-3.5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[var(--border-default)]/60 shrink-0" />
-                      <div className="space-y-1.5 flex-1">
-                        <div className="w-32 sm:w-48 h-3.5 rounded bg-[var(--border-default)]/80" />
-                        <div className="w-20 sm:w-28 h-2.5 rounded bg-[var(--border-default)]/40" />
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3.5 hidden sm:table-cell">
-                    <div className="w-14 h-5 rounded bg-[var(--border-default)]/60" />
-                  </td>
-                  <td className="px-4 py-3.5 hidden md:table-cell">
-                    <div className="w-16 h-5 rounded-md bg-[var(--border-default)]/50" />
-                  </td>
-                  <td className="px-4 py-3.5 hidden lg:table-cell">
-                    <div className="w-24 h-3 rounded bg-[var(--border-default)]/50" />
-                  </td>
-                  <td className="px-4 py-3.5 text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <div className="w-7 h-7 rounded-md bg-[var(--border-default)]/40" />
-                      <div className="w-7 h-7 rounded-md bg-[var(--border-default)]/40" />
-                      <div className="w-7 h-7 rounded-md bg-[var(--border-default)]/40" />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="flex flex-col items-center justify-center p-16 my-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)]">
+        <IOSSpinner size="md" />
+        <span className="text-xs text-[var(--text-muted)] mt-2.5">
+          {bin ? 'Loading trash...' : 'Loading playgrounds...'}
+        </span>
       </div>
     );
   }

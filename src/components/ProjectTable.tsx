@@ -6,6 +6,7 @@ import { deleteCode, updateCode } from '../db/operations';
 import CreatePlayground from './CreatePlayground';
 import HTMLDashboardPreviewModal from './html-playground/HTMLDashboardPreviewModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import IOSSpinner from './IOSSpinner';
 import {
   Star,
   Download,
@@ -27,6 +28,7 @@ function ProjectTable({
   createPlayground,
   dbcall,
   tagSuggestions,
+  isLoading,
 }: IProjectTable) {
   const dialogRef = useRef<ModalRef>(null);
   const [renameData, setRenameData] = useState<UserCodeBase>();
@@ -187,6 +189,17 @@ function ProjectTable({
         );
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-16 my-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)]">
+        <IOSSpinner size="md" />
+        <span className="text-xs text-[var(--text-muted)] mt-2.5">
+          {bin ? 'Loading trash...' : 'Loading playgrounds...'}
+        </span>
+      </div>
+    );
+  }
 
   if (data.length === 0) {
     return (

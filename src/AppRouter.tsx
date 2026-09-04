@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import { memo, Suspense, useEffect } from 'react';
 import PageSkeleton from './components/skeletons/PageSkeleton';
+import DashboardLoading from './components/DashboardLoading';
+import RouteProgressBar from './components/RouteProgressBar';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
@@ -51,7 +53,8 @@ const JSExecutionContextVisualizer = lazyWithRetry(
 
 function AppRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter useTransitions={false}>
+      <RouteProgressBar />
       <ScrollToTop />
       <RouteErrorBoundary>
         <Suspense fallback={<PageSkeleton />}>
@@ -87,7 +90,14 @@ function AppRouter() {
             <Route path="/html" element={<HTMLPlayground />} />
             <Route path="/html/:id" element={<HTMLPlayground />} />
             <Route path="/html-preview" element={<HTMLStandalonePreview />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/dashboard"
+              element={
+                <Suspense fallback={<DashboardLoading />}>
+                  <Dashboard />
+                </Suspense>
+              }
+            />
             <Route path="/interview" element={<Interview />} />
             <Route path="/output-questions" element={<OutputQuestions />} />
             <Route path="/bin" element={<Bin />} />

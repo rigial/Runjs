@@ -105,7 +105,7 @@ export function saveCrossToolTransfer(
     if (config) {
       sessionStorage.setItem(config.storageKey, code);
       if (sourceTitle) {
-        sessionStorage.setItem('runjs_transfer_source', sourceTitle);
+        sessionStorage.setItem(`${config.storageKey}_source`, sourceTitle);
       }
     }
   } catch {
@@ -127,22 +127,27 @@ export function consumeTransferredCode(
 
   let codeToLoad = locationState?.code;
   let sourceToLoad = locationState?.source;
+  const sourceStorageKey = `${config.storageKey}_source`;
 
-  if (codeToLoad === undefined || codeToLoad === null) {
-    try {
+  try {
+    if (codeToLoad === undefined || codeToLoad === null) {
       const stored = sessionStorage.getItem(config.storageKey);
       if (stored !== null) {
         codeToLoad = stored;
-        sessionStorage.removeItem(config.storageKey);
       }
-      const storedSource = sessionStorage.getItem('runjs_transfer_source');
+      const storedSource = sessionStorage.getItem(sourceStorageKey);
       if (storedSource) {
         sourceToLoad = storedSource;
-        sessionStorage.removeItem('runjs_transfer_source');
       }
-    } catch {
-      // ignore
     }
+    // The navigation-state path is preferred, but its fallback must still be
+    // consumed so it cannot overwrite a later visit to this tool.
+    if (codeToLoad !== undefined && codeToLoad !== null) {
+      sessionStorage.removeItem(config.storageKey);
+      sessionStorage.removeItem(sourceStorageKey);
+    }
+  } catch {
+    // ignore
   }
 
   if ((codeToLoad === undefined || codeToLoad === null) && search) {

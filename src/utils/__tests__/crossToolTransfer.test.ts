@@ -123,6 +123,7 @@ console.log("Sum is:", result);
     },
   };
 
+  const sampleCode = 'console.log("Hello from tests");';
   saveCrossToolTransfer('visualizer', 'const x = 1;', 'TS Playground');
   const fromStorage = consumeTransferredCode('visualizer');
   if (
@@ -136,7 +137,21 @@ console.log("Sum is:", result);
     '  ✓ Successfully transferred code via saveCrossToolTransfer and consumeTransferredCode'
   );
 
-  const sampleCode = 'console.log("Hello from tests");';
+  saveCrossToolTransfer('js', 'const stale = true;', 'Event Loop');
+  const fromStateWithFallback = consumeTransferredCode('js', {
+    code: sampleCode,
+    source: 'TypeScript',
+  });
+  const staleFallback = consumeTransferredCode('js');
+  if (
+    !fromStateWithFallback ||
+    fromStateWithFallback.code !== sampleCode ||
+    staleFallback !== null
+  ) {
+    throw new Error('Location state did not consume its sessionStorage fallback');
+  }
+  console.log('  ✓ Location state consumes its one-shot sessionStorage fallback');
+
   const fromState = consumeTransferredCode('js', {
     code: sampleCode,
     source: 'TypeScript',

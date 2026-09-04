@@ -178,14 +178,18 @@ export const HTMLPreview = forwardRef<HTMLPreviewRef, HTMLPreviewProps>(
       }
     }, [compiledDoc, projectId]);
 
-    const handleReload = () => {
+    const reloadIframe = () => {
       consoleDrawerRef.current?.clear();
       setIframeKey((prev) => prev + 1);
+    };
+
+    const handleReload = () => {
+      reloadIframe();
       onManualReload?.();
     };
 
     useImperativeHandle(ref, () => ({
-      reload: handleReload,
+      reload: reloadIframe,
       getConsoleRef: () => consoleDrawerRef.current,
     }));
 

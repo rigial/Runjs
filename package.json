@@ -15,6 +15,7 @@
     "test:visualizer": "node scripts/test-visualizer.js",
     "test:context": "node scripts/test-execution-context.js",
     "test:interlink": "node scripts/test-cross-tool-interlink.js",
+    "test:reset-modal": "node scripts/test-reset-modal.js",
     "build": "node scripts/generate-sitemap.js && tsc -b && vite build && node scripts/prerender-routes.js",
     "lint": "eslint ./src",
     "pretty": "prettier --write ./src",

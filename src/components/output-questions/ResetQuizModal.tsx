@@ -132,8 +132,11 @@ function ResetQuizModal({
             <button
               type="button"
               onClick={() => {
-                onConfirm();
-                onClose();
+                try {
+                  onConfirm();
+                } finally {
+                  onClose();
+                }
               }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 active:bg-red-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
             >

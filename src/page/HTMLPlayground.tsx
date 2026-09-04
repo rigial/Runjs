@@ -416,13 +416,29 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
 
   // Reset Project Execution
   const executeReset = useCallback(() => {
+    setIsResetModalOpen(false);
     setHtml(DEFAULT_HTML);
     setCss(DEFAULT_CSS);
     setJavascript(DEFAULT_JS);
+    if (!id) {
+      try {
+        localStorage.setItem(
+          LOCAL_STORAGE_KEY,
+          JSON.stringify({
+            html: DEFAULT_HTML,
+            css: DEFAULT_CSS,
+            javascript: DEFAULT_JS,
+            settings: { autoRun, fontSize: numericFontSize },
+          })
+        );
+      } catch (e) {
+        console.error('Failed to reset localStorage', e);
+      }
+    }
     previewRef.current?.getConsoleRef()?.clear();
     runCompilation(DEFAULT_HTML, DEFAULT_CSS, DEFAULT_JS);
     previewRef.current?.reload();
-  }, [runCompilation]);
+  }, [id, autoRun, numericFontSize, runCompilation]);
 
   // Format All Documents
   const handleFormatAll = useCallback(() => {

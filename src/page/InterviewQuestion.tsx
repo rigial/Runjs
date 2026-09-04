@@ -86,36 +86,14 @@ export default function InterviewQuestion() {
   );
 
   // Stored mastery ratings & bookmarks
-  const [masteryRaw, setMasteryRaw] = useLocalStorageState(
+  const [mastery, setMastery] = useLocalStorageState<InterviewMasteryMap>(
     'interviewMastery',
-    '{}'
+    {}
   );
-  const [bookmarksRaw, setBookmarksRaw] = useLocalStorageState(
+  const [bookmarks, setBookmarks] = useLocalStorageState<InterviewBookmarkMap>(
     'interviewBookmarks',
-    '{}'
+    {}
   );
-
-  const mastery: InterviewMasteryMap = useMemo(() => {
-    if (typeof masteryRaw === 'string') {
-      try {
-        return JSON.parse(masteryRaw);
-      } catch {
-        return {};
-      }
-    }
-    return masteryRaw ?? {};
-  }, [masteryRaw]);
-
-  const bookmarks: InterviewBookmarkMap = useMemo(() => {
-    if (typeof bookmarksRaw === 'string') {
-      try {
-        return JSON.parse(bookmarksRaw);
-      } catch {
-        return {};
-      }
-    }
-    return bookmarksRaw ?? {};
-  }, [bookmarksRaw]);
 
   // Categories list
   const categories = useMemo(() => {
@@ -204,9 +182,9 @@ export default function InterviewQuestion() {
       } else {
         next[currentQId] = status;
       }
-      setMasteryRaw(JSON.stringify(next));
+      setMastery(next);
     },
-    [currentQId, mastery, setMasteryRaw]
+    [currentQId, mastery, setMastery]
   );
 
   const handleToggleBookmark = useCallback(
@@ -218,9 +196,9 @@ export default function InterviewQuestion() {
       } else {
         next[targetId] = true;
       }
-      setBookmarksRaw(JSON.stringify(next));
+      setBookmarks(next);
     },
-    [currentQId, bookmarks, setBookmarksRaw]
+    [currentQId, bookmarks, setBookmarks]
   );
 
   const handleToggleMasteredForId = useCallback(
@@ -232,9 +210,9 @@ export default function InterviewQuestion() {
       } else {
         next[targetId] = 'mastered';
       }
-      setMasteryRaw(JSON.stringify(next));
+      setMastery(next);
     },
-    [mastery, setMasteryRaw]
+    [mastery, setMastery]
   );
 
   // Navigation handlers
@@ -340,15 +318,15 @@ export default function InterviewQuestion() {
   }, [setSearchParams]);
 
   const handleConfirmReset = useCallback(() => {
-    setMasteryRaw('{}');
-    setBookmarksRaw('{}');
+    setMastery({});
+    setBookmarks({});
     setCurrentIndex(0);
     setActiveCategory('All');
     setActiveDifficulty('all');
     setViewMode('welcome');
     setSearchParams({}, { replace: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [setMasteryRaw, setBookmarksRaw, setSearchParams]);
+  }, [setMastery, setBookmarks, setSearchParams]);
 
   // Copy current question & answer
   const handleCopyCurrent = useCallback(async () => {

@@ -73,21 +73,10 @@ export default function OutputQuestions() {
   });
 
   // Stored answers
-  const [answersRaw, setAnswersRaw] = useLocalStorageState(
+  const [answers, setAnswers] = useLocalStorageState<Record<number, number>>(
     'outputQuizAnswers',
-    '{}'
+    {}
   );
-
-  const answers: Record<number, number> = useMemo(() => {
-    if (typeof answersRaw === 'string') {
-      try {
-        return JSON.parse(answersRaw);
-      } catch {
-        return {};
-      }
-    }
-    return answersRaw ?? {};
-  }, [answersRaw]);
 
   // Filter questions
   const filteredQuestions = useMemo(() => {
@@ -130,9 +119,9 @@ export default function OutputQuestions() {
       if (answers[currentQuestion.id] !== undefined) return; // Only first answer counts
 
       const next = { ...answers, [currentQuestion.id]: optionIdx };
-      setAnswersRaw(JSON.stringify(next));
+      setAnswers(next);
     },
-    [currentQuestion, answers, setAnswersRaw]
+    [currentQuestion, answers, setAnswers]
   );
 
   // Navigation handlers
@@ -209,13 +198,13 @@ export default function OutputQuestions() {
   }, []);
 
   const handleConfirmReset = useCallback(() => {
-    setAnswersRaw('{}');
+    setAnswers({});
     setCurrentIndex(0);
     setActiveFilter('all');
     setViewMode('welcome');
     setSearchParams({}, { replace: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [setAnswersRaw, setSearchParams]);
+  }, [setAnswers, setSearchParams]);
 
   // Keyboard shortcut listener (only active in quiz mode)
   useEffect(() => {

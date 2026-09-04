@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { getLivePreviewDoc } from '../utils/previewStorage';
 
 const BROADCAST_CHANNEL_NAME = 'runjs_html_live_preview';
 
@@ -8,13 +9,7 @@ export default function HTMLStandalonePreview() {
   const targetId = searchParams.get('target') || 'scratch';
   const targetStorageKey = `runjs_html_live_doc_${targetId}`;
 
-  const [doc, setDoc] = useState<string>(() => {
-    try {
-      return localStorage.getItem(targetStorageKey) || '';
-    } catch {
-      return '';
-    }
-  });
+  const [doc, setDoc] = useState<string>(() => getLivePreviewDoc(targetId));
   const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {

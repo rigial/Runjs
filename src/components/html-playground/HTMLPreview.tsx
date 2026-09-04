@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { HTMLConsoleDrawer, HTMLConsoleRef } from './HTMLConsoleDrawer';
 import { SENDER_KEY } from '../../utils/htmlCompiler';
+import { saveLivePreviewDoc } from '../../utils/previewStorage';
 
 export interface HTMLPreviewRef {
   reload: () => void;
@@ -156,15 +157,8 @@ export const HTMLPreview = forwardRef<HTMLPreviewRef, HTMLPreviewProps>(
 
       if (compiledDoc) {
         const targetId = projectId || 'scratch';
-        const storageKey = `runjs_html_live_doc_${targetId}`;
-
         // 1. Sync to localStorage for initial load / persistence
-        try {
-          localStorage.setItem(storageKey, compiledDoc);
-          localStorage.setItem(`${storageKey}_time`, Date.now().toString());
-        } catch (e) {
-          console.error('Failed to sync live preview to localStorage', e);
-        }
+        saveLivePreviewDoc(targetId, compiledDoc);
 
         // 2. Broadcast immediately over BroadcastChannel to open preview tabs
         if (typeof BroadcastChannel !== 'undefined') {
@@ -210,15 +204,7 @@ export const HTMLPreview = forwardRef<HTMLPreviewRef, HTMLPreviewProps>(
 
     const handleOpenInNewTab = () => {
       const targetId = projectId || 'scratch';
-      const storageKey = `runjs_html_live_doc_${targetId}`;
-
-      try {
-        localStorage.setItem(storageKey, compiledDoc);
-        localStorage.setItem(`${storageKey}_time`, Date.now().toString());
-      } catch (e) {
-        console.error('Failed to cache live doc', e);
-      }
-
+      saveLivePreviewDoc(targetId, compiledDoc);
       const previewUrl = `${window.location.origin}/html-preview?target=${targetId}`;
       window.open(previewUrl, `runjs_html_preview_${targetId}`);
     };

@@ -93,8 +93,11 @@ function HTMLResetModal({ isOpen, onClose, onConfirm }: HTMLResetModalProps) {
           <button
             type="button"
             onClick={() => {
-              onConfirm();
-              onClose();
+              try {
+                onConfirm();
+              } finally {
+                onClose();
+              }
             }}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >

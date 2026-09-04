@@ -80,9 +80,10 @@ const routes = [
   },
   {
     path: '/about',
-    title: 'About RunJS - Open Source In-Browser IDE Story | RunJS',
+    title:
+      'About RunJS - Open Source Architecture & In-Browser IDE Story | RunJS',
     description:
-      'The story, motivation, and open-source foundation behind the RunJS developer playground and creator M R Kishore Kumar.',
+      'Learn how RunJS works, its 100% in-browser client architecture, WebAssembly compilation, AST loop protection, and open-source foundation.',
   },
   {
     path: '/privacy',

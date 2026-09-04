@@ -193,96 +193,167 @@ const navigation = [
   },
 ];
 
-const packageList = [
-  {
-    packageLink: 'https://www.npmjs.com/package/react',
-    packageName: 'react',
-    packageDescription:
-      'Core UI library for building reactive, component-driven user interfaces.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/react-dom',
-    packageName: 'react-dom',
-    packageDescription:
-      'DOM renderer for React handling high-performance client updates.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/react-router',
-    packageName: 'react-router',
-    packageDescription:
-      'Client-side declarative routing and URL synchronization across views.',
-  },
+export interface PackageItem {
+  packageName: string;
+  packageLink: string;
+  packageDescription: string;
+  category: string;
+}
+
+const packageList: PackageItem[] = [
   {
     packageLink: 'https://www.npmjs.com/package/@monaco-editor/react',
     packageName: '@monaco-editor/react',
+    category: 'Code Editor',
     packageDescription:
       'Powers the VS Code-grade code editor with syntax highlighting, formatting, and theme support.',
   },
   {
-    packageLink: 'https://www.npmjs.com/package/react-split',
-    packageName: 'react-split',
+    packageLink: 'https://www.npmjs.com/package/emmet-monaco-es',
+    packageName: 'emmet-monaco-es',
+    category: 'Code Editor',
     packageDescription:
-      'Provides resizable split-pane layouts for the problem solver and playgrounds.',
+      'Emmet expansion and abbreviations engine integrated with Monaco editor.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/acorn',
+    packageName: 'acorn',
+    category: 'Compiler & AST',
+    packageDescription:
+      'Blazingly fast JavaScript parser generating Abstract Syntax Trees (AST) used for Event Loop simulation, execution context stepping, and infinite loop protection.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/acorn-walk',
+    packageName: 'acorn-walk',
+    category: 'Compiler & AST',
+    packageDescription:
+      'Fast AST traversal utility for inspecting, scanning, and analyzing code syntax trees.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/esbuild-wasm',
     packageName: 'esbuild-wasm',
+    category: 'Compiler & AST',
     packageDescription:
-      'WebAssembly-based JavaScript and TypeScript compiler running blazingly fast in the browser.',
+      'WebAssembly-based JavaScript and TypeScript compiler running blazingly fast directly in the browser.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/@codesandbox/sandpack-react',
     packageName: '@codesandbox/sandpack-react',
+    category: 'Sandbox & Runtime',
     packageDescription:
-      'In-browser live bundler and container for the interactive React Playground.',
+      'In-browser live bundler and runtime container for the interactive React Playground.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/@xterm/xterm',
+    packageName: '@xterm/xterm',
+    category: 'Terminal & Shell',
+    packageDescription:
+      'Full-featured in-browser terminal emulator with interactive shell and npm support.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/@xterm/addon-fit',
+    packageName: '@xterm/addon-fit',
+    category: 'Terminal & Shell',
+    packageDescription:
+      'Addon for xterm.js that dynamically resizes the terminal to fit its parent layout container.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/@xterm/addon-web-links',
+    packageName: '@xterm/addon-web-links',
+    category: 'Terminal & Shell',
+    packageDescription:
+      'Addon for xterm.js providing hyperlink detection and clickable URLs directly in terminal output.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/luna-console',
     packageName: 'luna-console',
+    category: 'Inspector & Console',
     packageDescription:
       'Developer console capturing stdout, warnings, errors, and object trees with theme parity.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/luna-object-viewer',
     packageName: 'luna-object-viewer',
+    category: 'Inspector & Console',
     packageDescription:
       'Interactive deep object inspector for complex JavaScript data structures.',
   },
   {
-    packageLink: 'https://www.npmjs.com/package/idb',
-    packageName: 'idb',
+    packageLink: 'https://www.npmjs.com/package/react',
+    packageName: 'react',
+    category: 'Core Framework',
     packageDescription:
-      'IndexedDB wrapper providing fast, offline-first local storage for saved snippets and projects.',
+      'Core UI library for building reactive, component-driven user interfaces.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/react-dom',
+    packageName: 'react-dom',
+    category: 'Core Framework',
+    packageDescription:
+      'DOM renderer for React handling high-performance client updates.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/react-router',
+    packageName: 'react-router',
+    category: 'Core Framework',
+    packageDescription:
+      'Client-side declarative routing and URL synchronization across views.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/react-split',
+    packageName: 'react-split',
+    category: 'Layout & UI',
+    packageDescription:
+      'Provides resizable split-pane layouts for the problem solver and playgrounds.',
   },
   {
     packageLink: 'https://www.npmjs.com/package/lucide-react',
     packageName: 'lucide-react',
+    category: 'Layout & UI',
     packageDescription:
       'Beautiful, consistent vector icons powering navigation, buttons, and status indicators.',
   },
   {
+    packageLink: 'https://www.npmjs.com/package/idb',
+    packageName: 'idb',
+    category: 'Storage & State',
+    packageDescription:
+      'IndexedDB wrapper providing fast, offline-first local storage for saved snippets and projects.',
+  },
+  {
     packageLink: 'https://www.npmjs.com/package/uuid',
     packageName: 'uuid',
+    category: 'Utilities',
     packageDescription:
       'RFC4122 UUID generator for unique project keys and session identifiers.',
   },
   {
-    packageLink: 'https://www.npmjs.com/package/emmet-monaco-es',
-    packageName: 'emmet-monaco-es',
-    packageDescription:
-      'Emmet expansion and abbreviations engine integrated with Monaco editor.',
-  },
-  {
-    packageLink: 'https://www.npmjs.com/package/@xterm/xterm',
-    packageName: '@xterm/xterm',
-    packageDescription:
-      'Full-featured in-browser terminal emulator with interactive shell and npm support.',
-  },
-  {
     packageLink: 'https://www.npmjs.com/package/jszip',
     packageName: 'jszip',
+    category: 'Utilities',
     packageDescription:
       'In-browser ZIP archive generation for multi-file project export.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/vite',
+    packageName: 'vite',
+    category: 'Build & Tooling',
+    packageDescription:
+      'Next-generation frontend tooling and bundler providing instant dev server startup and optimized client builds.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/tailwindcss',
+    packageName: 'tailwindcss',
+    category: 'Build & Tooling',
+    packageDescription:
+      'Utility-first modern CSS framework powering responsive styling, fluid typography, and dark/light modes.',
+  },
+  {
+    packageLink: 'https://www.npmjs.com/package/typescript',
+    packageName: 'typescript',
+    category: 'Build & Tooling',
+    packageDescription:
+      'Typed superset of JavaScript providing static type checking, language tooling, and compiler definitions.',
   },
 ];
 

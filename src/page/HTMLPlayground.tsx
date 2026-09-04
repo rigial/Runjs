@@ -149,50 +149,32 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
   const [savedProject, setSavedProject] = useState<UserCodeBase | null>(null);
 
   // Project Code State
-  const [html, setHtml] = useState<string>(() => {
+  const [initialCode] = useState(() => {
     if (!id) {
       try {
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
-          return parsed.html ?? DEFAULT_HTML;
+          return {
+            html: parsed.html ?? DEFAULT_HTML,
+            css: parsed.css ?? DEFAULT_CSS,
+            javascript: parsed.javascript ?? DEFAULT_JS,
+          };
         }
       } catch (error) {
-        console.error('Failed to parse saved HTML', error);
+        console.error('Failed to parse saved HTML playground state', error);
       }
     }
-    return DEFAULT_HTML;
+    return {
+      html: DEFAULT_HTML,
+      css: DEFAULT_CSS,
+      javascript: DEFAULT_JS,
+    };
   });
 
-  const [css, setCss] = useState<string>(() => {
-    if (!id) {
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          return parsed.css ?? DEFAULT_CSS;
-        }
-      } catch (error) {
-        console.error('Failed to parse saved CSS', error);
-      }
-    }
-    return DEFAULT_CSS;
-  });
-
-  const [javascript, setJavascript] = useState<string>(() => {
-    if (!id) {
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          return parsed.javascript ?? DEFAULT_JS;
-        }
-      } catch (error) {
-        console.error('Failed to parse saved JS', error);
-      }
-    }
-    return DEFAULT_JS;
-  });
+  const [html, setHtml] = useState<string>(initialCode.html);
+  const [css, setCss] = useState<string>(initialCode.css);
+  const [javascript, setJavascript] = useState<string>(initialCode.javascript);
 
   // Settings
   const [autoRun, setAutoRun] = useState<boolean>(() => {
@@ -356,7 +338,6 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
             html,
             css,
             javascript,
-            settings: { autoRun, fontSize: numericFontSize },
           })
         );
       } catch (e) {
@@ -365,7 +346,7 @@ function HTMLPlaygroundCore({ id }: { id?: string }) {
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [id, html, css, javascript, autoRun, numericFontSize]);
+  }, [id, html, css, javascript]);
 
   // Persist to IndexedDB when in saved /html/:id (Dashboard project flow)
   useEffect(() => {

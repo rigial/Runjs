@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router';
 import { UserCodeBase } from '../../utils/interface';
 import { compileHtmlDocument, SENDER_KEY } from '../../utils/htmlCompiler';
+import { saveLivePreviewDoc } from '../../utils/previewStorage';
 import { HTMLConsoleDrawer, HTMLConsoleRef } from './HTMLConsoleDrawer';
 import {
   X,
@@ -110,13 +111,7 @@ export default function HTMLDashboardPreviewModal({
   };
 
   const handleOpenInNewTab = () => {
-    const storageKey = `runjs_html_live_doc_${project.id}`;
-    try {
-      localStorage.setItem(storageKey, compiledDoc);
-      localStorage.setItem(`${storageKey}_time`, Date.now().toString());
-    } catch (e) {
-      console.error('Failed to cache live doc', e);
-    }
+    saveLivePreviewDoc(project.id, compiledDoc);
     const previewUrl = `${window.location.origin}/html-preview?target=${project.id}`;
     window.open(previewUrl, `runjs_html_preview_${project.id}`);
   };

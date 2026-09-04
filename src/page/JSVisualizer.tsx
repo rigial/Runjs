@@ -45,6 +45,9 @@ import VisualizerControls from '../visualizer/components/VisualizerControls';
 import StepNarration from '../visualizer/components/StepNarration';
 import VisualizerConsole from '../visualizer/components/VisualizerConsole';
 import PresetsDropdown from '../visualizer/components/PresetsDropdown';
+import ToolInterlinkMenu from '../components/ToolInterlinkMenu';
+import ImportNotificationToast from '../components/ImportNotificationToast';
+import { consumeTransferredCode } from '../utils/crossToolTransfer';
 
 function JSVisualizer() {
   const location = useLocation();
@@ -67,6 +70,7 @@ function JSVisualizer() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [speed, setSpeed] = useState<number>(1);
   const [syntaxError, setSyntaxError] = useState<string | null>(null);
+  const [importSource, setImportSource] = useState<string | null>(null);
 
   // Mobile navigation tab
   const [activeMobileTab, setActiveMobileTab] = useState<
@@ -166,33 +170,22 @@ function JSVisualizer() {
 
   // Run initial simulation on mount, prioritizing code passed via state/sessionStorage/query
   useEffect(() => {
-    const passedCode = (location.state as { code?: string } | undefined)?.code;
-    let codeToLoad = passedCode;
+    const transferred = consumeTransferredCode(
+      'visualizer',
+      location.state as { code?: string; source?: string } | undefined,
+      location.search
+    );
 
-    if (!codeToLoad) {
-      try {
-        const stored = sessionStorage.getItem('runjs_visualizer_code');
-        if (stored) {
-          codeToLoad = stored;
-          sessionStorage.removeItem('runjs_visualizer_code');
-        }
-      } catch {
-        // ignore
-      }
-    }
-
-    if (!codeToLoad && location.search) {
-      const searchParams = new URLSearchParams(location.search);
-      const queryCode = searchParams.get('code');
-      if (queryCode) {
-        codeToLoad = queryCode;
-      }
-    }
-
-    if (codeToLoad) {
-      setCode(codeToLoad);
+    if (transferred && transferred.code !== undefined) {
+      setCode(transferred.code);
       setCurrentPresetId(null);
-      runSimulation(codeToLoad, false);
+      runSimulation(transferred.code, false);
+      if (transferred.source) {
+        setImportSource(transferred.source);
+      }
+      if (location.state && (location.state as { code?: string }).code) {
+        window.history.replaceState({}, document.title);
+      }
     } else {
       runSimulation(defaultPreset.code, false);
     }
@@ -496,6 +489,12 @@ function JSVisualizer() {
               <span className="hidden sm:inline">Run & Visualize</span>
               <span className="sm:hidden">Run</span>
             </button>
+
+            {/* Cross-Tool Interlink Menu */}
+            <ToolInterlinkMenu
+              currentTool="visualizer"
+              getCode={() => code}
+            />
 
             {/* Format Document Button */}
             <button
@@ -823,6 +822,11 @@ function JSVisualizer() {
           )}
         </section>
       </main>
+
+      <ImportNotificationToast
+        source={importSource}
+        onDismiss={() => setImportSource(null)}
+      />
 
       <HelpModal ref={dialogRef} />
     </Fragment>

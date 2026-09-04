@@ -46,6 +46,9 @@ import ContextControls from '../execution-context/components/ContextControls';
 import ContextNarration from '../execution-context/components/ContextNarration';
 import ContextConsole from '../execution-context/components/ContextConsole';
 import ContextPresetsDropdown from '../execution-context/components/ContextPresetsDropdown';
+import ToolInterlinkMenu from '../components/ToolInterlinkMenu';
+import ImportNotificationToast from '../components/ImportNotificationToast';
+import { consumeTransferredCode } from '../utils/crossToolTransfer';
 
 function JSExecutionContextVisualizer() {
   const location = useLocation();
@@ -68,6 +71,7 @@ function JSExecutionContextVisualizer() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [speed, setSpeed] = useState<number>(1);
   const [syntaxError, setSyntaxError] = useState<string | null>(null);
+  const [importSource, setImportSource] = useState<string | null>(null);
 
   // Selected execution context for inspector
   const [selectedContextId, setSelectedContextId] = useState<string>('gec');
@@ -173,33 +177,22 @@ function JSExecutionContextVisualizer() {
 
   // Run initial simulation on mount
   useEffect(() => {
-    const passedCode = (location.state as { code?: string } | undefined)?.code;
-    let codeToLoad = passedCode;
+    const transferred = consumeTransferredCode(
+      'execution-context',
+      location.state as { code?: string; source?: string } | undefined,
+      location.search
+    );
 
-    if (!codeToLoad) {
-      try {
-        const stored = sessionStorage.getItem('runjs_context_visualizer_code');
-        if (stored) {
-          codeToLoad = stored;
-          sessionStorage.removeItem('runjs_context_visualizer_code');
-        }
-      } catch {
-        // ignore
-      }
-    }
-
-    if (!codeToLoad && location.search) {
-      const searchParams = new URLSearchParams(location.search);
-      const queryCode = searchParams.get('code');
-      if (queryCode) {
-        codeToLoad = queryCode;
-      }
-    }
-
-    if (codeToLoad) {
-      setCode(codeToLoad);
+    if (transferred && transferred.code !== undefined) {
+      setCode(transferred.code);
       setCurrentPresetId(null);
-      runSimulation(codeToLoad, false);
+      runSimulation(transferred.code, false);
+      if (transferred.source) {
+        setImportSource(transferred.source);
+      }
+      if (location.state && (location.state as { code?: string }).code) {
+        window.history.replaceState({}, document.title);
+      }
     } else {
       runSimulation(defaultPreset.code, false);
     }
@@ -511,6 +504,12 @@ function JSExecutionContextVisualizer() {
               <span className="sm:hidden">Run</span>
             </button>
 
+            {/* Cross-Tool Interlink Menu */}
+            <ToolInterlinkMenu
+              currentTool="execution-context"
+              getCode={() => code}
+            />
+
             {/* Format Document Button */}
             <button
               type="button"
@@ -812,6 +811,11 @@ function JSExecutionContextVisualizer() {
           )}
         </section>
       </main>
+
+      <ImportNotificationToast
+        source={importSource}
+        onDismiss={() => setImportSource(null)}
+      />
 
       <HelpModal ref={dialogRef} />
     </Fragment>

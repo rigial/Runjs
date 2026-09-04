@@ -1,5 +1,5 @@
 import { transform } from 'esbuild-wasm';
-import { Fragment, memo, useCallback, useRef, useState } from 'react';
+import { Fragment, memo, useCallback, useEffect, useRef, useState } from 'react';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
 import '../utils/lunaStyles';
@@ -9,7 +9,7 @@ import useComplieCode from '../hook/useComplieCode';
 import useDebounceLocalStorageState from '../hook/useDebounceLocalStorageState';
 import { addInfiniteLoopProtection } from '../utils/addInfiniteLoopProtection';
 import { runInSandbox } from '../utils/sandboxRunner';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { ITypeScriptError, ModalRef } from '../utils/interface';
 import HelpModal from '../components/HelpModal';
 import useWarnOnClose from '../hook/useWarnOnClose ';
@@ -23,6 +23,9 @@ import useTheme from '../hook/useTheme';
 import { loadTypscript, saveJSTSFile } from '../utils/commonFunction';
 import SEO from '../seo/SEO';
 import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
+import ToolInterlinkMenu from '../components/ToolInterlinkMenu';
+import ImportNotificationToast from '../components/ImportNotificationToast';
+import { consumeTransferredCode } from '../utils/crossToolTransfer';
 import {
   Play,
   HelpCircle,
@@ -38,11 +41,32 @@ import {
  * TypeScript Playground page component providing live code editing, diagnostics, and in-browser execution.
  */
 function TSPlayground() {
+  const location = useLocation();
   const [code, setCode] = useDebounceLocalStorageState(
     'tscode',
     '// Welcome to RunJS - In-browser TypeScript Playground\n\ninterface UserProfile {\n  id: string;\n  name: string;\n  role: "admin" | "developer" | "designer";\n  skills: string[];\n}\n\nconst user: UserProfile = {\n  id: "usr_101",\n  name: "Alex Rivera",\n  role: "developer",\n  skills: ["TypeScript", "React", "Node.js"]\n};\n\nfunction printUserInfo(profile: UserProfile): void {\n  console.log(`User: ${profile.name} (${profile.role.toUpperCase()})`);\n  console.log("Skills:", profile.skills.join(", "));\n}\n\nprintUserInfo(user);\n',
     1000
   );
+  const [importSource, setImportSource] = useState<string | null>(null);
+
+  // Consume any code transferred from another tool (JS Playground, Event Loop, Execution Context)
+  useEffect(() => {
+    const transferred = consumeTransferredCode(
+      'ts',
+      location.state as { code?: string; source?: string } | undefined,
+      location.search
+    );
+
+    if (transferred && transferred.code !== undefined) {
+      setCode(transferred.code);
+      if (transferred.source) {
+        setImportSource(transferred.source);
+      }
+      if (location.state && (location.state as { code?: string }).code) {
+        window.history.replaceState({}, document.title);
+      }
+    }
+  }, [location.state, location.search, setCode]);
   const [currentFontSize, setFontSize] = useLocalStorageState('fontSize', '14');
   const [activeMobileTab, setActiveMobileTab] = useState<'editor' | 'console'>(
     'editor'
@@ -230,6 +254,12 @@ function TSPlayground() {
               </kbd>
             </button>
 
+            {/* Cross-Tool Interlink Menu */}
+            <ToolInterlinkMenu
+              currentTool="ts"
+              getCode={() => code}
+            />
+
             {/* Format Document */}
             <button
               type="button"
@@ -416,6 +446,11 @@ function TSPlayground() {
           )}
         </section>
       </main>
+
+      <ImportNotificationToast
+        source={importSource}
+        onDismiss={() => setImportSource(null)}
+      />
 
       <HelpModal ref={dialogRef} />
     </Fragment>

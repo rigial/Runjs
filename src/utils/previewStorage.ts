@@ -1,4 +1,5 @@
 const PREVIEW_KEY_PREFIX = 'runjs_html_live_doc_';
+const PREVIEW_RECENCY_KEY = 'runjs_html_live_preview_recency';
 const MAX_PREVIEW_DOCS = 3;
 
 /**
@@ -6,7 +7,10 @@ const MAX_PREVIEW_DOCS = 3;
  * that dead timestamp keys are cleaned up and old preview documents are pruned
  * to avoid exceeding localStorage quota limits.
  */
-export function saveLivePreviewDoc(targetId: string, compiledDoc: string): void {
+export function saveLivePreviewDoc(
+  targetId: string,
+  compiledDoc: string
+): void {
   const currentKey = `${PREVIEW_KEY_PREFIX}${targetId}`;
 
   try {
@@ -18,14 +22,22 @@ export function saveLivePreviewDoc(targetId: string, compiledDoc: string): void 
 
     // 3. Save the compiled preview document
     localStorage.setItem(currentKey, compiledDoc);
+    markPreviewAsRecent(currentKey);
   } catch (error) {
     // If quota exceeded, aggressively prune all other preview docs and retry once
-    console.warn('[PreviewStorage] Failed to save live preview doc, pruning cache...', error);
+    console.warn(
+      '[PreviewStorage] Failed to save live preview doc, pruning cache...',
+      error
+    );
     try {
       pruneAllPreviewDocsExcept(targetId);
       localStorage.setItem(currentKey, compiledDoc);
+      markPreviewAsRecent(currentKey);
     } catch (retryErr) {
-      console.error('[PreviewStorage] Critical: Unable to persist preview doc to localStorage', retryErr);
+      console.error(
+        '[PreviewStorage] Critical: Unable to persist preview doc to localStorage',
+        retryErr
+      );
     }
   }
 }
@@ -46,8 +58,10 @@ export function getLivePreviewDoc(targetId: string): string {
  */
 export function cleanupLivePreviewDoc(targetId: string): void {
   try {
-    localStorage.removeItem(`${PREVIEW_KEY_PREFIX}${targetId}`);
+    const previewKey = `${PREVIEW_KEY_PREFIX}${targetId}`;
+    localStorage.removeItem(previewKey);
     localStorage.removeItem(`${PREVIEW_KEY_PREFIX}${targetId}_time`);
+    removePreviewRecency(previewKey);
   } catch {
     // ignore
   }
@@ -93,13 +107,20 @@ function pruneOldPreviewDocs(currentTargetId: string): void {
       }
     }
 
-    // If we have more keys than allowed, remove excess
+    const recency = getPreviewRecency();
+    docKeys.sort(
+      (first, second) => (recency[first] ?? 0) - (recency[second] ?? 0)
+    );
+
+    // If we have more keys than allowed, remove the least recently updated ones.
     while (docKeys.length >= MAX_PREVIEW_DOCS) {
       const keyToRemove = docKeys.shift();
       if (keyToRemove) {
         localStorage.removeItem(keyToRemove);
+        delete recency[keyToRemove];
       }
     }
+    savePreviewRecency(recency);
   } catch {
     // ignore
   }
@@ -121,7 +142,49 @@ function pruneAllPreviewDocsExcept(targetId: string): void {
     for (const key of keysToRemove) {
       localStorage.removeItem(key);
     }
+    savePreviewRecency({});
   } catch {
     // ignore
   }
+}
+
+function getPreviewRecency(): Record<string, number> {
+  try {
+    const value = localStorage.getItem(PREVIEW_RECENCY_KEY);
+    if (!value) return {};
+    const parsed: unknown = JSON.parse(value);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed))
+      return {};
+
+    return Object.fromEntries(
+      Object.entries(parsed).filter(
+        ([key, timestamp]) =>
+          key.startsWith(PREVIEW_KEY_PREFIX) &&
+          typeof timestamp === 'number' &&
+          Number.isFinite(timestamp)
+      )
+    );
+  } catch {
+    return {};
+  }
+}
+
+function savePreviewRecency(recency: Record<string, number>): void {
+  try {
+    localStorage.setItem(PREVIEW_RECENCY_KEY, JSON.stringify(recency));
+  } catch {
+    // Preview documents remain usable even when recency cannot be persisted.
+  }
+}
+
+function markPreviewAsRecent(previewKey: string): void {
+  const recency = getPreviewRecency();
+  recency[previewKey] = Date.now();
+  savePreviewRecency(recency);
+}
+
+function removePreviewRecency(previewKey: string): void {
+  const recency = getPreviewRecency();
+  delete recency[previewKey];
+  savePreviewRecency(recency);
 }

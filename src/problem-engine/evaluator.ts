@@ -438,7 +438,14 @@ export async function runSingleTestCase(
               throw new Error("Method '" + op + "' is not defined on " + TargetClass.name);
             }
             const res = await instance[op](...args);
-            results.push(res !== undefined ? res : null);
+            if (
+              res === instance ||
+              (res && typeof res === 'object' && typeof res.unsubscribe === 'function')
+            ) {
+              results.push(null);
+            } else {
+              results.push(res !== undefined ? res : null);
+            }
           }
           return results;
         };
@@ -467,7 +474,51 @@ export async function runSingleTestCase(
           throw new Error("Function '${problem.functionName}' is not defined. Please ensure your solution defines '${problem.functionName}'.");
         }
         return async function(__inputArgs) {
-          return await ${problem.functionName}(...__inputArgs);
+          if ('${problem.functionName}' === 'debounce') {
+            let resVal = null;
+            const origFn = typeof __inputArgs[0] === 'function' ? __inputArgs[0] : (x) => x;
+            const wait = typeof __inputArgs[1] === 'number' ? __inputArgs[1] : 50;
+            const callArg = __inputArgs[2] !== undefined ? __inputArgs[2] : 10;
+            const wrappedFn = async (...args) => {
+              resVal = await origFn(...args);
+            };
+            const debounced = ${problem.functionName}(wrappedFn, wait);
+            debounced(callArg);
+            await new Promise((resolve) => setTimeout(resolve, wait + 30));
+            return resVal;
+          }
+
+          if ('${problem.functionName}' === 'promiseRace') {
+            const promises = (__inputArgs[0] || []).map((p) => typeof p === 'function' ? p() : p);
+            return await ${problem.functionName}(promises);
+          }
+
+          let res = await ${problem.functionName}(...__inputArgs);
+          if (typeof res === 'function' && __inputArgs.length > 1) {
+            const extra = __inputArgs[__inputArgs.length - 1];
+            if (Array.isArray(extra)) {
+              try {
+                const spreadRes = await res(...extra);
+                if (typeof spreadRes !== 'function') {
+                  return spreadRes;
+                }
+                let cur = spreadRes;
+                for (let i = 1; i < extra.length; i++) {
+                  if (typeof cur === 'function') cur = await cur(extra[i]);
+                }
+                return cur;
+              } catch (e) {
+                let cur = res;
+                for (const a of extra) {
+                  if (typeof cur === 'function') cur = await cur(a);
+                }
+                return cur;
+              }
+            } else {
+              return await res(extra);
+            }
+          }
+          return res;
         };
       `;
     }

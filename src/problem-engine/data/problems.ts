@@ -189,7 +189,7 @@ function reverseString(s) {
       {
         name: 'With Spaces and Punctuation',
         input: ['RunJS 2.0!'],
-        expected: '!0.2 SJunR',
+        expected: '!0.2 SJnuR',
         isHidden: true,
       },
       {
@@ -301,7 +301,7 @@ function isAnagram(s, t) {
   return true;
 }`,
       complexity: {
-        time: 'O(n)',
+        time: 'O(1) per invocation',
         space: 'O(1)',
       },
     },
@@ -351,7 +351,7 @@ function debounce(fn, wait) {
     testCases: [
       {
         name: 'Debounce Execution',
-        input: [(x: number) => x * 2, 50],
+        input: [(x: number) => x * 2, 50, 10],
         expected: 20,
       },
     ],
@@ -1698,8 +1698,8 @@ function promiseRace(promises) {
         name: 'Fastest Resolving Promise',
         input: [
           [
-            new Promise((res) => setTimeout(() => res('slow'), 50)),
-            new Promise((res) => setTimeout(() => res('fast'), 10)),
+            () => new Promise((res) => setTimeout(() => res('slow'), 50)),
+            () => new Promise((res) => setTimeout(() => res('fast'), 10)),
           ],
         ],
         expected: 'fast',
@@ -1709,7 +1709,7 @@ function promiseRace(promises) {
         input: [
           [
             'instant',
-            new Promise((res) => setTimeout(() => res('delayed'), 50)),
+            () => new Promise((res) => setTimeout(() => res('delayed'), 50)),
           ],
         ],
         expected: 'instant',
@@ -3034,7 +3034,10 @@ Iterate once, increment a counter when an element is negative.
       {
         name: 'returns an array of 26 uppercase letters A..Z',
         input: [],
-        expected: true,
+        expected: [
+          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+          'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        ],
       },
     ],
     hiddenTestCases: [],
@@ -3444,9 +3447,8 @@ This approach ensures that:
 
 ### Code`,
       code: `function removeDuplicates(arr) {
-  // your code here
-}
-removeDuplicates([1, 2, 2, 3, 4, 4]);`,
+  return Array.from(new Set(arr));
+}`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -6584,16 +6586,17 @@ for (const item of arr) {
       explanation:
         'We implement the optimal solution for groupBy considering constraints and edge cases.',
       code: `function groupBy(arr, key) {
-  // Your implementation
-}
-groupBy(
-  [
-    { name: 'Alice', age: 25 },
-    { name: 'Bob', age: 30 },
-    { name: 'Charlie', age: 25 },
-  ],
-  'age'
-);`,
+  if (!Array.isArray(arr)) return {};
+  const result = {};
+  for (const item of arr) {
+    const val = item[key];
+    if (!result[val]) {
+      result[val] = [];
+    }
+    result[val].push(item);
+  }
+  return result;
+}`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -8576,9 +8579,14 @@ Possible Output: ['b', 'c', 'a']
     },
     testCases: [
       {
-        name: 'does not mutate original array',
-        input: [[1, 2, 3]],
-        expected: [1, 2, 3],
+        name: 'preserves single element',
+        input: [[42]],
+        expected: [42],
+      },
+      {
+        name: 'preserves array of identical elements',
+        input: [[7, 7, 7]],
+        expected: [7, 7, 7],
       },
     ],
     hiddenTestCases: [
@@ -9805,7 +9813,7 @@ This function should mimic the behavior of the native \`reduce()\` method, inclu
 - Do **not** use the built-in \`reduce()\` method.`,
     examples: [
       {
-        input: '[1,2,3,4],null,0',
+        input: '[1, 2, 3, 4], (acc, val) => acc + val, 0',
         output: '10',
       },
     ],
@@ -9825,14 +9833,14 @@ This function should mimic the behavior of the native \`reduce()\` method, inclu
     testCases: [
       {
         name: 'Sum with Initial Value',
-        input: [[1, 2, 3, 4], undefined, 0],
+        input: [[1, 2, 3, 4], (acc: number, val: number) => acc + val, 0],
         expected: 10,
       },
     ],
     hiddenTestCases: [
       {
         name: 'Product with Initial Value',
-        input: [[1, 2, 3, 4], undefined, 1],
+        input: [[1, 2, 3, 4], (acc: number, val: number) => acc * val, 1],
         expected: 24,
         isHidden: true,
       },
@@ -9957,9 +9965,16 @@ console.log(counter.decrement()); // 4
 - The counter should handle negative initial values.  
 - The counter should not expose its internal value directly (encapsulation).  
 - Methods should be chainable (optional bonus).`,
-    examples: [],
+    examples: [
+      {
+        input: '["makeCounter","increment","increment","decrement","reset"],[[5],[],[],[],[]]',
+        output: '[null,6,7,6,5]',
+        explanation: 'Initializes with 5, increments to 6 and 7, decrements to 6, and resets to 5.',
+      },
+    ],
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'makeCounter',
+    isClass: true,
     starterCode: {
       javascript: `function makeCounter(initialValue = 0) {
     // Your implementation
@@ -9972,12 +9987,25 @@ console.log(counter.decrement()); // 4
     },
     testCases: [
       {
-        name: 'Standard Case',
-        input: [],
-        expected: null,
+        name: 'Standard counter operations starting at 5',
+        input: [
+          ['makeCounter', 'increment', 'increment', 'decrement', 'reset'],
+          [[5], [], [], [], []],
+        ],
+        expected: [null, 6, 7, 6, 5],
       },
     ],
-    hiddenTestCases: [],
+    hiddenTestCases: [
+      {
+        name: 'Default initial value 0 and negative operations',
+        input: [
+          ['makeCounter', 'decrement', 'decrement', 'reset', 'increment'],
+          [[], [], [], [], []],
+        ],
+        expected: [null, -1, -2, 0, 1],
+        isHidden: true,
+      },
+    ],
     hints: ['Break down the problem into smaller algorithmic steps.'],
     solution: {
       explanation: `### **Approach**  
@@ -10461,8 +10489,9 @@ promiseAllWithConcurrencyLimit(functions2, 1)
 - Handle edge cases where \`limit\` is greater than the number of functions.`,
     examples: [
       {
-        input: '[null,null,null],2',
-        output: `"Error occurred"`,
+        input: 'functions = [() => Promise.resolve(1), () => Promise.resolve(2)], limit = 2',
+        output: '[1, 2]',
+        explanation: 'Resolves all promises within concurrency limit while maintaining input order.',
       },
     ],
     constraints: ['Follow standard runtime and memory constraints.'],
@@ -10480,12 +10509,32 @@ promiseAllWithConcurrencyLimit(functions2, 1)
     },
     testCases: [
       {
-        name: 'Rejects when any promise rejects',
-        input: [[undefined, undefined, undefined], 2],
-        expected: 'Error occurred',
+        name: 'Executes promises within concurrency limit',
+        input: [
+          [
+            () => Promise.resolve(1),
+            () => Promise.resolve(2),
+            () => Promise.resolve(3),
+          ],
+          2,
+        ],
+        expected: [1, 2, 3],
       },
     ],
-    hiddenTestCases: [],
+    hiddenTestCases: [
+      {
+        name: 'Empty functions array',
+        input: [[], 2],
+        expected: [],
+        isHidden: true,
+      },
+      {
+        name: 'Single promise',
+        input: [[() => Promise.resolve(42)], 1],
+        expected: [42],
+        isHidden: true,
+      },
+    ],
     hints: [
       `Manage concurrency with a limit
 
@@ -11018,7 +11067,7 @@ Use depth-first search and push nodes to stack after exploring all neighbors.
     slug: 'concurrency-limited-task-scheduler',
     title: 'Concurrency Limited Task Scheduler',
     difficulty: 'medium',
-    topics: ['Array', 'String', 'Hash Map', 'Stack'],
+    topics: ['Array', 'Async', 'Concurrency', 'Promise'],
     acceptanceRate: '81%',
     description: `You are given an array of asynchronous functions called \`tasks\`, where each function returns a \`Promise\` resolving to a value. Your goal is to implement a function that executes these tasks with a concurrency limit that is, **no more than \`maxConcurrent\` tasks can be running at the same time**.
 
@@ -11035,7 +11084,13 @@ This is a classic problem often seen in API batching, file uploads, and load-bal
 
 - A \`Promise\` that resolves to an array of values, in the **same order** as the input tasks array.
 - Each element in the result corresponds to the resolved value of its respective task.`,
-    examples: [],
+    examples: [
+      {
+        input: '["lazy","add","execute"],[[{"add":"(a,b)=>a+b"}],[2,3],[]]',
+        output: '[null,null,[5]]',
+        explanation: 'Queues add(2, 3) and evaluates upon execute().',
+      },
+    ],
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'scheduleTasks',
     isAsync: true,
@@ -11061,12 +11116,32 @@ async function scheduleTasks(tasks: any, maxConcurrent: any): any {
     },
     testCases: [
       {
-        name: 'Standard Case',
-        input: [],
-        expected: null,
+        name: 'Runs tasks with maxConcurrent limit',
+        input: [
+          [
+            () => Promise.resolve('A'),
+            () => Promise.resolve('B'),
+            () => Promise.resolve('C'),
+          ],
+          2,
+        ],
+        expected: ['A', 'B', 'C'],
       },
     ],
-    hiddenTestCases: [],
+    hiddenTestCases: [
+      {
+        name: 'Sequential execution with maxConcurrent = 1',
+        input: [[() => Promise.resolve(1), () => Promise.resolve(2)], 1],
+        expected: [1, 2],
+        isHidden: true,
+      },
+      {
+        name: 'Empty tasks array',
+        input: [[], 2],
+        expected: [],
+        isHidden: true,
+      },
+    ],
     hints: ['Break down the problem into smaller algorithmic steps.'],
     solution: {
       explanation: `### **Approach**  
@@ -11758,7 +11833,13 @@ formatList(["one", "two", "three", "four"])
     description: `Implement a \`throttle\` function that takes a callback function and a delay time (in milliseconds) as arguments. The throttled function should ensure that the callback is executed at most once in the specified time period, regardless of how many times it's called.
 
 Unlike debounce (which resets the timer with each call), throttle guarantees function execution at regular intervals while calls are being made.`,
-    examples: [],
+    examples: [
+      {
+        input: 'func = (x) => x * 3, delay = 100, args = [5]',
+        output: '15',
+        explanation: 'Invokes immediately on the first call and returns the computed result.',
+      },
+    ],
     constraints: [
       'The function should execute immediately on the first call',
       'Subsequent calls within the delay period should be ignored',
@@ -11778,7 +11859,6 @@ Unlike debounce (which resets the timer with each call), throttle guarantees fun
 function throttle(func, delay) {
   // Write your code here
 }
-const throttledFn = throttle(() => console.log('Function called!'), 1000);
 `,
       typescript: `/**
  * Creates a throttled function that only invokes the provided function
@@ -11791,17 +11871,23 @@ const throttledFn = throttle(() => console.log('Function called!'), 1000);
 function throttle(func: any, delay: any): any {
   // Write your code here
 }
-const throttledFn = throttle(() => console.log('Function called!'), 1000);
 `,
     },
     testCases: [
       {
-        name: 'Standard Case',
-        input: [],
-        expected: null,
+        name: 'Executes immediately on initial call',
+        input: [(x: number) => x * 3, 100, [5]],
+        expected: 15,
       },
     ],
-    hiddenTestCases: [],
+    hiddenTestCases: [
+      {
+        name: 'Returns result for multi-argument function',
+        input: [(a: number, b: number) => a + b, 50, [10, 20]],
+        expected: 30,
+        isHidden: true,
+      },
+    ],
     hints: ['Break down the problem into smaller algorithmic steps.'],
     solution: {
       explanation: `### Approach
@@ -11829,8 +11915,7 @@ The key aspects of implementing throttle:
     // Return the result from the last execution
     return lastResult;
   };
-}
-const throttledFn = throttle(() => console.log('Function called!'), 1000);`,
+}`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -12778,7 +12863,7 @@ Pass a \`result\` object through recursive calls to collect flattened key-value 
       },
       {
         input: 'n = 3',
-        output: '[',
+        output: '["  *  ", " *** ", "*****"]',
       },
     ],
     constraints: [
@@ -12867,7 +12952,20 @@ for (let s = 0; s < spaces; s++) row += ' ';
       explanation:
         'We implement the optimal solution for generatePyramid considering constraints and edge cases.',
       code: `function generatePyramid(n) {
-  // your solution here
+  if (typeof n !== 'number' || !Number.isInteger(n) || n < 0) {
+    return false;
+  }
+  if (n === 0) return [];
+  const result = [];
+  const totalWidth = 2 * n - 1;
+  for (let i = 1; i <= n; i++) {
+    const starsCount = 2 * i - 1;
+    const spacesCount = (totalWidth - starsCount) / 2;
+    const spaces = ' '.repeat(spacesCount);
+    const stars = '*'.repeat(starsCount);
+    result.push(spaces + stars + spaces);
+  }
+  return result;
 }`,
       complexity: {
         time: 'O(n)',
@@ -13444,17 +13542,17 @@ You must write an efficient solution with **O(log n)** time complexity and **O(1
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'singleNonDuplicate',
     starterCode: {
-      javascript: `function findSingleElement(arr) {
-
+      javascript: `/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+function singleNonDuplicate(nums) {
+  // Write your code here
 }
-
-findSingleElement([1, 1, 2])
 `,
-      typescript: `function findSingleElement(arr) {
-
+      typescript: `function singleNonDuplicate(nums: number[]): number {
+  // Write your code here
 }
-
-findSingleElement([1, 1, 2])
 `,
     },
     testCases: [
@@ -13519,9 +13617,22 @@ return arr[low];
 - At each step, compute \`mid\`.
 - Ensure \`mid\` is even so that we always compare a full pair (\`mid\` and \`mid+1\`).
 - Depending on whether \`arr[mid]\` equals \`arr[mid+1]\`, we eliminate half the search space.`,
-      code: `function findSingleElement(arr) {}
-
-findSingleElement([1, 1, 2]);`,
+      code: `function singleNonDuplicate(nums) {
+  let low = 0;
+  let high = nums.length - 1;
+  while (low < high) {
+    let mid = Math.floor((low + high) / 2);
+    if (mid % 2 === 1) {
+      mid--;
+    }
+    if (nums[mid] === nums[mid + 1]) {
+      low = mid + 2;
+    } else {
+      high = mid;
+    }
+  }
+  return nums[low];
+}`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -14094,6 +14205,7 @@ const result3 = lazy({divide}).divide(10, 2).divide(6, 3).execute();
     examples: [],
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'lazy',
+    isClass: true,
     starterCode: {
       javascript: `function lazy(fn) {
     // Your implementation
@@ -14106,12 +14218,35 @@ const result3 = lazy({divide}).divide(10, 2).divide(6, 3).execute();
     },
     testCases: [
       {
-        name: 'Standard Case',
-        input: [],
-        expected: null,
+        name: 'Chained addition and multiplication',
+        input: [
+          ['lazy', 'add', 'multiply', 'execute'],
+          [
+            [
+              {
+                add: (a: number, b: number) => a + b,
+                multiply: (a: number, b: number) => a * b,
+              },
+            ],
+            [2, 3],
+            [4, 5],
+            [],
+          ],
+        ],
+        expected: [null, null, null, [5, 20]],
       },
     ],
-    hiddenTestCases: [],
+    hiddenTestCases: [
+      {
+        name: 'Empty operations execute',
+        input: [
+          ['lazy', 'execute'],
+          [[{ add: (a: number, b: number) => a + b }], []],
+        ],
+        expected: [null, []],
+        isHidden: true,
+      },
+    ],
     hints: [
       `Store functions to run later
 
@@ -14181,9 +14316,9 @@ return (...args) => {
 ### **Solution Code**`,
       code: `function lazy(functionsMap) {
     const queue = [];
-
-    return new Proxy({}, {
+    const proxy = new Proxy({}, {
         get(_, prop) {
+            if (prop === 'then' || typeof prop === 'symbol') return undefined;
             if (prop === 'execute') {
                 return () => queue.map(({ fn, args }) => fn(...args));
             }
@@ -14194,10 +14329,11 @@ return (...args) => {
 
             return (...args) => {
                 queue.push({ fn: functionsMap[prop], args });
-                return new Proxy({}, this);
+                return proxy;
             };
         }
     });
+    return proxy;
 }`,
       complexity: {
         time: 'O(n)',
@@ -14210,7 +14346,7 @@ return (...args) => {
     slug: 'oranges-rotting',
     title: 'Oranges Rotting',
     difficulty: 'medium',
-    topics: ['Array', 'Math'],
+    topics: ['Array', 'Breadth-First Search', 'Matrix'],
     acceptanceRate: '90%',
     description: `Write a function that determines the minimum number of minutes required for all fresh oranges in a grid to become rotten. Every minute, any fresh orange that is 4-directionally adjacent (up, down, left, right) to a rotten orange also becomes rotten. If it is impossible to rot all fresh oranges, return -1.
 
@@ -14272,21 +14408,17 @@ The grid can be empty.
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'orangesRotting',
     starterCode: {
-      javascript: `function orangesRotting(grid) {
+      javascript: `/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+function orangesRotting(grid) {
   // Write your code here
 }
-
-
-
-// Example usage
 `,
-      typescript: `function orangesRotting(grid: any): any {
+      typescript: `function orangesRotting(grid: number[][]): number {
   // Write your code here
 }
-
-
-
-// Example usage
 `,
     },
     testCases: [
@@ -14421,15 +14553,44 @@ After processing, if any fresh oranges remain, return -1. Otherwise, return the 
 
 ### **Solution Code**`,
       code: `function orangesRotting(grid) {
-  // Write your code here
-}
+  if (!grid || grid.length === 0 || grid[0].length === 0) return 0;
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const queue = [];
+  let freshCount = 0;
 
-// Example usage
-orangesRotting([
-  [2, 1, 1],
-  [1, 1, 0],
-  [0, 1, 1],
-]);`,
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === 2) {
+        queue.push([r, c, 0]);
+      } else if (grid[r][c] === 1) {
+        freshCount++;
+      }
+    }
+  }
+
+  if (freshCount === 0) return 0;
+
+  let minutes = 0;
+  const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+  let head = 0;
+  while (head < queue.length) {
+    const [r, c, time] = queue[head++];
+    minutes = time;
+
+    for (const [dr, dc] of directions) {
+      const nr = r + dr;
+      const nc = c + dc;
+      if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === 1) {
+        grid[nr][nc] = 2;
+        freshCount--;
+        queue.push([nr, nc, time + 1]);
+      }
+    }
+  }
+
+  return freshCount === 0 ? minutes : -1;
+}`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -14590,9 +14751,7 @@ deepOmit([{ a: 1, b: 2 }, { b: 3, c: 4 }], ['b']);
         ],
         expected: {
           a: 1,
-          b: {
-            c: 2,
-          },
+          b: {},
         },
         isHidden: true,
       },
@@ -14768,19 +14927,19 @@ Primitives (string, number, boolean, etc.) don’t need processing.`,
       {
         name: 'should handle disconnected graphs',
         input: [[[1], [], [3], []], 0],
-        expected: [0, 1, null, null],
+        expected: [0, 1, Infinity, Infinity],
         isHidden: true,
       },
       {
         name: 'should handle disconnected graphs',
         input: [[[1], [], [3], []], 2],
-        expected: [null, null, 0, 1],
+        expected: [Infinity, Infinity, 0, 1],
         isHidden: true,
       },
       {
         name: 'should handle disconnected graphs',
         input: [[[1], [], [3], []], 1],
-        expected: [null, 0, null, null],
+        expected: [Infinity, 0, Infinity, Infinity],
         isHidden: true,
       },
       {
@@ -14804,7 +14963,7 @@ Primitives (string, number, boolean, etc.) don’t need processing.`,
       {
         name: 'should handle source with no outgoing edges',
         input: [[[], [0], []], 1],
-        expected: [1, 0, null],
+        expected: [1, 0, Infinity],
         isHidden: true,
       },
       {
@@ -14822,7 +14981,7 @@ Primitives (string, number, boolean, etc.) don’t need processing.`,
       {
         name: 'should handle linear graph',
         input: [[[1], [2], [3], [4], []], 2],
-        expected: [null, null, 0, 1, 2],
+        expected: [Infinity, Infinity, 0, 1, 2],
         isHidden: true,
       },
       {
@@ -14834,7 +14993,7 @@ Primitives (string, number, boolean, etc.) don’t need processing.`,
       {
         name: 'should handle star graph',
         input: [[[1, 2, 3, 4], [], [], [], []], 1],
-        expected: [null, 0, null, null, null],
+        expected: [Infinity, 0, Infinity, Infinity, Infinity],
         isHidden: true,
       },
       {
@@ -14852,13 +15011,13 @@ Primitives (string, number, boolean, etc.) don’t need processing.`,
       {
         name: 'should handle all nodes unreachable from source',
         input: [[[], [0], []], 2],
-        expected: [null, null, 0],
+        expected: [Infinity, Infinity, 0],
         isHidden: true,
       },
       {
         name: 'should handle graph where source is isolated',
         input: [[[], [2], []], 0],
-        expected: [0, null, null],
+        expected: [0, Infinity, Infinity],
         isHidden: true,
       },
     ],
@@ -14978,8 +15137,9 @@ await mapAsyncLimit([1, 2, 3], 1, delayFn);
 - Should handle non-promise-returning functions gracefully (wrap in \`Promise.resolve()\` if needed).  5:["`,
     examples: [
       {
-        input: '[1,2,3],2,null',
-        output: `"fail"`,
+        input: 'arr = [1, 2, 3, 4], limit = 2, asyncFn = (x) => Promise.resolve(x * 2)',
+        output: '[2, 4, 6, 8]',
+        explanation: 'Maps array elements using asyncFn while respecting concurrency limit 2.',
       },
     ],
     constraints: ['Follow standard runtime and memory constraints.'],
@@ -14997,12 +15157,33 @@ await mapAsyncLimit([1, 2, 3], 1, delayFn);
     },
     testCases: [
       {
-        name: 'throws on async function failure',
-        input: [[1, 2, 3], 2, undefined],
-        expected: 'fail',
+        name: 'Maps array with concurrency limit',
+        input: [
+          [1, 2, 3, 4],
+          2,
+          (x: number) => Promise.resolve(x * 2),
+        ],
+        expected: [2, 4, 6, 8],
       },
     ],
-    hiddenTestCases: [],
+    hiddenTestCases: [
+      {
+        name: 'Sequential map with limit 1',
+        input: [
+          [1, 2, 3],
+          1,
+          (x: number) => Promise.resolve(x * 2),
+        ],
+        expected: [2, 4, 6],
+        isHidden: true,
+      },
+      {
+        name: 'Empty array returns empty array',
+        input: [[], 2, (x: number) => Promise.resolve(x)],
+        expected: [],
+        isHidden: true,
+      },
+    ],
     hints: [
       `Use a \`results\` array to maintain order
 
@@ -17108,7 +17289,7 @@ The edge list uses [u, v, weight] format, where u is the source node, v is the d
       {
         name: 'should handle disconnected graphs',
         input: [[[0, 1, 2]], 3, 0],
-        expected: [0, 2, null],
+        expected: [0, 2, Infinity],
         isHidden: true,
       },
       {
@@ -17192,7 +17373,7 @@ The edge list uses [u, v, weight] format, where u is the source node, v is the d
           3,
           0,
         ],
-        expected: [0, null, null],
+        expected: [0, Infinity, Infinity],
         isHidden: true,
       },
       {
@@ -17223,7 +17404,7 @@ The edge list uses [u, v, weight] format, where u is the source node, v is the d
           6,
           0,
         ],
-        expected: [0, 1, 3, -2, null, null],
+        expected: [0, 1, 3, -2, Infinity, Infinity],
         isHidden: true,
       },
     ],
@@ -17509,17 +17690,7 @@ run(taskFunction) {
             }
         });
     }
-}
-
-
-async function task(id, delay) {
-    return new Promise(resolve => setTimeout(() => resolve(\`Task \${id} done\`), delay));
-}
-
-pool.run(() => task(1, 1000)).then(console.log);
-pool.run(() => task(2, 500)).then(console.log);
-pool.run(() => task(3, 200)).then(console.log);
-pool.run(() => task(4, 300)).then(console.log);`,
+}`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',
@@ -18496,13 +18667,13 @@ function dijkstras(graph: any, src: any): any {
       {
         name: 'should handle disconnected graphs',
         input: [[[[1, 2]], [], [[3, 1]], []], 0],
-        expected: [0, 2, null, null],
+        expected: [0, 2, Infinity, Infinity],
         isHidden: true,
       },
       {
         name: 'should handle disconnected graphs',
         input: [[[[1, 2]], [], [[3, 1]], []], 2],
-        expected: [null, null, 0, 1],
+        expected: [Infinity, Infinity, 0, 1],
         isHidden: true,
       },
       {
@@ -18524,13 +18695,13 @@ function dijkstras(graph: any, src: any): any {
       {
         name: 'should handle source with no outgoing edges',
         input: [[[], [[0, 1]], []], 0],
-        expected: [0, null, null],
+        expected: [0, Infinity, Infinity],
         isHidden: true,
       },
       {
         name: 'should handle source with no outgoing edges',
         input: [[[], [[0, 1]], []], 1],
-        expected: [1, 0, null],
+        expected: [1, 0, Infinity],
         isHidden: true,
       },
       {
@@ -20236,7 +20407,7 @@ dfs(node, prefix);
     }
 
     dfs(node, prefix);
-    return results;
+    return results.sort();
   }
 }`,
       complexity: {
@@ -20299,7 +20470,7 @@ dfs(node, prefix);
         input: [2, [[0, 1, 5]]],
         expected: [
           [0, 5],
-          [null, 0],
+          [Infinity, 0],
         ],
         isHidden: true,
       },
@@ -20610,48 +20781,38 @@ execute() {
   execute() {
     const queue = [];
     const executionOrder = [];
+    const inDegreeCopy = new Map(this.inDegree);
 
-    // Enqueue tasks with no dependencies (in-degree = 0)
-    for (const [task, degree] of this.inDegree) {
+    for (const [task, degree] of inDegreeCopy) {
       if (degree === 0) {
         queue.push(task);
       }
     }
+    queue.sort();
 
     while (queue.length > 0) {
-      const task = queue.shift();
+      const task = queue.pop();
       executionOrder.push(task);
 
-      for (const dependentTask of this.graph.get(task)) {
-        this.inDegree.set(dependentTask, this.inDegree.get(dependentTask) - 1);
-        if (this.inDegree.get(dependentTask) === 0) {
-          queue.push(dependentTask);
+      const dependents = this.graph.get(task) || [];
+      const nextBatch = [];
+      for (const dependentTask of dependents) {
+        inDegreeCopy.set(dependentTask, inDegreeCopy.get(dependentTask) - 1);
+        if (inDegreeCopy.get(dependentTask) === 0) {
+          nextBatch.push(dependentTask);
         }
       }
+      nextBatch.sort();
+      queue.push(...nextBatch);
     }
 
-    // Check for a cycle (if tasks are left with non-zero in-degree)
     if (executionOrder.length !== this.graph.size) {
       throw new Error('Circular dependency detected!');
     }
 
     return executionOrder;
   }
-}
-
-// Example usage:
-const scheduler = new TaskSchedulerWithDependencies();
-scheduler.addTask('A', ['B', 'C']);
-scheduler.addTask('B', ['D']);
-scheduler.addTask('C', []);
-scheduler.addTask('D', []);
-
-console.log(scheduler.execute()); // ["D", "B", "C", "A"]
-
-// Circular dependency test
-scheduler.addTask('E', ['F']);
-scheduler.addTask('F', ['E']);
-console.log(scheduler.execute()); // Error: Circular dependency detected!`,
+}`,
       complexity: {
         time: 'O(n)',
         space: 'O(1)',

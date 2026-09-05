@@ -23,6 +23,7 @@ export const VITE_REACT_TEMPLATE: ProjectTemplate = {
         private: true,
         version: '0.0.0',
         type: 'module',
+        main: '/src/main.jsx',
         scripts: {
           dev: 'vite',
           build: 'vite build',
@@ -387,6 +388,7 @@ export const VITE_REACT_TS_TEMPLATE: ProjectTemplate = {
         private: true,
         version: '0.0.0',
         type: 'module',
+        main: '/src/main.tsx',
         scripts: {
           dev: 'vite',
           build: 'tsc && vite build',

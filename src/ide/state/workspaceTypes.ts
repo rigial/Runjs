@@ -12,6 +12,7 @@ export interface WorkspaceContextType {
   dirtyFiles: Set<string>;
   fileContents: Record<string, string>;
   isSaving: boolean;
+  isLoading: boolean;
   fontSize: number;
   isExplorerOpen: boolean;
   isTerminalOpen: boolean;
@@ -28,6 +29,7 @@ export interface WorkspaceContextType {
   setProjectName: (name: string) => void;
   setProjectTag: (tag: string) => void;
   switchTemplate: (templateId: string) => Promise<void>;
+  resetWorkspace: () => Promise<void>;
   toggleExplorer: () => void;
   toggleTerminal: () => void;
   toggleConsole: () => void;

@@ -7,19 +7,36 @@ import { normalizePath } from '../fs/pathUtils';
 import useLocalStorageState from '../../hook/useLocalStorageState';
 import { WorkspaceContext } from './workspaceTypes';
 import { getAllPackageVirtualFiles } from '../languages/typescript/packageDefinitions';
+import { prepareSandpackFiles } from './sandpackAdapter';
 
 interface WorkspaceProviderProps {
   initialProjectId?: string;
   children: React.ReactNode;
 }
 
+const DRAFT_STORAGE_PREFIX = 'runjs_react_workspace_draft_';
+
+interface WorkspaceDraft {
+  projectId: string;
+  projectName: string;
+  projectTag: string;
+  templateId: string;
+  activeFile: string;
+  openFiles: string[];
+  dirtyFiles: string[];
+  fileContents: Record<string, string>;
+  vfsFiles: Record<string, string>;
+  updatedAt: number;
+}
+
 export function WorkspaceProvider({
   initialProjectId,
   children,
 }: WorkspaceProviderProps) {
-  const [projectId, setProjectId] = useState(
-    initialProjectId || 'default-react-workspace'
-  );
+  const effectiveProjectId = initialProjectId || 'default-react-workspace';
+  const draftKey = `${DRAFT_STORAGE_PREFIX}${effectiveProjectId}`;
+
+  const [projectId, setProjectId] = useState(effectiveProjectId);
   const [projectName, setProjectName] = useState('React App');
   const [projectTag, setProjectTag] = useState('react');
   const [templateId, setTemplateId] = useState('vite-react');
@@ -32,9 +49,10 @@ export function WorkspaceProvider({
   const [dirtyFiles, setDirtyFiles] = useState<Set<string>>(new Set());
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
   const [sandpackFiles, setSandpackFiles] = useState<Record<string, string>>(
-    {}
+    () => prepareSandpackFiles(VITE_REACT_TEMPLATE.files, 'vite-react')
   );
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Layout states
   const [isExplorerOpen, setIsExplorerOpen] = useState(true);
@@ -54,20 +72,122 @@ export function WorkspaceProvider({
   }
   const vfs = vfsRef.current;
 
-  // Sync VFS to sandpackFiles for runtime bundler
-  const syncSandpackFiles = useCallback(async () => {
-    const json = await vfs.toJSON();
-    // Sandpack accepts paths without or with leading slash, but normalize for consistency
-    setSandpackFiles({ ...json });
-  }, [vfs]);
+  // Sync VFS + active editor contents to sandpackFiles for runtime bundler
+  const syncSandpackFiles = useCallback(
+    async (fileOverrides?: Record<string, string>) => {
+      const vfsJson = await vfs.toJSON();
+      const merged = fileOverrides
+        ? { ...fileOverrides }
+        : { ...vfsJson, ...fileContents };
+      const prepared = prepareSandpackFiles(merged, templateId);
+      setSandpackFiles(prepared);
+    },
+    [vfs, fileContents, templateId]
+  );
 
-  // Load project from IndexedDB or template
+  // Helper to persist current VFS state to IndexedDB
+  const persistToDatabase = useCallback(
+    async (currentVfsFiles: Record<string, string>) => {
+      try {
+        const mainCode =
+          currentVfsFiles['/src/App.jsx'] ||
+          currentVfsFiles['/src/App.tsx'] ||
+          currentVfsFiles['/src/main.jsx'] ||
+          currentVfsFiles['/src/main.tsx'] ||
+          '';
+
+        const existing = await getCode(projectId);
+
+        const payload: UserCodeBase = {
+          id: projectId,
+          fileName: projectName,
+          tag: projectTag,
+          language: 'react',
+          code: mainCode,
+          htmlCode: currentVfsFiles['/index.html'] || '',
+          cssCode:
+            currentVfsFiles['/src/App.css'] ||
+            currentVfsFiles['/src/index.css'] ||
+            '',
+          jsCode: mainCode,
+          createdAt: existing?.createdAt || new Date(),
+          lastModifiedAt: new Date(),
+          isDelete: false,
+          star: existing?.star ?? 0,
+          dbUpload: false,
+          files: currentVfsFiles,
+          activeFile,
+          openFiles,
+        };
+
+        if (existing) {
+          await updateCode(projectId, payload);
+        } else {
+          await addCode(payload);
+        }
+      } catch (err) {
+        console.error('Failed to persist project to IndexedDB:', err);
+      }
+    },
+    [projectId, projectName, projectTag, activeFile, openFiles]
+  );
+
+  // Dual-tier Workspace Loading on mount (Draft Storage -> IndexedDB -> Default Template)
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadWorkspace() {
-      if (initialProjectId) {
+      setIsLoading(true);
+      try {
+        // Tier 1: Check for working draft in localStorage
         try {
-          const dbCode = await getCode(initialProjectId);
-          if (dbCode) {
+          const rawDraft = localStorage.getItem(draftKey);
+          if (rawDraft) {
+            const draft: WorkspaceDraft = JSON.parse(rawDraft);
+            if (
+              draft &&
+              draft.vfsFiles &&
+              Object.keys(draft.vfsFiles).length > 0 &&
+              !isCancelled
+            ) {
+              await vfs.fromJSON(draft.vfsFiles);
+              setProjectId(draft.projectId || effectiveProjectId);
+              setProjectName(draft.projectName || 'React App');
+              setProjectTag(draft.projectTag || 'react');
+              const tpl = draft.templateId || 'vite-react';
+              setTemplateId(tpl);
+              setOpenFiles(draft.openFiles || VITE_REACT_TEMPLATE.openFiles);
+              setActiveFileState(
+                draft.activeFile || VITE_REACT_TEMPLATE.activeFile
+              );
+
+              if (
+                draft.fileContents &&
+                typeof draft.fileContents === 'object'
+              ) {
+                setFileContents(draft.fileContents);
+              }
+              if (Array.isArray(draft.dirtyFiles)) {
+                setDirtyFiles(new Set(draft.dirtyFiles));
+              }
+
+              const merged = {
+                ...draft.vfsFiles,
+                ...(draft.fileContents || {}),
+              };
+              const prepared = prepareSandpackFiles(merged, tpl);
+              setSandpackFiles(prepared);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Failed to restore from workspace draft storage:', e);
+        }
+
+        // Tier 2: Check IndexedDB (for initialProjectId or saved default workspace)
+        try {
+          const dbCode = await getCode(effectiveProjectId);
+          if (dbCode && !isCancelled) {
             setProjectId(dbCode.id);
             setProjectName(dbCode.fileName || 'React App');
             setProjectTag(dbCode.tag || 'react');
@@ -82,34 +202,98 @@ export function WorkspaceProvider({
                 ]
               );
               setActiveFileState(dbCode.activeFile || '/src/App.jsx');
-              setTemplateId(
-                dbCode.files['/src/App.tsx'] ? 'vite-react-ts' : 'vite-react'
-              );
+              const detectedTpl = dbCode.files['/src/App.tsx']
+                ? 'vite-react-ts'
+                : 'vite-react';
+              setTemplateId(detectedTpl);
+              setDirtyFiles(new Set());
+              setFileContents({});
+              const prepared = prepareSandpackFiles(dbCode.files, detectedTpl);
+              setSandpackFiles(prepared);
+              return;
             } else if (dbCode.code) {
-              // Backward compatibility for single-file code
               const template = { ...VITE_REACT_TEMPLATE.files };
               template['/src/App.jsx'] = dbCode.code;
               await vfs.fromJSON(template);
               setTemplateId('vite-react');
+              setDirtyFiles(new Set());
+              setFileContents({});
+              const prepared = prepareSandpackFiles(template, 'vite-react');
+              setSandpackFiles(prepared);
+              return;
             }
-            await syncSandpackFiles();
-            return;
           }
         } catch (e) {
-          console.error('Failed to load project from DB:', e);
+          console.error('Failed to load project from IndexedDB:', e);
+        }
+
+        // Tier 3: Fresh Default Template
+        if (!isCancelled) {
+          await vfs.fromJSON(VITE_REACT_TEMPLATE.files);
+          setOpenFiles(VITE_REACT_TEMPLATE.openFiles);
+          setActiveFileState(VITE_REACT_TEMPLATE.activeFile);
+          setTemplateId('vite-react');
+          setDirtyFiles(new Set());
+          setFileContents({});
+          const prepared = prepareSandpackFiles(
+            VITE_REACT_TEMPLATE.files,
+            'vite-react'
+          );
+          setSandpackFiles(prepared);
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
         }
       }
-
-      // Default template initialization
-      await vfs.fromJSON(VITE_REACT_TEMPLATE.files);
-      setOpenFiles(VITE_REACT_TEMPLATE.openFiles);
-      setActiveFileState(VITE_REACT_TEMPLATE.activeFile);
-      setTemplateId('vite-react');
-      await syncSandpackFiles();
     }
 
     loadWorkspace();
-  }, [initialProjectId, vfs, syncSandpackFiles]);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [effectiveProjectId, draftKey, vfs]);
+
+  // Debounced draft persistence to localStorage
+  useEffect(() => {
+    if (isLoading) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        const vfsFiles = await vfs.toJSON();
+        const draft: WorkspaceDraft = {
+          projectId,
+          projectName,
+          projectTag,
+          templateId,
+          activeFile,
+          openFiles,
+          dirtyFiles: Array.from(dirtyFiles),
+          fileContents,
+          vfsFiles,
+          updatedAt: Date.now(),
+        };
+        localStorage.setItem(draftKey, JSON.stringify(draft));
+      } catch (e) {
+        console.warn('Failed to persist draft to localStorage:', e);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [
+    isLoading,
+    draftKey,
+    projectId,
+    projectName,
+    projectTag,
+    templateId,
+    activeFile,
+    openFiles,
+    dirtyFiles,
+    fileContents,
+    vfs,
+  ]);
 
   // Read current active file content whenever active file or VFS updates
   useEffect(() => {
@@ -138,10 +322,11 @@ export function WorkspaceProvider({
     loadActiveContent();
   }, [activeFile, vfs, dirtyFiles, fileContents]);
 
-  // Subscribe to VFS modifications
+  // Subscribe to external VFS modifications (e.g. from PackageManager / Terminal)
   useEffect(() => {
     const unsub = vfs.on('*', async (event) => {
       await syncSandpackFiles();
+
       if (event.path === activeFile && event.content !== undefined) {
         setFileContents((prev) => ({ ...prev, [event.path]: event.content! }));
       }
@@ -206,6 +391,7 @@ export function WorkspaceProvider({
     setDirtyFiles(new Set());
   }, []);
 
+  // Update file content as user types in Monaco
   const updateFileContent = useCallback((path: string, content: string) => {
     const norm = normalizePath(path);
     if (norm.startsWith('/node_modules/')) return;
@@ -213,6 +399,7 @@ export function WorkspaceProvider({
     setDirtyFiles((prev) => new Set(prev).add(norm));
   }, []);
 
+  // Save a single file: commits to VFS, saves to DB, and instantly updates Sandpack preview
   const saveFile = useCallback(
     async (path: string) => {
       const norm = normalizePath(path);
@@ -225,12 +412,21 @@ export function WorkspaceProvider({
           next.delete(norm);
           return next;
         });
-        await syncSandpackFiles();
+
+        const vfsJson = await vfs.toJSON();
+        vfsJson[norm] = content;
+
+        // Instantly push to Sandpack preview
+        await syncSandpackFiles({ [norm]: content });
+
+        // Persist to IndexedDB
+        await persistToDatabase(vfsJson);
       }
     },
-    [fileContents, vfs, syncSandpackFiles]
+    [fileContents, vfs, syncSandpackFiles, persistToDatabase]
   );
 
+  // Save entire project: commits all dirty files to VFS, saves to DB, and instantly updates preview
   const saveProject = useCallback(async () => {
     setIsSaving(true);
     try {
@@ -245,40 +441,29 @@ export function WorkspaceProvider({
       setDirtyFiles(new Set());
 
       const allFiles = await vfs.toJSON();
-      const mainCode =
-        allFiles['/src/App.jsx'] ||
-        allFiles['/src/App.tsx'] ||
-        allFiles['/src/main.jsx'] ||
-        '';
 
-      const existing = await getCode(projectId);
+      // Instantly push to Sandpack preview
+      await syncSandpackFiles();
 
-      const payload: UserCodeBase = {
-        id: projectId,
-        fileName: projectName,
-        tag: projectTag,
-        language: 'react',
-        code: mainCode,
-        htmlCode: allFiles['/index.html'] || '',
-        cssCode: allFiles['/src/App.css'] || allFiles['/src/index.css'] || '',
-        jsCode: mainCode,
-        createdAt: existing?.createdAt || new Date(),
-        lastModifiedAt: new Date(),
-        isDelete: false,
-        star: existing?.star ?? 0,
-        dbUpload: false,
-        files: allFiles,
+      // Persist to IndexedDB
+      await persistToDatabase(allFiles);
+
+      // Update draft in localStorage
+      const draft: WorkspaceDraft = {
+        projectId,
+        projectName,
+        projectTag,
+        templateId,
         activeFile,
         openFiles,
+        dirtyFiles: [],
+        fileContents,
+        vfsFiles: allFiles,
+        updatedAt: Date.now(),
       };
-
-      if (existing) {
-        await updateCode(projectId, payload);
-      } else {
-        await addCode(payload);
-      }
+      localStorage.setItem(draftKey, JSON.stringify(draft));
     } catch (e) {
-      console.error('Failed to save project to IndexedDB:', e);
+      console.error('Failed to save project:', e);
     } finally {
       setIsSaving(false);
     }
@@ -286,32 +471,50 @@ export function WorkspaceProvider({
     dirtyFiles,
     fileContents,
     vfs,
+    syncSandpackFiles,
+    persistToDatabase,
     projectId,
     projectName,
     projectTag,
+    templateId,
     activeFile,
     openFiles,
+    draftKey,
   ]);
 
   const switchTemplate = useCallback(
     async (newTemplateId: string) => {
       const template =
         TEMPLATES.find((t) => t.id === newTemplateId) || VITE_REACT_TEMPLATE;
-      if (
-        window.confirm(
-          `Switch to template "${template.name}"? Current unsaved changes will be replaced.`
-        )
-      ) {
-        await vfs.fromJSON(template.files);
-        setOpenFiles(template.openFiles);
-        setActiveFileState(template.activeFile);
-        setTemplateId(template.id);
-        setDirtyFiles(new Set());
-        await syncSandpackFiles();
-      }
+      await vfs.fromJSON(template.files);
+      setOpenFiles(template.openFiles);
+      setActiveFileState(template.activeFile);
+      setTemplateId(template.id);
+      setDirtyFiles(new Set());
+      setFileContents({});
+
+      await syncSandpackFiles(template.files);
+
+      // Clear previous draft and update DB
+      localStorage.removeItem(draftKey);
+      await persistToDatabase(template.files);
     },
-    [vfs, syncSandpackFiles]
+    [vfs, draftKey, syncSandpackFiles, persistToDatabase]
   );
+
+  const resetWorkspace = useCallback(async () => {
+    await vfs.fromJSON(VITE_REACT_TEMPLATE.files);
+    setOpenFiles(VITE_REACT_TEMPLATE.openFiles);
+    setActiveFileState(VITE_REACT_TEMPLATE.activeFile);
+    setTemplateId('vite-react');
+    setDirtyFiles(new Set());
+    setFileContents({});
+
+    await syncSandpackFiles(VITE_REACT_TEMPLATE.files);
+
+    localStorage.removeItem(draftKey);
+    await persistToDatabase(VITE_REACT_TEMPLATE.files);
+  }, [vfs, draftKey, syncSandpackFiles, persistToDatabase]);
 
   const handleFileDeleted = useCallback(
     (path: string) => {
@@ -338,6 +541,14 @@ export function WorkspaceProvider({
         }
         return next;
       });
+      setFileContents((prev) => {
+        if (prev[normOld] !== undefined) {
+          const next = { ...prev, [normNew]: prev[normOld] };
+          delete next[normOld];
+          return next;
+        }
+        return prev;
+      });
     },
     [activeFile]
   );
@@ -363,6 +574,7 @@ export function WorkspaceProvider({
         dirtyFiles,
         fileContents,
         isSaving,
+        isLoading,
         fontSize,
         isExplorerOpen,
         isTerminalOpen,
@@ -379,6 +591,7 @@ export function WorkspaceProvider({
         setProjectName,
         setProjectTag,
         switchTemplate,
+        resetWorkspace,
         toggleExplorer,
         toggleTerminal,
         toggleConsole,

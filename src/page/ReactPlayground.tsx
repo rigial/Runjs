@@ -17,6 +17,7 @@ import { MultiTabEditor } from '../ide/components/Editor/MultiTabEditor';
 import { LivePreview } from '../ide/components/Preview/LivePreview';
 import TerminalSkeleton from '../components/skeletons/TerminalSkeleton';
 import { lazyWithRetry } from '../utils/lazyWithRetry';
+import AppLoading from '../components/AppLoading';
 
 const XtermTerminal = lazyWithRetry(() =>
   import('../ide/components/Terminal/XtermTerminal').then((m) => ({
@@ -29,11 +30,11 @@ import {
 } from '../ide/components/Console/IdeConsole';
 import ThemeSelector from '../components/ThemeSelector';
 import HelpModal from '../components/HelpModal';
+import ResetWorkspaceModal from '../ide/components/Modals/ResetWorkspaceModal';
 import { ModalRef } from '../utils/interface';
 import useTheme from '../hook/useTheme';
 import useMediaQuery from '../hook/useMediaQuery';
 import useWarnOnClose from '../hook/useWarnOnClose ';
-import { TEMPLATES } from '../ide/templates/defaultTemplates';
 import SEO from '../seo/SEO';
 import { getBreadcrumbSchema, getWebApplicationSchema } from '../seo/seoConfig';
 import {
@@ -49,6 +50,7 @@ import {
   MessageSquare,
   Edit2,
   Check,
+  RotateCcw,
 } from 'lucide-react';
 
 type MobileTab = 'files' | 'code' | 'preview' | 'terminal' | 'console';
@@ -63,11 +65,11 @@ function ReactWorkspace() {
     fileContents,
     fontSize,
     isSaving,
+    isLoading,
     isExplorerOpen,
     isTerminalOpen,
     isConsoleOpen,
     sandpackFiles,
-    templateId,
     setActiveFile,
     openFile,
     closeFile,
@@ -77,7 +79,7 @@ function ReactWorkspace() {
     saveFile,
     saveProject,
     setProjectName,
-    switchTemplate,
+    resetWorkspace,
     toggleExplorer,
     toggleTerminal,
     toggleConsole,
@@ -91,7 +93,13 @@ function ReactWorkspace() {
   const [activeMobileTab, setActiveMobileTab] = useState<MobileTab>('code');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [titleValue, setTitleValue] = useState(projectName);
-  const [devServerKey, setDevServerKey] = useState(0);
+  const [previewReloadTrigger, setPreviewReloadTrigger] = useState(0);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+
+  const handleConfirmReset = useCallback(async () => {
+    await resetWorkspace();
+    setIsResetModalOpen(false);
+  }, [resetWorkspace]);
 
   const consoleRef = useRef<IdeConsoleRef>(null);
   const helpDialogRef = useRef<ModalRef>(null);
@@ -202,8 +210,28 @@ function ReactWorkspace() {
   };
 
   const handleDevServerRestart = useCallback(() => {
-    setDevServerKey((prev) => prev + 1);
+    setPreviewReloadTrigger((prev) => prev + 1);
   }, []);
+
+  const renderPreview = () =>
+    Object.keys(sandpackFiles).length > 0 ? (
+      <SandpackProvider
+        files={sandpackFiles}
+        template="react"
+        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        options={{
+          recompileMode: 'delayed',
+          recompileDelay: 300,
+        }}
+        style={{ height: '100%', width: '100%' }}
+      >
+        <LivePreview previewReloadTrigger={previewReloadTrigger} />
+      </SandpackProvider>
+    ) : (
+      <div className="h-full w-full flex items-center justify-center bg-[var(--bg-app)] text-xs text-[var(--text-muted)]">
+        Loading preview runtime...
+      </div>
+    );
 
   return (
     <main className="h-screen w-full flex flex-col bg-[var(--bg-app)] overflow-hidden">
@@ -264,20 +292,17 @@ function ReactWorkspace() {
             </span>
           </div>
 
-          {/* Template Selector Dropdown */}
-          <div className="hidden lg:flex items-center ml-2">
-            <select
-              aria-label="Project Template"
-              onChange={(e) => switchTemplate(e.target.value)}
-              value={templateId}
-              className="px-2 py-1 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface-muted)] text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] outline-none cursor-pointer"
+          {/* Reset Workspace Action */}
+          <div className="hidden sm:flex items-center ml-1">
+            <button
+              type="button"
+              onClick={() => setIsResetModalOpen(true)}
+              title="Reset Workspace to Clean Template"
+              className="flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface-muted)] text-[11px] text-[var(--text-muted)] hover:text-rose-500 hover:border-rose-500/30 transition-colors cursor-pointer"
             >
-              {TEMPLATES.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.icon} {t.name}
-                </option>
-              ))}
-            </select>
+              <RotateCcw className="w-3 h-3" />
+              <span>Reset</span>
+            </button>
           </div>
         </div>
 
@@ -425,156 +450,73 @@ function ReactWorkspace() {
         </div>
       </nav>
 
-      {/* Main Workspace with SandpackProvider Runtime */}
+      {/* Main Workspace */}
       <div className="flex-1 w-full overflow-hidden">
-        {Object.keys(sandpackFiles).length > 0 && (
-          <SandpackProvider
-            key={devServerKey}
-            files={sandpackFiles}
-            template="react"
-            theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
-            options={{
-              recompileMode: 'delayed',
-              recompileDelay: 300,
-            }}
-            style={{ height: '100%', width: '100%' }}
+        {isLoading ? (
+          <AppLoading freeLoading={true} />
+        ) : isDesktop ? (
+          /* Desktop Multi-Split Layout */
+          <Split
+            className="flex h-full w-full split"
+            sizes={isExplorerOpen ? [18, 44, 38] : [0, 56, 44]}
+            minSize={isExplorerOpen ? [140, 300, 260] : [0, 300, 260]}
+            gutterSize={6}
           >
-            {isDesktop ? (
-              /* Desktop Multi-Split Layout */
-              <Split
-                className="flex h-full w-full split"
-                sizes={isExplorerOpen ? [18, 44, 38] : [0, 56, 44]}
-                minSize={isExplorerOpen ? [140, 300, 260] : [0, 300, 260]}
-                gutterSize={6}
-              >
-                {/* 1. Left: File Explorer */}
-                <div
-                  className={`h-full overflow-hidden bg-[var(--bg-surface)] ${
-                    isExplorerOpen ? 'block' : 'hidden'
-                  }`}
-                >
-                  <FileExplorer
-                    vfs={vfs}
-                    activeFile={activeFile}
-                    dirtyFiles={dirtyFiles}
-                    onSelectFile={setActiveFile}
-                    onFileDeleted={handleFileDeleted}
-                    onFileRenamed={handleFileRenamed}
-                  />
-                </div>
+            {/* 1. Left: File Explorer */}
+            <div
+              className={`h-full overflow-hidden bg-[var(--bg-surface)] ${
+                isExplorerOpen ? 'block' : 'hidden'
+              }`}
+            >
+              <FileExplorer
+                vfs={vfs}
+                activeFile={activeFile}
+                dirtyFiles={dirtyFiles}
+                onSelectFile={setActiveFile}
+                onFileDeleted={handleFileDeleted}
+                onFileRenamed={handleFileRenamed}
+              />
+            </div>
 
-                {/* 2. Center: Code Editor & Bottom Terminal */}
-                <div className="h-full overflow-hidden bg-[var(--bg-app)]">
-                  {isTerminalOpen ? (
-                    <Split
-                      className="flex flex-col h-full w-full"
-                      direction="vertical"
-                      sizes={[65, 35]}
-                      minSize={[150, 100]}
-                      gutterSize={6}
-                    >
-                      <div className="h-full overflow-hidden">
-                        <MultiTabEditor
-                          activeFile={activeFile}
-                          openFiles={openFiles}
-                          dirtyFiles={dirtyFiles}
-                          content={fileContents[activeFile] ?? ''}
-                          onSelectTab={setActiveFile}
-                          onCloseTab={closeFile}
-                          onCloseOtherTabs={closeOtherFiles}
-                          onCloseAllTabs={closeAllFiles}
-                          onChangeCode={updateFileContent}
-                          onSaveFile={saveFile}
-                          fontSize={fontSize}
-                          editorRef={editorRef}
-                          allFiles={allFiles}
-                        />
-                      </div>
-                      <div className="h-full overflow-hidden">
-                        <Suspense fallback={<TerminalSkeleton />}>
-                          <XtermTerminal
-                            vfs={vfs}
-                            onDevServerRestart={handleDevServerRestart}
-                            onOpenFile={openFile}
-                          />
-                        </Suspense>
-                      </div>
-                    </Split>
-                  ) : (
-                    <div className="h-full overflow-hidden">
-                      <MultiTabEditor
-                        activeFile={activeFile}
-                        openFiles={openFiles}
-                        dirtyFiles={dirtyFiles}
-                        content={fileContents[activeFile] ?? ''}
-                        onSelectTab={setActiveFile}
-                        onCloseTab={closeFile}
-                        onCloseOtherTabs={closeOtherFiles}
-                        onCloseAllTabs={closeAllFiles}
-                        onChangeCode={updateFileContent}
-                        onSaveFile={saveFile}
-                        fontSize={fontSize}
-                        editorRef={editorRef}
-                        allFiles={allFiles}
+            {/* 2. Center: Code Editor & Bottom Terminal */}
+            <div className="h-full overflow-hidden bg-[var(--bg-app)]">
+              {isTerminalOpen ? (
+                <Split
+                  className="flex flex-col h-full w-full"
+                  direction="vertical"
+                  sizes={[65, 35]}
+                  minSize={[150, 100]}
+                  gutterSize={6}
+                >
+                  <div className="h-full overflow-hidden">
+                    <MultiTabEditor
+                      activeFile={activeFile}
+                      openFiles={openFiles}
+                      dirtyFiles={dirtyFiles}
+                      content={fileContents[activeFile] ?? ''}
+                      onSelectTab={setActiveFile}
+                      onCloseTab={closeFile}
+                      onCloseOtherTabs={closeOtherFiles}
+                      onCloseAllTabs={closeAllFiles}
+                      onChangeCode={updateFileContent}
+                      onSaveFile={saveFile}
+                      fontSize={fontSize}
+                      editorRef={editorRef}
+                      allFiles={allFiles}
+                    />
+                  </div>
+                  <div className="h-full overflow-hidden">
+                    <Suspense fallback={<TerminalSkeleton />}>
+                      <XtermTerminal
+                        vfs={vfs}
+                        onDevServerRestart={handleDevServerRestart}
+                        onOpenFile={openFile}
                       />
-                    </div>
-                  )}
-                </div>
-
-                {/* 3. Right: Live Preview & Bottom Console */}
-                <div className="h-full overflow-hidden bg-[var(--bg-app)]">
-                  {isConsoleOpen ? (
-                    <Split
-                      className="flex flex-col h-full w-full"
-                      direction="vertical"
-                      sizes={[60, 40]}
-                      minSize={[150, 100]}
-                      gutterSize={6}
-                    >
-                      <div className="h-full overflow-hidden">
-                        <LivePreview
-                          onRestartDevServer={handleDevServerRestart}
-                        />
-                      </div>
-                      <div className="h-full overflow-hidden">
-                        <IdeConsole ref={consoleRef} />
-                      </div>
-                    </Split>
-                  ) : (
-                    <div className="h-full overflow-hidden">
-                      <LivePreview
-                        onRestartDevServer={handleDevServerRestart}
-                      />
-                    </div>
-                  )}
-                </div>
-              </Split>
-            ) : (
-              /* Mobile Single Tab Layout */
-              <div className="h-full w-full overflow-hidden">
-                <div
-                  className={`h-full overflow-hidden ${
-                    activeMobileTab === 'files' ? 'block' : 'hidden'
-                  }`}
-                >
-                  <FileExplorer
-                    vfs={vfs}
-                    activeFile={activeFile}
-                    dirtyFiles={dirtyFiles}
-                    onSelectFile={(path) => {
-                      setActiveFile(path);
-                      setActiveMobileTab('code');
-                    }}
-                    onFileDeleted={handleFileDeleted}
-                    onFileRenamed={handleFileRenamed}
-                  />
-                </div>
-
-                <div
-                  className={`h-full overflow-hidden ${
-                    activeMobileTab === 'code' ? 'block' : 'hidden'
-                  }`}
-                >
+                    </Suspense>
+                  </div>
+                </Split>
+              ) : (
+                <div className="h-full overflow-hidden">
                   <MultiTabEditor
                     activeFile={activeFile}
                     openFiles={openFiles}
@@ -591,46 +533,116 @@ function ReactWorkspace() {
                     allFiles={allFiles}
                   />
                 </div>
+              )}
+            </div>
 
-                <div
-                  className={`h-full overflow-hidden ${
-                    activeMobileTab === 'preview' ? 'block' : 'hidden'
-                  }`}
+            {/* 3. Right: Live Preview & Bottom Console */}
+            <div className="h-full overflow-hidden bg-[var(--bg-app)]">
+              {isConsoleOpen ? (
+                <Split
+                  className="flex flex-col h-full w-full"
+                  direction="vertical"
+                  sizes={[60, 40]}
+                  minSize={[150, 100]}
+                  gutterSize={6}
                 >
-                  <LivePreview onRestartDevServer={handleDevServerRestart} />
-                </div>
+                  <div className="h-full overflow-hidden">
+                    {renderPreview()}
+                  </div>
+                  <div className="h-full overflow-hidden">
+                    <IdeConsole ref={consoleRef} />
+                  </div>
+                </Split>
+              ) : (
+                <div className="h-full overflow-hidden">{renderPreview()}</div>
+              )}
+            </div>
+          </Split>
+        ) : (
+          /* Mobile Single Tab Layout */
+          <div className="h-full w-full overflow-hidden">
+            <div
+              className={`h-full overflow-hidden ${
+                activeMobileTab === 'files' ? 'block' : 'hidden'
+              }`}
+            >
+              <FileExplorer
+                vfs={vfs}
+                activeFile={activeFile}
+                dirtyFiles={dirtyFiles}
+                onSelectFile={(path) => {
+                  setActiveFile(path);
+                  setActiveMobileTab('code');
+                }}
+                onFileDeleted={handleFileDeleted}
+                onFileRenamed={handleFileRenamed}
+              />
+            </div>
 
-                <div
-                  className={`h-full overflow-hidden ${
-                    activeMobileTab === 'terminal' ? 'block' : 'hidden'
-                  }`}
-                >
-                  <Suspense fallback={<TerminalSkeleton />}>
-                    <XtermTerminal
-                      vfs={vfs}
-                      onDevServerRestart={handleDevServerRestart}
-                      onOpenFile={(p) => {
-                        openFile(p);
-                        setActiveMobileTab('code');
-                      }}
-                    />
-                  </Suspense>
-                </div>
+            <div
+              className={`h-full overflow-hidden ${
+                activeMobileTab === 'code' ? 'block' : 'hidden'
+              }`}
+            >
+              <MultiTabEditor
+                activeFile={activeFile}
+                openFiles={openFiles}
+                dirtyFiles={dirtyFiles}
+                content={fileContents[activeFile] ?? ''}
+                onSelectTab={setActiveFile}
+                onCloseTab={closeFile}
+                onCloseOtherTabs={closeOtherFiles}
+                onCloseAllTabs={closeAllFiles}
+                onChangeCode={updateFileContent}
+                onSaveFile={saveFile}
+                fontSize={fontSize}
+                editorRef={editorRef}
+                allFiles={allFiles}
+              />
+            </div>
 
-                <div
-                  className={`h-full overflow-hidden ${
-                    activeMobileTab === 'console' ? 'block' : 'hidden'
-                  }`}
-                >
-                  <IdeConsole ref={consoleRef} />
-                </div>
-              </div>
-            )}
-          </SandpackProvider>
+            <div
+              className={`h-full overflow-hidden ${
+                activeMobileTab === 'preview' ? 'block' : 'hidden'
+              }`}
+            >
+              {renderPreview()}
+            </div>
+
+            <div
+              className={`h-full overflow-hidden ${
+                activeMobileTab === 'terminal' ? 'block' : 'hidden'
+              }`}
+            >
+              <Suspense fallback={<TerminalSkeleton />}>
+                <XtermTerminal
+                  vfs={vfs}
+                  onDevServerRestart={handleDevServerRestart}
+                  onOpenFile={(p) => {
+                    openFile(p);
+                    setActiveMobileTab('code');
+                  }}
+                />
+              </Suspense>
+            </div>
+
+            <div
+              className={`h-full overflow-hidden ${
+                activeMobileTab === 'console' ? 'block' : 'hidden'
+              }`}
+            >
+              <IdeConsole ref={consoleRef} />
+            </div>
+          </div>
         )}
       </div>
 
       <HelpModal ref={helpDialogRef} />
+      <ResetWorkspaceModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        onConfirm={handleConfirmReset}
+      />
     </main>
   );
 }

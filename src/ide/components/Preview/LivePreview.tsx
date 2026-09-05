@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SandpackPreview, useSandpack } from '@codesandbox/sandpack-react';
 import {
   RotateCcw,
@@ -11,23 +11,39 @@ import {
 
 interface LivePreviewProps {
   onRestartDevServer?: () => void;
+  previewReloadTrigger?: number;
   className?: string;
 }
 
 type ViewportMode = 'responsive' | 'mobile' | 'tablet' | 'desktop';
 
 export function LivePreview({
-  onRestartDevServer,
+  previewReloadTrigger = 0,
   className = '',
 }: LivePreviewProps) {
-  const { sandpack } = useSandpack();
+  const { sandpack, dispatch } = useSandpack();
   const [viewport, setViewport] = useState<ViewportMode>('responsive');
   const [key, setKey] = useState(0);
 
   const handleRefresh = () => {
+    try {
+      dispatch({ type: 'refresh' });
+    } catch {
+      // fallback to iframe key reload
+    }
     setKey((prev) => prev + 1);
-    onRestartDevServer?.();
   };
+
+  useEffect(() => {
+    if (previewReloadTrigger > 0) {
+      try {
+        dispatch({ type: 'refresh' });
+      } catch {
+        // fallback
+      }
+      setKey((prev) => prev + 1);
+    }
+  }, [previewReloadTrigger, dispatch]);
 
   const getViewportWidth = () => {
     switch (viewport) {

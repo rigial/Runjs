@@ -45,6 +45,12 @@ function Footer({ className = '', hasMarginTop }: FooterProps) {
             Terms & Conditions
           </Link>
           <Link
+            to="/kishorekumar"
+            className="hover:text-[var(--text-primary)] transition-colors hover:underline"
+          >
+            Creator
+          </Link>
+          <Link
             to="/about"
             className="hover:text-[var(--text-primary)] transition-colors hover:underline"
           >

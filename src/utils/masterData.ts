@@ -92,7 +92,7 @@ export interface MoreNavItem {
   title: string;
   link: string;
   description: string;
-  iconName: 'about' | 'bin' | 'github' | 'privacy' | 'terms';
+  iconName: 'about' | 'bin' | 'github' | 'privacy' | 'terms' | 'creator';
   isExternal?: boolean;
 }
 
@@ -127,6 +127,12 @@ export const moreNavLinks: MoreNavItem[] = [
     description: 'View source code, star the project, and report issues',
     iconName: 'github',
     isExternal: true,
+  },
+  {
+    title: 'Creator Portfolio',
+    link: '/kishorekumar',
+    description: 'Meet M R Kishore Kumar, creator & maintainer of RunJS',
+    iconName: 'creator',
   },
 ];
 
@@ -178,6 +184,10 @@ const navigation = [
   {
     title: 'Bin',
     link: '/bin',
+  },
+  {
+    title: 'Creator Portfolio',
+    link: '/kishorekumar',
   },
   {
     title: 'About',

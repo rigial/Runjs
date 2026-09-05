@@ -20,6 +20,9 @@ function ScrollToTop() {
 
 const HomePage = lazyWithRetry(() => import('./page/HomePage'));
 const AboutPage = lazyWithRetry(() => import('./page/AboutPage'));
+const CreatorPortfolioPage = lazyWithRetry(
+  () => import('./page/CreatorPortfolioPage')
+);
 const PrivacyPolicyPage = lazyWithRetry(
   () => import('./page/PrivacyPolicyPage')
 );
@@ -61,6 +64,7 @@ function AppRouter() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/kishorekumar" element={<CreatorPortfolioPage />} />
             <Route path="/privacy" element={<PrivacyPolicyPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms" element={<TermsConditionsPage />} />

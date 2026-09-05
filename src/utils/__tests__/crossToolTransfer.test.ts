@@ -1,9 +1,16 @@
-import { TOOL_CONFIGS, compileTsToJs, consumeTransferredCode, saveCrossToolTransfer } from '../crossToolTransfer';
+import {
+  TOOL_CONFIGS,
+  compileTsToJs,
+  consumeTransferredCode,
+  saveCrossToolTransfer,
+} from '../crossToolTransfer';
 import { simulateCode } from '../../visualizer/engine/simulator';
 import { simulateExecutionContext } from '../../execution-context/engine/interpreter';
 
 async function runTests() {
-  console.log('=== Testing Cross-Tool Interlinking & TypeScript Conversion ===\n');
+  console.log(
+    '=== Testing Cross-Tool Interlinking & TypeScript Conversion ===\n'
+  );
 
   // 1. Tool configurations test
   console.log('1. Verifying Tool Configurations...');
@@ -17,7 +24,9 @@ async function runTests() {
       throw new Error(`Incomplete tool config for ${toolId}`);
     }
   }
-  console.log('  ✓ All 4 tools configured correctly (js, visualizer, execution-context, ts)');
+  console.log(
+    '  ✓ All 4 tools configured correctly (js, visualizer, execution-context, ts)'
+  );
 
   // 2. TypeScript to JavaScript compilation tests
   console.log('\n2. Verifying TypeScript-to-JavaScript Transpilation...');
@@ -37,7 +46,9 @@ console.log(user.name);
     throw new Error(`Failed to compile basic TS interface: ${result1.error}`);
   }
   if (result1.code.includes('interface') || result1.code.includes(': User')) {
-    throw new Error(`Compiled code still contains TypeScript types: ${result1.code}`);
+    throw new Error(
+      `Compiled code still contains TypeScript types: ${result1.code}`
+    );
   }
   console.log('  ✓ Interface and type annotations cleanly stripped');
 
@@ -59,18 +70,26 @@ console.log("End");
 `;
   const eventLoopCompiled = await compileTsToJs(tsEventLoopCode);
   if (eventLoopCompiled.error) {
-    throw new Error(`Failed to compile event loop TS code: ${eventLoopCompiled.error}`);
+    throw new Error(
+      `Failed to compile event loop TS code: ${eventLoopCompiled.error}`
+    );
   }
 
   // Verify it executes cleanly in Event Loop Simulator
   const elSimResult = simulateCode(eventLoopCompiled.code);
   if (!elSimResult.success) {
-    throw new Error(`Event Loop Visualizer failed to simulate compiled TS code: ${elSimResult.error}`);
+    throw new Error(
+      `Event Loop Visualizer failed to simulate compiled TS code: ${elSimResult.error}`
+    );
   }
   if (elSimResult.steps.length < 5) {
-    throw new Error(`Event Loop simulation generated too few steps: ${elSimResult.steps.length}`);
+    throw new Error(
+      `Event Loop simulation generated too few steps: ${elSimResult.steps.length}`
+    );
   }
-  console.log(`  ✓ Compiled TS code successfully simulated in Event Loop engine (${elSimResult.steps.length} steps)`);
+  console.log(
+    `  ✓ Compiled TS code successfully simulated in Event Loop engine (${elSimResult.steps.length} steps)`
+  );
 
   // Test with Execution Context simulation: Functions, hoisting, closures with TS types
   const tsContextCode = `
@@ -88,30 +107,47 @@ console.log("Sum is:", result);
 `;
   const contextCompiled = await compileTsToJs(tsContextCode);
   if (contextCompiled.error) {
-    throw new Error(`Failed to compile execution context TS code: ${contextCompiled.error}`);
+    throw new Error(
+      `Failed to compile execution context TS code: ${contextCompiled.error}`
+    );
   }
 
   // Verify it executes cleanly in Execution Context Simulator
   const ecSimResult = simulateExecutionContext(contextCompiled.code);
   if (!ecSimResult.success) {
-    throw new Error(`Execution Context Visualizer failed to simulate compiled TS code: ${ecSimResult.error}`);
+    throw new Error(
+      `Execution Context Visualizer failed to simulate compiled TS code: ${ecSimResult.error}`
+    );
   }
   if (ecSimResult.steps.length < 5) {
-    throw new Error(`Execution Context simulation generated too few steps: ${ecSimResult.steps.length}`);
+    throw new Error(
+      `Execution Context simulation generated too few steps: ${ecSimResult.steps.length}`
+    );
   }
-  console.log(`  ✓ Compiled TS code successfully simulated in Execution Context engine (${ecSimResult.steps.length} steps)`);
+  console.log(
+    `  ✓ Compiled TS code successfully simulated in Execution Context engine (${ecSimResult.steps.length} steps)`
+  );
 
   // 3. Error Handling Test
-  console.log('\n3. Verifying Error Handling with Invalid TypeScript Syntax...');
+  console.log(
+    '\n3. Verifying Error Handling with Invalid TypeScript Syntax...'
+  );
   const invalidTs = `const broken = ;`;
   const errorResult = await compileTsToJs(invalidTs);
   if (!errorResult.error) {
-    throw new Error('Expected syntax error for broken TS code, but compilation succeeded.');
+    throw new Error(
+      'Expected syntax error for broken TS code, but compilation succeeded.'
+    );
   }
-  console.log('  ✓ Syntax error accurately caught and returned:', errorResult.error.split('\n')[0]);
+  console.log(
+    '  ✓ Syntax error accurately caught and returned:',
+    errorResult.error.split('\n')[0]
+  );
 
   // 4. State consumption test
-  console.log('\n4. Verifying saveCrossToolTransfer and consumeTransferredCode helper...');
+  console.log(
+    '\n4. Verifying saveCrossToolTransfer and consumeTransferredCode helper...'
+  );
   const mockStorage: Record<string, string> = {};
   (globalThis as unknown as { sessionStorage: unknown }).sessionStorage = {
     getItem: (k: string) => mockStorage[k] ?? null,
@@ -148,20 +184,32 @@ console.log("Sum is:", result);
     fromStateWithFallback.code !== sampleCode ||
     staleFallback !== null
   ) {
-    throw new Error('Location state did not consume its sessionStorage fallback');
+    throw new Error(
+      'Location state did not consume its sessionStorage fallback'
+    );
   }
-  console.log('  ✓ Location state consumes its one-shot sessionStorage fallback');
+  console.log(
+    '  ✓ Location state consumes its one-shot sessionStorage fallback'
+  );
 
   const fromState = consumeTransferredCode('js', {
     code: sampleCode,
     source: 'TypeScript',
   });
-  if (!fromState || fromState.code !== sampleCode || fromState.source !== 'TypeScript') {
+  if (
+    !fromState ||
+    fromState.code !== sampleCode ||
+    fromState.source !== 'TypeScript'
+  ) {
     throw new Error('Failed to consume code from location.state');
   }
   console.log('  ✓ Successfully consumed code from location.state');
 
-  const fromSearch = consumeTransferredCode('ts', null, `?code=${encodeURIComponent(sampleCode)}`);
+  const fromSearch = consumeTransferredCode(
+    'ts',
+    null,
+    `?code=${encodeURIComponent(sampleCode)}`
+  );
   if (!fromSearch || fromSearch.code !== sampleCode) {
     throw new Error('Failed to consume code from URL query string');
   }

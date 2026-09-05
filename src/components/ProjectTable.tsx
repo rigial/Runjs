@@ -151,8 +151,7 @@ function ProjectTable({
   }
 
   const getLanguageBadge = (valOrLang: UserCodeBase | string) => {
-    const lang =
-      typeof valOrLang === 'string' ? valOrLang : valOrLang.language;
+    const lang = typeof valOrLang === 'string' ? valOrLang : valOrLang.language;
     const project = typeof valOrLang === 'object' ? valOrLang : undefined;
 
     switch (lang) {
@@ -323,7 +322,10 @@ function ProjectTable({
                             <div className="font-medium text-[var(--text-secondary)] flex items-center gap-1.5 cursor-not-allowed select-none">
                               <span>{val.fileName}</span>
                               <span className="text-[var(--text-muted)] text-[11px]">
-                                .{val.language === 'react' ? getReactFlavor(val) : val.language}
+                                .
+                                {val.language === 'react'
+                                  ? getReactFlavor(val)
+                                  : val.language}
                               </span>
                             </div>
                           ) : (
@@ -333,7 +335,10 @@ function ProjectTable({
                             >
                               <span>{val.fileName}</span>
                               <span className="text-[var(--text-muted)] text-[11px]">
-                                .{val.language === 'react' ? getReactFlavor(val) : val.language}
+                                .
+                                {val.language === 'react'
+                                  ? getReactFlavor(val)
+                                  : val.language}
                               </span>
                             </Link>
                           )}

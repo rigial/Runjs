@@ -19,7 +19,11 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
 }
 
 // Request persistent storage to protect offline IndexedDB and Cache Storage from browser eviction
-if (typeof navigator !== 'undefined' && navigator.storage && navigator.storage.persist) {
+if (
+  typeof navigator !== 'undefined' &&
+  navigator.storage &&
+  navigator.storage.persist
+) {
   navigator.storage.persist().catch(() => {
     // Best-effort; silently ignore if denied or in private mode
   });

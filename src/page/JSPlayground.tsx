@@ -215,10 +215,7 @@ function JSPlayground() {
             </button>
 
             {/* Cross-Tool Interlink Menu */}
-            <ToolInterlinkMenu
-              currentTool="js"
-              getCode={() => code}
-            />
+            <ToolInterlinkMenu currentTool="js" getCode={() => code} />
 
             {/* Format Document */}
             <button

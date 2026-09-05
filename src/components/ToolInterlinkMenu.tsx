@@ -71,11 +71,7 @@ function ToolInterlinkMenu({
       const targetConfig = TOOL_CONFIGS[targetToolId];
 
       // If switching from TypeScript to JS or visualizers, compile TS to JS
-      if (
-        currentTool === 'ts' &&
-        targetToolId !== 'ts' &&
-        !forceRaw
-      ) {
+      if (currentTool === 'ts' && targetToolId !== 'ts' && !forceRaw) {
         setIsConverting(true);
         setConvertingTarget(targetToolId);
         setCompileError(null);

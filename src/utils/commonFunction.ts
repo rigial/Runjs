@@ -83,3 +83,48 @@ export async function loadTypscript(): Promise<void> {
   }
   return initPromise;
 }
+
+/**
+ * Determines whether a React playground project uses TypeScript (TSX) or JavaScript (JSX).
+ */
+export function getReactFlavor(project: {
+  files?: Record<string, string>;
+  activeFile?: string;
+  template?: string;
+  tag?: string;
+  fileName?: string;
+}): 'tsx' | 'jsx' {
+  if (project.template === 'vite-react-ts') return 'tsx';
+  if (project.template === 'vite-react') return 'jsx';
+  if (
+    project.tag?.toLowerCase() === 'react-ts' ||
+    project.tag?.toLowerCase() === 'tsx' ||
+    project.tag?.toLowerCase() === 'ts'
+  ) {
+    return 'tsx';
+  }
+  if (
+    project.activeFile?.endsWith('.tsx') ||
+    project.activeFile?.endsWith('.ts')
+  ) {
+    return 'tsx';
+  }
+  if (project.files) {
+    if (
+      '/src/App.tsx' in project.files ||
+      '/src/main.tsx' in project.files ||
+      '/tsconfig.json' in project.files
+    ) {
+      return 'tsx';
+    }
+    if (
+      '/src/App.jsx' in project.files ||
+      '/src/main.jsx' in project.files
+    ) {
+      return 'jsx';
+    }
+  }
+  if (project.fileName?.endsWith('.tsx')) return 'tsx';
+  return 'jsx';
+}
+

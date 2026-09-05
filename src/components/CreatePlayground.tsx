@@ -182,6 +182,7 @@ const CreatePlayground = ({
         files: selectedTemplate.files,
         activeFile: selectedTemplate.activeFile,
         openFiles: selectedTemplate.openFiles,
+        template: reactFlavor === 'ts' ? 'vite-react-ts' : 'vite-react',
       };
     } else if (lang === 'html') {
       newCode = {

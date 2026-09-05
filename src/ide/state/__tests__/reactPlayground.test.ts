@@ -9,6 +9,7 @@ import {
   DRAFT_STORAGE_PREFIX,
   WorkspaceDraft,
 } from '../workspaceDraft';
+import { getReactFlavor } from '../../../utils/commonFunction';
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -378,6 +379,42 @@ export default function App() {
   console.log(
     '  ✓ Verified dev server restart syncs workspace files and reinitializes provider runtime key'
   );
+}
+
+// 9. Test getReactFlavor detection
+{
+  console.log(
+    '\nTest 9: getReactFlavor correctly identifies TSX vs JSX projects'
+  );
+  assert(
+    getReactFlavor({ template: 'vite-react-ts' }) === 'tsx',
+    'Identifies TSX by template'
+  );
+  assert(
+    getReactFlavor({ template: 'vite-react' }) === 'jsx',
+    'Identifies JSX by template'
+  );
+  assert(
+    getReactFlavor({ tag: 'react-ts' }) === 'tsx',
+    'Identifies TSX by tag'
+  );
+  assert(
+    getReactFlavor({ activeFile: '/src/App.tsx' }) === 'tsx',
+    'Identifies TSX by activeFile'
+  );
+  assert(
+    getReactFlavor({ files: { '/src/App.tsx': '' } }) === 'tsx',
+    'Identifies TSX by files'
+  );
+  assert(
+    getReactFlavor({ files: { '/src/App.jsx': '' } }) === 'jsx',
+    'Identifies JSX by files'
+  );
+  assert(
+    getReactFlavor({ tag: 'react' }) === 'jsx',
+    'Defaults to JSX when no TS indicators exist'
+  );
+  console.log('  ✓ Verified getReactFlavor identifies JSX vs TSX accurately');
 }
 
 console.log('\n=== All React Playground tests passed successfully! ===\n');

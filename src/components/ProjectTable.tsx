@@ -1,7 +1,7 @@
 import { Fragment, memo, useRef, useState } from 'react';
 import { IProjectTable, ModalRef, UserCodeBase } from '../utils/interface';
 import { Link } from 'react-router';
-import { saveJSTSFile } from '../utils/commonFunction';
+import { getReactFlavor, saveJSTSFile } from '../utils/commonFunction';
 import { deleteCode, updateCode } from '../db/operations';
 import CreatePlayground from './CreatePlayground';
 import HTMLDashboardPreviewModal from './html-playground/HTMLDashboardPreviewModal';
@@ -150,15 +150,32 @@ function ProjectTable({
     }
   }
 
-  const getLanguageBadge = (lang: string) => {
+  const getLanguageBadge = (valOrLang: UserCodeBase | string) => {
+    const lang =
+      typeof valOrLang === 'string' ? valOrLang : valOrLang.language;
+    const project = typeof valOrLang === 'object' ? valOrLang : undefined;
+
     switch (lang) {
-      case 'react':
+      case 'react': {
+        const flavor = project ? getReactFlavor(project) : 'jsx';
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 w-fit shrink-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-            React + Vite
-          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 w-fit shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+              React + Vite
+            </span>
+            <span
+              className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 ${
+                flavor === 'tsx'
+                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
+                  : 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30'
+              }`}
+            >
+              {flavor.toUpperCase()}
+            </span>
+          </div>
         );
+      }
       case 'js':
         return (
           <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 w-fit shrink-0">
@@ -306,7 +323,7 @@ function ProjectTable({
                             <div className="font-medium text-[var(--text-secondary)] flex items-center gap-1.5 cursor-not-allowed select-none">
                               <span>{val.fileName}</span>
                               <span className="text-[var(--text-muted)] text-[11px]">
-                                .{val.language}
+                                .{val.language === 'react' ? getReactFlavor(val) : val.language}
                               </span>
                             </div>
                           ) : (
@@ -316,12 +333,12 @@ function ProjectTable({
                             >
                               <span>{val.fileName}</span>
                               <span className="text-[var(--text-muted)] text-[11px]">
-                                .{val.language}
+                                .{val.language === 'react' ? getReactFlavor(val) : val.language}
                               </span>
                             </Link>
                           )}
                           <div className="sm:hidden mt-0.5 flex items-center gap-2">
-                            {getLanguageBadge(val.language)}
+                            {getLanguageBadge(val)}
                             {val.tag && (
                               <span className="text-[10px] text-[var(--text-muted)]">
                                 #{val.tag}
@@ -334,7 +351,7 @@ function ProjectTable({
 
                     {/* Language */}
                     <td className="px-4 py-3 hidden sm:table-cell">
-                      {getLanguageBadge(val.language)}
+                      {getLanguageBadge(val)}
                     </td>
 
                     {/* Tag */}
@@ -343,6 +360,11 @@ function ProjectTable({
                         <span className="inline-flex items-center gap-1 text-xs text-[var(--text-secondary)] bg-[var(--bg-surface-hover)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">
                           <TagIcon className="w-3 h-3 opacity-60" />
                           <span>{val.tag}</span>
+                        </span>
+                      ) : val.language === 'react' ? (
+                        <span className="inline-flex items-center gap-1 text-xs text-[var(--text-secondary)] bg-[var(--bg-surface-hover)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">
+                          <TagIcon className="w-3 h-3 opacity-60" />
+                          <span>{getReactFlavor(val)}</span>
                         </span>
                       ) : (
                         <span className="text-[var(--text-muted)] italic text-[11px]">

@@ -95,6 +95,7 @@ export function WorkspaceProvider({
           fileName: projectName,
           tag: projectTag,
           language: 'react',
+          template: templateId,
           code: mainCode,
           htmlCode: currentVfsFiles['/index.html'] || '',
           cssCode:

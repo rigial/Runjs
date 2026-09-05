@@ -18,6 +18,9 @@ export interface WorkspaceContextType {
   isTerminalOpen: boolean;
   isConsoleOpen: boolean;
   sandpackFiles: Record<string, string>;
+  syncSandpackFiles: (
+    fileOverrides?: Record<string, string>
+  ) => Promise<Record<string, string>>;
   setActiveFile: (path: string) => void;
   openFile: (path: string) => void;
   closeFile: (path: string) => void;

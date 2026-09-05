@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { SandpackPreview, useSandpack } from '@codesandbox/sandpack-react';
 import {
   RotateCcw,
@@ -11,39 +11,37 @@ import {
 
 interface LivePreviewProps {
   onRestartDevServer?: () => void;
-  previewReloadTrigger?: number;
   className?: string;
 }
 
 type ViewportMode = 'responsive' | 'mobile' | 'tablet' | 'desktop';
 
 export function LivePreview({
-  previewReloadTrigger = 0,
+  onRestartDevServer,
   className = '',
 }: LivePreviewProps) {
   const { sandpack, dispatch } = useSandpack();
   const [viewport, setViewport] = useState<ViewportMode>('responsive');
-  const [key, setKey] = useState(0);
 
   const handleRefresh = () => {
-    try {
-      dispatch({ type: 'refresh' });
-    } catch {
-      // fallback to iframe key reload
-    }
-    setKey((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (previewReloadTrigger > 0) {
+    if (sandpack.status === 'idle') {
+      if (onRestartDevServer) {
+        onRestartDevServer();
+      } else {
+        sandpack.runSandpack();
+      }
+    } else {
       try {
         dispatch({ type: 'refresh' });
       } catch {
-        // fallback
+        if (onRestartDevServer) {
+          onRestartDevServer();
+        } else {
+          sandpack.runSandpack();
+        }
       }
-      setKey((prev) => prev + 1);
     }
-  }, [previewReloadTrigger, dispatch]);
+  };
 
   const getViewportWidth = () => {
     switch (viewport) {
@@ -173,7 +171,6 @@ export function LivePreview({
           }`}
         >
           <SandpackPreview
-            key={key}
             showNavigator={false}
             showRefreshButton={false}
             showOpenInCodeSandbox={false}

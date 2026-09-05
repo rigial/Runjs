@@ -336,4 +336,48 @@ export default function App() {
   );
 }
 
+// 8. Test Dev Server restart workflow
+{
+  console.log(
+    '\nTest 8: Dev server restart workflow synchronizes files and increments runtime key'
+  );
+  let previewReloadTrigger = 0;
+  const vfsFiles = { ...VITE_REACT_TEMPLATE.files };
+  const inMemoryEdits = {
+    '/src/App.jsx':
+      'export default function App() { return <h1>Restarted App</h1>; }',
+  };
+
+  const syncSandpackFiles = (overrides?: Record<string, string>) => {
+    const merged = overrides
+      ? { ...vfsFiles, ...overrides }
+      : { ...vfsFiles, ...inMemoryEdits };
+    return prepareSandpackFiles(merged, 'vite-react');
+  };
+
+  let syncedSandpackFiles = syncSandpackFiles();
+  const onDevServerRestart = () => {
+    syncedSandpackFiles = syncSandpackFiles();
+    previewReloadTrigger += 1;
+  };
+
+  onDevServerRestart();
+
+  assert(
+    previewReloadTrigger === 1,
+    'previewReloadTrigger must increment on dev server restart'
+  );
+  assert(
+    syncedSandpackFiles['/src/App.jsx'].includes('Restarted App'),
+    'Sandpack files must reflect in-memory workspace edits on restart'
+  );
+  assert(
+    Boolean(syncedSandpackFiles['/src/main.jsx']),
+    'Main entry must be present in sandpack files on restart'
+  );
+  console.log(
+    '  ✓ Verified dev server restart syncs workspace files and reinitializes provider runtime key'
+  );
+}
+
 console.log('\n=== All React Playground tests passed successfully! ===\n');

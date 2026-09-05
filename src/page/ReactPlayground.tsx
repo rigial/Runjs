@@ -70,6 +70,7 @@ function ReactWorkspace() {
     isTerminalOpen,
     isConsoleOpen,
     sandpackFiles,
+    syncSandpackFiles,
     setActiveFile,
     openFile,
     closeFile,
@@ -209,13 +210,15 @@ function ReactWorkspace() {
     }
   };
 
-  const handleDevServerRestart = useCallback(() => {
+  const handleDevServerRestart = useCallback(async () => {
+    await syncSandpackFiles();
     setPreviewReloadTrigger((prev) => prev + 1);
-  }, []);
+  }, [syncSandpackFiles]);
 
   const renderPreview = () =>
     Object.keys(sandpackFiles).length > 0 ? (
       <SandpackProvider
+        key={previewReloadTrigger}
         files={sandpackFiles}
         template="react"
         theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
@@ -225,7 +228,7 @@ function ReactWorkspace() {
         }}
         style={{ height: '100%', width: '100%' }}
       >
-        <LivePreview previewReloadTrigger={previewReloadTrigger} />
+        <LivePreview onRestartDevServer={handleDevServerRestart} />
       </SandpackProvider>
     ) : (
       <div className="h-full w-full flex items-center justify-center bg-[var(--bg-app)] text-xs text-[var(--text-muted)]">

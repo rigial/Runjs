@@ -131,6 +131,70 @@ export function formatValueForDisplay(val: any): string {
   }
 }
 
+export function isTopologicallyValidTaskSchedule(input: any, actual: any): boolean {
+  if (!Array.isArray(input) || input.length !== 2) return false;
+  const [operations, opArgs] = input;
+  if (
+    !Array.isArray(operations) ||
+    !Array.isArray(opArgs) ||
+    !Array.isArray(actual)
+  ) {
+    return false;
+  }
+  if (actual.length !== operations.length) return false;
+
+  if (operations[operations.length - 1] !== 'execute') return false;
+
+  for (let i = 0; i < actual.length - 1; i++) {
+    if (actual[i] !== null && actual[i] !== undefined) return false;
+  }
+
+  const execResult = actual[actual.length - 1];
+  if (!Array.isArray(execResult)) return false;
+
+  const dependencies = new Map<string, string[]>();
+  const allTasks = new Set<string>();
+
+  for (let i = 0; i < operations.length; i++) {
+    if (operations[i] === 'addTask' && Array.isArray(opArgs[i])) {
+      const [taskId, deps] = opArgs[i];
+      if (taskId !== undefined) {
+        allTasks.add(String(taskId));
+        if (!dependencies.has(String(taskId))) {
+          dependencies.set(String(taskId), []);
+        }
+        if (Array.isArray(deps)) {
+          for (const d of deps) {
+            allTasks.add(String(d));
+            dependencies.get(String(taskId))!.push(String(d));
+          }
+        }
+      }
+    }
+  }
+
+  if (execResult.length !== allTasks.size) return false;
+
+  const posMap = new Map<string, number>();
+  for (let i = 0; i < execResult.length; i++) {
+    const task = String(execResult[i]);
+    if (!allTasks.has(task) || posMap.has(task)) return false;
+    posMap.set(task, i);
+  }
+
+  for (const [task, deps] of dependencies.entries()) {
+    const taskIdx = posMap.get(task)!;
+    for (const dep of deps) {
+      const depIdx = posMap.get(dep);
+      if (depIdx === undefined || depIdx >= taskIdx) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 /**
  * Transpiles TypeScript source code to executable JavaScript via esbuild-wasm if needed.
  *
@@ -438,7 +502,14 @@ export async function runSingleTestCase(
               throw new Error("Method '" + op + "' is not defined on " + TargetClass.name);
             }
             const res = await instance[op](...args);
-            results.push(res !== undefined ? res : null);
+            if (
+              res === instance ||
+              (res && typeof res === 'object' && typeof res.unsubscribe === 'function')
+            ) {
+              results.push(null);
+            } else {
+              results.push(res !== undefined ? res : null);
+            }
           }
           return results;
         };
@@ -467,7 +538,42 @@ export async function runSingleTestCase(
           throw new Error("Function '${problem.functionName}' is not defined. Please ensure your solution defines '${problem.functionName}'.");
         }
         return async function(__inputArgs) {
-          return await ${problem.functionName}(...__inputArgs);
+          if ('${problem.functionName}' === 'debounce') {
+            let resVal = null;
+            const origFn = typeof __inputArgs[0] === 'function' ? __inputArgs[0] : (x) => x;
+            const wait = typeof __inputArgs[1] === 'number' ? __inputArgs[1] : 50;
+            const callArg = __inputArgs[2] !== undefined ? __inputArgs[2] : 10;
+            const wrappedFn = async (...args) => {
+              resVal = await origFn(...args);
+            };
+            const debounced = ${problem.functionName}(wrappedFn, wait);
+            debounced(callArg);
+            await new Promise((resolve) => setTimeout(resolve, wait + 30));
+            return resVal;
+          }
+
+          if ('${problem.functionName}' === 'promiseRace') {
+            const promises = (__inputArgs[0] || []).map((p) => typeof p === 'function' ? p() : p);
+            return await ${problem.functionName}(promises);
+          }
+
+          let res = await ${problem.functionName}(...__inputArgs);
+          if (typeof res === 'function' && __inputArgs.length > 1) {
+            const extra = __inputArgs[__inputArgs.length - 1];
+            if (Array.isArray(extra)) {
+              let cur = await res(...extra);
+              if (typeof cur === 'function') {
+                cur = res;
+                for (const a of extra) {
+                  if (typeof cur === 'function') cur = await cur(a);
+                }
+              }
+              return cur;
+            } else {
+              return await res(extra);
+            }
+          }
+          return res;
         };
       `;
     }
@@ -520,7 +626,11 @@ export async function runSingleTestCase(
       Math.round((performance.now() - startTime) * 100) / 100
     );
 
-    const passed = deepEqual(actual, testCase.expected);
+    const passed =
+      problem.functionName === 'TaskSchedulerWithDependencies'
+        ? isTopologicallyValidTaskSchedule(testCase.input, actual) ||
+          deepEqual(actual, testCase.expected)
+        : deepEqual(actual, testCase.expected);
 
     return {
       testCaseIndex: index,

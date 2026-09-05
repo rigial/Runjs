@@ -16,8 +16,8 @@
     "question": "What is the output of the following code?",
     "code": "(function(a) {\n  return (function(b) {\n    console.log(a);\n  })(1);\n})(2);",
     "options": ["1", "2", "undefined", "ReferenceError"],
-    "correctIndex": 0,
-    "explanation": "The inner IIFE logs 'a', which is passed as 1. Wait, 'a' is 2 because the outer IIFE is called with 2."
+    "correctIndex": 1,
+    "explanation": "The outer IIFE is invoked with 2, binding parameter 'a' to 2. The inner IIFE is invoked with 1, binding parameter 'b' to 1. Inside the inner IIFE, console.log(a) accesses 'a' from the outer closure scope, which is 2."
   },
   {
     "id": 38,
@@ -34,15 +34,15 @@
     "difficulty": "medium",
     "topic": "this keyword in different contexts",
     "question": "What is the output of the following code?",
-    "code": "const obj = {\n  name: \"JS\",\n  print: function() {\n    console.log(this.name);\n  },\n  printArrow: () => {\n    console.log(this.name);\n  }\n};\nobj.print();\nobj.printArrow();",
+    "code": "function createObj() {\n  return {\n    name: \"JS\",\n    print: function() {\n      console.log(this.name);\n    },\n    printArrow: () => {\n      console.log(this.name);\n    }\n  };\n}\nconst obj = createObj.call({ name: \"Outer\" });\nobj.print();\nobj.printArrow();",
     "options": [
-      "JS, undefined",
+      "JS, Outer",
       "JS, JS",
       "undefined, JS",
       "undefined, undefined"
     ],
     "correctIndex": 0,
-    "explanation": "Arrow functions do not bind 'this', they inherit it from the enclosing scope (window/global here). Normal functions bind 'this' to the caller object."
+    "explanation": "The regular print method receives obj as this, so it logs 'JS'. printArrow is created inside createObj and captures that function's this value, which createObj.call sets to { name: 'Outer' }."
   },
   {
     "id": 40,
@@ -137,7 +137,7 @@
     "code": "const sym1 = Symbol('id');\nconst sym2 = Symbol('id');\nconst obj = { [sym1]: 1, [sym2]: 2 };\nconsole.log(sym1 === sym2);\nconsole.log(Object.keys(obj).length);",
     "options": ["false, 0", "true, 2", "false, 2", "true, 0"],
     "correctIndex": 0,
-    "explanation": "Symbols are always unique. Object keys are not Strings or Symbols in Object.keys(), so length is 0."
+    "explanation": "Symbols are always unique, so sym1 === sym2 evaluates to false. Object.keys() only returns enumerable string-keyed property names and ignores symbol keys, so Object.keys(obj).length is 0."
   },
   {
     "id": 47,
@@ -157,7 +157,7 @@
     "code": "let obj = { val: 1 };\nconst wm = new WeakMap();\nwm.set(obj, 'data');\nobj = null;\nconsole.log(wm.has(obj));",
     "options": ["true", "false", "undefined", "ReferenceError"],
     "correctIndex": 1,
-    "explanation": "Since obj was reassigned, we lost the reference, but the key inside WeakMap will be garbage collected and not accessible."
+    "explanation": "After obj is reassigned to null, wm.has(obj) is the same as wm.has(null), which returns false. Whether the original key is collected is not observable here."
   },
   {
     "id": 49,
@@ -366,8 +366,8 @@
       "[1, 2, [3]], [2, [2, [3]]]",
       "[1, 2, [3]], [2, 2, [3]]"
     ],
-    "correctIndex": 0,
-    "explanation": "flat(1) flattens one level. flatMap returns elements wrapped in arrays which are flattened."
+    "correctIndex": 3,
+    "explanation": "arr.flat(1) flattens the array by one depth level, producing [1, 2, [3]]. In flatMap, the number 1 is mapped to [2], while [2, [3]] is not a number and returned as-is. flatMap then flattens the mapped result by one level, producing [2, 2, [3]]."
   },
   {
     "id": 68,

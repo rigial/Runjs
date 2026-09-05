@@ -12,7 +12,7 @@
       "1, 7, 2, 6, 3, 5, 4"
     ],
     "correctIndex": 0,
-    "explanation": "Synchronous code runs first (1, 7). Then microtasks queue is emptied (3, 5). The macrotask queue then processes setTimeout callbacks in the order they were queued: first 2, then 6. The setTimeout inside the microtask was queued after 2 but before 6? No, the setTimeout inside the Promise.then is queued during microtask execution, so it gets queued after 6. Therefore, macrotasks run 2, 6, 4."
+    "explanation": "Synchronous code logs 1 and 7 first. The microtasks then log 3 and 5; during the second microtask, the callback that logs 4 is queued. The earlier timers for 2 and 6 were already queued, so the timers run in the order 2, 6, 4."
   },
   {
     "id": 77,

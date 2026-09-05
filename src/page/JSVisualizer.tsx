@@ -491,10 +491,7 @@ function JSVisualizer() {
             </button>
 
             {/* Cross-Tool Interlink Menu */}
-            <ToolInterlinkMenu
-              currentTool="visualizer"
-              getCode={() => code}
-            />
+            <ToolInterlinkMenu currentTool="visualizer" getCode={() => code} />
 
             {/* Format Document Button */}
             <button

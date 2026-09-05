@@ -1,5 +1,5 @@
 // RunJS PWA Service Worker
-const CACHE_NAME = 'runjs-pwa-v1';
+const CACHE_NAME = 'runjs-pwa-v2';
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',

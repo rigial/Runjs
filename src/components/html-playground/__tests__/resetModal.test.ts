@@ -105,4 +105,6 @@ console.log('=== Testing HTML Playground Reset Modal & Preview Reload ===\n');
   console.log('  ✓ Decoupled reload does not trigger infinite recursion');
 }
 
-console.log('\nAll HTML Reset Modal and Preview Reload tests passed successfully! 🎉');
+console.log(
+  '\nAll HTML Reset Modal and Preview Reload tests passed successfully! 🎉'
+);

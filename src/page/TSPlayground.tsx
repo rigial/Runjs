@@ -1,5 +1,12 @@
 import { transform } from 'esbuild-wasm';
-import { Fragment, memo, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Split from 'react-split';
 import LunaConsole from 'luna-console';
 import '../utils/lunaStyles';
@@ -255,10 +262,7 @@ function TSPlayground() {
             </button>
 
             {/* Cross-Tool Interlink Menu */}
-            <ToolInterlinkMenu
-              currentTool="ts"
-              getCode={() => code}
-            />
+            <ToolInterlinkMenu currentTool="ts" getCode={() => code} />
 
             {/* Format Document */}
             <button

@@ -3035,8 +3035,32 @@ Iterate once, increment a counter when an element is negative.
         name: 'returns an array of 26 uppercase letters A..Z',
         input: [],
         expected: [
-          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-          'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+          'A',
+          'B',
+          'C',
+          'D',
+          'E',
+          'F',
+          'G',
+          'H',
+          'I',
+          'J',
+          'K',
+          'L',
+          'M',
+          'N',
+          'O',
+          'P',
+          'Q',
+          'R',
+          'S',
+          'T',
+          'U',
+          'V',
+          'W',
+          'X',
+          'Y',
+          'Z',
         ],
       },
     ],
@@ -9967,9 +9991,11 @@ console.log(counter.decrement()); // 4
 - Methods should be chainable (optional bonus).`,
     examples: [
       {
-        input: '["makeCounter","increment","increment","decrement","reset"],[[5],[],[],[],[]]',
+        input:
+          '["makeCounter","increment","increment","decrement","reset"],[[5],[],[],[],[]]',
         output: '[null,6,7,6,5]',
-        explanation: 'Initializes with 5, increments to 6 and 7, decrements to 6, and resets to 5.',
+        explanation:
+          'Initializes with 5, increments to 6 and 7, decrements to 6, and resets to 5.',
       },
     ],
     constraints: ['Follow standard runtime and memory constraints.'],
@@ -10489,9 +10515,11 @@ promiseAllWithConcurrencyLimit(functions2, 1)
 - Handle edge cases where \`limit\` is greater than the number of functions.`,
     examples: [
       {
-        input: 'functions = [() => Promise.resolve(1), () => Promise.resolve(2)], limit = 2',
+        input:
+          'functions = [() => Promise.resolve(1), () => Promise.resolve(2)], limit = 2',
         output: '[1, 2]',
-        explanation: 'Resolves all promises within concurrency limit while maintaining input order.',
+        explanation:
+          'Resolves all promises within concurrency limit while maintaining input order.',
       },
     ],
     constraints: ['Follow standard runtime and memory constraints.'],
@@ -11839,7 +11867,8 @@ Unlike debounce (which resets the timer with each call), throttle guarantees fun
       {
         input: 'func = (x) => x * 3, delay = 100, args = [5]',
         output: '15',
-        explanation: 'Invokes immediately on the first call and returns the computed result.',
+        explanation:
+          'Invokes immediately on the first call and returns the computed result.',
       },
     ],
     constraints: [
@@ -15147,9 +15176,11 @@ await mapAsyncLimit([1, 2, 3], 1, delayFn);
 - Should handle non-promise-returning functions gracefully (wrap in \`Promise.resolve()\` if needed).  5:["`,
     examples: [
       {
-        input: 'arr = [1, 2, 3, 4], limit = 2, asyncFn = (x) => Promise.resolve(x * 2)',
+        input:
+          'arr = [1, 2, 3, 4], limit = 2, asyncFn = (x) => Promise.resolve(x * 2)',
         output: '[2, 4, 6, 8]',
-        explanation: 'Maps array elements using asyncFn while respecting concurrency limit 2.',
+        explanation:
+          'Maps array elements using asyncFn while respecting concurrency limit 2.',
       },
     ],
     constraints: ['Follow standard runtime and memory constraints.'],
@@ -15168,22 +15199,14 @@ await mapAsyncLimit([1, 2, 3], 1, delayFn);
     testCases: [
       {
         name: 'Maps array with concurrency limit',
-        input: [
-          [1, 2, 3, 4],
-          2,
-          (x: number) => Promise.resolve(x * 2),
-        ],
+        input: [[1, 2, 3, 4], 2, (x: number) => Promise.resolve(x * 2)],
         expected: [2, 4, 6, 8],
       },
     ],
     hiddenTestCases: [
       {
         name: 'Sequential map with limit 1',
-        input: [
-          [1, 2, 3],
-          1,
-          (x: number) => Promise.resolve(x * 2),
-        ],
+        input: [[1, 2, 3], 1, (x: number) => Promise.resolve(x * 2)],
         expected: [2, 4, 6],
         isHidden: true,
       },

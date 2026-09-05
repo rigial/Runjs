@@ -131,7 +131,10 @@ export function formatValueForDisplay(val: any): string {
   }
 }
 
-export function isTopologicallyValidTaskSchedule(input: any, actual: any): boolean {
+export function isTopologicallyValidTaskSchedule(
+  input: any,
+  actual: any
+): boolean {
   if (!Array.isArray(input) || input.length !== 2) return false;
   const [operations, opArgs] = input;
   if (

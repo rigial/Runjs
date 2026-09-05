@@ -40,7 +40,9 @@ export async function loadTypscript(): Promise<void> {
           } catch (nodeErr) {
             if (
               nodeErr instanceof Error &&
-              nodeErr.message.includes('Cannot call "initialize" more than once')
+              nodeErr.message.includes(
+                'Cannot call "initialize" more than once'
+              )
             ) {
               return;
             }
@@ -117,14 +119,10 @@ export function getReactFlavor(project: {
     ) {
       return 'tsx';
     }
-    if (
-      '/src/App.jsx' in project.files ||
-      '/src/main.jsx' in project.files
-    ) {
+    if ('/src/App.jsx' in project.files || '/src/main.jsx' in project.files) {
       return 'jsx';
     }
   }
   if (project.fileName?.endsWith('.tsx')) return 'tsx';
   return 'jsx';
 }
-

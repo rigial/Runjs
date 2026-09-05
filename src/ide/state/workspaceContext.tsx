@@ -8,25 +8,16 @@ import useLocalStorageState from '../../hook/useLocalStorageState';
 import { WorkspaceContext } from './workspaceTypes';
 import { getAllPackageVirtualFiles } from '../languages/typescript/packageDefinitions';
 import { prepareSandpackFiles } from './sandpackAdapter';
+import {
+  DRAFT_STORAGE_PREFIX,
+  WorkspaceDraft,
+  createWorkspaceDraft,
+  restoreDraftMergedFiles,
+} from './workspaceDraft';
 
 interface WorkspaceProviderProps {
   initialProjectId?: string;
   children: React.ReactNode;
-}
-
-const DRAFT_STORAGE_PREFIX = 'runjs_react_workspace_draft_';
-
-interface WorkspaceDraft {
-  projectId: string;
-  projectName: string;
-  projectTag: string;
-  templateId: string;
-  activeFile: string;
-  openFiles: string[];
-  dirtyFiles: string[];
-  fileContents: Record<string, string>;
-  vfsFiles: Record<string, string>;
-  updatedAt: number;
 }
 
 export function WorkspaceProvider({
@@ -77,7 +68,7 @@ export function WorkspaceProvider({
     async (fileOverrides?: Record<string, string>) => {
       const vfsJson = await vfs.toJSON();
       const merged = fileOverrides
-        ? { ...fileOverrides }
+        ? { ...vfsJson, ...fileOverrides }
         : { ...vfsJson, ...fileContents };
       const prepared = prepareSandpackFiles(merged, templateId);
       setSandpackFiles(prepared);
@@ -171,10 +162,7 @@ export function WorkspaceProvider({
                 setDirtyFiles(new Set(draft.dirtyFiles));
               }
 
-              const merged = {
-                ...draft.vfsFiles,
-                ...(draft.fileContents || {}),
-              };
+              const merged = restoreDraftMergedFiles(draft);
               const prepared = prepareSandpackFiles(merged, tpl);
               setSandpackFiles(prepared);
               return;
@@ -261,22 +249,37 @@ export function WorkspaceProvider({
 
     const timer = setTimeout(async () => {
       try {
-        const vfsFiles = await vfs.toJSON();
-        const draft: WorkspaceDraft = {
+        const rawVfsFiles = await vfs.toJSON();
+        const draft = createWorkspaceDraft({
           projectId,
           projectName,
           projectTag,
           templateId,
           activeFile,
           openFiles,
-          dirtyFiles: Array.from(dirtyFiles),
+          dirtyFiles,
           fileContents,
-          vfsFiles,
-          updatedAt: Date.now(),
-        };
-        localStorage.setItem(draftKey, JSON.stringify(draft));
+          rawVfsFiles,
+        });
+        try {
+          localStorage.setItem(draftKey, JSON.stringify(draft));
+        } catch (e: unknown) {
+          const err = e as { name?: string; code?: number };
+          if (
+            err?.name === 'QuotaExceededError' ||
+            err?.code === 22 ||
+            err?.code === 1014
+          ) {
+            console.error(
+              'LocalStorage quota exceeded while persisting workspace draft:',
+              e
+            );
+          } else {
+            console.warn('Failed to persist draft to localStorage:', e);
+          }
+        }
       } catch (e) {
-        console.warn('Failed to persist draft to localStorage:', e);
+        console.warn('Failed to prepare workspace draft:', e);
       }
     }, 400);
 
@@ -324,14 +327,22 @@ export function WorkspaceProvider({
 
   // Subscribe to external VFS modifications (e.g. from PackageManager / Terminal)
   useEffect(() => {
-    const unsub = vfs.on('*', async (event) => {
-      await syncSandpackFiles();
-
+    let syncTimer: ReturnType<typeof setTimeout> | null = null;
+    const unsub = vfs.on('*', (event) => {
       if (event.path === activeFile && event.content !== undefined) {
         setFileContents((prev) => ({ ...prev, [event.path]: event.content! }));
       }
+
+      if (syncTimer) clearTimeout(syncTimer);
+      syncTimer = setTimeout(async () => {
+        await syncSandpackFiles();
+      }, 50);
     });
-    return () => unsub();
+
+    return () => {
+      if (syncTimer) clearTimeout(syncTimer);
+      unsub();
+    };
   }, [vfs, activeFile, syncSandpackFiles]);
 
   const setActiveFile = useCallback((path: string) => {
@@ -504,6 +515,8 @@ export function WorkspaceProvider({
 
   const resetWorkspace = useCallback(async () => {
     await vfs.fromJSON(VITE_REACT_TEMPLATE.files);
+    setProjectName('React App');
+    setProjectTag('react');
     setOpenFiles(VITE_REACT_TEMPLATE.openFiles);
     setActiveFileState(VITE_REACT_TEMPLATE.activeFile);
     setTemplateId('vite-react');

@@ -6,7 +6,7 @@ interface SwitchTemplateModalProps {
   isOpen: boolean;
   targetTemplate: ProjectTemplate | null;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
 }
 
 function SwitchTemplateModal({
@@ -125,11 +125,7 @@ function SwitchTemplateModal({
           <button
             type="button"
             onClick={() => {
-              try {
-                onConfirm();
-              } finally {
-                onClose();
-              }
+              onConfirm();
             }}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500 hover:bg-cyan-600 active:bg-cyan-700 text-black shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >

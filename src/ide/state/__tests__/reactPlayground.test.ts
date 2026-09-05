@@ -3,6 +3,12 @@ import {
   VITE_REACT_TEMPLATE,
   VITE_REACT_TS_TEMPLATE,
 } from '../../templates/defaultTemplates';
+import {
+  createWorkspaceDraft,
+  restoreDraftMergedFiles,
+  DRAFT_STORAGE_PREFIX,
+  WorkspaceDraft,
+} from '../workspaceDraft';
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -30,7 +36,7 @@ console.log(
     `package.json main must be /src/main.jsx, got ${pkg.main}`
   );
 
-  // Must have mirrored /public/index.html with #root
+  // Must have mirrored /public/index.html with #root, and stripped Vite module script tags
   assert(
     Boolean(sandpackFiles['/public/index.html']),
     '/public/index.html must exist for Sandpack CRA bundler'
@@ -39,12 +45,16 @@ console.log(
     sandpackFiles['/public/index.html'].includes('id="root"'),
     '/public/index.html must contain id="root"'
   );
+  assert(
+    !sandpackFiles['/public/index.html'].includes('<script type="module"'),
+    '/public/index.html must strip Vite module scripts'
+  );
 
   // Must have bridge files so Sandpack React packager executes user code instead of phantom "Hello world"
   assert(Boolean(sandpackFiles['/index.js']), '/index.js bridge must exist');
   assert(
-    sandpackFiles['/index.js'].includes("import './src/main'"),
-    '/index.js bridge must import ./src/main'
+    sandpackFiles['/index.js'].includes("import './src/main.jsx'"),
+    '/index.js bridge must import ./src/main.jsx with explicit extension'
   );
 
   assert(Boolean(sandpackFiles['/App.js']), '/App.js bridge must exist');
@@ -110,66 +120,106 @@ export default function App() {
   );
 
   assert(
-    sandpackFiles['/index.js'].includes("import './src/main'"),
-    '/index.js bridge must import ./src/main for TS template'
+    sandpackFiles['/index.js'].includes("import './src/main.tsx'"),
+    '/index.js bridge must import ./src/main.tsx for TS template'
   );
   console.log(
     '  ✓ Verified Vite React TS package.json main entry and bridge wiring'
   );
 }
 
-// 4. Test Draft persistence simulation (Hard reload recovery)
+// 4. Test Draft persistence contract & recovery using real workspace helpers
 {
   console.log(
-    '\nTest 4: Draft persistence & recovery on hard reload simulation'
+    '\nTest 4: Draft persistence & recovery with createWorkspaceDraft & restoreDraftMergedFiles'
   );
   const mockStorage: Record<string, string> = {};
   const effectiveProjectId = 'default-react-workspace';
-  const draftKey = `runjs_react_workspace_draft_${effectiveProjectId}`;
+  const draftKey = `${DRAFT_STORAGE_PREFIX}${effectiveProjectId}`;
 
-  // User edits code without explicitly pressing save:
-  const draftPayload = {
-    files: {
-      '/src/App.jsx': {
-        name: 'App.jsx',
-        path: '/src/App.jsx',
-        content:
-          'export default function App() { return <h1>Hard Reload Restored</h1>; }',
-      },
-    },
-    activeFilePath: '/src/App.jsx',
-    openTabs: ['/src/App.jsx'],
-    isDirtyMap: { '/src/App.jsx': true },
-    projectName: 'My Draft Project',
-    updatedAt: Date.now(),
+  // Real raw VFS contains project files plus virtual /node_modules entries
+  const rawVfsFiles: Record<string, string> = {
+    ...VITE_REACT_TEMPLATE.files,
+    '/node_modules/react/package.json': '{"name":"react"}',
+    '/node_modules/react/index.js': 'module.exports = {};',
   };
 
-  // Simulate auto-save draft to localStorage
-  mockStorage[draftKey] = JSON.stringify(draftPayload);
+  // User has edited /src/App.jsx in Monaco editor (uncommitted)
+  const unsavedAppContent =
+    'export default function App() { return <h1>Hard Reload Restored</h1>; }';
+  const fileContents: Record<string, string> = {
+    '/src/App.jsx': unsavedAppContent,
+    '/package.json': rawVfsFiles['/package.json'], // clean, matches VFS
+    '/node_modules/react/index.js': 'module.exports = {};', // in node_modules
+  };
+  const dirtyFiles = new Set(['/src/App.jsx']);
 
-  // Simulate browser hard reload:
-  // Workspace initialization reads draft from localStorage first
-  const rawDraft = mockStorage[draftKey];
-  assert(Boolean(rawDraft), 'Draft must exist in localStorage');
-  const restoredDraft = JSON.parse(rawDraft);
+  // Call the actual production draft constructor
+  const draft = createWorkspaceDraft({
+    projectId: effectiveProjectId,
+    projectName: 'My Draft Project',
+    projectTag: 'react',
+    templateId: 'vite-react',
+    activeFile: '/src/App.jsx',
+    openFiles: ['/src/App.jsx', '/src/App.css'],
+    dirtyFiles,
+    fileContents,
+    rawVfsFiles,
+  });
 
+  // Verify contract: /node_modules must be excluded from vfsFiles to protect storage quota
   assert(
-    restoredDraft.files['/src/App.jsx'].content.includes(
-      'Hard Reload Restored'
-    ),
-    'Draft content must be recovered after hard reload simulation'
+    draft.vfsFiles['/node_modules/react/index.js'] === undefined,
+    'vfsFiles in draft must exclude /node_modules'
   );
   assert(
-    restoredDraft.activeFilePath === '/src/App.jsx',
-    'Active tab must be restored after hard reload simulation'
+    Boolean(draft.vfsFiles['/src/App.jsx']),
+    'vfsFiles in draft must include project files'
+  );
+
+  // Verify contract: fileContents must only store divergent dirty files, not clean VFS duplicates
+  assert(
+    draft.fileContents['/package.json'] === undefined,
+    'fileContents in draft must prune clean files matching vfsFiles'
   );
   assert(
-    restoredDraft.isDirtyMap['/src/App.jsx'] === true,
-    'Dirty state must be preserved for unsaved draft'
+    draft.fileContents['/src/App.jsx'] === unsavedAppContent,
+    'fileContents in draft must retain unsaved modifications'
+  );
+  assert(
+    draft.dirtyFiles.includes('/src/App.jsx'),
+    'dirtyFiles in draft must track dirty paths'
+  );
+
+  // Persist to stubbed localStorage and simulate browser restart
+  mockStorage[draftKey] = JSON.stringify(draft);
+  const rawStored = mockStorage[draftKey];
+  assert(Boolean(rawStored), 'Draft must exist in localStorage');
+
+  const restoredDraft: WorkspaceDraft = JSON.parse(rawStored);
+  const mergedFiles = restoreDraftMergedFiles(restoredDraft);
+
+  assert(
+    mergedFiles['/src/App.jsx'] === unsavedAppContent,
+    'restoreDraftMergedFiles must apply uncommitted draft edits over VFS'
+  );
+
+  // Prepare sandpack files from restored draft files
+  const sandpackFiles = prepareSandpackFiles(
+    mergedFiles,
+    restoredDraft.templateId
+  );
+  assert(
+    sandpackFiles['/src/App.jsx'].includes('Hard Reload Restored'),
+    'Sandpack files prepared from restored draft must contain uncommitted edits'
+  );
+  assert(
+    sandpackFiles['/App.js'].includes("export { default } from './src/App'"),
+    'Sandpack files prepared from restored draft must have working bridges'
   );
 
   console.log(
-    '  ✓ Verified uncommitted edits & tab state are fully recovered after hard reload'
+    '  ✓ Verified real draft constructor filters node_modules, deduplicates contents, and restores correctly'
   );
 }
 
@@ -180,23 +230,28 @@ export default function App() {
   );
   const mockStorage: Record<string, string> = {};
   const effectiveProjectId = 'default-react-workspace';
-  const draftKey = `runjs_react_workspace_draft_${effectiveProjectId}`;
-  mockStorage[draftKey] = '{"files":{}}';
+  const draftKey = `${DRAFT_STORAGE_PREFIX}${effectiveProjectId}`;
+  mockStorage[draftKey] = JSON.stringify({
+    projectId: effectiveProjectId,
+    vfsFiles: VITE_REACT_TEMPLATE.files,
+  });
 
-  // Perform reset
+  // Perform reset: removeItem is called
   delete mockStorage[draftKey];
 
   assert(mockStorage[draftKey] === undefined, 'Draft must be cleared on reset');
   console.log('  ✓ Verified workspace reset purges draft storage');
 }
 
-// 6. Test Reset Modal Workflow
+// 6. Test Reset Modal Workflow and state re-initialization
 {
   console.log('\nTest 6: Reset Workspace Modal Workflow');
   let currentFiles: Record<string, string> = {
     ...VITE_REACT_TEMPLATE.files,
     '/src/custom.js': 'console.log("dirty");',
   };
+  let projectName = 'Custom User Project';
+  let projectTag = 'custom-tag';
   const modalState = { isOpen: false };
 
   // User clicks reset
@@ -213,11 +268,17 @@ export default function App() {
     Boolean(currentFiles['/src/custom.js']),
     'Custom files preserved on cancel'
   );
+  assert(
+    projectName === 'Custom User Project',
+    'Project name preserved on cancel'
+  );
 
-  // User clicks reset and confirms
+  // User clicks reset and confirms: resets files, projectName, and projectTag
   modalState.isOpen = true;
   const onResetConfirm = () => {
     currentFiles = { ...VITE_REACT_TEMPLATE.files };
+    projectName = 'React App';
+    projectTag = 'react';
     modalState.isOpen = false;
   };
   onResetConfirm();
@@ -226,8 +287,52 @@ export default function App() {
     currentFiles['/src/custom.js'] === undefined,
     'Workspace re-initializes to clean default template on reset confirm'
   );
+  assert(
+    projectName === 'React App',
+    'projectName resets to default on reset confirm'
+  );
+  assert(
+    projectTag === 'react',
+    'projectTag resets to default on reset confirm'
+  );
   console.log(
     '  ✓ Verified custom modal confirmation workflow for workspace reset'
+  );
+}
+
+// 7. Test single-file override layers on top of existing workspace
+{
+  console.log(
+    '\nTest 7: Single-file save override layers on top of full workspace tree'
+  );
+  const vfsJson = { ...VITE_REACT_TEMPLATE.files };
+  const singleFileOverride = {
+    '/src/App.jsx':
+      'export default function App() { return <div>Saved Once</div>; }',
+  };
+
+  // Simulating syncSandpackFiles merged tree
+  const merged = { ...vfsJson, ...singleFileOverride };
+  const sandpackFiles = prepareSandpackFiles(merged, 'vite-react');
+
+  assert(
+    sandpackFiles['/src/App.jsx'].includes('Saved Once'),
+    'Saved file content must be present in sandpack files'
+  );
+  assert(
+    Boolean(sandpackFiles['/src/main.jsx']),
+    'Unrelated files (/src/main.jsx) must not be dropped during single-file save'
+  );
+  assert(
+    Boolean(sandpackFiles['/package.json']),
+    'package.json must not be dropped during single-file save'
+  );
+  assert(
+    sandpackFiles['/App.js'].includes("export { default } from './src/App'"),
+    'Bridges must remain intact during single-file save'
+  );
+  console.log(
+    '  ✓ Verified single-file override preserves the complete workspace tree'
   );
 }
 

@@ -4,7 +4,7 @@ import { RotateCcw, X, AlertTriangle } from 'lucide-react';
 interface ResetWorkspaceModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
 }
 
 function ResetWorkspaceModal({
@@ -105,11 +105,7 @@ function ResetWorkspaceModal({
           <button
             type="button"
             onClick={() => {
-              try {
-                onConfirm();
-              } finally {
-                onClose();
-              }
+              onConfirm();
             }}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >

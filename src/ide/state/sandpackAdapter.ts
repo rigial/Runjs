@@ -110,8 +110,13 @@ export function prepareSandpackFiles(
 </html>`;
 
   // Provide both /index.html and /public/index.html so all packager types find the template
+  // Strip Vite module script tags for /public/index.html so CRA packager doesn't execute /src/main outside the bundler
+  const cleanPublicHtml = htmlContent.replace(
+    /<script\s+type=["']module["'][^>]*>(?:<\/script>|[\s\S]*?<\/script>)/gi,
+    ''
+  );
   result['/index.html'] = htmlContent;
-  result['/public/index.html'] = htmlContent;
+  result['/public/index.html'] = cleanPublicHtml;
 
   // 4. Provide Bridge Shims for /index.js and /App.js
   // Sandpack's built-in REACT_TEMPLATE defines:
@@ -124,9 +129,8 @@ export function prepareSandpackFiles(
   const hasUserIndexJs = Boolean(result['/index.js']);
 
   if (!hasUserIndexJs) {
-    const entryWithoutExt = detectedEntry.replace(/\.[^/.]+$/, '');
     result['/index.js'] = `// RunJS Bundler Bridge
-import '.${entryWithoutExt}';
+import '.${detectedEntry}';
 `;
   }
 

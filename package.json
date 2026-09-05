@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "vite --host",
     "generate:sitemap": "node scripts/generate-sitemap.js",
+    "generate:favicons": "node scripts/generate-favicons.js",
     "prerender:routes": "node scripts/prerender-routes.js",
     "verify:seo": "node scripts/verify-seo.js",
     "test:visualizer": "node scripts/test-visualizer.js",

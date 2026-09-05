@@ -8,6 +8,7 @@ const PRECACHE_ASSETS = [
   '/RunJS-512.png',
   '/runjs.in.webp',
   '/favicon.ico',
+  '/favicon.svg',
 ];
 
 // Install: Cache core application shell assets

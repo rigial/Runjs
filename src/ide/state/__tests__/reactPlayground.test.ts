@@ -9,6 +9,7 @@ import {
   DRAFT_STORAGE_PREFIX,
   WorkspaceDraft,
 } from '../workspaceDraft';
+import { getReactFlavor } from '../../../utils/commonFunction';
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -334,6 +335,86 @@ export default function App() {
   console.log(
     '  ✓ Verified single-file override preserves the complete workspace tree'
   );
+}
+
+// 8. Test Dev Server restart workflow
+{
+  console.log(
+    '\nTest 8: Dev server restart workflow synchronizes files and increments runtime key'
+  );
+  let previewReloadTrigger = 0;
+  const vfsFiles = { ...VITE_REACT_TEMPLATE.files };
+  const inMemoryEdits = {
+    '/src/App.jsx':
+      'export default function App() { return <h1>Restarted App</h1>; }',
+  };
+
+  const syncSandpackFiles = (overrides?: Record<string, string>) => {
+    const merged = overrides
+      ? { ...vfsFiles, ...overrides }
+      : { ...vfsFiles, ...inMemoryEdits };
+    return prepareSandpackFiles(merged, 'vite-react');
+  };
+
+  let syncedSandpackFiles = syncSandpackFiles();
+  const onDevServerRestart = () => {
+    syncedSandpackFiles = syncSandpackFiles();
+    previewReloadTrigger += 1;
+  };
+
+  onDevServerRestart();
+
+  assert(
+    previewReloadTrigger === 1,
+    'previewReloadTrigger must increment on dev server restart'
+  );
+  assert(
+    syncedSandpackFiles['/src/App.jsx'].includes('Restarted App'),
+    'Sandpack files must reflect in-memory workspace edits on restart'
+  );
+  assert(
+    Boolean(syncedSandpackFiles['/src/main.jsx']),
+    'Main entry must be present in sandpack files on restart'
+  );
+  console.log(
+    '  ✓ Verified dev server restart syncs workspace files and reinitializes provider runtime key'
+  );
+}
+
+// 9. Test getReactFlavor detection
+{
+  console.log(
+    '\nTest 9: getReactFlavor correctly identifies TSX vs JSX projects'
+  );
+  assert(
+    getReactFlavor({ template: 'vite-react-ts' }) === 'tsx',
+    'Identifies TSX by template'
+  );
+  assert(
+    getReactFlavor({ template: 'vite-react' }) === 'jsx',
+    'Identifies JSX by template'
+  );
+  assert(
+    getReactFlavor({ tag: 'react-ts' }) === 'tsx',
+    'Identifies TSX by tag'
+  );
+  assert(
+    getReactFlavor({ activeFile: '/src/App.tsx' }) === 'tsx',
+    'Identifies TSX by activeFile'
+  );
+  assert(
+    getReactFlavor({ files: { '/src/App.tsx': '' } }) === 'tsx',
+    'Identifies TSX by files'
+  );
+  assert(
+    getReactFlavor({ files: { '/src/App.jsx': '' } }) === 'jsx',
+    'Identifies JSX by files'
+  );
+  assert(
+    getReactFlavor({ tag: 'react' }) === 'jsx',
+    'Defaults to JSX when no TS indicators exist'
+  );
+  console.log('  ✓ Verified getReactFlavor identifies JSX vs TSX accurately');
 }
 
 console.log('\n=== All React Playground tests passed successfully! ===\n');

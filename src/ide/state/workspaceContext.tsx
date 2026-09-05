@@ -72,6 +72,7 @@ export function WorkspaceProvider({
         : { ...vfsJson, ...fileContents };
       const prepared = prepareSandpackFiles(merged, templateId);
       setSandpackFiles(prepared);
+      return prepared;
     },
     [vfs, fileContents, templateId]
   );
@@ -94,6 +95,7 @@ export function WorkspaceProvider({
           fileName: projectName,
           tag: projectTag,
           language: 'react',
+          template: templateId,
           code: mainCode,
           htmlCode: currentVfsFiles['/index.html'] || '',
           cssCode:
@@ -593,6 +595,7 @@ export function WorkspaceProvider({
         isTerminalOpen,
         isConsoleOpen,
         sandpackFiles,
+        syncSandpackFiles,
         setActiveFile,
         openFile,
         closeFile,

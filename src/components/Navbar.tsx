@@ -26,6 +26,7 @@ import {
   RotateCw,
   Boxes,
   Download,
+  User,
 } from 'lucide-react';
 import { usePwaInstall } from '../hook/usePwaInstall';
 
@@ -191,6 +192,12 @@ function Navbar() {
   // Helper to render More menu icons
   const renderMoreIcon = (iconName: string) => {
     switch (iconName) {
+      case 'creator':
+        return (
+          <div className="w-7 h-7 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
+            <User className="w-3.5 h-3.5" />
+          </div>
+        );
       case 'about':
         return (
           <div className="w-7 h-7 rounded-md bg-purple-500/10 text-purple-500 border border-purple-500/20 flex items-center justify-center shrink-0">

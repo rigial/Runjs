@@ -122,42 +122,73 @@ function AboutPage() {
           </p>
         </div>
 
-        {/* Creator & Social Links Card */}
-        <section className="p-6 sm:p-7 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-black font-bold text-xl shadow-sm shrink-0">
-                MK
+        {/* Meet the Creator Section */}
+        <section className="p-6 sm:p-8 rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 via-[var(--bg-surface)] to-[var(--bg-surface)] shadow-xs">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+              <div className="relative group shrink-0">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-amber-500/40 bg-[var(--bg-surface-elevated)] shadow-sm flex items-center justify-center">
+                  <img
+                    src="/mrkishorekumar.jpeg"
+                    alt="M R Kishore Kumar"
+                    className="w-full h-full object-cover object-center"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-amber-400 to-amber-600 text-black font-bold text-xl -z-10">
+                    MK
+                  </div>
+                </div>
               </div>
-              <div>
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">
+
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-500 uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3" />
+                  <span>Meet the Creator</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)]">
                   M R Kishore Kumar
                 </h2>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
-                  Creator &amp; Maintainer of RunJS
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-xl leading-relaxed">
+                  Creator &amp; Maintainer of RunJS. React Native Engineer with
+                  4.5 years shipping consumer apps at scale (1Cr+ downloads).
+                  Passionate about building client-side developer tools and
+                  interactive learning experiences.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5 sm:self-auto">
+              <Link
+                to="/kishorekumar"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-black text-xs sm:text-sm font-bold shadow-xs transition-all hover:scale-102 active:scale-98"
+              >
+                <span>View Creator Portfolio</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
               <Link
                 target="_blank"
                 rel="noopener noreferrer"
                 to="https://github.com/mrkishorekumar"
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                aria-label="GitHub Profile"
               >
                 <GithubIcon />
-                <span>GitHub</span>
+                <span className="hidden sm:inline">GitHub</span>
                 <ExternalLink className="w-3 h-3 opacity-60" />
               </Link>
+
               <Link
                 target="_blank"
                 rel="noopener noreferrer"
                 to="https://www.linkedin.com/in/mrkishorekumar/"
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-medium text-[var(--text-secondary)] hover:text-[#0a66c2] transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-hover)] text-xs font-medium text-[var(--text-secondary)] hover:text-[#0a66c2] transition-colors"
+                aria-label="LinkedIn Profile"
               >
                 <LinkedinIcon />
-                <span>LinkedIn</span>
+                <span className="hidden sm:inline">LinkedIn</span>
                 <ExternalLink className="w-3 h-3 opacity-60" />
               </Link>
             </div>

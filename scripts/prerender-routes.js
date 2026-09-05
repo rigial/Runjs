@@ -86,6 +86,13 @@ const routes = [
       'Learn how RunJS works, its 100% in-browser client architecture, WebAssembly compilation, AST loop protection, and open-source foundation.',
   },
   {
+    path: '/kishorekumar',
+    title:
+      'M R Kishore Kumar - Creator & Maintainer of RunJS | Portfolio',
+    description:
+      'Meet M R Kishore Kumar, React Native Engineer with 4.5 years shipping consumer e-commerce apps at scale (1Cr+ downloads) and creator of RunJS.',
+  },
+  {
     path: '/privacy',
     title: 'Privacy Policy - RunJS Developer Playground | RunJS',
     description:

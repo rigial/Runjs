@@ -51,6 +51,7 @@ const coreRoutes = [
   { path: '/interview', changefreq: 'weekly', priority: '0.8' },
   { path: '/output-questions', changefreq: 'weekly', priority: '0.8' },
   { path: '/about', changefreq: 'monthly', priority: '0.7' },
+  { path: '/kishorekumar', changefreq: 'monthly', priority: '0.7' },
   { path: '/privacy', changefreq: 'monthly', priority: '0.5' },
   { path: '/terms', changefreq: 'monthly', priority: '0.5' },
 ];

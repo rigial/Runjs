@@ -32,20 +32,29 @@ for (const q of all) {
   }
   seenIds.add(q.id);
 
-  if (!q.topic || typeof q.topic !== "string") {
+  if (!Number.isInteger(q.id) || q.id < 1 || q.id > 100) {
+    throw new Error(`Question #${q.id} must have an integer ID between 1 and 100`);
+  }
+  if (!['easy', 'medium', 'hard'].includes(q.difficulty)) {
+    throw new Error(`Question #${q.id} has invalid difficulty: ${q.difficulty}`);
+  }
+  if (!q.topic || typeof q.topic !== "string" || q.topic.trim().length === 0) {
     throw new Error(`Question #${q.id} missing valid topic`);
   }
-  if (!q.code || typeof q.code !== "string") {
+  if (!q.question || typeof q.question !== "string" || q.question.trim().length === 0) {
+    throw new Error(`Question #${q.id} missing valid question prompt`);
+  }
+  if (!q.code || typeof q.code !== "string" || q.code.trim().length === 0) {
     throw new Error(`Question #${q.id} missing valid code`);
   }
-  if (!Array.isArray(q.options) || q.options.length !== 4) {
-    throw new Error(`Question #${q.id} must have exactly 4 options`);
+  if (!Array.isArray(q.options) || q.options.length !== 4 || !q.options.every(opt => typeof opt === "string")) {
+    throw new Error(`Question #${q.id} must have exactly 4 string options`);
   }
   const optionSet = new Set(q.options);
   if (optionSet.size !== 4) {
     throw new Error(`Question #${q.id} has duplicate options: ${JSON.stringify(q.options)}`);
   }
-  if (typeof q.correctIndex !== "number" || q.correctIndex < 0 || q.correctIndex > 3) {
+  if (!Number.isInteger(q.correctIndex) || q.correctIndex < 0 || q.correctIndex > 3) {
     throw new Error(`Question #${q.id} has invalid correctIndex: ${q.correctIndex}`);
   }
   if (!q.explanation || typeof q.explanation !== "string" || q.explanation.trim().length === 0) {

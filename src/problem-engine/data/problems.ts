@@ -11086,9 +11086,11 @@ This is a classic problem often seen in API batching, file uploads, and load-bal
 - Each element in the result corresponds to the resolved value of its respective task.`,
     examples: [
       {
-        input: '["lazy","add","execute"],[[{"add":"(a,b)=>a+b"}],[2,3],[]]',
-        output: '[null,null,[5]]',
-        explanation: 'Queues add(2, 3) and evaluates upon execute().',
+        input:
+          'tasks = [() => Promise.resolve("A"), () => Promise.resolve("B")], maxConcurrent = 2',
+        output: '["A", "B"]',
+        explanation:
+          'Runs tasks respecting the maxConcurrent limit and resolves with results in task order.',
       },
     ],
     constraints: ['Follow standard runtime and memory constraints.'],
@@ -14202,7 +14204,15 @@ const result3 = lazy({divide}).divide(10, 2).divide(6, 3).execute();
 - If no function is queued, \`.execute()\` should return an empty array.  
 - All arguments must be passed at chaining time and retained until execution.  
 - Must handle functions with varying numbers of arguments.`,
-    examples: [],
+    examples: [
+      {
+        input:
+          '["lazy","add","multiply","execute"],[[{"add":"(a,b)=>a+b","multiply":"(a,b)=>a*b"}],[2,3],[4,5],[]]',
+        output: '[null,null,null,[5,20]]',
+        explanation:
+          'Chains add(2, 3) and multiply(4, 5) methods and executes all queued operations returning [5, 20].',
+      },
+    ],
     constraints: ['Follow standard runtime and memory constraints.'],
     functionName: 'lazy',
     isClass: true,
